@@ -99,7 +99,7 @@ function gen_posts($skipreflinks, $msgsource, $boardid, $dbdata, $extended = fal
 					"thumb_h"  => $dbentry['thumb_h'],
 					"animated" => $dbentry['pic_animated'],
 					"spoiler"  => $dbentry['pic_spoiler'],
-					"text"     => ($msgsource ? $dbentry['message_source'] : $dbentry['message']),
+					"text"     => ($msgsource ? (($dbentry['message_source'] == '') ? $dbentry['message'] : $dbentry['message_source']) : $dbentry['message']),
 					"reflinks" => ($skipreflinks ? null : $reflinks)
 				),
 				"lastreplies"   => $lastreplies
@@ -125,7 +125,7 @@ function gen_posts($skipreflinks, $msgsource, $boardid, $dbdata, $extended = fal
 				"thumb_h"  => $dbentry['thumb_h'],
 				"animated" => $dbentry['pic_animated'],
 				"spoiler"  => $dbentry['pic_spoiler'],
-				"text"     => ($msgsource ? $dbentry['message_source'] : $dbentry['message']),
+				"text"     => ($msgsource ? (($dbentry['message_source'] == '') ? $dbentry['message'] : $dbentry['message_source']) : $dbentry['message']),
 				"reflinks" => ($skipreflinks ? null : $reflinks)
 			);
 		}
