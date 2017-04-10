@@ -1,1 +1,1 @@
-<?php system('git pull origin master'); ?>
+<?php header('Content-Type: text/html'); system('git pull origin master'); ?>
