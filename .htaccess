@@ -1,0 +1,62 @@
+DirectoryIndex front.php
+
+AddCharset UTF-8 .html
+AddCharset UTF-8 .php
+
+AddType video/mp4 mp4 m4v
+AddType audio/mp4 m4a
+AddType video/ogg ogv
+AddType audio/ogg ogg oga
+AddType video/webm webm
+
+FileETag None
+
+ErrorDocument 403 /error.php?p=403
+ErrorDocument 404 /error.php?p=404
+
+# Anti-pekacefaling
+<Limit GET POST>
+BrowserMatchNoCase "Feedfetcher-Google" feedfetcher
+BrowserMatchNoCase "facebookexternalhit" facebook
+order deny,allow
+deny from env=feedfetcher
+deny from env=facebook
+</Limit>
+
+<IfModule mod_headers.c>
+<Files *.html>
+RequestHeader add Cookie "prevent-caching" early
+Header add Expires "Mon, 26 Jul 1997 05:00:00 GMT"
+Header add Pragma "no-cache"
+Header add Cache-Control "must-revalidate, no-cache, no-store"
+Header unset Last-Modified
+Header unset ETag
+Header unset Vary
+</Files>
+<FilesMatch ".(js|css)$">
+Header set Cache-Control "max-age=2592000"
+</FilesMatch>
+<FilesMatch ".(flv|swf|ico|gif|jpg|jpeg|png|webm)$">
+Header set Cache-Control "max-age=2592000"
+</FilesMatch>
+</IfModule>
+
+Options -Indexes
+
+<IfModule mod_deflate.c>
+  AddOutputFilterByType DEFLATE text/text text/html text/plain text/xml text/css application/x-javascript application/javascript application/json
+</IfModule>
+
+<Files ~ "\.xml$">
+Order allow,deny
+Deny from all
+Satisfy all
+</Files>
+<Files ~ "spam.txt">
+Order allow,deny
+Deny from all
+Satisfy all
+</Files>
+
+# Warning: Contents below this line may be erased, please place all .htaccess rules above this line
+## !KU_BANS:

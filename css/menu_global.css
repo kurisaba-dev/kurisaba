@@ -1,0 +1,250 @@
+html, body { 
+	height: 100%; 
+}
+
+html {
+	overflow: hidden;
+}
+
+body {
+	font-size: 10pt;
+	margin: 0px;
+}
+
+.defaultfield {
+	color: #a0a0a0;
+}
+
+.board, .board:visited {
+	display: block;
+	text-decoration: none;
+	margin: 2px 0;
+	margin-left: -3px;
+	display: block;
+	text-decoration: none;
+	padding: 1px 0 1px 6px;
+	-webkit-transition: background-color 0.1s, color 0.2s;
+	-o-transition: background-color 0.1s, color 0.2s;
+	transition: background-color 0.1s, color 0.2s;
+}
+
+.xlink {
+	text-decoration: none;
+	border-bottom: 1px dashed;
+	text-align: center;
+}
+
+.toggler {
+	cursor: pointer;
+}
+
+.chan {
+	position: relative;
+	-webkit-transition: background-color 0.4s, box-shadow 0.4s;
+	-o-transition: background-color 0.4s, box-shadow 0.4s;
+	transition: background-color 0.4s, box-shadow 0.4s;
+}
+
+.l-v .chan {
+	width: 230px;
+}
+
+.chan-overlay {
+	display: inline-block;
+	position: absolute;
+	top: 0px;
+	-webkit-transition: opacity 0.2s;
+	-o-transition: opacity 0.2s;
+	transition: opacity 0.2s;
+	opacity: 0;
+	padding: 1px 2px;
+	-webkit-transition: opacity 0.2s, background-color 0.3s;
+	-o-transition: opacity 0.2s, background-color 0.3s;
+	transition: opacity 0.2s, background-color 0.3s;
+}
+
+.chan-overlay a {
+	-webkit-transition: color 0.3s;
+	-o-transition: color 0.3s;
+	transition: color 0.3s;
+}
+
+.chan:hover .chan-overlay {
+	opacity: 1
+}
+
+.boards {
+	padding: 4px 0 1px 3px;
+}
+
+.boards .boards {
+	padding: 0;
+}
+
+.category {
+	margin-bottom: 10px;
+}
+
+.chan-header {
+	cursor: pointer;
+	text-align: center;
+	font-size: 1.2em;
+	padding-left: 2px
+}
+
+.cat-header {
+	text-decoration: underline;
+}
+
+.ibtn {
+	font-size: 16px;
+}
+
+.ch-own .chan-header {
+	font-weight: bold;
+}
+
+.layout-control {
+	cursor: pointer;
+	line-height: 30px;
+	text-align: center;
+	-webkit-transition: color 0.2s;
+	-o-transition: color 0.2s;
+	transition: color 0.2s;
+}
+
+
+/*------------HORIZONTAL------------*/
+.l-h .board {
+	height: 30px;
+	line-height: 30px;
+	text-align: center;
+	border: 1px solid;
+	border-radius: 4px;
+	margin: 10px;
+	padding: 0px;
+	margin-right: 17px;
+}
+.l-h .board:active {
+	box-shadow: inset 0 3px 9px rgba(0, 0, 0, 0.14);
+}
+.l-h .chan-header {
+	line-height: 30px;
+}
+#pinunpin {
+	display: none;
+}
+
+
+/*------------VERTICAL------------*/
+@media screen and ( max-width: 115px ) {
+	.l-v #showhide {
+		display:block;
+		line-height: 100vh;
+	}
+	.l-v #mainstuff {
+		display: none;
+	}
+}
+
+.l-v:not(.hidden) .layout-control {
+	width: 50%;
+	margin-left: -0.5px; /*this is to prevent half-pixel positioning*/
+}
+.l-v .layout-control {
+	display: inline-block;
+}
+
+.l-v.hidden #pinunpin {
+	display: none;
+}
+
+.l-v:not(.hidden) #pinunpin {
+	display: inline-block;
+}
+
+.ibtn {
+	speak: none;
+	font-style: normal;
+	font-weight: normal;
+	font-variant: normal;
+	text-transform: none;
+	line-height: 1;
+
+	/* Better Font Rendering =========== */
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+	
+	/* [MY] =========== */
+	display: inline-block;
+  	text-decoration: none;
+}
+
+.l-v.hidden .layout-control {
+	width: 100%;
+	-webkit-transition-property: line-height, width;
+	-o-transition-property: line-height, width;
+	transition-property: line-height, width;
+	-webkit-transition-duration: 0.3s;
+	-o-transition-duration: 0.3s;
+	transition-duration: 0.3s;
+}
+
+.icon-left:before, .l-v #showhide .ibtn:before {
+	content: "\e603";
+}
+
+.icon-right:before {
+	content: "\e604";
+}
+
+#showhide .ibtn {
+	-webkit-transition: transform 0.5s;
+	-o-transition: transform 0.5s;
+	transition: transform 0.5s;
+}
+.hidden #showhide .ibtn {
+	-ms-transform: rotate(180deg);
+	-webkit-transform: rotate(180deg);
+	transform: rotate(180deg);
+}
+
+.icon-up:before, .l-h #showhide .ibtn:before {
+	content: "\e601";
+}
+
+.icon-down:before/ {
+	content: "\e602";
+}
+
+.icon-pin:before {
+	content: "\e605";
+}
+
+.icon-unpin:before {
+	content: "\e606";
+}
+
+.icon-home:before {
+	content: "\e607";
+}
+
+.icon-info:before {
+	content: "\e608";
+}
+
+.icon-burger:before {
+	content: "\e60a";
+}
+
+.icon-overlay:before, .l-olay #pinunpin .ibtn:before {
+	content: "\e60b";
+}
+
+.icon-fixed:before, .l-fix #pinunpin .ibtn:before {
+	content: "\e609";
+}
+
+.icon-shift:before, .l-shift #pinunpin .ibtn:before {
+	content: "\e600";
+}

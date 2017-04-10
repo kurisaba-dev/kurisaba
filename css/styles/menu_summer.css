@@ -1,0 +1,159 @@
+body {
+	font-family: sans-serif;
+	font-size: 75%;
+	background: fixed url(images/summer/bg_bottom.png) bottom  repeat-x;
+	background-color: #f8ffee;
+	color: #000000;
+	margin: 0;
+	width: 90%;
+}
+
+a {
+	color: 113311;
+}
+
+h2 {
+	margin: 0px;
+	padding: 2px;
+	font-size: 100%;
+	background-image: url(images/summer/topbar-center.png);
+        background-repeat: repeat-x;
+	color: #007F46;
+}
+
+h2 a {
+	text-decoration: none;
+	color:#345C34;
+}
+
+h1, h3, .menu {
+	font-family: Verdana,Tahoma,sans-serif;
+}
+
+h1 {
+	margin: 0;
+	/*color: #800;*/
+	text-align: center;
+	margin-top: 1em;
+}
+
+h3 {
+	margin: 0;
+	/*color: #800;*/
+	text-align: center;
+	font-weight: normal;
+	font-size: medium;
+}
+
+.menu {
+	margin-top: 1em;
+	text-align: center;
+}
+
+.content {
+	margin-left: 3em;
+	padding: 0px;
+	background-color: #e6ffcd;
+	border: solid 1px #CCC;
+}
+
+.newssub {
+	padding: 2px;
+	position: absolute;
+	background-color: #e6ffcd;
+	background-image: url(images/summer/topbar-center.png);
+        background-repeat: repeat-x;
+}
+
+.permalink {
+	padding: 2px;
+	text-align: right;
+	display: block;
+}
+
+.permalink a {
+	color: black;
+	text-decoration: underline;
+}
+/*h1 { font-size: 150% }*/
+/*h2 { font-size: 100%; margin-top: 1em }
+.hl {
+	font-style: italic;
+}
+.plus { float: right; font-size: 8px; font-weight: normal; padding: 1px 4px 2px 4px; margin: 0px 0px; background: #eb9; color: #000; border: 1px solid #da8; cursor: hand; cursor: pointer }
+.plus:hover { background: #da8; border: 1px solid #c97 }
+ul { list-style: none; padding-left: 0px; margin: 0px }
+li { margin: 0px }
+li:hover { background: #fec; }
+li a { display: block; width: 100%; }/*
+body {
+	margin: 8px;
+}
+
+a {
+	text-decoration: none;
+	color: #550;
+}
+
+h1, h2 {
+	background: #DAF0D6;
+	text-align: left;
+	background-image: url(images/summer/topbar-center.png);
+	background-repeat: repeat-x;
+}
+
+h1 {
+	margin-top: 0px;
+	font-size: 150%;
+	color: #000;
+}
+
+h2 {
+	font-size: 100%;
+	margin-top: 1em;
+}
+
+.plus {
+	float: right;
+	font-size: 8px;
+	font-weight: normal;
+	padding: 1px 4px 2px 4px;
+	margin: 0px 0px;
+	background: #88FF88;
+	background-image: url(images/summer/topbar-center.png);
+	background-repeat: repeat-x;
+	color: #000;
+	border: 1px solid #117743;
+	cursor: hand;
+	cursor: pointer;
+}
+
+.plus:hover {
+	background: #da8;
+	border: 1px solid #c97;
+}
+
+ul {
+	list-style: none; 
+	padding-left: 0px;
+	margin: 0px;
+}
+
+li {
+	margin: 0px;
+	padding-left: 3px;
+	background: #e6ffcd;
+}
+
+li:hover {
+	background: #f6fff6;
+}
+
+/*li a {
+	display: inline;
+	width: 100%;
+}
+*/
+
+
+

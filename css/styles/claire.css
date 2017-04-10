@@ -1,0 +1,259 @@
+html, body {
+	background-image:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAMAAAAoLQ9TAAAABlBMVEUcHBweHh5WWmVNAAAAJUlEQVR4AWMAAkYQgNOMaCJAAlUEiFFFgAhVBM1EICAoMljcAQBWEAChK8hEDAAAAABJRU5ErkJggg==);
+	color: #CCC;
+	font-family:"Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+input[type="text"],textarea,select{background:rgba(20,20,20,0.5);border:1px solid #999;color:#fff}
+form {font-size:0.9em}
+.overlay-menu {
+	background:rgba(0,0,0,0.95);
+}
+.uibutton {
+	background:rgba(20,20,20,0.5);
+}
+a {
+	color: #fff;
+	text-decoration: none;
+}
+a:hover {
+	color: fff;
+	text-decoration: underline;
+}
+.adminbar {
+	text-align:right;
+	background:inherit;
+	clear:both;
+	float:right;
+	font-size: .8em;
+}
+.adminbar a { 
+	font-weight: bold;
+}
+.logo {
+	clear:both;
+	text-align:center;
+	background:inherit;
+	font-size:24pt;
+	color:#CCC;
+	width:100%;
+}
+.postarea {
+	background:inherit;
+}
+.rules {
+	font-size:10px;
+}
+.postblock {
+	background:rgba(20,20,20,0.5);
+	color:#C5C8C6;
+	font-weight:800;
+	padding: 2px 5px 2px 5px;
+	font-family: Arial,Helvetica,sans-serif;
+	font-size: .9em;
+}
+.footer {
+	text-align:center;
+	font-size:10px;
+}
+.passvalid {
+	background:#282A2E;
+	text-align:center;
+	width:100%;
+	color:#C5C8C6;
+}
+.dellist {
+	background:inherit;
+	text-align:center;
+}
+.delbuttons {
+	background:inherit;
+	text-align:center;
+	padding-bottom:4px;
+
+}
+.row1 {
+	background:#282A2E;
+	font-size:12px;
+/*	color:#000000;*/
+}
+.row2 {
+/*	background:#FFFFFF;*/
+	font-size:12px;
+/*	color:#000000;*/
+}
+.unkfunc {
+	color:#B5BD68;
+}
+.unkfunc2 {
+	color:#18a952;
+}
+.filesize {
+	font-size:12px;
+}
+
+.doubledash {
+	display: none;
+ 	vertical-align:top;
+	clear:both;
+	float:left;
+}
+
+.filetitle {
+	background:inherit;
+	font-size:16px;
+	color:#B294BB;
+	font-weight:800;
+}
+.postername, .postnumber_green  {
+	background:inherit;
+	font-size:1em;
+	color:#C5C8C6;
+	font-weight:800;
+}
+.oldpost {
+	background:inherit;
+	font-size:18px;
+	color:#0F0C5D;
+	font-weight:800;
+}
+.omittedposts {
+	background:inherit;
+	font-size:1em;
+	color:#B294BB;
+	font-weight:800;
+	font-family:sans-serif;
+}
+.reply {
+	background:rgba(20,20,20,0.95);
+	padding-right: 3px;
+/*	font-family:serif;*/
+	border-color: #282a2e;
+	border-radius: 0;
+/*	display : table;
+	padding : 2px;*/
+}
+
+.replymode {
+	background:#282A2E;
+	text-align:center;
+	padding:2px;
+	color:#C5C8C6;
+	clear: both;
+	font-weight: bold;
+	margin-bottom: .5em;
+	border: solid 1px #282A2E;
+	-webkit-border-radius: 5px;
+}
+
+.highlight {
+background:#09090a;
+border-color: #111811;
+}
+
+.doubledash {
+ 	vertical-align:top;
+	clear:both;
+	float:left;
+}
+.replytitle {
+	background:inherit;
+	font-size:18px;
+	color:#B294BB;
+	font-weight:800;
+}
+.thumbnailmsg {
+	background:inherit;
+	font-size:11px;
+}
+
+hr {
+	border : none;
+	border-top : 1px solid #282a2e;
+	height : 0;
+}
+td {
+	margin : 0;
+	padding : 0;
+}
+input[type="text"]:focus, input[type="password"]:focus, input:not([type]):focus, textarea:focus {
+	border : #000 solid 1px !important ;
+}
+
+.title {
+	background-color: #282a2e;
+	color: #c5c8c6;
+}
+
+span.spoiler {background: #111; color: #111;}
+span.spoiler:hover, span.spoiler:focus {color: #c5c8c6;}
+
+div.messagehelperC {
+	/*float:left;*/
+	/*width:48px;*/
+}
+div.messagehelper {
+	font-family:Impact;
+	font-size:14px;
+	cursor:pointer;
+	background: #282A2E;
+	margin-left:3px;
+	margin-top:3px;
+	min-width: 19px;
+	height:19px;
+	text-align:center;
+	text-decoration:none;
+	float:left;
+}
+div.messagehelper:hover { background: #1d1f21; }
+div.messagehelper a { font-family:Impact;font-size:14px;text-decoration:none;color:#81a2be; }
+div.messagehelper a:hover { text-decoration:none; }
+
+.reflink a {
+/* color: inherit; */
+color:#fff;
+text-decoration: none;
+}
+
+.reflink a:hover{
+	color: #fff;
+	text-decoration: underline;
+}
+
+#options {
+font-size: .8em;
+z-index: 99999;
+right: 10px;
+top: 50px;
+position: fixed;
+padding: 10px;
+text-align: left;
+background:#282a2e;
+border: solid 1px #1d1f21;
+}
+
+.reflinkpreview {
+	background-color: #282a2e !important;
+	border-collapse: separate;
+	border-spacing: 2px;
+	border-color: gray;
+}
+
+.admin {
+color: #BB2222;
+}
+
+.reply blockquote, blockquote :last-child {
+margin-bottom: 0.8em;
+}
+
+li a:hover {
+  color: #5f89ac;
+}
+
+li a {
+  color:#81a2be;
+}
+
+.ulsearch {
+    background: #282a2e !important;
+  }

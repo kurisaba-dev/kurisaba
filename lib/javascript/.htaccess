@@ -1,0 +1,2 @@
+RewriteEngine  on
+RewriteRule ^(.*)_v.*\.js$ $1.js
