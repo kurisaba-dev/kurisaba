@@ -26,23 +26,8 @@ class Menu {
 		global $tc_db, $dwoo, $dwoo_data, $kusabaxorg;
 
 		require_once KU_ROOTDIR.'lib/dwoo.php';
-
-		/*$thread_random = $tc_db->GetOne("SELECT `value` FROM `" . KU_DBPREFIX . "kurisaba_ext_data` WHERE `name` = 'thread_random'");
-		$thread_cirno  = $tc_db->GetOne("SELECT `value` FROM `" . KU_DBPREFIX . "kurisaba_ext_data` WHERE `name` = 'thread_cirno'");
-		$thread_faq    = $tc_db->GetOne("SELECT `value` FROM `" . KU_DBPREFIX . "kurisaba_ext_data` WHERE `name` = 'thread_faq'");
-		$thread_dev    = $tc_db->GetOne("SELECT `value` FROM `" . KU_DBPREFIX . "kurisaba_ext_data` WHERE `name` = 'thread_dev'");
-
-		$thread_random_link = preg_replace('/^\/([^\/]+?)\/(.+?)$/','/$1/res/$2.html',$thread_random);
-		$thread_cirno_link =  preg_replace('/^\/([^\/]+?)\/(.+?)$/','/$1/res/$2.html',$thread_cirno);
-		$thread_faq_link =    preg_replace('/^\/([^\/]+?)\/(.+?)$/','/$1/res/$2.html',$thread_faq);
-		$thread_dev_link =    preg_replace('/^\/([^\/]+?)\/(.+?)$/','/$1/res/$2.html',$thread_dev);
-
-		$dwoo_data->assign('thread_random_link', $thread_random_link);
-		$dwoo_data->assign('thread_cirno_link',  $thread_cirno_link);
-		$dwoo_data->assign('thread_faq_link',    $thread_faq_link);
-		$dwoo_data->assign('thread_dev_link',    $thread_dev_link);*/
 		
-		$dwoo_data->assign('boardpath', getCLBoardPath());
+		$dwoo_data->assign('boardpath', KU_BOARDSPATH . '/');
 
 		$special_threads = $tc_db->GetOne("SELECT `value` FROM `" . KU_DBPREFIX . "kurisaba_ext_data` WHERE `name` = 'special_threads'");
 		$special_threads = preg_replace('/ +/', ' ', $special_threads);
@@ -66,11 +51,6 @@ class Menu {
 				$special_threads_html .= '<li><a href="'.$special_thread[1].'" class="boardlink">&nbsp;&nbsp;'.$special_thread[2].' - '.$special_thread[3].'</a></li>';
 			}
 		}
-
-		/*$special_threads_html = str_replace('{$thread_random_link}', $thread_random_link, $special_threads_html);
-		$special_threads_html = str_replace('{$thread_cirno_link}',  $thread_cirno_link , $special_threads_html);
-		$special_threads_html = str_replace('{$thread_faq_link}',    $thread_faq_link   , $special_threads_html);
-		$special_threads_html = str_replace('{$thread_dev_link}',    $thread_dev_link   , $special_threads_html);*/
 		
 		$dwoo_data->assign('special_threads', $special_threads_html);
 		

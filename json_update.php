@@ -96,7 +96,7 @@ if (count($posts_to_print) > 0)
 	$board_class->dwoo_data->assign('board', $board_class->board);
 	$board_class->dwoo_data->assign('isupdate', true);
 	$board_class->dwoo_data->assign('isread', true);
-	$board_class->dwoo_data->assign('file_path', getCLBoardPath($board_class->board['name'], $board_class->board['loadbalanceurl_formatted']));
+	$board_class->dwoo_data->assign('file_path', KU_BOARDSPATH . '/' . $board_class->board['name']);
 	$board_class->dwoo_data->assign('replythread', $thread);
 	if ($board_class->board['type'] == 0) {
 		$embeds = $tc_db->GetAll("SELECT filetype FROM `" . KU_DBPREFIX . "embeds`");

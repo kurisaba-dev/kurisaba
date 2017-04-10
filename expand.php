@@ -41,7 +41,7 @@ if ($board_name != '') {
 $board_class->InitializeDwoo();
 $board_class->dwoo_data->assign('isexpand', true);
 $board_class->dwoo_data->assign('board', $board_class->board);
-$board_class->dwoo_data->assign('file_path', getCLBoardPath($board_class->board['name'], $board_class->board['loadbalanceurl_formatted']));
+$board_class->dwoo_data->assign('file_path', KU_BOARDSPATH . '/' . $board_class->board['name']);
 if (isset($_GET['preview'])) {
     require KU_ROOTDIR . 'inc/classes/parse.class.php';
     $parse_class = new Parse();

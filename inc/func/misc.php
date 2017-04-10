@@ -89,8 +89,8 @@ function exitWithErrorPage($errormsg, $extended = '', $posttext = '', $template 
 		require_once KU_ROOTDIR . 'lib/dwoo.php';
 		$dwoo = new Dwoo();
 		$dwoo_data = new Dwoo_Data();
-		$dwoo_data->assign('cwebpath', getCWebpath());
-		$dwoo_data->assign('boardpath', getCLBoardPath());
+		$dwoo_data->assign('cwebpath', KU_WEBPATH . '/');
+		$dwoo_data->assign('boardpath', KU_BOARDSPATH . '/');
 	}
 	if (!isset($board_class)) {
 		require_once KU_ROOTDIR . 'inc/classes/board-post.class.php';

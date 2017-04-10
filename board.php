@@ -639,7 +639,7 @@ if($operation_post) // it's `noreturn`.
 				$board_class->dwoo_data->assign('board', $board_class->board);
 				$board_class->dwoo_data->assign('isread', true);
 				$board_class->dwoo_data->assign('istempfile', true);
-				$board_class->dwoo_data->assign('file_path', getCLBoardPath($board_class->board['name'], $board_class->board['loadbalanceurl_formatted']));
+				$board_class->dwoo_data->assign('file_path', KU_BOARDSPATH . '/' . $board_class->board['name']);
 
 				$page ='';
 

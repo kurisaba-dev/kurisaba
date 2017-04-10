@@ -2351,7 +2351,6 @@ class Manage {
 					$updateboard_forcedanon = isset($_POST['forcedanon']) ? '1' : '0';
 					$updateboard_trial = isset($_POST['trial']) ? '1' : '0';
 					$updateboard_popular = isset($_POST['popular']) ? '1' : '0';
-					$updateboard_enablearchiving = isset($_POST['enablearchiving']) ? '1' : '0';
 					$updateboard_showid = isset($_POST['showid']) ? '1' : '0';
 					$updateboard_compactlist = isset($_POST['compactlist']) ? '1' : '0';
 					$updateboard_locked = isset($_POST['locked']) ? '1' : '0';
@@ -2374,7 +2373,7 @@ class Manage {
 										$updateboard_allowedembeds = substr($updateboard_allowedembeds, 0, -1);
 									}
 								}
-								$tc_db->Execute("UPDATE `" . KU_DBPREFIX . "boards` SET `type` = " . $tc_db->qstr($_POST['type']) . " , `uploadtype` = " . $tc_db->qstr($_POST['uploadtype']) . " , `order` = " . $tc_db->qstr(intval($_POST['order'])) . " , `section` = " . $tc_db->qstr(intval($_POST['section'])) . " , `desc` = " . $tc_db->qstr($_POST['desc']) . " , `locale` = " . $tc_db->qstr($_POST['locale']) . " , `showid` = '" . $updateboard_showid . "' , `compactlist` = '" . $updateboard_compactlist . "' , `locked` = '" . $updateboard_locked . "' , `balls` = '" . $updateboard_balls . "' , `dice` = '" . $updateboard_dice . "' , `useragent` = '" . $updateboard_useragent . "' , `maximagesize` = " . $tc_db->qstr($_POST['maximagesize']) . " , `messagelength` = " . $tc_db->qstr($_POST['messagelength']) . " , `maxpages` = " . $tc_db->qstr($_POST['maxpages']) . " , `maxage` = " . $tc_db->qstr($_POST['maxage']) . " , `markpage` = " . $tc_db->qstr($_POST['markpage']) . " , `maxreplies` = " . $tc_db->qstr($_POST['maxreplies']) . " , `image` = " . $tc_db->qstr($_POST['image']) . " , `includeheader` = " . $tc_db->qstr($_POST['includeheader']) . " , `redirecttothread` = '" . $updateboard_redirecttothread . "' , `anonymous` = " . $tc_db->qstr($_POST['anonymous']) . " , `forcedanon` = '" . $updateboard_forcedanon . "' , `embeds_allowed` = " . $tc_db->qstr($updateboard_allowedembeds) . " , `trial` = '" . $updateboard_trial . "' , `popular` = '" . $updateboard_popular . "' , `defaultstyle` = " . $tc_db->qstr($_POST['defaultstyle']) . " , `enablereporting` = '" . $updateboard_enablereporting . "', `enablecaptcha` = '" . $updateboard_enablecaptcha . "' , `enablenofile` = '" . $updateboard_enablenofile . "' , `enablearchiving` = '" . $updateboard_enablearchiving . "', `enablecatalog` = '" . $updateboard_enablecatalog . "' , `hiddenthreads` = " . $tc_db->qstr($_POST['hiddenthreads']) . " , `loadbalanceurl` = " . $tc_db->qstr($_POST['loadbalanceurl']) . " , `loadbalancepassword` = " . $tc_db->qstr($_POST['loadbalancepassword']) . " WHERE `name` = " . $tc_db->qstr($_GET['updateboard']) . "");
+								$tc_db->Execute("UPDATE `" . KU_DBPREFIX . "boards` SET `type` = " . $tc_db->qstr($_POST['type']) . " , `uploadtype` = " . $tc_db->qstr($_POST['uploadtype']) . " , `order` = " . $tc_db->qstr(intval($_POST['order'])) . " , `section` = " . $tc_db->qstr(intval($_POST['section'])) . " , `desc` = " . $tc_db->qstr($_POST['desc']) . " , `locale` = " . $tc_db->qstr($_POST['locale']) . " , `showid` = '" . $updateboard_showid . "' , `compactlist` = '" . $updateboard_compactlist . "' , `locked` = '" . $updateboard_locked . "' , `balls` = '" . $updateboard_balls . "' , `dice` = '" . $updateboard_dice . "' , `useragent` = '" . $updateboard_useragent . "' , `maximagesize` = " . $tc_db->qstr($_POST['maximagesize']) . " , `messagelength` = " . $tc_db->qstr($_POST['messagelength']) . " , `maxpages` = " . $tc_db->qstr($_POST['maxpages']) . " , `maxage` = " . $tc_db->qstr($_POST['maxage']) . " , `markpage` = " . $tc_db->qstr($_POST['markpage']) . " , `maxreplies` = " . $tc_db->qstr($_POST['maxreplies']) . " , `image` = " . $tc_db->qstr($_POST['image']) . " , `includeheader` = " . $tc_db->qstr($_POST['includeheader']) . " , `redirecttothread` = '" . $updateboard_redirecttothread . "' , `anonymous` = " . $tc_db->qstr($_POST['anonymous']) . " , `forcedanon` = '" . $updateboard_forcedanon . "' , `embeds_allowed` = " . $tc_db->qstr($updateboard_allowedembeds) . " , `trial` = '" . $updateboard_trial . "' , `popular` = '" . $updateboard_popular . "' , `defaultstyle` = " . $tc_db->qstr($_POST['defaultstyle']) . " , `enablereporting` = '" . $updateboard_enablereporting . "', `enablecaptcha` = '" . $updateboard_enablecaptcha . "' , `enablenofile` = '" . $updateboard_enablenofile . "', `enablecatalog` = '" . $updateboard_enablecatalog . "' , `hiddenthreads` = " . $tc_db->qstr($_POST['hiddenthreads']) . " WHERE `name` = " . $tc_db->qstr($_GET['updateboard']) . "");
 								$tc_db->Execute("DELETE FROM `" . KU_DBPREFIX . "board_filetypes` WHERE `boardid` = '" . $boardid . "'");
 								foreach ($filetypes as $filetype) {
 									$tc_db->Execute("INSERT INTO `" . KU_DBPREFIX . "board_filetypes` ( `boardid`, `typeid` ) VALUES ( '" . $boardid . "', " . $tc_db->qstr($filetype) . " )");
@@ -2470,16 +2469,6 @@ class Manage {
 					$tpl_page .= '<label for="hiddenthreads">Спрятанные треды:</label>
 					<input type="text" name="hiddenthreads" value="'.$lineboard['hiddenthreads'].'" />
 					<div class="desc">Список тредов, которые не видны на странице борды, разделённые запятыми. К примеру: 12345,8675,987</div><br />';
-
-					/* Load balancer URL */
-					$tpl_page .= '<label for="loadbalanceurl">'. _gettext('Load balance URL') .':</label>
-					<input type="text" name="loadbalanceurl" value="'.$lineboard['loadbalanceurl'].'" />
-					<div class="desc">'. _gettext('The full http:// URL to the load balance script for this board. The script will handle file uploads, and creation of thumbnails. Only one script per board can be used, and there must be a src and thumb dir in the same folder as the script. Set to nothing to disable.') .'</div><br />';
-
-					/* Load balancer password */
-					$tpl_page .= '<label for="loadbalancepassword">'. _gettext('Load balance password') .':</label>
-					<input type="text" name="loadbalancepassword" value="'.$lineboard['loadbalancepassword'].'" />
-					<div class="desc">'. _gettext('The password which will be passed to the script above. The script must have this same password entered at the top, in the configuration area.') .'</div><br />';
 
 					/* Allowed filetypes */
 					$tpl_page .= '<label>'. _gettext('Allowed filetypes') .':</label>

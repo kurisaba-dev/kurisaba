@@ -47,7 +47,7 @@ foreach ($results as $key=>$post)
 	$post_board_class = $boards[$post['boardid']];
 	$post['filetypes'] = $post_board_class->board['filetypes'];
 	$post['board'] = $post_board_class->board;
-	$post['file_path'] = getCLBoardPath($post_board_class->board['name'], $post_board_class->board['loadbalanceurl_formatted']);
+	$post['file_path'] = KU_BOARDSPATH . '/' . $post_board_class->board['name'];
 	$thread = ($post['parentid'] == 0) ? $post['id'] : $post['parentid'];
 	$extname = '/'.$post_board_class->board['name'].'/'.$thread;
 	$post['externalreference'] = '[Тред '. $extname .']';

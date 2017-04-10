@@ -33,29 +33,9 @@
 
 class Board {
 	/* Declare the public variables */
-	/**
-	 * Array to hold the boards settings
-	 */
 	var $board = array();
-	/**
-	 * Dwoo class
-	 *
-	 * @var class Dwoo
-	 */
 	var $dwoo;
-	/**
-	 * Dwoo data class
-	 *
-	 * @var class Dwoo
-	 */
 	var $dwoo_data;
-	/**
-	 * Load balancer class
-	 *
-	 * @var class Load balancer
-	 */
-	var $loadbalancer;
-
 	var $boardids;
 	
 	/**
@@ -106,15 +86,6 @@ class Board {
 				if ($this->board['locale'] && $this->board['locale'] != KU_LOCALE) {
 					changeLocale($this->board['locale']);
 				}
-			}
-			$this->board['loadbalanceurl_formatted'] = ($this->board['loadbalanceurl'] != '') ? substr($this->board['loadbalanceurl'], 0, strrpos($this->board['loadbalanceurl'], '/')) : '';
-
-			if ($this->board['loadbalanceurl'] != '' && $this->board['loadbalancepassword'] != '') {
-				require_once KU_ROOTDIR . 'inc/classes/loadbalancer.class.php';
-				$this->loadbalancer = new Load_Balancer;
-
-				$this->loadbalancer->url = $this->board['loadbalanceurl'];
-				$this->loadbalancer->password = $this->board['loadbalancepassword'];
 			}
 		}
 	}
@@ -241,7 +212,7 @@ class Board {
 		}
 
 		$this->dwoo_data->assign('posts', $newposts);
-		$this->dwoo_data->assign('file_path', getCLBoardPath($this->board['name'], $this->board['loadbalanceurl_formatted']));
+		$this->dwoo_data->assign('file_path', KU_BOARDSPATH . '/' . $this->board['name']);
 
 		$content = $this->dwoo->get(KU_TEMPLATEDIR . '/' . $this->board['text_readable'] . '_board_page.tpl', $this->dwoo_data);
 		$footer = $this->Footer(false, (microtime_float() - $executiontime_start_page), (($this->board['type'] == 1) ? (true) : (false)));
@@ -397,7 +368,7 @@ class Board {
 			$this->dwoo_data->assign('threadid', $thread[0]['id']);
 			$this->dwoo_data->assign('fullposts', $thread);
 			$this->dwoo_data->assign('posts', $thread);
-			$this->dwoo_data->assign('file_path', getCLBoardPath($this->board['name'], $this->board['loadbalanceurl_formatted']));
+			$this->dwoo_data->assign('file_path', KU_BOARDSPATH . '/' . $this->board['name']);
 			
 			$postbox = $this->dwoo->get(KU_TEMPLATEDIR . '/' . $this->board['text_readable'] . '_reply_header.tpl', $this->dwoo_data).$postbox;
 			if (!isset($footer)) $footer = $this->Footer(false, microtime_float() - $executiontime_start_thread, $this->board['type'] == 1);
@@ -523,8 +494,8 @@ class Board {
 		if (isset($this->board['filetypes']) && in_array($post['file_type'], $this->board['filetypes'])) {
 			$post['videobox'] = embeddedVideoBox($post);
 		}
-		if ($post['file_type'] == 'mp3' && $this->board['loadbalanceurl'] == '') {
-			//Grab the ID3 info. TODO: Make this work for load-balanced boards.
+		if ($post['file_type'] == 'mp3') {
+			//Grab the ID3 info.
 			// include getID3() library
 
 			require_once(KU_ROOTDIR . 'lib/getid3/getid3.php');
@@ -901,8 +872,8 @@ class Board {
 		$this->dwoo = new Dwoo();
 		$this->dwoo_data = new Dwoo_Data();
 
-		$this->dwoo_data->assign('cwebpath', getCWebpath());
-		$this->dwoo_data->assign('boardpath', getCLBoardPath());
+		$this->dwoo_data->assign('cwebpath', KU_WEBPATH . '/');
+		$this->dwoo_data->assign('boardpath', KU_BOARDSPATH . '/');
 	}
 }
 
@@ -980,27 +951,29 @@ class Post extends Board {
 
 	function DeleteFile($update_to_removed = true, $whole_thread = false, $save_picture = false) {
 		global $tc_db;
-		if ($whole_thread && $this->post['isthread']) {
+		if ($whole_thread && $this->post['isthread'])
+		{
 			// $save_picture does not work on deletion of the whole thread.
 			$results = $tc_db->GetAll("SELECT `id`, `file`, `file_type` FROM `".KU_DBPREFIX."posts` WHERE `boardid` = " . $this->board['id'] . " AND `IS_DELETED` = 0 AND `parentid` = ".$tc_db->qstr($this->post['id']));
-			if (count($results)>0) {
-				foreach($results AS $line) {
-					if ($line['file'] != '' && $line['file'] != 'removed') {
-						if ($this->board['loadbalanceurl'] != '') {
-							$this->loadbalancer->Delete($line['file'], $line['file_type']);
-						} else {
-							@unlink(KU_BOARDSDIR.$this->board['name'].'/src/'.$line['file'].'.'.$line['file_type']);
-							@unlink(KU_BOARDSDIR.$this->board['name'].'/src/'.$line['file'].'.pch');
-							@unlink(KU_BOARDSDIR.$this->board['name'].'/thumb/'.$line['file'].'s.'.$line['file_type']);
-							@unlink(KU_BOARDSDIR.$this->board['name'].'/thumb/'.$line['file'].'a.'.$line['file_type']);
-							@unlink(KU_BOARDSDIR.$this->board['name'].'/thumb/'.$line['file'].'c.'.$line['file_type']);
-							if ($line['file_type'] == 'mp3') {
-								@unlink(KU_BOARDSDIR.$this->board['name'].'/thumb/'.$line['file'].'s.jpg');
-								@unlink(KU_BOARDSDIR.$this->board['name'].'/thumb/'.$line['file'].'s.png');
-								@unlink(KU_BOARDSDIR.$this->board['name'].'/thumb/'.$line['file'].'s.gif');
-							}
+			if (count($results)>0)
+			{
+				foreach($results AS $line)
+				{
+					if ($line['file'] != '' && $line['file'] != 'removed')
+					{
+						@unlink(KU_BOARDSDIR.$this->board['name'].'/src/'.$line['file'].'.'.$line['file_type']);
+						@unlink(KU_BOARDSDIR.$this->board['name'].'/src/'.$line['file'].'.pch');
+						@unlink(KU_BOARDSDIR.$this->board['name'].'/thumb/'.$line['file'].'s.'.$line['file_type']);
+						@unlink(KU_BOARDSDIR.$this->board['name'].'/thumb/'.$line['file'].'a.'.$line['file_type']);
+						@unlink(KU_BOARDSDIR.$this->board['name'].'/thumb/'.$line['file'].'c.'.$line['file_type']);
+						if ($line['file_type'] == 'mp3')
+						{
+							@unlink(KU_BOARDSDIR.$this->board['name'].'/thumb/'.$line['file'].'s.jpg');
+							@unlink(KU_BOARDSDIR.$this->board['name'].'/thumb/'.$line['file'].'s.png');
+							@unlink(KU_BOARDSDIR.$this->board['name'].'/thumb/'.$line['file'].'s.gif');
 						}
-						if ($update_to_removed) {
+						if ($update_to_removed)
+						{
 							$tc_db->Execute("UPDATE `".KU_DBPREFIX."posts` SET `file` = 'removed', `file_md5` = '' WHERE `boardid` = '" . $this->board['id'] . "' AND `id` = ".$line['id']);
 							clearPostCache($line['id'], $this->board['name']);
 						}
@@ -1009,27 +982,26 @@ class Post extends Board {
 			}
 			$this->DeleteFile($update_to_removed, false, $save_picture);
 		} else {
-			if ($this->post['file']!=''&&$this->post['file']!='removed') {
+			if ($this->post['file']!=''&&$this->post['file']!='removed')
+			{
 				if ($save_picture)
 				{
 					@copy(KU_BOARDSDIR.$this->board['name'].'/src/'.$this->post['file'].'.'.$this->post['file_type'],
 					      KU_BOARDSDIR.$this->board['name'].'/tmp/saved'.$this->post['file'].'.'.$this->post['file_type']);
 				}
-				if ($this->board['loadbalanceurl'] != '') {
-					$this->loadbalancer->Delete($this->post['file'], $this->post['filetype']);
-				} else {
-						@unlink(KU_BOARDSDIR.$this->board['name'].'/src/'.$this->post['file'].'.'.$this->post['file_type']);
-						@unlink(KU_BOARDSDIR.$this->board['name'].'/src/'.$this->post['file'].'.pch');
-						@unlink(KU_BOARDSDIR.$this->board['name'].'/thumb/'.$this->post['file'].'s.'.$this->post['file_type']);
-						@unlink(KU_BOARDSDIR.$this->board['name'].'/thumb/'.$this->post['file'].'a.'.$this->post['file_type']);
-						@unlink(KU_BOARDSDIR.$this->board['name'].'/thumb/'.$this->post['file'].'c.'.$this->post['file_type']);
-						if ($this->post['file_type'] == 'mp3') {
-							@unlink(KU_BOARDSDIR.$this->board['name'].'/thumb/'.$this->post['file'].'s.jpg');
-							@unlink(KU_BOARDSDIR.$this->board['name'].'/thumb/'.$this->post['file'].'s.png');
-							@unlink(KU_BOARDSDIR.$this->board['name'].'/thumb/'.$this->post['file'].'s.gif');
-						}
+				@unlink(KU_BOARDSDIR.$this->board['name'].'/src/'.$this->post['file'].'.'.$this->post['file_type']);
+				@unlink(KU_BOARDSDIR.$this->board['name'].'/src/'.$this->post['file'].'.pch');
+				@unlink(KU_BOARDSDIR.$this->board['name'].'/thumb/'.$this->post['file'].'s.'.$this->post['file_type']);
+				@unlink(KU_BOARDSDIR.$this->board['name'].'/thumb/'.$this->post['file'].'a.'.$this->post['file_type']);
+				@unlink(KU_BOARDSDIR.$this->board['name'].'/thumb/'.$this->post['file'].'c.'.$this->post['file_type']);
+				if ($this->post['file_type'] == 'mp3')
+				{
+					@unlink(KU_BOARDSDIR.$this->board['name'].'/thumb/'.$this->post['file'].'s.jpg');
+					@unlink(KU_BOARDSDIR.$this->board['name'].'/thumb/'.$this->post['file'].'s.png');
+					@unlink(KU_BOARDSDIR.$this->board['name'].'/thumb/'.$this->post['file'].'s.gif');
 				}
-				if ($update_to_removed) {
+				if ($update_to_removed)
+				{
 					$tc_db->Execute("UPDATE `".KU_DBPREFIX."posts` SET `file` = 'removed', `file_md5` = '' WHERE `boardid` = '" . $this->board['id'] . "' AND `id` = ".$tc_db->qstr($this->post['id']));
 					clearPostCache($this->post['id'], $this->board['name']);
 				}
