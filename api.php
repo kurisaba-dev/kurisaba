@@ -143,16 +143,17 @@ function json_exit($code, $message, $id = null)
 $api_function = Array
 (
 	// Special objects:
-	// <BOARD>: "id":string =>  {"name":string, "captchaenabled":bool}
-	// <POST>:  "id":integer => {"id":integer, "thread":integer, "subject":string, "name":string, "tripcode":string, "email":string,
-	//          "datetime":unixtime, "filename":string(or ''), "filetype":string(or ''), "filesize":integer, "pic_w":integer, "pic_h":integer,
-	//          "thumb_w":integer, "thumb_h":integer, "text":string, "reflinks":Array of {"board":string, "id":integer}}
+	// <BOARD>: {"name":string, "captchaenabled":bool}.
+	// <POST>:  {"id":integer, "thread":integer, "subject":string, "name":string, "tripcode":string, "email":string,
+	//          "datetime":unixtime, "filename":string, "filetype":string, "filesize":integer, "pic_w":integer, "pic_h":integer,
+	//          "thumb_w":integer, "thumb_h":integer, "animated":bool, "spoiler":bool, "text":string,
+	//          "reflinks":Array of {"board":string, "id":integer}}.
 
 	'get_boards' => function($request, $request_id)
 	{
 		// Get board list.
 		// Request: none.
-		// Response: Array of <BOARD>s.
+		// Response: Object { string:<BOARD>, ... }, where key is board name.
 
 		global $tc_db;
 
@@ -174,8 +175,11 @@ $api_function = Array
 	'get_thread' => function($request, $request_id)
 	{
 		// Get every post in a thread.
-		// Request: {"board":string, "thread_id":integer}
-		// Response: Array of <POST>s (including OP).
+		// Request: Object { "board":string, "thread_id":integer, "skipreflinks":optional bool, "msgsource":optional "source"|"parsed" }.
+		// Response: Object { integer:<POST>, ... }, where key is post id.
+		// Posts do include OP.
+		// "skipreflinks" parameter results in not including "reflinks" item in resulting <POST>s. Default is to include.
+		// "msgsource" parameter results in getting HTML or unparsed message text ('message'/'message_source' DB fields) Default is HTML.
 		
 		global $tc_db;
 
@@ -194,8 +198,10 @@ $api_function = Array
 	'get_updates_to_thread' => function($request, $request_id)
 	{
 		// Get every post in a thread after chosen timestamp.
-		// Request: {"board":string, "thread_id":integer, "timestamp":unixtime}
-		// Response: Array of <POST>s(with timestamp > "timestamp" from request).
+		// Request: Object { "board":string, "thread_id":integer, "timestamp":unixtime, "skipreflinks":optional bool, "msgsource":optional "source"|"parsed" }.
+		// Response: Object { integer:<POST>, ... }, where key is post id.
+		// Posts include only those with timestamp > "timestamp" from request.
+		// "skipreflinks", "msgsource": see get_thread().
 
 		global $tc_db;
 
@@ -214,9 +220,9 @@ $api_function = Array
 
 	'get_thread_ids' => function($request, $request_id)
 	{
-		// Get every post number in a thread.
-		// Request: {"board":string, "thread_id":integer}
-		// Response: Array of integers representing post numbers ([0] = OP).
+		// Get every post id in a thread.
+		// Request: Object { "board":string, "thread_id":integer }.
+		// Response: Array of [ integer ], representing post ids including OP.
 
 		global $tc_db;
 
@@ -239,8 +245,9 @@ $api_function = Array
 	'get_posts_by_id' => function($request, $request_id)
 	{
 		// Get specified posts from a board.
-		// Request: {"board":string, "ids":Array of integers}
-		// Response: Array of <POST>s.
+		// Request: Object { "board":string, "ids":Array of [ integer ], "skipreflinks":optional bool, "msgsource":optional "source"|"parsed" }.
+		// Response: Object { integer:<POST>, ... }, where key is post id.
+		// "skipreflinks", "msgsource": see get_thread().
 
 		global $tc_db;
 
@@ -265,8 +272,17 @@ $api_function = Array
 	'get_part_of_board' => function($request, $request_id)
 	{
 		// Get part of board.
-		// Request: {"board":string, "start":integer(number of thread to start from, counting from 0), "threadnum":integer(how much threads), "previewnum":integer}
-		// Response: Array[threadnum(max)] of ("opflags":{"stickied":bool,"locked":bool}, "numreplies":integer(OP does not count), "numpicreplies":integer(OP does not count), "op":<POST>, "lastreplies":Array[previewnum(max)] of <POST>s).
+		// Request: Object { "board":string, "start":integer, "threadnum":integer, "previewnum":integer,
+		//          "skipreflinks":optional bool, "msgsource":optional "source"|"parsed" }.
+		// Response: Array [ Object { "opflags":Object { "stickied":bool, "locked":bool }, "numreplies":integer,
+		//           "numpicreplies":integer, "op":<POST>, "lastreplies":Array [ <POST> ] } ].
+		// "start" is number of thread to start from, the newest thread on board has number 0.
+		// "threadnum" is quantity of threads to retrieve.
+		// "previewnum" is quantity of last posts in thread to retrieve.
+		// "skipreflinks", "msgsource": see get_thread().
+		// "numreplies" is total quantity of replies in thread (without OP).
+		// "numpicreplies" is total quantity of replies with attachments in thread (without OP).
+		// Response has no more than "threadnum" items; "lastreplies" - no more than "previewnum".
 
 		global $tc_db;
 
@@ -287,9 +303,10 @@ $api_function = Array
 
 	'get_new_posts_count' => function($request, $request_id)
 	{
-		// Get count of new posts on every board from specifed timestamps.
-		// Request: {"timestamps":{boardid:last timestamp,boardid:last timestamp,...}}
-		// Response: {boardname:integer,boardname:integer,...}
+		// For specified boards, get count of new posts which are newer than specifed timestamp for this board.
+		// Request: Object { "timestamps":Object { integer:unixtime, ... } }.
+		// Response: Object { string:integer, ... }, where key is board name.
+		// "timestamps" object uses board id as a key.
 
 		global $tc_db;
 		
@@ -313,8 +330,13 @@ $api_function = Array
 	'get_stats' => function($request, $request_id)
 	{
 		// Get statistical values.
-		// Request: {"type":"postslastday"|"postslasthour"|"postsboard"}
-		// Response: {"result":integer}
+		// Request: Object { "type":"postslastday"|"postslasthour"|"postsboard", "board":string }
+		// Response: Object { "result":integer }
+		// "type" chooses one of possible stats:
+		//        "postslastday" - total posts on all boards for the last 24 hours,
+		//        "postslasthour" - total posts on all boards for the last 1 hour,
+		//        "postsboard" - total posts on specified "board".
+		// "board" defines required board name for "postsboard" stat (optional and ignored for others).
 
 		global $tc_db;
 		
