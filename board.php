@@ -722,13 +722,6 @@ if($operation_post) // it's `noreturn`.
 		kurisaba_exit(_gettext('Sorry, this board is locked and can not be posted in.'),'',$_POST['message']);
 	}
 
-	if (KU_RSS) {
-		require_once KU_ROOTDIR . 'inc/classes/rss.class.php';
-		$rss_class = new RSS();
-
-		print_page(KU_BOARDSDIR.$_POST['board'].'/rss.xml',$rss_class->GenerateRSS($_POST['board'], $board_class->board['id']),$_POST['board']);
-	}
-
 	if( $_POST['redirecttothread'] == 1 || $_POST['em'] == 'return' || $_POST['em'] == 'noko') {
 		setcookie('tothread', 'on', time() + KU_ADDTIME + 31556926, '/');
 		if ($thread_replyto == "0") {

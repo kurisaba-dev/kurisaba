@@ -1007,7 +1007,7 @@ class Manage {
 				$results = $tc_db->GetAll("SELECT HIGH_PRIORITY * FROM `" . KU_DBPREFIX . "boards` WHERE `name` = " . $tc_db->qstr($dir) . "");
 				if (count($results) == 0) {
 					if (mkdir(KU_BOARDSDIR . $dir, 0777) && mkdir(KU_BOARDSDIR . $dir . '/res', 0777) && mkdir(KU_BOARDSDIR . $dir . '/src', 0777) && mkdir(KU_BOARDSDIR . $dir . '/thumb', 0777)) {
-						file_put_contents(KU_BOARDSDIR . $dir . '/.htaccess', 'DirectoryIndex '. KU_FIRSTPAGE . '');
+						file_put_contents(KU_BOARDSDIR . $dir . '/.htaccess', 'DirectoryIndex '. 'board.html' . '');
 						file_put_contents(KU_BOARDSDIR . $dir . '/src/.htaccess', 'AddType text/plain .ASM .C .CPP .CSS .JAVA .JS .LSP .PHP .PL .PY .RAR .SCM .TXT'. "\n" . 'SetHandler default-handler');
 						if ($_POST['firstpostid'] < 1) {
 							$_POST['firstpostid'] = 1;
@@ -1059,7 +1059,7 @@ class Manage {
 					/* Add mod rights */
 					$moderating[] = $dir;
 					$tc_db->Execute("UPDATE `" . KU_DBPREFIX . "staff` SET `boards` = " . $tc_db->qstr(implode('|',$moderating)) . " WHERE `username` = '" . $_SESSION['manageusername'] . "'");
-					file_put_contents(KU_BOARDSDIR . $dir . '/.htaccess', 'DirectoryIndex '. KU_FIRSTPAGE . '');
+					file_put_contents(KU_BOARDSDIR . $dir . '/.htaccess', 'DirectoryIndex '. 'board.html' . '');
 					file_put_contents(KU_BOARDSDIR . $dir . '/src/.htaccess', 'AddType text/plain .ASM .C .CPP .CSS .JAVA .JS .LSP .PHP .PL .PY .RAR .SCM .TXT'. "\n" . 'SetHandler default-handler');
 					$_POST['firstpostid'] = 1;
 					$sect20 = $tc_db->GetOne('SELECT `id` FROM `'. KU_DBPREFIX .'sections` WHERE `abbreviation`="20"');
@@ -1435,10 +1435,10 @@ class Manage {
 				management_addlogentry(_gettext('Deleted an Embed'), 9);
 			} elseif ($_GET['act'] == 'add') {
 				if (isset($_POST['embeds']) && isset($_POST['name']) && isset($_POST['filetype']) && isset($_POST['videourl'])) {
-					if ($_POST['embeds'] != '') {
-            $this->CheckToken($_POST['token']);
-						$width = ($_POST['width'] != '') ? $_POST['width'] : KU_YOUTUBEWIDTH;
-						$height = ($_POST['height'] != '') ? $_POST['height'] : KU_YOUTUBEHEIGHT;
+					if ($_POST['embeds'] != '' && $_POST['width'] != '' && $_POST['height'] != '') {
+						$this->CheckToken($_POST['token']);
+						$width = $_POST['width'];
+						$height = $_POST['height'];
 
 						$tpl_page .= '<hr />';
 						if ($_POST['embeds'] != '') {
@@ -1473,11 +1473,11 @@ class Manage {
 
 			<label for="width">'. _gettext('Width') . ':</label>
 			<input type="text" id="width" name="width" value="'. (isset($values['width']) ? $values['width'] : '') . '" />
-			<div class="desc">'. _gettext('This can be left blank. It will be reset with the default width set in config.php') . '</div><br />
+			<div class="desc">'. _gettext('Can not be left blank.') . '</div><br />
 
 			<label for="height">'. _gettext('Height') . ':</label>
 			<input type="text" id="height" name="height" value="'. (isset($values['height']) ? $values['height'] : '') . '" />
-			<div class="desc">'. _gettext('This can be left blank. It will be reset with the default height set in config.php') . '</div><br />
+			<div class="desc">'. _gettext('Can not be left blank.') . '</div><br />
 
 			<input type="submit" value="'. _gettext('Edit') .'" />
 			</form>';

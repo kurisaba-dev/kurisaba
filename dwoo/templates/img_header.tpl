@@ -1,6 +1,5 @@
 <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0">
 <script type="text/javascript"><!--
-		var captchaTimeout = ( {%KU_CAPTCHALIFE} * 1000 ) - 500;
 		var react_api = '{%KU_CLI_REACT_API}';
 		var react_ena = '{%KU_REACT_ENA}';
 		var react_sitename = {if %KU_REACT_SITENAME}'{%KU_REACT_SITENAME}:'{else}''{/if};
@@ -11,7 +10,6 @@
 		var ku_maxfilesize = {$maxfilesize};
 		var style_cookie = "kustyle";
 		var locale = '{$locale}';
-		var ku_youtube_apikey = '{%KU_YOUTUBE_APIKEY}';
 		var search_phrases = Array('{$search_phrases}');
 {if $replythread != 0}
 		var ispage = false;
@@ -34,9 +32,6 @@
 		}
 	</style>
 	{/literal}
-{/if}
-{if %KU_RSS neq ''}
-	<link rel="alternate" type="application/rss+xml" title="RSS" href="{%KU_BOARDSPATH}/{$board.name}/rss.xml" />
 {/if}
 <!-- <script src="//cdnjs.cloudflare.com/ajax/libs/headjs/1.0.3/head.load.min.js"></script> -->
 <script type="text/javascript" src="{$cwebpath}lib/javascript/gettext.js"></script>

@@ -172,17 +172,6 @@ function iter_obj(object, callback) {
 		{/if}
 	{/foreach}
 {/if}
-{if %KU_IRC}
-	{if %KU_MENUTYPE eq 'normal'}
-		<h2>
-	{else}
-		<h2 style="display: inline;"><br />
-	{/if}
-	&nbsp;IRC</h2>
-	<ul>
-		<li>{%KU_IRC}</li>
-	</ul>
-{/if}
 <h2><span class="plus" onclick="toggle(this, 'ilinks');" title="Нажмите Показать/Спрятать">&minus;</span>&nbsp;Треды</h2>
 <div id="ilinks">
 <ul>

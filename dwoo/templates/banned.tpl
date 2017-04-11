@@ -7,7 +7,6 @@
 </head>
 <body>
 <h1>{%KU_NAME}</h1>
-<h3>{%KU_SLOGAN}</h3>
 <div style="margin: 3em;">
 	<h2>&nbsp;{t}YOU ARE BANNED{/t}! :\</h2>
 	<img src="{%KU_BOARDSPATH}/images/youarebanned.jpg" style="float: right;" alt=":'(">

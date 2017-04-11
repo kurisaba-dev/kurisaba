@@ -303,11 +303,7 @@ class Parse {
 				}
 				if ($realid !== '') {
 					$return = '<a href="' . KU_BOARDSFOLDER . 'read.php';
-					if (KU_TRADITIONALREAD) {
-						$return .= '/' . $thread_board_return . '/' . $realid.'/' . $matches[1];
-					} else {
-						$return .= '?b=' . $thread_board_return . '&t=' . $realid.'&p=' . $matches[1];
-					}
+					$return .= '?b=' . $thread_board_return . '&t=' . $realid.'&p=' . $matches[1];
 					$return .= '">' . $matches[0] . '</a>';
 				}
 			}
@@ -473,7 +469,6 @@ class Parse {
 		$this->boardid = $boardid;	
 		$this->ipmd5 = $ipmd5;	
 		$message = trim($message);
-		//$message = $this->CutWord($message, (KU_LINELENGTH / 15)); // will be done on client
 		$message = htmlspecialchars($message, ENT_QUOTES);
 		$message = $this->BBCode($message);
 		$message = $this->ClickableQuote($message, $board, $boardtype, $parentid, $boardid, $ispage);

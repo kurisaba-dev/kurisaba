@@ -132,9 +132,6 @@ class Posting {
 		/* If the board has captcha's enabled... */
 		if ($board_class->board['enablecaptcha'] == 1) {
 			$submit_time = time() + KU_ADDTIME;
-			/*if($submit_time - $_SESSION['captchatime'] > KU_CAPTCHALIFE) {
-				return _gettext('Captcha has expired.');
-			}*/
 			
 			// Check if they entered the correct code. If not... 
 			if ($_SESSION['security_code'.$_POST['captchaid']] != mb_strtoupper($_POST['captcha']) || empty($_SESSION['security_code'.$_POST['captchaid']]))
@@ -142,13 +139,6 @@ class Posting {
 				// Give user another chance: compare with old-style security code. It's so if he use dollscript.
 				if ($_SESSION['security_code'] != mb_strtoupper($_POST['captcha']) || empty($_SESSION['security_code']))
 				{
-
-//file_put_contents(KU_BOARDSDIR . '_captcha_debug.txt', 'getid='.$_GET['captchaid'].'postid='.$_POST['captchaid'].':entered='
-//.$_POST['captcha'].':new='
-//.(isset($_SESSION['security_code'.$_POST['captchaid']])?$_SESSION['security_code'.$_POST['captchaid']]:'not set').':old='
-//.(isset($_SESSION['security_code'])?$_SESSION['security_code']:'not set').':useragent='.$_SERVER['HTTP_USER_AGENT']
-//."\n", FILE_APPEND);
-
 					// Delete used captchas
 					if (isset($_SESSION['security_code'.$_POST['captchaid']])) unset($_SESSION['security_code'.$_POST['captchaid']]);
 					if (isset($_SESSION['security_code'])) unset($_SESSION['security_code']);

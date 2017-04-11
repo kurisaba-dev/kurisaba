@@ -9,7 +9,6 @@
 
 <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0">
 <script type="text/javascript"><!--
-		var captchaTimeout = ( {%KU_CAPTCHALIFE} * 1000 ) - 500;
 		var react_api = '{%KU_CLI_REACT_API}';
 		var react_ena = '{%KU_REACT_ENA}';
 		var react_sitename = {if %KU_REACT_SITENAME}'{%KU_REACT_SITENAME}:'{else}''{/if};
@@ -19,7 +18,6 @@
 		var ku_maxfilesize = 0;
 		var style_cookie = "kustyle";
 		var locale = '{$locale}';
-		var ku_youtube_apikey = '{%KU_YOUTUBE_APIKEY}';
 {if $replythread > 0}
 		var ispage = false;
 {else}

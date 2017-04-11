@@ -6,7 +6,7 @@ if (!isset($_GET['info'])) {
 	$preconfig_db_unnecessary = true;
 }
 require 'config.php';
-$menufile = (KU_STATICMENU) ? 'menu.html' : 'menu.php';
+$menufile = 'menu.php';
 $menusize = (KU_MENUTYPE == 'normal') ? '15%' : '10%';
 $mainsize = 100-$menusize . '%';
 header("Expires: Mon, 1 Jan 2030 05:00:00 GMT");

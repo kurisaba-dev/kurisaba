@@ -642,12 +642,11 @@ class Upload {
 	function webmThumb($filepath, $thumbpath, $filename, $midtime) {
 		if(KU_FFMPEGPATH) putenv('PATH=' . getenv('PATH') . PATH_SEPARATOR . KU_FFMPEGPATH);
 		$scale = "w=".KU_THUMBWIDTH.":h=".KU_THUMBHEIGHT;
-		$scalecat = "w=".KU_CATTHUMBWIDTH.":h=".KU_CATTHUMBHEIGHT;
 		$foar = ':force_original_aspect_ratio=decrease';
 		$rawdur = shell_exec("ffmpeg -i ".$filepath." 2>&1");
 		$common = ' -ss '.$midtime.' -vframes 1 -filter:v scale=';
 		$newfn = $thumbpath.$filename;
-		$result = shell_exec('ffmpeg -i '.$filepath.$common.$scale.$foar.' '.$newfn.'s.jpg'.$common.$scalecat.$foar.' '.$newfn.'c.jpg 2>&1');
+		$result = shell_exec('ffmpeg -i '.$filepath.$common.$scale.$foar.' '.$newfn.'s.jpg 2>&1');
 		preg_match('/Output[\s\S]+?(\d+)x(\d+)[\s\S]+?(\d+)x(\d+)/m', $result, $ths);
 		if(count($ths) == 5) return array(
 			'thumbwidth' => $ths[1], 

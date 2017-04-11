@@ -13,9 +13,6 @@
 	</style>
 	{/literal}
 {/if}
-{if %KU_RSS neq ''}
-	<link rel="alternate" type="application/rss+xml" title="RSS" href="{%KU_BOARDSPATH}/{$board.name}/rss.xml" />
-{/if}
 <script type="text/javascript"><!--
 		var ku_boardspath = '{%KU_BOARDSPATH}';
 		var ku_cgipath = '{%KU_CGIPATH}';
@@ -74,9 +71,7 @@
 </div>
 
 <div class="logo">
-{if %KU_HEADERURL neq '' && $board.image eq ''}
-	<img src="{%KU_HEADERURL}" alt="{t}Logo{/t}" /><br />
-{elseif $board.image neq '' && $board.image neq "none"}
+{if $board.image neq '' && $board.image neq "none"}
 	<img src="{$board.image}" alt="{t}Logo{/t}" /><br />
 {/if}
 {if %KU_DIRTITLE}

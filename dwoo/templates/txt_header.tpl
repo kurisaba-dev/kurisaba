@@ -13,9 +13,6 @@
 	</style>
 	{/literal}
 {/if}
-{if %KU_RSS neq ''}
-	<link rel="alternate" type="application/rss+xml" title="RSS" href="{%KU_BOARDSPATH}/{$board.name}/rss.xml" />
-{/if}
 <script type="text/javascript"><!--
 		var ku_boardspath = '{%KU_BOARDSPATH}';
 		var ku_cgipath = '{%KU_CGIPATH}';

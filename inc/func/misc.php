@@ -202,12 +202,6 @@ function management_addlogentry($entry, $category = 0, $forceusername = '') {
 	if ($entry != '') {
 		$tc_db->Execute("INSERT INTO `" . KU_DBPREFIX . "modlog` ( `entry` , `user` , `category` , `timestamp` ) VALUES ( " . $tc_db->qstr($entry) . " , '" . $username . "' , " . $tc_db->qstr($category) . " , '" . (time() + KU_ADDTIME) . "' )");
 	}
-	if (KU_RSS) {
-		require_once(KU_ROOTDIR . 'inc/classes/rss.class.php');
-		$rss_class = new RSS();
-
-		print_page(KU_BOARDSDIR . 'modlogrss.xml', $rss_class->GenerateModLogRSS($entry), '');
-	}
 }
 
 function sendStaffMail($subject, $message) {

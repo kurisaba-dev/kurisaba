@@ -28,10 +28,6 @@ require 'config.php';
 require KU_ROOTDIR . 'inc/functions.php';
 require KU_ROOTDIR . 'inc/classes/menu.class.php';
 
-if (KU_STATICMENU) {
-	die('This file is disabled because KU_STATICMENU is set to true.');
-}
-
 $menu_class = new Menu;
 if (isset($_COOKIE['tcshowdirs'])) {
 	if ($_COOKIE['tcshowdirs'] == 'yes') {
