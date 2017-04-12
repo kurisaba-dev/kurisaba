@@ -110,7 +110,7 @@
 						<input type="radio" name="attach_type" value="link" onchange="showembedfield(this);"> Ссылка
 					</td>
 				</tr>
-				<tr id="attachfile_tr">
+				<tr id="attachfile_tr" style="height: 26px;">
 					<td class="postblock">
 						{t}File{/t}
 					</td>
@@ -122,7 +122,7 @@
 						<input type="button" value="Очистить" onclick="document.forms['postform'].imagefile.value='';" style="width: 80px;" >
 					</td>
 				</tr>
-				<tr id="attachdrop_tr" style="display: none;">
+				<tr id="attachdrop_tr" style="height: 26px; display: none;">
 					<td class="postblock">
 						{t}File{/t}
 					</td>
@@ -135,7 +135,7 @@
 				</tr>
 				
 				{if ($board.uploadtype eq 1 || $board.uploadtype eq 2) && $board.embeds_allowed neq ''}
-					<tr id="attachembed_tr" style="display: none;">
+					<tr id="attachembed_tr" style="height: 26px; display: none;">
 						<td class="postblock">
 							<select name="embedtype" style="margin-top: -2px; margin-bottom: -2px;">
 								{foreach name=embed from=$embeds item=embed}
@@ -151,7 +151,7 @@
 					</tr>
 				{/if}
 
-				<tr id="attachlink_tr" style="display: none;">
+				<tr id="attachlink_tr" style="height: 26px; display: none;">
 					<td class="postblock">
 						Ссылка</td>
 					<td>
