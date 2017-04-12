@@ -35,7 +35,15 @@ function determine_msgfield($request)
 	json_exit(400, "Incorrect msgtype value", $request['id']);
 }
 
-function gen_posts($skipreflinks, $msgsource, $boardid, $dbdata, $extended = false, $previewnum = 0)
+function determine_replyformat($request)
+{
+	if (!isset($request['replyformat'])) return false;
+	if ($request['msgtype'] == 'array')  return true;
+	if ($request['msgtype'] == 'object') return false;
+	json_exit(400, "Incorrect replyformat value", $request['id']);
+}
+
+function gen_posts($skipreflinks, $msgsource, $replyformat, $boardid, $dbdata, $extended = false, $previewnum = 0)
 {
 	global $tc_db;
 	
@@ -69,7 +77,7 @@ function gen_posts($skipreflinks, $msgsource, $boardid, $dbdata, $extended = fal
 			$dbdata3 = $tc_db->GetAll("SELECT * FROM `" . KU_DBPREFIX . "posts` WHERE `boardid` = " . $boardid . " AND `parentid` = " . $tc_db->qstr($dbentry['id']) . " AND IS_DELETED = 0 ORDER BY `id` DESC LIMIT " . $previewnum);
 			if (is_array($dbdata3) && count($dbdata3) > 0)
 			{
-				$lastreplies = array_reverse(gen_posts($skipreflinks, $msgsource, $boardid, $dbdata3),true);
+				$lastreplies = array_reverse(gen_posts($skipreflinks, $msgsource, false, $boardid, $dbdata3),true);
 			}
 			
 			array_push($result, Array
@@ -107,27 +115,54 @@ function gen_posts($skipreflinks, $msgsource, $boardid, $dbdata, $extended = fal
 		}
 		else
 		{
-			$result[$dbentry['id']] = Array
-			(
-				"id"       => $dbentry['id'],
-				"thread"   => (($dbentry['parentid'] == 0)? $dbentry['id'] : $dbentry['parentid']),
-				"subject"  => $dbentry['subject'],
-				"name"     => $dbentry['name'],
-				"tripcode" => $dbentry['tripcode'],
-				"email"    => $dbentry['email'],
-				"datetime" => $dbentry['timestamp'],
-				"filename" => $dbentry['file'],
-				"filetype" => $dbentry['file_type'],
-				"filesize" => $dbentry['file_size'],
-				"pic_w"    => $dbentry['image_w'],
-				"pic_h"    => $dbentry['image_h'],
-				"thumb_w"  => $dbentry['thumb_w'],
-				"thumb_h"  => $dbentry['thumb_h'],
-				"animated" => $dbentry['pic_animated'],
-				"spoiler"  => $dbentry['pic_spoiler'],
-				"text"     => ($msgsource ? (($dbentry['message_source'] == '') ? $dbentry['message'] : $dbentry['message_source']) : $dbentry['message']),
-				"reflinks" => ($skipreflinks ? null : $reflinks)
-			);
+			if ($replyformat) // Array
+			{
+				array_push($result, Array
+				(
+					"id"       => $dbentry['id'],
+					"thread"   => (($dbentry['parentid'] == 0)? $dbentry['id'] : $dbentry['parentid']),
+					"subject"  => $dbentry['subject'],
+					"name"     => $dbentry['name'],
+					"tripcode" => $dbentry['tripcode'],
+					"email"    => $dbentry['email'],
+					"datetime" => $dbentry['timestamp'],
+					"filename" => $dbentry['file'],
+					"filetype" => $dbentry['file_type'],
+					"filesize" => $dbentry['file_size'],
+					"pic_w"    => $dbentry['image_w'],
+					"pic_h"    => $dbentry['image_h'],
+					"thumb_w"  => $dbentry['thumb_w'],
+					"thumb_h"  => $dbentry['thumb_h'],
+					"animated" => $dbentry['pic_animated'],
+					"spoiler"  => $dbentry['pic_spoiler'],
+					"text"     => ($msgsource ? (($dbentry['message_source'] == '') ? $dbentry['message'] : $dbentry['message_source']) : $dbentry['message']),
+					"reflinks" => ($skipreflinks ? null : $reflinks)
+				);
+			}
+			else // Object
+			{
+				$result[$dbentry['id']] = Array
+				(
+					"id"       => $dbentry['id'],
+					"thread"   => (($dbentry['parentid'] == 0)? $dbentry['id'] : $dbentry['parentid']),
+					"subject"  => $dbentry['subject'],
+					"name"     => $dbentry['name'],
+					"tripcode" => $dbentry['tripcode'],
+					"email"    => $dbentry['email'],
+					"datetime" => $dbentry['timestamp'],
+					"filename" => $dbentry['file'],
+					"filetype" => $dbentry['file_type'],
+					"filesize" => $dbentry['file_size'],
+					"pic_w"    => $dbentry['image_w'],
+					"pic_h"    => $dbentry['image_h'],
+					"thumb_w"  => $dbentry['thumb_w'],
+					"thumb_h"  => $dbentry['thumb_h'],
+					"animated" => $dbentry['pic_animated'],
+					"spoiler"  => $dbentry['pic_spoiler'],
+					"text"     => ($msgsource ? (($dbentry['message_source'] == '') ? $dbentry['message'] : $dbentry['message_source']) : $dbentry['message']),
+					"reflinks" => ($skipreflinks ? null : $reflinks)
+				);
+			}
 		}
 	}
 	return $result;
@@ -175,11 +210,12 @@ $api_function = Array
 	'get_thread' => function($request, $request_id)
 	{
 		// Get every post in a thread.
-		// Request: Object { "board":string, "thread_id":integer, "skipreflinks":optional bool, "msgsource":optional "source"|"parsed" }.
-		// Response: Object { integer:<POST>, ... }, where key is post id.
+		// Request: Object { "board":string, "thread_id":integer, "skipreflinks":optional bool, "msgsource":optional "source"|"parsed", "replyformat":optional "object"|"array" }.
+		// Response: Object { integer:<POST>, ... }, where key is post id, or Array of [ <POST> ] if "replyformat"=="array".
 		// Posts do include OP.
 		// "skipreflinks" parameter results in not including "reflinks" item in resulting <POST>s. Default is to include.
 		// "msgsource" parameter results in getting HTML or unparsed message text ('message'/'message_source' DB fields) Default is HTML.
+		// "replyformat" parameter selects data format in response: array of object. Default is object.
 		
 		global $tc_db;
 
@@ -188,20 +224,21 @@ $api_function = Array
 		$boardid      = get_boardid_by_name($request_id, $request['board']);
 		$skipreflinks = determine_reflinks($request);
 		$msgsource    = determine_msgfield($request);
+		$replyformat  = determine_replyformat($request);
 		
 		$dbdata = $tc_db->GetAll("SELECT * FROM `" . KU_DBPREFIX . "posts` WHERE `boardid` = " . $boardid . " AND ((`id` = " . $tc_db->qstr($request['thread_id']) . " AND `parentid` = 0) OR `parentid` = " . $tc_db->qstr($request['thread_id']) . ") AND IS_DELETED = 0 ORDER BY `id` ASC");
 		if (!is_array($dbdata) || count($dbdata) == 0) json_exit(404, "get_thread(): No such thread found", $request_id);
 
-		return gen_posts($skipreflinks, $msgsource, $boardid, $dbdata);
+		return gen_posts($skipreflinks, $msgsource, $replyformat, $boardid, $dbdata);
 	},
 
 	'get_updates_to_thread' => function($request, $request_id)
 	{
 		// Get every post in a thread after chosen timestamp.
-		// Request: Object { "board":string, "thread_id":integer, "timestamp":unixtime, "skipreflinks":optional bool, "msgsource":optional "source"|"parsed" }.
-		// Response: Object { integer:<POST>, ... }, where key is post id.
+		// Request: Object { "board":string, "thread_id":integer, "timestamp":unixtime, "skipreflinks":optional bool, "msgsource":optional "source"|"parsed", "replyformat":optional "object"|"array" }.
+		// Response: Object { integer:<POST>, ... }, where key is post id, or Array of [ <POST> ] if "replyformat"=="array".
 		// Posts include only those with timestamp > "timestamp" from request.
-		// "skipreflinks", "msgsource": see get_thread().
+		// "skipreflinks", "msgsource", "replyformat": see get_thread().
 
 		global $tc_db;
 
@@ -211,11 +248,12 @@ $api_function = Array
 		$boardid      = get_boardid_by_name($request_id, $request['board']);
 		$skipreflinks = determine_reflinks($request);
 		$msgsource    = determine_msgfield($request);
+		$replyformat  = determine_replyformat($request);
 		
 		$dbdata = $tc_db->GetAll("SELECT * FROM `" . KU_DBPREFIX . "posts` WHERE `boardid` = " . $boardid . " AND `timestamp` > " . $request['timestamp'] . " AND `parentid` = " . $tc_db->qstr($request['thread_id']) . " AND IS_DELETED = 0 ORDER BY `id` ASC");
 		if (!is_array($dbdata) || count($dbdata) == 0) json_exit(404, "get_thread(): No new posts", $request_id);
 
-		return gen_posts($skipreflinks, $msgsource, $boardid, $dbdata);
+		return gen_posts($skipreflinks, $msgsource, $replyformat, $boardid, $dbdata);
 	},
 
 	'get_thread_ids' => function($request, $request_id)
@@ -245,9 +283,9 @@ $api_function = Array
 	'get_posts_by_id' => function($request, $request_id)
 	{
 		// Get specified posts from a board.
-		// Request: Object { "board":string, "ids":Array of [ integer ], "skipreflinks":optional bool, "msgsource":optional "source"|"parsed" }.
-		// Response: Object { integer:<POST>, ... }, where key is post id.
-		// "skipreflinks", "msgsource": see get_thread().
+		// Request: Object { "board":string, "ids":Array of [ integer ], "skipreflinks":optional bool, "msgsource":optional "source"|"parsed", "replyformat":optional "object"|"array" }.
+		// Response: Object { integer:<POST>, ... }, where key is post id, or Array of [ <POST> ] if "replyformat"=="array".
+		// "skipreflinks", "msgsource", "replyformat": see get_thread().
 
 		global $tc_db;
 
@@ -262,11 +300,12 @@ $api_function = Array
 		$boardid      = get_boardid_by_name($request_id, $request['board']);
 		$skipreflinks = determine_reflinks($request);
 		$msgsource    = determine_msgfield($request);
+		$replyformat  = determine_replyformat($request);
 		
 		$dbdata = $tc_db->GetAll("SELECT * FROM `" . KU_DBPREFIX . "posts` WHERE `boardid` = " . $boardid . " AND `id` IN " . $postlist . " AND IS_DELETED = 0 ORDER BY `id` ASC");
 		if (!is_array($dbdata) || count($dbdata) == 0) json_exit(404, "get_posts_by_id(): No relevant posts found", $request_id);
 
-		return gen_posts($skipreflinks, $msgsource, $boardid, $dbdata);
+		return gen_posts($skipreflinks, $msgsource, $replyformat, $boardid, $dbdata);
 	},
 
 	'get_part_of_board' => function($request, $request_id)
@@ -298,7 +337,7 @@ $api_function = Array
 		$dbdata = $tc_db->GetAll("SELECT * FROM `" . KU_DBPREFIX . "posts` WHERE `boardid` = " . $boardid . " AND `parentid` = 0 AND IS_DELETED = 0 ORDER BY `bumped` DESC LIMIT " . $request['start'] . ", " . $request['threadnum']);
 		if (!is_array($dbdata) || count($dbdata) == 0) json_exit(404, "get_part_of_board(): No relevant threads found", $request_id);
 
-		return gen_posts($skipreflinks, $msgsource, $boardid, $dbdata, true, $request['previewnum']);
+		return gen_posts($skipreflinks, $msgsource, false, $boardid, $dbdata, true, $request['previewnum']);
 	},
 
 	'get_new_posts_count' => function($request, $request_id)
