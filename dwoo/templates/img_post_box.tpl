@@ -115,11 +115,11 @@
 						{t}File{/t}
 					</td>
 					<td>
-						<input type="file" name="imagefile" id="imagefile" style="width: 395px;" accesskey="f" />
+						<input type="file" name="imagefile" id="imagefile" style="width: 440px;" accesskey="f" />
 						{if $replythread eq 0 && $board.enablenofile eq 1 }
 							[<input type="checkbox" name="nofile" id="nofile" accesskey="q" /><label for="nofile"> {t}No File{/t}</label>]
 						{/if}
-						<input type="button" value="Очистить" onclick="document.forms['postform'].imagefile.value='';">
+						<input type="button" value="Очистить" onclick="document.forms['postform'].imagefile.value='';" style="width: 80px;" >
 					</td>
 				</tr>
 				<tr id="attachdrop_tr" style="display: none;">
@@ -137,7 +137,7 @@
 				{if ($board.uploadtype eq 1 || $board.uploadtype eq 2) && $board.embeds_allowed neq ''}
 					<tr id="attachembed_tr" style="display: none;">
 						<td class="postblock">
-							<select name="embedtype">
+							<select name="embedtype" style="margin-top: -2px; margin-bottom: -2px;">
 								{foreach name=embed from=$embeds item=embed}
 									{if in_array($embed.filetype,explode(',' $board.embeds_allowed))}
 										<option value="{$embed.name|lower}">{$embed.name}</option>
@@ -146,7 +146,7 @@
 							</select>
 						</td>
 						<td>
-							<input type="text" name="embed" size="76" maxlength="76" accesskey="e" style="width: 520px;" />&nbsp;
+							<input type="text" name="embed" size="76" maxlength="76" accesskey="e" style="width: 520px;" />
 						</td>
 					</tr>
 				{/if}
@@ -169,7 +169,7 @@
 				</td>
 				<td>
 					<nobr>
-						<input type="text" name="captcha" size="76" accesskey="c" style="width: 480px;">
+						<input type="text" name="captcha" size="76" accesskey="c" style="width: 520px;">
 						<input type="hidden" class="captchaid" name="captchaid" value="{$captchaid}">
 					</nobr>
 				</td>
