@@ -30,7 +30,7 @@ $board_class->dwoo_data->assign('issearch', true);
 $board_class->dwoo_data->assign('isread', true);
 $board_class->dwoo_data->assign('skipheader', true);
 $embeds = $tc_db->GetAll("SELECT * FROM `" . KU_DBPREFIX . "embeds`");
-$this->dwoo_data->assign('embeds', $embeds);
+$board_class->dwoo_data->assign('embeds', $embeds);
 $page ='';
 $page .= $board_class->PageHeader(-1, 0, -1, "Однопоток");
 $page .= "<hr>";
