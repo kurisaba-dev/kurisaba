@@ -37,9 +37,9 @@ function determine_msgfield($request)
 
 function determine_replyformat($request)
 {
-	if (!isset($request['replyformat'])) return false;
-	if ($request['msgtype'] == 'array')  return true;
-	if ($request['msgtype'] == 'object') return false;
+	if (!isset($request['replyformat']))     return false;
+	if ($request['replyformat'] == 'array')  return true;
+	if ($request['replyformat'] == 'object') return false;
 	json_exit(400, "Incorrect replyformat value", $request['id']);
 }
 
