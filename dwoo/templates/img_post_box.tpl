@@ -36,15 +36,15 @@
 					<td class="postblock">
 						{t}Name{/t}</td>
 					<td>
-						<input type="text" name="name" size="76" maxlength="{%KU_MAXNAMELENGTH}" accesskey="n"/>
-						<a href="#" onclick="javascript:emgr_ui_onclick();return false;" title="История записей">
+						<input type="text" name="name" size="76" maxlength="{%KU_MAXNAMELENGTH}" accesskey="n" style="width: 500px;"/>
+						<a href="#" onclick="javascript:emgr_ui_onclick();return false;" title="История записей" style="vertical-align: middle;">
 							<img src="/css/icons/blank.gif" border="0" class="spritebtn editmgr">
 						</a>
 					</td>
 				</tr>
 			{/if}
 			
-			<span class="extrabtns postboxcontrol" style="display: none;">
+			<span class="extrabtns postboxcontrol" style="display: none; padding-top: 5px;">
 				<span class="qrpinner">
 					<a href="#" onclick="javascript:$('#postform').pin();return false;" title="Прикрепить / Открепить">
 						<img src="/css/icons/blank.gif" border="0" class="spritebtn pinner">
@@ -62,7 +62,7 @@
 				</td>
 				<td>
 					{strip}
-						<input type="text" name="subject" size="48" maxlength="{%KU_MAXSUBJLENGTH}" accesskey="s" />&nbsp;
+						<input type="text" name="subject" size="48" maxlength="{%KU_MAXSUBJLENGTH}" accesskey="s" style="width: 330px;" />&nbsp;
 					<input type="submit" value="
 						{if %KU_QUICKREPLY && $replythread eq 0}
 							{t}Submit{/t}" accesskey="z" />&nbsp;<small id="posttypeindicator">({t}new thread{/t})</small>
@@ -80,7 +80,7 @@
 					{t}Message{/t}
 				</td>
 				<td>
-					<textarea name="message" cols="58" rows="5" accesskey="m" id="message"></textarea>
+					<textarea name="message" cols="58" rows="5" accesskey="m" id="message" style="width: 520px;"></textarea>
 					<div id="quickeditloading" style="display: none;"><img src="/images/loading.gif"></div>
 					<div class="markupbtns">
 						<nobr style="font-size: 16px;">
@@ -146,7 +146,7 @@
 							</select>
 						</td>
 						<td>
-							<input type="text" name="embed" size="76" maxlength="76" accesskey="e" />&nbsp;
+							<input type="text" name="embed" size="76" maxlength="76" accesskey="e" style="width: 520px;" />&nbsp;
 						</td>
 					</tr>
 				{/if}
@@ -155,7 +155,7 @@
 					<td class="postblock">
 						Ссылка</td>
 					<td>
-						<input type="text" name="embedlink" value="" size="76" />
+						<input type="text" name="embedlink" value="" size="76" style="width: 520px;" />
 					</td>
 				</tr>
 			{/if}
@@ -169,7 +169,7 @@
 				</td>
 				<td>
 					<nobr>
-						<input type="text" name="captcha" size="76" accesskey="c">
+						<input type="text" name="captcha" size="76" accesskey="c" style="width: 480px;">
 						<input type="hidden" class="captchaid" name="captchaid" value="{$captchaid}">
 					</nobr>
 				</td>
@@ -209,7 +209,7 @@
 				</td>
 				<td>
 					<input type="text" style="display: none;" name="fakeandgay"/>
-					<input type="password" name="postpassword" size="38" accesskey="p" autocomplete="on"/>&nbsp;{t}(for post and file deletion){/t}
+					<input type="password" name="postpassword" size="38" accesskey="p" autocomplete="on" style="width: 270px;" />&nbsp;{t}(for post and file deletion){/t}
 				</td>
 			</tr>
 

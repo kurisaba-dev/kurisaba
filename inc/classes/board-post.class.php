@@ -751,7 +751,7 @@ class Board {
 			$string .= '<input type="radio" name="smilies_group' . $add . '" value="' . $smilies_groupkey . '" onclick="showsmilebox' . $add . '(this)" ' . /*(first ? "checked" : "") .*/ '> ' . $smilies_groupkey;
 		}
 				
-		$string .= '<div style="width: 482px; overflow-x: scroll;"><table>';
+		$string .= '<div style="width: 525px; overflow-x: scroll;"><table>';
 		
 		foreach ($smilies_replace as $smilies_groupkey => $smilies_group)
 		{
