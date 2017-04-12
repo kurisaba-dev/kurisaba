@@ -347,3 +347,7 @@ color: rgb(36, 218, 226);
 .reflinkpreview {
 	background-color: #DDDDDD !important;
 }
+
+#imagefile {
+	border: 0px;
+}

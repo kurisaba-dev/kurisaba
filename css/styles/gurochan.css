@@ -13,6 +13,9 @@ input, textarea {
   background-color: #E6CBC0;
   border: 1px solid #CA927B;
 }
+#imagefile {
+	border: 0px;
+}
 a {
   background:inherit;
   color:#34345C;

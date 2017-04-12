@@ -42,6 +42,9 @@ input:focus, textarea:focus
 {
 background-color: #444;
 }
+#imagefile {
+	border: 0px;
+}
 .adminbar {
 	text-align:right;
 	clear:both;

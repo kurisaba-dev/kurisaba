@@ -231,6 +231,10 @@ background:#282a2e;
 border: solid 1px #1d1f21;
 }
 
+#imagefile {
+	border: 0px;
+}
+
 .reflinkpreview {
 	background-color: #282a2e !important;
 	border-collapse: separate;

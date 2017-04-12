@@ -264,6 +264,10 @@ input[type="text"], textarea {
 	border: 1px solid rgb(180, 180, 180);
 }
 
+#imagefile {
+	border: 0px;
+}
+
 .reflinkpreview .reply {
 	-webkit-box-shadow: none;
 	-moz-box-shadow: none;

@@ -39,6 +39,10 @@ input, textarea {
 	border-radius: 2px;
 }
 
+#imagefile {
+	border: 0px;
+}
+
 .reply {
     box-shadow: 1px 4px 6px #ddd;
 	background: #0E0E0E url(data:image/gif;base64,R0lGODlhGAAMAKEEAOXl5ebm5vDw8PHx8SH+EUNyZWF0ZWQgd2l0aCBHSU1QACwAAAAAGAAMAAACRpQiY6cLa146MyY1EJQKjG81lNGRUPOIkgMJHtquBgIO7xwvpbrpduUSuXq8ntEC0bBEylYitdDAdM1ViaobkgKgZwyDLAAAOw==) repeat 0 0!important;

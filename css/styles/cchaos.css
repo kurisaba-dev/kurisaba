@@ -35,7 +35,7 @@ html, body {
     border: 1px solid #00cccc;
     background: #000;
     text-decoration: none;
-    padding: 0 14px;
+    padding: 0 6px;
 }.
 
 #message {
@@ -63,6 +63,10 @@ input {
    background-color: #001010; 
    border: 1px dotted #00CCCC;
    color: #00CCCC;
+}
+
+#imagefile {
+	border: 0px;
 }
 
 .content-background {

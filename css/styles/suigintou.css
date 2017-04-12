@@ -79,6 +79,7 @@ input[type="text"],input[type="password"],textarea{border:1px solid rgb(127, 101
 
 input[type="text"]:hover,input[type="password"]:hover,textarea:hover{background:rgb(51, 34, 63);}
 input[type="text"]:focus,input[type="password"]:focus,textarea:focus{border:1px solid rgba(173, 131, 216, 0.64); background:#1f0220;outline:none;box-shadow:0 0 2px rgb(173, 131, 216);color:#c0b0c0;}
+#imagefile {	border: 0px;}
 
 .reflinkpreview .reply{-webkit-box-shadow:none;-moz-box-shadow:none;box-shadow:none;}
 .prettyprint{overflow:auto;max-height:500px;text-shadow:none;color:black;background:rgba(255,255,255,0.72);}
