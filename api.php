@@ -137,7 +137,7 @@ function gen_posts($skipreflinks, $msgsource, $replyformat, $boardid, $dbdata, $
 					"spoiler"  => $dbentry['pic_spoiler'],
 					"text"     => ($msgsource ? (($dbentry['message_source'] == '') ? $dbentry['message'] : $dbentry['message_source']) : $dbentry['message']),
 					"reflinks" => ($skipreflinks ? null : $reflinks)
-				);
+				));
 			}
 			else // Object
 			{
