@@ -239,6 +239,7 @@ $api_function = Array
 		// Response: Object { integer:<POST>, ... }, where key is post id, or Array of [ <POST> ] if "replyformat"=="array".
 		// Posts include only those with timestamp > "timestamp" from request.
 		// "skipreflinks", "msgsource", "replyformat": see get_thread().
+		// Returns 404 Not Found if thread exist but no new posts, and 410 Gone if thread was deleted.
 
 		global $tc_db;
 
@@ -250,6 +251,9 @@ $api_function = Array
 		$msgsource    = determine_msgfield($request);
 		$replyformat  = determine_replyformat($request);
 		
+		$dbdata = $tc_db->GetAll("SELECT * FROM `" . KU_DBPREFIX . "posts` WHERE `boardid` = " . $boardid . " AND `id` = " . $tc_db->qstr($request['thread_id']) . " AND IS_DELETED = 0");
+		if (!is_array($dbdata) || count($dbdata) == 0) json_exit(410, "get_thread(): Thread was deleted", $request_id);
+
 		$dbdata = $tc_db->GetAll("SELECT * FROM `" . KU_DBPREFIX . "posts` WHERE `boardid` = " . $boardid . " AND `timestamp` > " . $request['timestamp'] . " AND `parentid` = " . $tc_db->qstr($request['thread_id']) . " AND IS_DELETED = 0 ORDER BY `id` ASC");
 		if (!is_array($dbdata) || count($dbdata) == 0) json_exit(404, "get_thread(): No new posts", $request_id);
 
