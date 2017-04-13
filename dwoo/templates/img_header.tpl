@@ -248,7 +248,7 @@ function scrolling(elem, direction) {
 					Перейти:
 					<form style="display: inline;" action="/read.php" method="get">
 						<input size="3" name="b" value="sg" type="text">
-						<input size="7" name="p" value="206" type="text" class="defaultfield" id="searchposttop" onfocus="check_field('searchposttop',true);" onblur="check_field('searchposttop',false);">
+						<input size="7" name="p" value="206" type="text" class="defaultfield" id="searchpostmain" onfocus="check_field('searchpostmain',true);" onblur="check_field('searchpostmain',false);">
 						<input value="Перейти" type="submit">
 						<input name="t" value="0" type="hidden">
 						<input name="issearch" value="true" type="hidden">
@@ -256,7 +256,7 @@ function scrolling(elem, direction) {
 					Поиск:
 					<form style="display: inline;" method="get" action="/read.php">
 						<input size="3" name="b" value="sg" type="text">
-						<input size="25" name="v" value="{$search_phrase}" type="text" class="defaultfield" id="searchtexttop" onfocus="check_field('searchtexttop',true);" onblur="check_field('searchtexttop',false);">
+						<input size="25" name="v" value="{$search_phrase}" type="text" class="defaultfield" id="searchtextmain" onfocus="check_field('searchtextmain',true);" onblur="check_field('searchtextmain',false);">
 						<input value="Искать" type="submit">
 					</form>
 				</span>
