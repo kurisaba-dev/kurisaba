@@ -3309,7 +3309,7 @@ class Manage {
 								{
 									$tpl_page .= '<br /><br /><meta http-equiv="refresh" content="1;url='. KU_CGIPATH . '/manage_page.php?action=bans&banboard='. $_GET['boarddir'] . '&banpost='. $delpost_id .'"><a href="'. KU_CGIPATH . '/manage_page.php?action=bans&banboard='. $_GET['boarddir'] . '&banpost='. $delpost_id . '">'. _gettext('Redirecting') . '</a> to ban page...';
 								}
-								elseif ($isquickdel && !isset($_GET['noreturn'])
+								elseif ($isquickdel && !isset($_GET['noreturn']))
 								{
 									if ($delpost_parentid > 0)
 									{
