@@ -1944,7 +1944,7 @@ class Manage {
 					$deleted = "<font color=green><blink><strong>". _gettext('DELETED') ."</strong></blink></font> - ";
 				} else {
 					$deleted = "";
-					if ($first == "1") {
+					if ($thread == "0" || $first == "1") {
 						$bans = "</td><td width=80px style=\"text-align: right; vertical-align: top;\">[<a href=\"manage_page.php?action=delposts&boarddir=$board&delthreadid=$id\">D</a> <a href=\"manage_page.php?action=delposts&boarddir=$board&delthreadid=$id&postid=$id\">&amp;</a> <a href=\"manage_page.php?action=bans&banboard=$board&banpost=$id\">B</a>]";
 					} else {
 						$bans = "</td><td width=80px style=\"text-align: right; vertical-align: top;\">[<a href=\"manage_page.php?action=delposts&boarddir=$board&delpostid=$id\">D</a> <a href=\"manage_page.php?action=delposts&boarddir=$board&delpostid=$id&postid=$id\">&amp;</a> <a href=\"manage_page.php?action=bans&banboard=$board&banpost=$id\">B</a>]";
