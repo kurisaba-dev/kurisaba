@@ -1944,11 +1944,7 @@ class Manage {
 					$deleted = "<font color=green><blink><strong>". _gettext('DELETED') ."</strong></blink></font> - ";
 				} else {
 					$deleted = "";
-					if ($thread == "0" || $first == "1") {
-						$bans = "</td><td width=80px style=\"text-align: right; vertical-align: top;\">[<a href=\"manage_page.php?action=delposts&boarddir=$board&delthreadid=$id\">D</a> <a href=\"manage_page.php?action=delposts&boarddir=$board&delthreadid=$id&postid=$id\">&amp;</a> <a href=\"manage_page.php?action=bans&banboard=$board&banpost=$id\">B</a>]";
-					} else {
-						$bans = "</td><td width=80px style=\"text-align: right; vertical-align: top;\">[<a href=\"manage_page.php?action=delposts&boarddir=$board&delpostid=$id\">D</a> <a href=\"manage_page.php?action=delposts&boarddir=$board&delpostid=$id&postid=$id\">&amp;</a> <a href=\"manage_page.php?action=bans&banboard=$board&banpost=$id\">B</a>]";
-					}
+					$bans = "</td><td width=80px style=\"text-align: right; vertical-align: top;\">[<a href=\"manage_page.php?action=delposts&boarddir=$board&delpostid=$id&noreturn=true\">D</a> <a href=\"manage_page.php?action=delposts&boarddir=$board&delpostid=$id&do_ban=true\">&amp;</a> <a href=\"manage_page.php?action=bans&banboard=$board&banpost=$id\">B</a>]";
 				}
 
 
@@ -3202,58 +3198,82 @@ class Manage {
 	}
 
 	/* Delete a post, or multiple posts */
-	function delposts($multidel=false) {
+	function delposts($multidel=false)
+	{
 		global $tc_db, $tpl_page, $board_class;
 
-    $isquickdel = false;
-    if (isset($_POST['boarddir']) || isset($_GET['boarddir'])) {
-      if (!isset($_GET['boarddir']) && isset($_POST['boarddir'])) {
-        $this->CheckToken($_POST['token']);
-      }
-      if (isset($_GET['boarddir'])) {
+		$isquickdel = false;
+		if (isset($_POST['boarddir']) || isset($_GET['boarddir']))
+		{
+			if (!isset($_GET['boarddir']) && isset($_POST['boarddir']))
+			{
+				$this->CheckToken($_POST['token']);
+			}
+			if (isset($_GET['boarddir']))
+			{
 				$isquickdel = true;
 				$_POST['boarddir'] = $_GET['boarddir'];
-				if (isset($_GET['delthreadid'])) {
+				if (isset($_GET['delthreadid']))
+				{
 					$_POST['delthreadid'] = $_GET['delthreadid'];
 				}
-				if (isset($_GET['delpostid'])) {
+				if (isset($_GET['delpostid']))
+				{
 					$_POST['delpostid'] = $_GET['delpostid'];
 				}
 			}
 			$results = $tc_db->GetAll("SELECT HIGH_PRIORITY * FROM `" . KU_DBPREFIX . "boards` WHERE `name` = " . $tc_db->qstr($_POST['boarddir']) . "");
-			if (count($results) > 0) {
-				if (!$this->CurrentUserIsModeratorOfBoard($_POST['boarddir'], $_SESSION['manageusername'])) {
+			if (count($results) > 0)
+			{
+				if (!$this->CurrentUserIsModeratorOfBoard($_POST['boarddir'], $_SESSION['manageusername']))
+				{
 					exitWithErrorPage(_gettext('You are not a moderator of this board.'));
 				}
-				foreach ($results as $line) {
+				foreach ($results as $line)
+				{
 					$board_id = $line['id'];
 					$board_dir = $line['name'];
 				}
-				if (isset($_GET['cp'])) {
+				if (isset($_GET['cp']))
+				{
 					$cp = '&amp;cp=y&amp;instant=y';
 				}
 
-				if (isset($_POST['delpostid'])) {
-					if ($_POST['delpostid'] > 0) {
+				if (isset($_POST['delpostid']))
+				{
+					if ($_POST['delpostid'] > 0)
+					{
 						$results = $tc_db->GetAll("SELECT HIGH_PRIORITY * FROM `" . KU_DBPREFIX . "posts` WHERE `boardid` = " . $board_id . " AND `IS_DELETED` = '0' AND `id` = " . $tc_db->qstr($_POST['delpostid']) . "");
-						if (count($results) > 0) {
-							if (isset($_POST['fileonly'])) {
-								foreach ($results as $line) {
-									if (!empty($line['file'])) {
+						if (count($results) > 0)
+						{
+							if (isset($_POST['fileonly']))
+							{
+								foreach ($results as $line)
+								{
+									if (!empty($line['file']))
+									{
 										$del = @unlink(KU_ROOTDIR . $_POST['boarddir'] . '/src/'. $line['file'] . '.'. $line['file_type']);
-										if ($del) {
+										if ($del)
+										{
 											@unlink(KU_ROOTDIR . $_POST['boarddir'] . '/thumb/'. $line['file'] . 's.'. $line['file_type']);
 											$tc_db->Execute("UPDATE `".KU_DBPREFIX."posts` SET `file` = 'removed', `file_md5` = '' WHERE `boardid` = " . $board_id . " AND `id` = ".$_POST['delpostid']." LIMIT 1");
 											$tpl_page .= '<hr />File successfully deleted<hr />';
-										} else {
+										}
+										else
+										{
 											$tpl_page .= '<hr />That file has already been deleted.<hr />';
 										}
-									} else {
+									}
+									else
+									{
 										$tpl_page .= '<hr />Error: That thread doesn\'t have a file associated with it.<hr />';
 									}
 								}
-							} else {
-								foreach ($results as $line) {
+							}
+							else
+							{
+								foreach ($results as $line)
+								{
 									$delpost_id = $line['id'];
 									$delpost_parentid = $line['parentid'];
 								}
@@ -3285,9 +3305,12 @@ class Manage {
 									management_addlogentry('Удалён пост' . ' #<a href="?action=viewthread&thread='. $delpost_parentid . '&board='. $_POST['boarddir'] . '#'. $delpost_id . '">'. $delpost_id . '</a> - /'. $board_dir . '/', 7);
 								}
 
-								if (isset($_GET['do_ban'])) {
+								if (isset($_GET['do_ban']))
+								{
 									$tpl_page .= '<br /><br /><meta http-equiv="refresh" content="1;url='. KU_CGIPATH . '/manage_page.php?action=bans&banboard='. $_GET['boarddir'] . '&banpost='. $delpost_id .'"><a href="'. KU_CGIPATH . '/manage_page.php?action=bans&banboard='. $_GET['boarddir'] . '&banpost='. $delpost_id . '">'. _gettext('Redirecting') . '</a> to ban page...';
-								} elseif ($isquickdel) {
+								}
+								elseif ($isquickdel && !isset($_GET['noreturn'])
+								{
 									if ($delpost_parentid > 0)
 									{
 										$tpl_page .= '<br /><br /><meta http-equiv="refresh" content="1;url='. KU_BOARDSPATH . '/'. $_GET['boarddir'] . '/res/'. $delpost_parentid . '.html"><a href="'. KU_BOARDSPATH . '/'. $_GET['boarddir'] . '/res/'. $delpost_parentid . '.html">'. _gettext('Redirecting') . '</a> back to thread...';
@@ -3298,17 +3321,22 @@ class Manage {
 									}
 								}
 							}
-						} else {
+						}
+						else
+						{
 							$tpl_page .= _gettext('Invalid thread ID '.$delpost_id.'. This may have been caused by the thread recently being deleted.');
 						}
 					}
 				}
-			} else {
+			}
+			else
+			{
 				$tpl_page .= _gettext('Invalid board directory.');
 			}
 		}
 		$tpl_page .= '<h2>'. _gettext('Delete thread/post') . '</h2><br />';
-		if (!$multidel) {
+		if (!$multidel)
+		{
 			$tpl_page .= '<form action="manage_page.php?action=delposts" method="post">
 			<input type="hidden" name="token" value="' . $_SESSION['token'] . '" />
 			<label for="boarddir">'. _gettext('Board') .':</label>' .
