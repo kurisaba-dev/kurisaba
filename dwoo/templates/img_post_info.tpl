@@ -13,14 +13,12 @@
 			<a href="mailto:{$post.email}">
 		{/if}
 
-		<span class="postername hideablename">
-			{if $post.name eq '' && $post.tripcode eq ''}
-				{$board.anonymous}
-			{elseif $post.name eq '' && $post.tripcode neq ''}
-			{else}
-				{$post.name}
-			{/if}
-		</span>
+		{if $post.name eq '' && $post.tripcode eq ''}
+			<span class="postername hideablename">{$board.anonymous}</span>
+		{elseif $post.name eq '' && $post.tripcode neq ''}
+		{else}
+			<span class="postername hideablename">{$post.name}</span>
+		{/if}
 
 		{if $post.tripcode neq ''}
 			<span class="postertrip">!{$post.tripcode}</span>
