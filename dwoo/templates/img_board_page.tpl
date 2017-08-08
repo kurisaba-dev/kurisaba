@@ -91,6 +91,8 @@
 	<table class="userdelete" width="100%" style="float:none; margin-top: 5px;">
 		<tbody>
 			<tr>
+				<td>
+				{*</td>*}
 			{*</tr>*}
 		{*</tbody>*}
 	{*</table>*}

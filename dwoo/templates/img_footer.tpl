@@ -7,15 +7,19 @@
 						{*<table>*}
 							{*<tbody>*}
 								{*<tr>*}
-									<td style="text-align: right; vertical-align: top;">
-										Пароль:
-										<input name="postpassword" size="8" type="password">
-										<input name="deletepost" value="Удалить пост" type="submit" onclick="delform_submit = 'Delete';">
-										[<input name="fileonly" id="fileonly" value="on" type="checkbox"><label for="fileonly">только файл</label>]
-										&nbsp;●&nbsp;
-										Причина:
-										<input name="reportreason" size="10" type="text">
-										<input name="reportpost" value="Репорт" type="submit" onclick="delform_submit = 'Report';">	
+									{*<td>*}
+										<div style="float:right; text-align: right; vertical-align: top;">
+											&nbsp;●&nbsp;
+											Причина:
+											<input name="reportreason" size="10" type="text">
+											<input name="reportpost" value="Репорт" type="submit" onclick="delform_submit = 'Report';">	
+										</div>
+										<div style="float:right; text-align: right; vertical-align: top;">
+											Пароль:
+											<input name="postpassword" size="8" type="password">
+											<input name="deletepost" value="Удалить пост" type="submit" onclick="delform_submit = 'Delete';">
+											[<input name="fileonly" id="fileonly" value="on" type="checkbox"><label for="fileonly">только файл</label>]
+										</div>
 									</td>
 								</tr>
 							</tbody>

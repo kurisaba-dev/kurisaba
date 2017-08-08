@@ -155,7 +155,7 @@ function scrolling(elem, direction) {
 <body>
 <div class="scroll"><div onmouseover="scrolling(this, 'up');">∧</div><div onmouseover="scrolling(this, 'down');">∨</div></div>
 
-<div id="boardlist_header">
+<div id="boardlist_header_toggler">
 	<div id="overlay_menu_toggler" class="content-background overlay-menu" style="left: 20px;">
 		<span class="olm-link">[<a href="#" onclick="$('#overlay_menu').slideToggle();return false;"> &gt; </a>]</span>
 	</div>
