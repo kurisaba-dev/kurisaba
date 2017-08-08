@@ -156,11 +156,16 @@ function scrolling(elem, direction) {
 <div class="scroll"><div onmouseover="scrolling(this, 'up');">∧</div><div onmouseover="scrolling(this, 'down');">∨</div></div>
 
 <div id="boardlist_header">
+	<div id="overlay_menu_toggler" class="content-background overlay-menu" style="left: 20px;">
+		<span class="olm-link">[<a href="#" onclick="$('#overlay_menu').slideToggle();return false;"> &gt; </a>]</span>
+	</div>
+</div>
+
+<div id="boardlist_header">
 	<div id="overlay_menu" class="content-background overlay-menu" style="left: 20px;">
-		<span style="display: none" class="olm-link mgoback">[<a href="{%KU_CGIPATH}/{$board.name}/"> &lt; </a>]</span>
-		
+		<span class="olm-link">[<a href="#" onclick="$('#overlay_menu').slideToggle();return false;"> &lt; </a>]</span>
 		{if !$skipheader}
-			<strong>/{$board.name}/ - {$board.desc}</strong>
+			<a href="{%KU_CGIPATH}/{$board.name}/">/{$board.name}/</a> - <strong>{$board.desc}</strong>
 			&nbsp;[<a href="/{$board.name}/catalog.html">Каталог</a>]
 		{else}
 			<strong>Однопоток постов</strong>
