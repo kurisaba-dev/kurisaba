@@ -229,7 +229,7 @@ table td {
 	width: 100%;
 	table-layout: fixed;
 }
-#overlay_menu {
+.overlay-menu {
 	-webkit-transition-property: background-color, color, box-shadow;
 	-webkit-transition-duration: 0.4s;
 	-o-transition-property: background-color, color, box-shadow;
@@ -242,7 +242,7 @@ table td {
 	border: none;
 }
 
-#overlay_menu:hover {
+.overlay-menu:hover {
 	box-shadow: 0 0 20px rgba(0, 0, 0, 1);
 	background: rgb(27, 27, 27);
 }
@@ -342,10 +342,6 @@ color: rgb(36, 218, 226);
 }
 .markupbtns {
 	margin-bottom: -2px;
-}
-
-.reflinkpreview {
-	background-color: #DDDDDD !important;
 }
 
 #imagefile {

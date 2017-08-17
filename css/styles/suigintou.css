@@ -67,9 +67,9 @@ table td{border-style:none;}
 
 .content-background{background-color:#1f0220;}
 .maintable{width:100%;table-layout:fixed;}
-#overlay_menu{-webkit-transition-property:background-color,color,box-shadow;-webkit-transition-duration:0.4s;-o-transition-property:background-color,color,box-shadow;-o-transition-duration:0.4s;-moz-transition-property:background-color,color,box-shadow;-moz-transition-duration:0.4s;transition-property:background-color,color,box-shadow;transition-duration:0.4s;box-shadow:none;border:none;}
+.overlay-menu{-webkit-transition-property:background-color,color,box-shadow;-webkit-transition-duration:0.4s;-o-transition-property:background-color,color,box-shadow;-o-transition-duration:0.4s;-moz-transition-property:background-color,color,box-shadow;-moz-transition-duration:0.4s;transition-property:background-color,color,box-shadow;transition-duration:0.4s;box-shadow:none;border:none;}
 
-#overlay_menu:hover{box-shadow:0 0 20px rgba(0,0,0,1);background:rgb(27,27,27);}
+.overlay-menu:hover{box-shadow:0 0 20px rgba(0,0,0,1);background:rgb(27,27,27);}
 .replies table{border-spacing:2px 4px;}
 .menu-item{padding:2px 5px;border-radius:3px;}
 .maintable hr{margin-left:-9px;margin-right:-9px;}

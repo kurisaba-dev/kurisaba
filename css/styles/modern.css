@@ -215,7 +215,7 @@ table td {
 	width: 100%;
 	table-layout: fixed;
 }
-#overlay_menu {
+.overlay-menu {
 	-webkit-transition: box-shadow 0.2s, background-color 0.2s;
 	transition: box-shadow 0.2s, background-color 0.2s;
 	-o-transition: box-shadow 0.2s, background-color 0.2s;
@@ -223,7 +223,7 @@ table td {
 	box-shadow: none;
 }
 
-#overlay_menu:hover {
+.overlay-menu:hover {
 	box-shadow: 0 0 20px #ccc;
 	background: rgb(247, 247, 247);
 }
