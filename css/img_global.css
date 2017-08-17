@@ -255,7 +255,13 @@ pre {
 	background-color: inherit;
 }
 
-.spoiler a { 
+.spoiler:not(:hover) pre.prettyprint { 
+	color: inherit;
+	background-color: inherit;
+	border: none;
+}
+
+.spoiler a {
 	color: inherit;
 }
 
@@ -402,12 +408,12 @@ img.latex, object.latex  {
 	overflow: auto;
 	max-height: 500px;
 	max-width: 1000px;
-	background: rgba(255, 255, 255, 0.62);
+	background: rgba(255, 255, 255, 0.15);
 }
 
 .cutspoiler {
 	border: 1px dashed #666;
-	background: rgba(255, 255, 255, 0.62);
+	background: rgba(255, 255, 255, 0.15);
 	display: inline-block;
 }
 
