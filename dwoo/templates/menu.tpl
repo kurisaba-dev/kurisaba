@@ -21,7 +21,7 @@
 <link rel="shortcut icon" href="{%KU_WEBFOLDER}favicon.ico" />
 <script type="text/javascript" src="{%KU_WEBFOLDER}lib/javascript/gettext.js"></script>
 <!-- <script type="text/javascript" src="{%KU_WEBFOLDER}lib/javascript/menu.js"></script> -->
-<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+<script src="{%KU_WEBFOLDER}lib/javascript/jquery-1.11.1.min.js"></script>
 <script type="text/javascript" src="{%KU_WEBFOLDER}lib/javascript/kusaba.new.js?v={%KU_JSVER}"></script>
 	<script src="lib/javascript/frame.js?v={%KU_JSVER}"></script>
 <script type="text/javascript"><!--
@@ -34,15 +34,16 @@ var ku_boardspath = '{%KU_BOARDSPATH}';
 
 function showstyleswitcher() {
 		var switcher = document.getElementById('sitestyles');
-		switcher.innerHTML = '{strip}
-		{if %KU_MENUSTYLESWITCHER && %KU_MENUTYPE eq 'normal'}
-			{t}Styles{/t}:
-			{loop $styles}
-				[<a href="#" onclick="javascript:Styles.change(\'{$|capitalize}\', false, true);/*reloadmain();*/" style="display: inline;" target="_self">{$|substr:0:1|upper}</a>]{if !$dwoo.loop.default.last} {/if}
-			{/loop}
-		{/if}
-		{/strip}';
-
+		var state = switcher.getAttribute("data-expanded");
+		if (state == "1") {
+			document.getElementById('sitestyles-expanded').style.display = "none";
+			document.getElementById('sitestyles-normal').style.display = "";
+			switcher.setAttribute("data-expanded", "0");
+		} else {
+			document.getElementById('sitestyles-expanded').style.display = "";
+			document.getElementById('sitestyles-normal').style.display = "none";
+			switcher.setAttribute("data-expanded", "1");
+		}
 }
 {literal}
 function toggle(button, area) {
@@ -123,7 +124,13 @@ function iter_obj(object, callback) {
 	<li><a onclick="javascript:hidedirs();" href="{$files.0}" target="_self">[{t}Hide Directories{/t}]</a></li>
 {/if}
 {if %KU_MENUSTYLESWITCHER && %KU_MENUTYPE eq 'normal'}
-	<li id="sitestyles"><a onclick="javascript:showstyleswitcher();" href="#" target="_self">[{t}Site Styles{/t}]</a></li>
+	<li id="sitestyles" data-expanded="0"><span id="sitestyles-normal"><a onclick="javascript:showstyleswitcher();" href="#" target="_self">[{t}Site Styles{/t}]</a></span>
+<span id="sitestyles-expanded" style="display:none">
+			<a onclick="javascript:showstyleswitcher();" href="#" target="_self">[{t}Styles{/t}]</a>:
+			{loop $styles}
+				[<a href="#" title="{$|capitalize}" onclick="javascript:Styles.change('{$|capitalize}', false, true);/*reloadmain();*/" style="display: inline;" target="_self">{$|substr:0:1|upper}</a>]{if !$dwoo.loop.default.last} {/if}
+			{/loop}
+</span></li>
 {/if}
 {* if %KU_MENUTYPE eq 'normal'}
 	<li id="removeframes"><a href="#" onclick="javascript:return removeframes();" target="_self">[{t}Remove Frames{/t}]</a></li>
