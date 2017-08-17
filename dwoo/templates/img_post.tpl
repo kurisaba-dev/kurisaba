@@ -1,3 +1,4 @@
+<div{if $post.parentid ne 0} id="repl_kukloshit"{/if}>
 <table {if $post.parentid eq 0}id="optable"{/if} class="postnode" width="100%">
 	<tbody>
 		<tr>
@@ -219,4 +220,4 @@
 		</tr>
 	</tbody>
 </table>
-
+</div>
