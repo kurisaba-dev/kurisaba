@@ -44,11 +44,11 @@ class Menu {
 			}
 			else if($special_thread[0] == 'THREAD')
 			{
-				$special_threads_html .= '<li><a href="/'.$current_board.'/res/'.$special_thread[1].'.html" class="boardlink">&nbsp;&nbsp;'.$special_thread[2].' - '.$special_thread[3].'</a></li>';
+				$special_threads_html .= '<li>&nbsp;&nbsp;<a href="/'.$current_board.'/res/'.$special_thread[1].'.html" class="boardlink">'.$special_thread[2].' - '.$special_thread[3].'</a></li>';
 			}
 			else if($special_thread[0] == 'SPECIALTHREAD')
 			{
-				$special_threads_html .= '<li><a href="'.$special_thread[1].'" class="boardlink">&nbsp;&nbsp;'.$special_thread[2].' - '.$special_thread[3].'</a></li>';
+				$special_threads_html .= '<li>&nbsp;&nbsp;<a href="'.$special_thread[1].'" class="boardlink">'.$special_thread[2].' - '.$special_thread[3].'</a></li>';
 			}
 		}
 		

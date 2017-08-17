@@ -33,17 +33,18 @@ var ku_boardspath = '{%KU_BOARDSPATH}';
 {/if}
 
 function showstyleswitcher() {
-		var switcher = document.getElementById('sitestyles');
-		var state = switcher.getAttribute("data-expanded");
-		if (state == "1") {
-			document.getElementById('sitestyles-expanded').style.display = "none";
-			document.getElementById('sitestyles-normal').style.display = "";
-			switcher.setAttribute("data-expanded", "0");
-		} else {
-			document.getElementById('sitestyles-expanded').style.display = "";
-			document.getElementById('sitestyles-normal').style.display = "none";
-			switcher.setAttribute("data-expanded", "1");
-		}
+	var switcher = document.getElementById('sitestyles');
+	var state = switcher.getAttribute("data-expanded");
+	if (state == "1") {
+		document.getElementById('sitestyles-expanded').style.display = "none";
+		document.getElementById('sitestyles-normal').style.display = "";
+		switcher.setAttribute("data-expanded", "0");
+	} else {
+		document.getElementById('sitestyles-expanded').style.display = "";
+		document.getElementById('sitestyles-normal').style.display = "none";
+		switcher.setAttribute("data-expanded", "1");
+	}
+	return false;
 }
 {literal}
 function toggle(button, area) {
@@ -62,8 +63,6 @@ function removeframes() {
 	for(var i=0;i<boardlinks.length;i++) if(boardlinks[i].className == "boardlink") boardlinks[i].target = "_top";
 
 	document.getElementById("removeframes").innerHTML = '{/literal}{t}Frames removed{/t}{literal}.';
-
-	return false;
 }
 function reloadmain() {
 	if (parent.main) {
@@ -89,6 +88,7 @@ function showdirs() {
 }
 {literal}
 function updatenewpostscount() {
+	if (!localStorage['lastvisits']) return;
     $.ajax({
         url: '/api.php?id=0&method=get_new_posts_count&params={"timestamps":'+localStorage['lastvisits']+'}',
         success: function(data) {
@@ -119,23 +119,23 @@ function iter_obj(object, callback) {
 <h1><a href="{%KU_WEBFOLDER}" target="_top" title="{t}Front Page{/t}">{%KU_NAME}</a></h1>
 <ul>	<li><a href="/faq/" class="boardlink">[ FAQ ]</a></li>
 {if $showdirs eq 0}
-	<li><a onclick="javascript:showdirs();" href="{$files.1}" target="_self">[{t}Show Directories{/t}]</a></li>
+	<li><a onclick="showdirs();" href="{$files.1}" target="_self">[{t}Show Directories{/t}]</a></li>
 {else}
-	<li><a onclick="javascript:hidedirs();" href="{$files.0}" target="_self">[{t}Hide Directories{/t}]</a></li>
+	<li><a onclick="hidedirs();" href="{$files.0}" target="_self">[{t}Hide Directories{/t}]</a></li>
 {/if}
 {if %KU_MENUSTYLESWITCHER && %KU_MENUTYPE eq 'normal'}
-	<li id="sitestyles" data-expanded="0"><span id="sitestyles-normal"><a onclick="javascript:showstyleswitcher();" href="#" target="_self">[{t}Site Styles{/t}]</a></span>
+	<li id="sitestyles" data-expanded="0"><span id="sitestyles-normal"><a onclick="showstyleswitcher(); return false;" href="#" target="_self">[{t}Site Styles{/t}]</a></span>
 <span id="sitestyles-expanded" style="display:none">
-			<a onclick="javascript:showstyleswitcher();" href="#" target="_self">[{t}Styles{/t}]</a>:
-			{loop $styles}
-				[<a href="#" title="{$|capitalize}" onclick="javascript:Styles.change('{$|capitalize}', false, true);/*reloadmain();*/" style="display: inline;" target="_self">{$|substr:0:1|upper}</a>]{if !$dwoo.loop.default.last} {/if}
-			{/loop}
+	<a onclick="showstyleswitcher(); return false;" href="#" target="_self">[{t}Styles{/t}]</a>:
+	{loop $styles}
+		[<a href="#" title="{$|capitalize}" onclick="Styles.change('{$|capitalize}', false, true);/*reloadmain();*/ return false;" style="display: inline;" target="_self">{$|substr:0:1|upper}</a>]{if !$dwoo.loop.default.last} {/if}
+	{/loop}
 </span></li>
 {/if}
 {* if %KU_MENUTYPE eq 'normal'}
-	<li id="removeframes"><a href="#" onclick="javascript:return removeframes();" target="_self">[{t}Remove Frames{/t}]</a></li>
+	<li id="removeframes"><a href="#" onclick="removeframes(); return false;" target="_self">[{t}Remove Frames{/t}]</a></li>
 {/if *}
-<li id="refreshnewposts"><a href="#" onclick="javascript:updatenewpostscount();return false" target="_self">Обновить</a></li>
+<li id="refreshnewposts"><a href="#" onclick="updatenewpostscount(); return false;" target="_self">Обновить</a></li>
 </ul>
 {if empty($boards)}
 	<ul>
