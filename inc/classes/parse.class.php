@@ -464,6 +464,7 @@ class Parse {
 		return $ret;
 	}
 	function ParsePost($message, $board, $boardtype, $parentid, $boardid, $ispage = false, $useragent = '', $dice = '', $ipmd5 = '') {
+		$message = str_replace("\r", "", $message);
 		$this->boardtype = $boardtype;
 		$this->parentid = $parentid;
 		$this->boardid = $boardid;	
