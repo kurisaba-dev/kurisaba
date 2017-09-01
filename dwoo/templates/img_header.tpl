@@ -178,7 +178,7 @@ function scrolling(elem, direction) {
 		[<a href="{%KU_WEBPATH}/single.php">Однопоток</a>]
 		[<a href="{%KU_WEBPATH}/faq/">FAQ</a>]
 
-		<span class="mobile-nav" id="mn-normalboards" style="display:none"> 
+		<span class="mobile-nav-disabled" id="mn-normalboards" style="display:none"> 
 			<select onchange="javascript:if(selectedIndex != 0) location.href='{%KU_WEBPATH}/' + this.options[this.selectedIndex].value;">
 				<option><strong>{t}Boards{/t}</strong></option>
 				{foreach name=sections item=sect from=$boardlist}
