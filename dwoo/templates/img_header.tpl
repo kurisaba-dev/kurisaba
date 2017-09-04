@@ -95,7 +95,7 @@ if (!window.prettyPrint) {
 position: fixed;
 top: 40%;
 right: 0%;
-z-index: 0;
+z-index: 110;
 }
 
 .scroll div
