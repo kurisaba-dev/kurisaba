@@ -86,7 +86,7 @@ input[type="text"]:focus,input[type="password"]:focus,textarea:focus{border:1px 
 .prettyprint-container{display:inline-block;margin-left:2px;margin-bottom:4px;margin-top:4px;}
 .omittedposts a, .xlink{text-decoration:inherit;border-bottom:1px dashed #c596c4;}
 .postnode label{font-size:.9em;color:rgb(155,155,155);}
-.uibutton{background:rgb(80, 70, 89);border:1px solid rgb(127, 101, 154);border-radius:0px 0px 0 0;border-bottom:0;color: #e94964}
+.uibutton{background:rgb(80, 70, 89);border:1px solid rgb(127, 101, 154);border-radius:0;color: #e94964}
 .uibutton:hover{background:rgb(100, 88, 111);border:1px solid rgb(173, 131, 216);color: #ff6b6c}
 #postclone,#postclone .captchaimage{background-color:rgb(27,27,27);}
 .postmessage span[style*="color:blue"]{color:rgb(173,212,255)!important;}

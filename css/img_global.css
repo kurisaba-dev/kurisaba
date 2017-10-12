@@ -691,14 +691,13 @@ border-radius: 5px;
 	font-size: 12px;
 	border-radius: 4px;
 	border: 1px solid #cccccc;
-	background: #f6f6f6 url(images/ui-bg_glass_100_f6f6f6_1x400.png) 50% 50% repeat-x;
+	/* background-color: #fafafa; */
+	background-color: rgba(255, 255, 255, 0.2);
 	text-decoration: none;
 	padding: 0 7px;
 }
 .uibutton:hover {
-	color: #c77405;
 	border: 1px solid #fbcb09;
-	background: #fdf5ce url(images/ui-bg_glass_100_fdf5ce_1x400.png) 50% 50% repeat-x;
 }
 #interface-notifier {
 display: inline-block;

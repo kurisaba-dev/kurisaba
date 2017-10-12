@@ -326,8 +326,6 @@ input[type="text"]:focus, input[type="password"]:focus, textarea:focus {
 .uibutton {
 	background: rgb(65, 65, 65);
 	border: 1px solid rgb(83, 83, 83);
-	border-radius: 4px 4px 0 0;
-	border-bottom: 0;
 }
 .uibutton:hover {
 background: rgb(83, 83, 83);
