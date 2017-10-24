@@ -120,7 +120,7 @@ form .trap {
 
 pre {
 	font-family: Consolas, Lucida Console, monospace !important;
-	margin: 0em;
+	margin: 0;
 }
 
 .code_part {
@@ -407,9 +407,11 @@ img.latex, object.latex  {
 
 .prettyprint {
 	overflow: auto;
-	max-height: 500px;
+	max-height: 800px;
 	max-width: 1000px;
 	background: rgba(255, 255, 255, 0.15);
+	white-space: pre-wrap;
+	word-wrap: break-word;
 }
 
 .cutspoiler {
@@ -437,12 +439,12 @@ border-radius: 5px;
 	display: block;
 }*/
 
-.prettyprint-container {
+/*.prettyprint-container {
 	display: inline-block; 
     margin-left: 0px;
     margin-bottom: 2px;
     margin-top: 2px;
-}
+}*/
 
 .qreplyform {
 	padding: 3px;
