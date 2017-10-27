@@ -247,31 +247,18 @@ pre {
 	background-color: black;
 }
 
-.spoiler .unkfunc {
-	color: inherit;
-}
-
 .spoiler:hover {
 	color: inherit;
 	background-color: inherit;
 }
 
-.spoiler:not(:hover) pre.prettyprint { 
+.spoiler:not(:hover) * {
 	color: inherit;
 	background-color: inherit;
+}
+
+.spoiler:not(:hover) pre.prettyprint { 
 	border: none;
-}
-
-.spoiler a {
-	color: inherit;
-}
-
-.spoiler a:visited { 
-	color: inherit;
-}
-
-.spoiler a:hover {
-	color: inherit;
 }
 
 .extrabtns, [id^=dnb] {

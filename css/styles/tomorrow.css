@@ -170,6 +170,11 @@ td {
 	margin : 0;
 	padding : 0;
 }
+
+input[type="text"], input[type="password"], input:not([type]), textarea {
+	border : #333 solid 1px !important ;
+}
+
 input[type="text"]:focus, input[type="password"]:focus, input:not([type]):focus, textarea:focus {
 	border : #000 solid 1px !important ;
 }
@@ -184,7 +189,6 @@ input[type="text"]:focus, input[type="password"]:focus, input:not([type]):focus,
 }
 
 span.spoiler {background: #111; color: #111;}
-span.spoiler:hover, span.spoiler:focus {color: #c5c8c6;}
 
 div.messagehelperC {
 	/*float:left;*/

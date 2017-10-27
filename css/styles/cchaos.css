@@ -301,3 +301,8 @@ table td {
 .reflinkpreview {
 	background-color: #001010 !important;
 }
+
+.spoiler {
+color: #111;
+background-color: #111;
+}

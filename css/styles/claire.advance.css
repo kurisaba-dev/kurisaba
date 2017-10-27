@@ -185,7 +185,6 @@ input[type="text"]:focus, input[type="password"]:focus, input:not([type]):focus,
 }
 
 span.spoiler {background: #111; color: #111;}
-span.spoiler:hover, span.spoiler:focus {color: #c5c8c6;}
 
 div.messagehelperC {
 	/*float:left;*/
