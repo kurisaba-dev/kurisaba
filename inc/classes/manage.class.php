@@ -161,12 +161,12 @@ class Manage {
 	function Logout() {
 		global $tc_db, $tpl_page;
 
-		setcookie('kumod', '', time() + KU_ADDTIME - 3600, KU_BOARDSFOLDER, KU_DOMAIN);
+		setcookie('kumod', '', 1000000, KU_BOARDSFOLDER, KU_DOMAIN);
 
 		session_destroy();
 		unset($_SESSION['manageusername']);
 		unset($_SESSION['managepassword']);
-    unset($_SESSION['token']);
+    	unset($_SESSION['token']);
 		die('<script type="text/javascript">top.location.href = \''. KU_CGIPATH .'/manage.php\';</script>');
 	}
 
@@ -3825,6 +3825,7 @@ class Manage {
 		global $tc_db, $tpl_page, $bans_class;
 		$this->ModeratorsOnly();
 		$tpl_page .= '<h2>'. _gettext('Appeals') . '</h2><br />';
+
 		$ban_ip = '';
 		if (isset($_GET['accept'])) {
 			if ($_GET['accept'] > 0) {
