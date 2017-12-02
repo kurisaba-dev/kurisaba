@@ -11,7 +11,7 @@
     #bottom_menu li:hover{background:rgba(0,20,40,0.75);transition:background 400ms;}
     #bottom_menu a{display:inline-table;width:100%;color:rgba(215,255,255,0.7);text-decoration:none;}
     #bottom_menu li:hover a{color:#DFF;}
-    .char{position:absolute;top:0;right:0;}
+    .char{position:absolute;bottom:0;right:0;height:100%;}
 h3{margin-left:12px;}
 .last{max-width:50%;background-color: rgba(0,20,40,0.4);}
 li a{color:#dff;}
