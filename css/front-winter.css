@@ -1,5 +1,5 @@
 * {margin:0px;}
-    html {font-family:"Courier New",sans-serif;font-size:12px;text-shadow: #002 0 0 3px;color:#cff;overflow:hidden;height: 100%;}
+    html {font-family:"Courier New",sans-serif;font-size:12px;text-shadow: rgba(0,20,40,1) 0 0 3px;color:#cff;overflow:hidden;height: 100%;}
     h1{font-family:"Century Gothic","Lucida Grande",Arial,sans-serif;font-size:2em}
     body {min-height: 100%;}
     #wrapper {background-color: rgba(0,20,40,0.4);padding:16px}

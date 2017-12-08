@@ -67,7 +67,7 @@ if ($mode === 'newyear')
 {
 	$template_file = '/front_index.tpl';
 	$path = 'newyear';
-	$cssfile = 'front-winter';
+	$cssfile = 'winter';
 	$bgnames = array("christmas","akiba01","akiba02","akiba03","akiba04","akiba05","akiba06","akiba07","akiba08","akiba09","akiba10","akiba11");
 	$skip = array("christmas" => true);
 	$characters = array("tohsaka", "ny-2-new", "ny-3", "ny-2-new", "ny-3", "ny-2-new", "ny-3", "ny-2-new", "ny-3", "ny-2-new", "ny-3", "ny-2-new", "ny-3", "ny-2-new", "ny-3", "ny-2-new", "ny-3", "ny-2-new", "ny-3", "ny-2-new", "ny-3", "ny-2-new", "ny-3", "ny-2-new", "ny-3", "ny-2-new", "ny-3", "ny-2-new", "ny-3", "ny-2-new", "ny-3", "ny-2-new", "ny-3", "ny-2-new", "ny-3", "ny-2-new", "ny-3", "ny-2-new", "ny-3", "ny-4", "ny-5", "ny-5", "ny-5", "ny-5", "ny-5", "ny-5", "ny-5", "ny-5", "ny-5", "ny-5", "ny-5", "ny-5", "ny-5", "ny-5", "ny-5", "ny-5", "ny-5", "ny-5", "ny-5");
@@ -76,7 +76,7 @@ else if ($mode === 'touhou')
 {
 	$template_file = '/front_touhou.tpl';
 	$path = 'touhou';
-	$cssfile = 'front';
+	$cssfile = 'default';
 	$bgnames = array('genso1','genso2','genso3','genso4','genso5','genso6','genso7');
 	$skip = array();
 	$characters = array('alice1','alice2','alice3','chen','cirno1','cirno2','cirno3','daiyousei','eirin1','eirin2','flandre','keine','lunasa','lyrica','marisa1','marisa2','meiling','merlin','patchouli1','patchouli2','patchouli3','ran1','ran2','reimu1','reimu2','reimu3','remilia1','remilia2','sakuya','suika','sumireko','suwako1','suwako2','tenshi','tewi','yamaxanadu1','yamaxanadu2','youmu1','youmu2','yuuka','yuyuko1','yuyuko2');
@@ -86,7 +86,7 @@ else
 	$mode = 'default';
 	$template_file = '/front_index.tpl';
 	$path = 'default';
-	$cssfile = 'front';
+	$cssfile = 'default';
 	$bgnames = array("bg1","bg2","bg3","bg4","bg5","bg6","bg7","bg8","bg9","bg10");
 	$skip = array();
 	$characters = array
