@@ -3,7 +3,7 @@
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
   <link rel="icon" type="image/ico" href="{%KU_WEBPATH}/favicon.ico" sizes="32x32">
-  <link rel="stylesheet" type="text/css" href="css/{$cssfile}.css?v={%KU_CSSVER}">
+  <link rel="stylesheet" type="text/css" href="css/front/{$cssfile}.css?v={%KU_CSSVER}">
 
   <!-- <script src="lib/javascript/jquery-1.11.1.min.js"></script>
   <script src="lib/javascript/snowfall.jquery.js"></script> -->
