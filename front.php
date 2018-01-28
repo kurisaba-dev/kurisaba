@@ -68,7 +68,8 @@ if ($mode === 'newyear')
 	$template_file = '/front_index.tpl';
 	$path = 'newyear';
 	$cssfile = 'winter';
-	$bgnames = array("christmas","akiba01","akiba02","akiba03","akiba04","akiba05","akiba06","akiba07","akiba08","akiba09","akiba10","akiba11");
+	// ls | grep -E '\.jpg|\.png' | sort --version-sort | sed 's/\..*//g' | sed 's/$/"/g; s/^/"/g' | tr '\n' ',' | sed 's/^,//g; s/,$//g'; echo
+	$bgnames = array("1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17","18","19","christmas");
 	$skip = array("christmas" => true);
 	$characters = array("tohsaka", "ny-2-new", "ny-3", "ny-2-new", "ny-3", "ny-2-new", "ny-3", "ny-2-new", "ny-3", "ny-2-new", "ny-3", "ny-2-new", "ny-3", "ny-2-new", "ny-3", "ny-2-new", "ny-3", "ny-2-new", "ny-3", "ny-2-new", "ny-3", "ny-2-new", "ny-3", "ny-2-new", "ny-3", "ny-2-new", "ny-3", "ny-2-new", "ny-3", "ny-2-new", "ny-3", "ny-2-new", "ny-3", "ny-2-new", "ny-3", "ny-2-new", "ny-3", "ny-2-new", "ny-3", "ny-4", "ny-5", "ny-5", "ny-5", "ny-5", "ny-5", "ny-5", "ny-5", "ny-5", "ny-5", "ny-5", "ny-5", "ny-5", "ny-5", "ny-5", "ny-5", "ny-5", "ny-5", "ny-5", "ny-5");
 }
