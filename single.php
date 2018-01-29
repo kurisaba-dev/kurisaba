@@ -38,7 +38,7 @@ $page .= "<hr>";
 $board_class->dwoo_data->assign('onlyclone', true);
 $page .= $board_class->Postbox();
 
-$results = $tc_db->GetAll("SELECT * FROM `" . KU_DBPREFIX . "posts` WHERE `IS_DELETED` = 0 ORDER BY `timestamp` DESC LIMIT " . KU_FEEDLENGTH);
+$results = $tc_db->GetAll("SELECT A.*, B.subject AS parent_subject FROM (SELECT * FROM `" . KU_DBPREFIX . "posts` WHERE `IS_DELETED` = 0 ORDER BY `timestamp` DESC LIMIT " . KU_FEEDLENGTH . ") as A LEFT JOIN `" . KU_DBPREFIX . "posts` AS B ON B.id = A.parentid AND A.parentid != 0");
 
 if (count($results) == 0) { exitWithErrorPage('Постов в базе нет!'); }
 
@@ -52,7 +52,10 @@ foreach ($results as $key=>$post)
 	$post['file_path'] = KU_BOARDSPATH . '/' . $post_board_class->board['name'];
 	$thread = ($post['parentid'] == 0) ? $post['id'] : $post['parentid'];
 	$extname = '/'.$post_board_class->board['name'].'/'.$thread;
-	$post['externalreference'] = '[Тред '. $extname .']';
+	if ($post['parent_subject'] !== null)
+		if ($post['parent_subject'] != "")
+			$extname = $post['parent_subject'];
+	$post['externalreference'] = '['. $extname .']';
 
 	$results[$key] = $post_board_class->BuildPost($post, false);
 }
