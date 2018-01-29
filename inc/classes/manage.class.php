@@ -1629,6 +1629,10 @@ class Manage {
 						'<input type="submit" value="'. _gettext('IP Search') . '" />'. "\n";
 		}
 	}
+	
+	function remove_spaces($str) {
+		return str_replace(" ", "", $str);
+	}
 
 	/* Search for posts by IP */
 	function specialthreads() {
@@ -1639,10 +1643,10 @@ class Manage {
 
 		if (isset($_GET['thread_random']) && isset($_GET['thread_cirno']) && isset($_GET['thread_faq']) && isset($_GET['thread_dev']))
 		{
-			$tc_db->Execute("UPDATE `" . KU_DBPREFIX . "kurisaba_ext_data` SET `value` = " . $tc_db->qstr($_GET['thread_random']) . " WHERE `name` = 'thread_random'");
-			$tc_db->Execute("UPDATE `" . KU_DBPREFIX . "kurisaba_ext_data` SET `value` = " . $tc_db->qstr($_GET['thread_cirno']) . " WHERE `name` = 'thread_cirno'");
-			$tc_db->Execute("UPDATE `" . KU_DBPREFIX . "kurisaba_ext_data` SET `value` = " . $tc_db->qstr($_GET['thread_faq']) . " WHERE `name` = 'thread_faq'");
-			$tc_db->Execute("UPDATE `" . KU_DBPREFIX . "kurisaba_ext_data` SET `value` = " . $tc_db->qstr($_GET['thread_dev']) . " WHERE `name` = 'thread_dev'");
+			$tc_db->Execute("UPDATE `" . KU_DBPREFIX . "kurisaba_ext_data` SET `value` = " . $tc_db->qstr($this->remove_spaces($_GET['thread_random'])) . " WHERE `name` = 'thread_random'");
+			$tc_db->Execute("UPDATE `" . KU_DBPREFIX . "kurisaba_ext_data` SET `value` = " . $tc_db->qstr($this->remove_spaces($_GET['thread_cirno'])) . " WHERE `name` = 'thread_cirno'");
+			$tc_db->Execute("UPDATE `" . KU_DBPREFIX . "kurisaba_ext_data` SET `value` = " . $tc_db->qstr($this->remove_spaces($_GET['thread_faq'])) . " WHERE `name` = 'thread_faq'");
+			$tc_db->Execute("UPDATE `" . KU_DBPREFIX . "kurisaba_ext_data` SET `value` = " . $tc_db->qstr($this->remove_spaces($_GET['thread_dev'])) . " WHERE `name` = 'thread_dev'");
 			$tc_db->Execute("UPDATE `" . KU_DBPREFIX . "kurisaba_ext_data` SET `value` = " . $tc_db->qstr($_GET['special_threads']) . " WHERE `name` = 'special_threads'");
 			$tpl_page .= _gettext('Данные обновлены.<br />'). "\n";
 		}
