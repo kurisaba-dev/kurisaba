@@ -477,12 +477,12 @@ class Parse {
       	if (KU_MAKELINKS)
 		{
 			$message = $this->MakeClickable($message);
-		}		
+		}
 		$message = $this->Smilies($message);
 		$message = preg_replace('#^- #m', '— ', $message);
-		$message = str_replace("\n", '<br />', $message);
+		$message = preg_replace("/ *\n/i", '<br />', $message);
 		$message = preg_replace('#(<br(?: \/)?>\s*){3,}#i', '<br /><br />', $message);
-		$message = str_replace("[hr]", '<br /><hr />', $message);
+		$message = preg_replace("/ *\\[hr\\]/i", '<br /><hr />', $message);
 
 		// Hide the "smileys wall"
 		do
