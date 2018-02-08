@@ -43,6 +43,12 @@ Header set Cache-Control "max-age=2592000"
 
 Options -Indexes
 
+# suppress error logging of opening board dirs
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteRule "^.*/$" "-" [F]
+</IfModule>
+
 <IfModule mod_deflate.c>
   AddOutputFilterByType DEFLATE text/text text/html text/plain text/xml text/css application/x-javascript application/javascript application/json
 </IfModule>
