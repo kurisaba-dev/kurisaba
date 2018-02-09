@@ -48,13 +48,12 @@ $sql = "SELECT
 		LIMIT 10";
 
 $last_images = $tc_db->GetAll($sql);
-$sql = "SELECT * FROM `posts` WHERE `boardid`=9 ORDER BY `TIMESTAMP` desc limit 10";
-$last_posts = $tc_db->GetAll($sql);
+$last_posts = $tc_db->GetAll("SELECT * FROM `posts` WHERE `boardid`=9 ORDER BY `TIMESTAMP` desc limit 10");
 $diskfree  = disk_free_space('/') / 1048576;
 $disktotal = disk_total_space('/') / 1048576;
 $postcount  = $tc_db->GetAll("SELECT COUNT(*) AS postcount FROM posts WHERE boardid=9");
-$postcountz = $tc_db->GetOne("SELECT HIGH_PRIORITY COUNT(*) FROM `posts` WHERE `boardid`=9 AND `timestamp` > " . (time() + KU_ADDTIME - 86400) . "");
-$postcounth = $tc_db->GetOne("SELECT HIGH_PRIORITY COUNT(*) FROM `posts` WHERE `boardid`=9 AND `timestamp` > " . (time() + KU_ADDTIME - 3600)  . "");
+$postcountz = $tc_db->GetOne("SELECT COUNT(*) FROM `posts` WHERE `boardid`=9 AND `timestamp` > " . (time() + KU_ADDTIME - 86400));
+$postcounth = $tc_db->GetOne("SELECT COUNT(*) FROM `posts` WHERE `boardid`=9 AND `timestamp` > " . (time() + KU_ADDTIME - 3600));
 
 if (!isset($_GET['mode'])) {
 	if ( isNewYearModeDate() )
