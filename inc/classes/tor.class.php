@@ -33,9 +33,7 @@ class Tor
     private $payload;
     private $returnData;
 
-	function __construct() {$this->Tor();}
-	
-    public function Tor()
+    public function __construct()
     {
         $this->url = null;
         $this->userAgent = null;

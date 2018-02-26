@@ -77,7 +77,7 @@ function createThumbnail($name, $filename, $new_w, $new_h) {
 			if (!is_file($filename)) return 2;
 
 			// Check if file is animated
-			$convert = 'gifsicle --info ' . escapeshellarg($name) . " | nead -n 1";
+			$convert = 'gifsicle --info ' . escapeshellarg($name) . " | head -n 1";
 			$line = exec($convert);
 			if (preg_match('/ 1 image$/',$line)) return 0;
 			

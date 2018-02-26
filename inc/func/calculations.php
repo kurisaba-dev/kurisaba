@@ -32,7 +32,7 @@ function getQuoteIds($quote, $replies = false) {
 		}
 		if (strpos($postid, '-') !== false) {
 			$range_processed = Array();
-			$rangeids = split('-', $postid);
+			$rangeids = explode('-', $postid);
 			if (count($rangeids) == 2) {
 				if(empty($rangeids[1])){
 					$postids['BETWEEN'][$i][] = 0;

@@ -47,8 +47,7 @@ class Board {
 	 * @param boolean $extra grab additional data for page generation purposes. Only false if all that's needed is the board info.
 	 * @return class
 	 */
-	function __construct($board, $extra = true) { $this->Board($board, $extra); }
-	function Board($board, $extra = true) {
+	function __construct($board, $extra = true) {
 		global $tc_db, $CURRENTLOCALE;
 
 		// If the instance was created with the board argument present, get all of the board info and configuration values and save it inside of the class
@@ -402,6 +401,9 @@ class Board {
 			}
 			else if ($mode == "-100")
 			{
+
+
+
 				$replycount = (count($thread)-1);
 				if ($replycount > 100) {
 					$this->dwoo_data->assign('replycount', $replycount);
@@ -888,16 +890,14 @@ class Post extends Board {
 	// Declare the public variables
 	var $post = Array();
 
-	function __construct($postid, $board, $boardid, $is_inserting = false) { $this->Post($postid, $board, $boardid, $is_inserting); }
-
-	function Post($postid, $board, $boardid, $is_inserting = false) {
+	function __construct($postid, $board, $boardid, $is_inserting = false) {
 		global $tc_db;
 
 		$results = $tc_db->GetAll("SELECT * FROM `".KU_DBPREFIX."posts` WHERE `boardid` = '" . $boardid . "' AND `id` = ".$tc_db->qstr($postid)." LIMIT 1");
 		if (count($results)==0&&!$is_inserting) {
 			exitWithErrorPage('Invalid post ID.');
 		} elseif ($is_inserting) {
-			$this->Board($board, false);
+			parent::__construct($board, false);
 		} else {
 			foreach ($results[0] as $key=>$line) {
 				if (!is_numeric($key)) $this->post[$key] = $line;
@@ -912,7 +912,7 @@ class Post extends Board {
 			}
 			$this->post['isthread'] = ($this->post['parentid'] == 0) ? true : false;
 			if (empty($this->board) || $this->board['name'] != $board) {
-				$this->Board($board, false);
+				parent::__construct($board, false);
 			}
 		}
 	}
@@ -999,6 +999,7 @@ class Post extends Board {
 					@unlink(KU_BOARDSDIR.$this->board['name'].'/thumb/'.$this->post['file'].'s.jpg');
 					@unlink(KU_BOARDSDIR.$this->board['name'].'/thumb/'.$this->post['file'].'s.png');
 					@unlink(KU_BOARDSDIR.$this->board['name'].'/thumb/'.$this->post['file'].'s.gif');
+
 				}
 				if ($update_to_removed)
 				{
@@ -1015,9 +1016,78 @@ class Post extends Board {
 		global $tc_db;
 		$quoted_message = $tc_db->qstr($message);
 		if (strlen($quoted_message) > 60000) return -1;
-		$query = "INSERT INTO `".KU_DBPREFIX."posts` ( `parentid` , `boardid`, `name` , `tripcode` , `email` , `subject` , `message` , `message_source`, `file` , `file_original`, `file_type` , `file_md5` , `banimage_md5` , `image_w` , `image_h` , `file_size` , `file_size_formatted` , `thumb_w` , `thumb_h` , `password` , `timestamp` , `bumped` , `ip` , `ipmd5` , `posterauthority` , `stickied` , `locked`, `country`, `pic_spoiler`, `pic_animated` ) VALUES ( ".$tc_db->qstr($parentid).", ".$tc_db->qstr($boardid).", ".$tc_db->qstr($name).", ".$tc_db->qstr($tripcode).", ".$tc_db->qstr($email).", ".$tc_db->qstr($subject).", ".$quoted_message.", ".$tc_db->qstr($message_source).", ".$tc_db->qstr($filename).", ".$tc_db->qstr($file_original).", ".$tc_db->qstr($filetype).", ".$tc_db->qstr($file_md5).", ".$tc_db->qstr($image_md5).", ".$tc_db->qstr(intval($image_w)).", ".$tc_db->qstr(intval($image_h)).", ".$tc_db->qstr($filesize).", ".$tc_db->qstr(ConvertBytes($filesize)).", ".$tc_db->qstr($thumb_w).", ".$tc_db->qstr($thumb_h).", ".$tc_db->qstr($password).", ".$tc_db->qstr($timestamp).", ".$tc_db->qstr($bumped).", ".$tc_db->qstr(md5_encrypt($ip, KU_RANDOMSEED)).", '".md5($ip)."', ".$tc_db->qstr($posterauthority).", ".$tc_db->qstr($stickied).", ".$tc_db->qstr($locked).", ".$tc_db->qstr($country).", ".$tc_db->qstr($pic_spoiler).", ".$tc_db->qstr($pic_animated)." )";
+		$tc_db->Execute("SET TRANSACTION ISOLATION LEVEL SERIALIZABLE");
+		$tc_db->Execute("BEGIN TRANSACTION");
+		$query = "INSERT INTO `".KU_DBPREFIX."posts` ("
+		."`id`,"
+		."`parentid`,"
+		."`boardid`,"
+		."`name`,"
+		."`tripcode`,"
+		."`email`,"
+		."`subject`,"
+		."`message`,"
+		."`message_source`,"
+		."`file`,"
+		."`file_original`,"
+		."`file_type`,"
+		."`file_md5`,"
+		."`banimage_md5`,"
+		."`image_w`,"
+		."`image_h`,"
+		."`file_size`,"
+		."`file_size_formatted`,"
+		."`thumb_w`,"
+		."`thumb_h`,"
+		."`password`,"
+		."`timestamp`,"
+		."`bumped`,"
+		."`ip`,"
+		."`ipmd5`,"
+		."`posterauthority`,"
+		."`stickied`,"
+		."`locked`,"
+		."`country`,"
+		."`pic_spoiler`,"
+		."`pic_animated`"
+		.") VALUES ("
+		."(SELECT * FROM (SELECT (IFNULL(MAX(id), 0) + 1) FROM `".KU_DBPREFIX."posts` WHERE `boardid` = ".$tc_db->qstr($boardid).") AS musthavename),"
+		.$tc_db->qstr($parentid).","
+		.$tc_db->qstr($boardid).","
+		.$tc_db->qstr($name).","
+		.$tc_db->qstr($tripcode).","
+		.$tc_db->qstr($email).","
+		.$tc_db->qstr($subject).","
+		.$quoted_message.","
+		.$tc_db->qstr($message_source).","
+		.$tc_db->qstr($filename).","
+		.$tc_db->qstr($file_original).","
+		.$tc_db->qstr($filetype).","
+		.$tc_db->qstr($file_md5).","
+		.$tc_db->qstr($image_md5).","
+		.$tc_db->qstr(intval($image_w)).","
+		.$tc_db->qstr(intval($image_h)).","
+		.$tc_db->qstr($filesize).","
+		.$tc_db->qstr(ConvertBytes($filesize)).","
+		.$tc_db->qstr($thumb_w).","
+		.$tc_db->qstr($thumb_h).","
+		.$tc_db->qstr($password).","
+		.$tc_db->qstr($timestamp).","
+		.$tc_db->qstr($bumped).","
+		.$tc_db->qstr(md5_encrypt($ip, KU_RANDOMSEED)).","
+		."'".md5($ip)."',"
+		.$tc_db->qstr($posterauthority).","
+		.$tc_db->qstr($stickied).","
+		.$tc_db->qstr($locked).","
+		.$tc_db->qstr($country).","
+		.$tc_db->qstr($pic_spoiler).","
+		.$tc_db->qstr($pic_animated)
+		.")";
 
 		$tc_db->Execute($query);
+		$tc_db->Execute("COMMIT");
+		$tc_db->Execute("SET TRANSACTION ISOLATION LEVEL READ COMMITTED");
+
 		$id = $tc_db->Insert_Id();
 		if(!$id || KU_DBTYPE == 'sqlite') {
 			// Non-mysql installs don't return the insert ID after insertion, we need to manually get it.
