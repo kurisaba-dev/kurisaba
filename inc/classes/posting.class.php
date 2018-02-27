@@ -37,7 +37,7 @@ class Posting {
 	function CheckReplyTime($post_message = '') {
 		global $tc_db, $board_class;
 		/* Get the timestamp of the last time a reply was made by this IP address */
-		$result = $tc_db->GetOne("SELECT MAX(timestamp) FROM `" . KU_DBPREFIX . "posts` WHERE `boardid` = " . $board_class->board['id'] . " AND `parentid` != 0 AND `ipmd5` = '" . md5($_SERVER[(isset($_SERVER['HTTP_CF_CONNECTING_IP'])?'HTTP_CF_CONNECTING_IP':'REMOTE_ADDR')]) . "' AND `timestamp` > " . (time() + KU_ADDTIME - KU_REPLYDELAY));
+		$result = $tc_db->GetOne("SELECT MAX(timestamp) FROM `" . KU_DBPREFIX . "posts` WHERE `boardid` = " . $board_class->board['id'] . " AND `parentid` != 0 AND `ipmd5` = '" . md5(KU_REMOTE_ADDR) . "' AND `timestamp` > " . (time() + KU_ADDTIME - KU_REPLYDELAY));
 		/* If they have posted before and it was recorded... */
 		if (isset($result)) {
 		/* If the time was shorter than the minimum time distance */
@@ -51,7 +51,7 @@ class Posting {
 	function CheckNewThreadTime($post_message = '') {
 		global $tc_db, $board_class;
 		/* Get the timestamp of the last time a new thread was made by this IP address */
-		$result = $tc_db->GetOne("SELECT MAX(timestamp) FROM `" . KU_DBPREFIX . "posts` WHERE `boardid` = " . $board_class->board['id'] . " AND `parentid` = 0 AND `ipmd5` = '" . md5($_SERVER[(isset($_SERVER['HTTP_CF_CONNECTING_IP'])?'HTTP_CF_CONNECTING_IP':'REMOTE_ADDR')]) . "' AND `timestamp` > " . (time() + KU_ADDTIME - KU_NEWTHREADDELAY));
+		$result = $tc_db->GetOne("SELECT MAX(timestamp) FROM `" . KU_DBPREFIX . "posts` WHERE `boardid` = " . $board_class->board['id'] . " AND `parentid` = 0 AND `ipmd5` = '" . md5(KU_REMOTE_ADDR) . "' AND `timestamp` > " . (time() + KU_ADDTIME - KU_NEWTHREADDELAY));
 		/* If they have posted before and it was recorded... */
 		if (isset($result)) {
 			/* If the time was shorter than the minimum time distance */
@@ -173,8 +173,8 @@ class Posting {
 
 				// was there a reCAPTCHA response?
 				$resp = recaptcha_check_answer ($privatekey, 
-					$_SERVER["REMOTE_ADDR"], 
-					$_POST["recaptcha_challenge_field"], 
+					KU_REMOTE_ADDR, 
+					$_POST["recaptcha_challenge_field"],
 					$_POST["recaptcha_response_field"]
 				); 
 				if (!$resp->is_valid) {
@@ -197,8 +197,8 @@ class Posting {
 				$banhash2 = md5_image($_FILES['imagefile']['tmp_name']);
 				$results = $tc_db->GetAll("SELECT `bantime` , `description` FROM `" . KU_DBPREFIX . "bannedhashes` WHERE `md5` = " . $tc_db->qstr($banhash1) . " OR `md5` = " . $tc_db->qstr($banhash2) . " LIMIT 1");
 				if (count($results) > 0) {
-						$bans_class->BanUser($_SERVER[(isset($_SERVER['HTTP_CF_CONNECTING_IP'])?'HTTP_CF_CONNECTING_IP':'REMOTE_ADDR')], 'SERVER', '1', $results[0]['bantime'], '', 'Posting a banned file.<br />' . $results[0]['description'], 0, 0, 1);
-						$bans_class->BanCheck($_SERVER[(isset($_SERVER['HTTP_CF_CONNECTING_IP'])?'HTTP_CF_CONNECTING_IP':'REMOTE_ADDR')], $board_class->board['name']);
+						$bans_class->BanUser(KU_REMOTE_ADDR, 'SERVER', '1', $results[0]['bantime'], '', 'Posting a banned file.<br />' . $results[0]['description'], 0, 0, 1);
+						$bans_class->BanCheck(KU_REMOTE_ADDR, $board_class->board['name']);
 						return true;
 				}
 			}
@@ -219,8 +219,8 @@ class Posting {
 		$results = $tc_db->GetAll("SELECT `bantime` , `description` FROM `" . KU_DBPREFIX . "bannedhashes` WHERE `md5` = " . $tc_db->qstr($banhash1) . " OR `md5` = " . $tc_db->qstr($banhash2) . " LIMIT 1");
 		if (count($results) > 0)
 		{
-			$bans_class->BanUser($_SERVER[(isset($_SERVER['HTTP_CF_CONNECTING_IP'])?'HTTP_CF_CONNECTING_IP':'REMOTE_ADDR')], 'SERVER', '1', $results[0]['bantime'], '', 'Posting a banned file.<br />' . $results[0]['description'], 0, 0, 1);
-			$bans_class->BanCheck($_SERVER[(isset($_SERVER['HTTP_CF_CONNECTING_IP'])?'HTTP_CF_CONNECTING_IP':'REMOTE_ADDR')], $board_class->board['name'], false, isset($_POST['through_js']));
+			$bans_class->BanUser(KU_REMOTE_ADDR, 'SERVER', '1', $results[0]['bantime'], '', 'Posting a banned file.<br />' . $results[0]['description'], 0, 0, 1);
+			$bans_class->BanCheck(KU_REMOTE_ADDR, $board_class->board['name'], false, isset($_POST['through_js']));
 			@unlink($file_location);
 			return true;
 		}
@@ -410,7 +410,7 @@ class Posting {
 		foreach ($badlinks as $badlink) {
 			if (stripos($_POST['message'], $badlink) !== false) {
 				/* They included a blacklisted link in their post. Ban them for an hour */
-				$bans_class->BanUser($_SERVER[(isset($_SERVER['HTTP_CF_CONNECTING_IP'])?'HTTP_CF_CONNECTING_IP':'REMOTE_ADDR')], 'board.php', 1, 3600, '', _gettext('Posting a blacklisted link.') . ' (' . $badlink . ')', $_POST['message']);
+				$bans_class->BanUser(KU_REMOTE_ADDR, 'board.php', 1, 3600, '', _gettext('Posting a blacklisted link.') . ' (' . $badlink . ')', $_POST['message']);
 				exitWithErrorPage(sprintf(_gettext('Blacklisted link ( %s ) detected.'), $badlink));
 			}
 		}
@@ -429,7 +429,7 @@ class Posting {
 
 		/* It is not needed in current reality.
 		
-		$lastmsg = $tc_db->GetAll("SELECT `message` FROM `".KU_DBPREFIX."posts` WHERE  `ipmd5` = '" . md5($_SERVER[(isset($_SERVER['HTTP_CF_CONNECTING_IP'])?'HTTP_CF_CONNECTING_IP':'REMOTE_ADDR')]) . "' AND `boardid`='".$boardid."' ORDER BY `timestamp` DESC LIMIT 1");
+		$lastmsg = $tc_db->GetAll("SELECT `message` FROM `".KU_DBPREFIX."posts` WHERE  `ipmd5` = '" . md5(KU_REMOTE_ADDR) . "' AND `boardid`='".$boardid."' ORDER BY `timestamp` DESC LIMIT 1");
 		$lastmsg = mb_strtolower(strip_tags(str_replace($cyr, $lat, $lastmsg[0][0])));
 
 		if($msg == $lastmsg) return 1; */
@@ -442,7 +442,7 @@ class Posting {
 		foreach ($badlinks as $badlink) {
 			if (stripos($msg, mb_strtolower(str_replace($cyr, $lat, $badlink))) !== false) {
 				/* They included a blacklisted link in their post. Ban them for an hour */
-				$bans_class->BanUser($_SERVER[(isset($_SERVER['HTTP_CF_CONNECTING_IP'])?'HTTP_CF_CONNECTING_IP':'REMOTE_ADDR')], 'board.php', 0, 3600, $board, _gettext('Posting a blacklisted link.') . ' (' . $badlink . ')', $_POST['message']);
+				$bans_class->BanUser(KU_REMOTE_ADDR, 'board.php', 0, 3600, $board, _gettext('Posting a blacklisted link.') . ' (' . $badlink . ')', $_POST['message']);
 				return 2; // Blacklisted link
 			}
 		}

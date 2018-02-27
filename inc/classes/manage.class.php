@@ -89,7 +89,7 @@ class Manage {
 		global $tc_db, $action;
 
 		$tc_db->Execute("DELETE FROM `" . KU_DBPREFIX . "loginattempts` WHERE `timestamp` < '" . (time() + KU_ADDTIME - 1200) . "'");
-		$results = $tc_db->GetAll("SELECT HIGH_PRIORITY `ip` FROM `" . KU_DBPREFIX . "loginattempts` WHERE `ip` = '" . $_SERVER[(isset($_SERVER['HTTP_CF_CONNECTING_IP'])?'HTTP_CF_CONNECTING_IP':'REMOTE_ADDR')] . "' LIMIT 6");
+		$results = $tc_db->GetAll("SELECT HIGH_PRIORITY `ip` FROM `" . KU_DBPREFIX . "loginattempts` WHERE `ip` = '" . KU_REMOTE_ADDR . "' LIMIT 6");
 		if (count($results) > 5) {
 			exitWithErrorPage(_gettext('System lockout'), _gettext('Sorry, because of your numerous failed logins, you have been locked out from logging in for 20 minutes. Please wait and then try again.'));
 		} else {
@@ -105,12 +105,12 @@ class Manage {
 						$_SESSION['managepassword'] = $newpass;
             			$_SESSION['token'] = md5($_SESSION['manageusername'] . $_SESSION['managepassword'] . rand(0,100));
 						$this->SetModerationCookies();
-						$tc_db->Execute("DELETE FROM `" . KU_DBPREFIX . "loginattempts` WHERE `ip` < '" . $_SERVER[(isset($_SERVER['HTTP_CF_CONNECTING_IP'])?'HTTP_CF_CONNECTING_IP':'REMOTE_ADDR')] . "'");
+						$tc_db->Execute("DELETE FROM `" . KU_DBPREFIX . "loginattempts` WHERE `ip` < '" . KU_REMOTE_ADDR . "'");
 						$action = 'posting_rates';
 						management_addlogentry(_gettext('Logged in'), 1);
 						die('<script type="text/javascript">top.location.href = \''. KU_CGIPATH .'/manage.php\';</script>');
 					} else {
-						$tc_db->Execute("INSERT HIGH_PRIORITY INTO `" . KU_DBPREFIX . "loginattempts` ( `username` , `ip` , `timestamp` ) VALUES ( " . $tc_db->qstr($_POST['username']) . " , '" . $_SERVER[(isset($_SERVER['HTTP_CF_CONNECTING_IP'])?'HTTP_CF_CONNECTING_IP':'REMOTE_ADDR')] . "' , '" . (time() + KU_ADDTIME) . "' )");
+						$tc_db->Execute("INSERT HIGH_PRIORITY INTO `" . KU_DBPREFIX . "loginattempts` ( `username` , `ip` , `timestamp` ) VALUES ( " . $tc_db->qstr($_POST['username']) . " , '" . KU_REMOTE_ADDR . "' , '" . (time() + KU_ADDTIME) . "' )");
 						exitWithErrorPage(_gettext('Incorrect username/password.'));
 					}
 				} else {
@@ -123,12 +123,12 @@ class Manage {
 						management_addlogentry(_gettext('Logged in'), 1);
 						die('<script type="text/javascript">top.location.href = \''. KU_CGIPATH .'/manage.php\';</script>');
 					} else {
-						$tc_db->Execute("INSERT HIGH_PRIORITY INTO `" . KU_DBPREFIX . "loginattempts` ( `username` , `ip` , `timestamp` ) VALUES ( " . $tc_db->qstr($_POST['username']) . " , '" . $_SERVER[(isset($_SERVER['HTTP_CF_CONNECTING_IP'])?'HTTP_CF_CONNECTING_IP':'REMOTE_ADDR')] . "' , '" . (time() + KU_ADDTIME) . "' )");
+						$tc_db->Execute("INSERT HIGH_PRIORITY INTO `" . KU_DBPREFIX . "loginattempts` ( `username` , `ip` , `timestamp` ) VALUES ( " . $tc_db->qstr($_POST['username']) . " , '" . KU_REMOTE_ADDR . "' , '" . (time() + KU_ADDTIME) . "' )");
 						exitWithErrorPage(_gettext('Incorrect username/password.'));
 					}
 				}
 			} else {
-				$tc_db->Execute("INSERT HIGH_PRIORITY INTO `" . KU_DBPREFIX . "loginattempts` ( `username` , `ip` , `timestamp` ) VALUES ( " . $tc_db->qstr($_POST['username']) . " , '" . $_SERVER[(isset($_SERVER['HTTP_CF_CONNECTING_IP'])?'HTTP_CF_CONNECTING_IP':'REMOTE_ADDR')] . "' , '" . (time() + KU_ADDTIME) . "' )");
+				$tc_db->Execute("INSERT HIGH_PRIORITY INTO `" . KU_DBPREFIX . "loginattempts` ( `username` , `ip` , `timestamp` ) VALUES ( " . $tc_db->qstr($_POST['username']) . " , '" . KU_REMOTE_ADDR . "' , '" . (time() + KU_ADDTIME) . "' )");
 				exitWithErrorPage(_gettext('Incorrect username/password.'));
 			}
 		}

@@ -404,6 +404,8 @@ class Board {
 
 
 
+
+
 				$replycount = (count($thread)-1);
 				if ($replycount > 100) {
 					$this->dwoo_data->assign('replycount', $replycount);
@@ -441,7 +443,7 @@ class Board {
 	function replace_reflinks($matches)
 	{
 		global $tc_db;
-		$etalon_md5 = md5($_SERVER[(isset($_SERVER['HTTP_CF_CONNECTING_IP'])?'HTTP_CF_CONNECTING_IP':'REMOTE_ADDR')]);
+		$etalon_md5 = md5(KU_REMOTE_ADDR);
 		$board_name = $matches[1];
 		$board_id = $this->boardids[$board_name];
 		$ref_id = $matches[3];
@@ -468,7 +470,7 @@ class Board {
 
 		// (You) indicator in head
 		$post['youindicator'] = '';
-		if (md5($_SERVER[(isset($_SERVER['HTTP_CF_CONNECTING_IP'])?'HTTP_CF_CONNECTING_IP':'REMOTE_ADDR')]) == $post['ipmd5'])
+		if (md5(KU_REMOTE_ADDR) == $post['ipmd5'])
 		{
 			$post['youindicator'] = '<span class="youindicator">&nbsp;<strong>(You)</strong></span>';
 		}
@@ -564,7 +566,7 @@ class Board {
 				foreach ($replies_q as $reply_q)
 				{
 					// (You) indicator in reply map
-					$etalon_md5 = md5($_SERVER[(isset($_SERVER['HTTP_CF_CONNECTING_IP'])?'HTTP_CF_CONNECTING_IP':'REMOTE_ADDR')]);
+					$etalon_md5 = md5(KU_REMOTE_ADDR);
 					$board_name = $reply_q['from_boardname'];
 					$board_id = $this->boardids[$board_name];
 					$ref_id = $reply_q['from_id'];
@@ -1051,7 +1053,7 @@ class Post extends Board {
 		."`pic_spoiler`,"
 		."`pic_animated`"
 		.") VALUES ("
-		."(SELECT * FROM (SELECT (IFNULL(MAX(id), 0) + 1) FROM `".KU_DBPREFIX."posts` WHERE `boardid` = ".$tc_db->qstr($boardid).") AS musthavename),"
+		."(SELECT * FROM (SELECT (COALESCE(MAX(id), 0) + 1) FROM `".KU_DBPREFIX."posts` WHERE `boardid` = ".$tc_db->qstr($boardid).") AS musthavename),"
 		.$tc_db->qstr($parentid).","
 		.$tc_db->qstr($boardid).","
 		.$tc_db->qstr($name).","
@@ -1111,7 +1113,7 @@ class Post extends Board {
 	function Report() {
 		global $tc_db;
 
-		return $tc_db->Execute("INSERT INTO `".KU_DBPREFIX."reports` ( `board` , `postid` , `when` , `ip`, `reason` ) VALUES ( " . $tc_db->qstr($this->board['name']) . " , " . $tc_db->qstr($this->post['id']) . " , ".(time() + KU_ADDTIME)." , '" . md5_encrypt($_SERVER[(isset($_SERVER['HTTP_CF_CONNECTING_IP'])?'HTTP_CF_CONNECTING_IP':'REMOTE_ADDR')], KU_RANDOMSEED) . "', " . $tc_db->qstr($_POST['reportreason']) . " )");
+		return $tc_db->Execute("INSERT INTO `".KU_DBPREFIX."reports` ( `board` , `postid` , `when` , `ip`, `reason` ) VALUES ( " . $tc_db->qstr($this->board['name']) . " , " . $tc_db->qstr($this->post['id']) . " , ".(time() + KU_ADDTIME)." , '" . md5_encrypt(KU_REMOTE_ADDR, KU_RANDOMSEED) . "', " . $tc_db->qstr($_POST['reportreason']) . " )");
 	}
 }
 

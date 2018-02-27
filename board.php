@@ -123,14 +123,14 @@ if (isset($_POST['board'])) {
 // 3.3. Check for an IP ban (and remove if expired).
 if (isset($_POST['through_js']))
 {
-	if($bans_class->BanCheckSilent($_SERVER[(isset($_SERVER['HTTP_CF_CONNECTING_IP'])?'HTTP_CF_CONNECTING_IP':'REMOTE_ADDR')], $board_class->board['name']))
+	if($bans_class->BanCheckSilent(KU_REMOTE_ADDR))
 	{
 		die("USER WAS BANNED FOR SOME POST");
 	}
 }
 else
 {
-	$bans_class->BanCheck($_SERVER[(isset($_SERVER['HTTP_CF_CONNECTING_IP'])?'HTTP_CF_CONNECTING_IP':'REMOTE_ADDR')], $board_class->board['name']);
+	$bans_class->BanCheck(KU_REMOTE_ADDR, $board_class->board['name']);
 }
 	
 // 3.4. Oekaki stuff
@@ -400,7 +400,7 @@ if($operation_post) // it's `noreturn`.
 	$parse_class->id = $nextid;
 	$ua = ($board_class->board['useragent']) ? htmlspecialchars($_SERVER['HTTP_USER_AGENT']) : false;
 	$dice = ($board_class->board['dice']) ? true : false;
-	$ipmd5 = md5($_SERVER[(isset($_SERVER['HTTP_CF_CONNECTING_IP'])?'HTTP_CF_CONNECTING_IP':'REMOTE_ADDR')]);
+	$ipmd5 = md5(KU_REMOTE_ADDR);
 
 	if ($parse_class->CountSmilies($_POST['message']) > KU_MAXSMILIES)
 	{
@@ -626,8 +626,8 @@ if($operation_post) // it's `noreturn`.
 				$post['password'] = $post_passwordmd5;
 				$post['timestamp'] = time() + KU_ADDTIME;
 				$post['bumped'] = time() + KU_ADDTIME;
-				$post['ip'] = md5_encrypt($_SERVER[(isset($_SERVER['HTTP_CF_CONNECTING_IP'])?'HTTP_CF_CONNECTING_IP':'REMOTE_ADDR')], KU_RANDOMSEED);
-				$post['ipmd5'] = md5($_SERVER[(isset($_SERVER['HTTP_CF_CONNECTING_IP'])?'HTTP_CF_CONNECTING_IP':'REMOTE_ADDR')]);
+				$post['ip'] = md5_encrypt(KU_REMOTE_ADDR, KU_RANDOMSEED);
+				$post['ipmd5'] = md5(KU_REMOTE_ADDR);
 				$post['posterauthority'] = $user_authority_display;
 				$post['stickied'] = $sticky;
 				$post['locked'] = $lock;
@@ -664,7 +664,7 @@ if($operation_post) // it's `noreturn`.
 				die;
 			}
 			
-			$post_id = $post_class->Insert($thread_replyto, $post['name'], $post['tripcode'], $post['email'], $post['subject'], addslashes($post['message']), $post['message_source'], $upload_class->file_name, $upload_class->original_file_name, $filetype_withoutdot, $upload_class->file_md5, $upload_class->image_md5, $upload_class->imgWidth, $upload_class->imgHeight, $upload_class->file_size, $upload_class->imgWidth_thumb, $upload_class->imgHeight_thumb, $post_passwordmd5, time() + KU_ADDTIME, time() + KU_ADDTIME, $_SERVER[(isset($_SERVER['HTTP_CF_CONNECTING_IP'])?'HTTP_CF_CONNECTING_IP':'REMOTE_ADDR')], $user_authority_display, $sticky, $lock, $board_class->board['id'], $post['country'], $post['pic_spoiler'], $post['pic_animated']);
+			$post_id = $post_class->Insert($thread_replyto, $post['name'], $post['tripcode'], $post['email'], $post['subject'], addslashes($post['message']), $post['message_source'], $upload_class->file_name, $upload_class->original_file_name, $filetype_withoutdot, $upload_class->file_md5, $upload_class->image_md5, $upload_class->imgWidth, $upload_class->imgHeight, $upload_class->file_size, $upload_class->imgWidth_thumb, $upload_class->imgHeight_thumb, $post_passwordmd5, time() + KU_ADDTIME, time() + KU_ADDTIME, KU_REMOTE_ADDR, $user_authority_display, $sticky, $lock, $board_class->board['id'], $post['country'], $post['pic_spoiler'], $post['pic_animated']);
 			if ($post_id == -1)
 			{
 				// Don't leave orphan files

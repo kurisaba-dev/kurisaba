@@ -12,7 +12,7 @@ function request_log($text)
 	$tc_db->Execute("INSERT INTO `" . KU_DBPREFIX . "reqlog` ( `request`, `text` , `ip` , `timestamp` ) VALUES ( " .
 	$tc_db->qstr($_SERVER['REQUEST_URI']) . " , " .
 	$tc_db->qstr($text) . " , " .
-	$tc_db->qstr($_SERVER['HTTP_CF_CONNECTING_IP']) . " , '" .
+	$tc_db->qstr(KU_REMOTE_ADDR) . " , '" .
 	(time() + KU_ADDTIME) . "' )");*/
 }
 

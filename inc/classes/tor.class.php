@@ -150,7 +150,7 @@ class Tor
 	
 	// should detect if the remote user is using TOR or not
 	public function IsTorExitPoint(){
-		if (gethostbyname($this->ReverseIPOctets($_SERVER[(isset($_SERVER['HTTP_CF_CONNECTING_IP'])?'HTTP_CF_CONNECTING_IP':'REMOTE_ADDR')]).".".$_SERVER['SERVER_PORT'].".".$this->ReverseIPOctets($_SERVER['SERVER_ADDR']).".ip-port.exitlist.torproject.org")=="127.0.0.2") {
+		if (gethostbyname($this->ReverseIPOctets(KU_REMOTE_ADDR).".".$_SERVER['SERVER_PORT'].".".$this->ReverseIPOctets($_SERVER['SERVER_ADDR']).".ip-port.exitlist.torproject.org")=="127.0.0.2") {
 			return true;
 		} 
 		else {
