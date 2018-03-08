@@ -46,6 +46,7 @@ Options -Indexes
 # suppress error logging of opening board dirs
 <IfModule mod_rewrite.c>
     RewriteEngine On
+	RewriteCond %{REQUEST_URI} !^/[maryspin|hakurei_gate]
     RewriteRule "^.*/$" "-" [F]
 </IfModule>
 
