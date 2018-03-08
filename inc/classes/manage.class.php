@@ -350,7 +350,17 @@ class Manage {
 		global $tpl_page;
 		$this->AdministratorsOnly();
 		$tpl_page .= '<h1><center>Лог Apache:</center></h1><br><table width="100%" border=1><tr><td><pre>';
-		$tpl_page .= file_get_contents("/var/log/apache2/error.log");
+		$tpl_page .= shell_exec("get_error_log");
+		/*
+		    The executable (not script!) 'get_error_log' should:
+		    - execute command like 'cat /var/log/apache2/error.log';
+		    - have suid bit;
+		    - be executable as www-data user.
+		    For example, it may be achieved with following file, say, get_error_log.c:
+				#include <stdlib.h>
+				int main() {return system("cat /var/log/apache2/error.log");}
+			Then you should compile it with 'gcc get_error_log.c -o get_error_log' and then do 'chmod u+s get_error_log'.
+		*/
 		$tpl_page .= '</td></tr></table></pre>';
 	}
 
