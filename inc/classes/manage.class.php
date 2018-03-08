@@ -2313,9 +2313,11 @@ class Manage {
 		
 		$tc_db->Execute("TRUNCATE TABLE `" . KU_DBPREFIX . "answers`");
 
-        for ($step = 0;;$step = $step + 10000) {
+		$nposts = 0;
+        for ($step = 0;;$step = $step + 10000)
+		{
             $results = $tc_db->GetAll("SELECT `id`, `boardid`, `parentid`, `message` FROM `" . KU_DBPREFIX . "posts` " .
-                        "WHERE `IS_DELETED` = 0 AND `id` >= " . $step . " AND id < " . $step + 10000);
+				"WHERE `IS_DELETED` = 0 AND `id` >= " . $step . " AND `id` < " . $step + 10000);
             if (count($results) == 0)
                 break;
            
@@ -2324,18 +2326,17 @@ class Manage {
                 $results[$key]['boardname'] = $boardnames[$value['boardid']];
             }
             AnswerMapAdd($results, $boardids);
+			$nposts = $nposts + count($results);
         }
 		
-		management_addlogentry('Перегенерация карты ответов закончена');
-		
-		$nposts = count($results);
 		$nrecords = $tc_db->GetOne("SELECT COUNT(*) FROM `" . KU_DBPREFIX . "answers`");
 		$ntime = time() - $starttime;
+		management_addlogentry('Перегенерация карты ответов закончена. '.$nrecords.' ответов для '.$nposts.' постов, '.$ntime.' секунд.');
 		$tpl_page .= 'Готово. Записано '.$nrecords.' ответов для '.$nposts.' постов. Затрачено '.$ntime.' секунд.';
 	}
 	
 	/*
-	* +------------------------------------------------------------------------------+
+	* +------------------------------------------------------------------------------+
 	* Boards Pages
 	* +------------------------------------------------------------------------------+
 	*/
