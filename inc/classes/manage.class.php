@@ -349,7 +349,7 @@ class Manage {
 	function apachelog() {
 		global $tpl_page;
 		$this->AdministratorsOnly();
-		$tpl_page .= '<h1><center>Лог Apache:</center></h1><br><table width="80%" border=1><td><tr><pre>';
+		$tpl_page .= '<h1><center>Лог Apache:</center></h1><br><table width="100%" border=1><tr><td><pre>';
 		$tpl_page .= file_get_contents("/var/log/apache2/error.log");
 		$tpl_page .= '</td></tr></table></pre>';
 	}
