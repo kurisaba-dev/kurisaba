@@ -2313,14 +2313,19 @@ class Manage {
 		
 		$tc_db->Execute("TRUNCATE TABLE `" . KU_DBPREFIX . "answers`");
 
-		$results = $tc_db->GetAll("SELECT `id`, `boardid`, `parentid`, `message` FROM `" . KU_DBPREFIX . "posts` WHERE `IS_DELETED` = 0");
-		if (count($results) > 0) {
-			foreach ($results as $key=>$value)
-			{
-				$results[$key]['boardname'] = $boardnames[$value['boardid']];
-			}
-			AnswerMapAdd($results, $boardids);
-		}
+        for ($step = 0;;$step = $step + 10000) {
+            $results = $tc_db->GetAll("SELECT `id`, `boardid`, `parentid`, `message` FROM `" . KU_DBPREFIX . "posts` " .
+                        "WHERE `IS_DELETED` = 0 AND `id` >= " . $step . " AND id < " . $step + 10000);
+            if (count($results) == 0)
+                break;
+           
+            foreach ($results as $key=>$value)
+            {
+                $results[$key]['boardname'] = $boardnames[$value['boardid']];
+            }
+            AnswerMapAdd($results, $boardids);
+        }
+		
 		management_addlogentry('Перегенерация карты ответов закончена');
 		
 		$nposts = count($results);
