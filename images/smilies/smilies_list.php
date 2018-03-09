@@ -1,4 +1,4 @@
-<?php	
+<?php
 	$smilies_replace = array
 	(
 		'CatHead' => array
