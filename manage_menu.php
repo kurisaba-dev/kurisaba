@@ -76,12 +76,14 @@ if (!$manage_class->ValidateSession(true)) {
 		$tpl_links .= section_html(_gettext('Site Administration'), 'siteadministration') .
 		'<ul>' . "\n";
 		$tpl_links .= '<li><a style="color:red" href="manage_page.php?action=templates">' . _gettext('Edit templates') . '</a></li>
-		<li><a style="color:red" href="manage_page.php?action=specialthreads">' . _gettext('Специальные треды') . '</a></li>
+		<li><a style="color:red" href="manage_page.php?action=specialthreads">' . _gettext('Special threads') . '</a></li>
 		<li><a href="manage_page.php?action=spaceused">' . _gettext('Disk space used') . '</a></li>
 		<li><a style="color:blue" href="manage_page.php?action=staff">' . _gettext('Staff') . '</a></li>
 		<li><a style="color:red" href="manage_page.php?action=modlog">' . _gettext('ModLog') . '</a></li>
 		<li><a href="manage_page.php?action=proxyban">' . _gettext('Ban proxy list') . '</a></li>
-		<li><a href="manage_page.php?action=sql">' . _gettext('SQL query') . '</a></li>' . "\n";
+		<li><a href="manage_page.php?action=sql">' . _gettext('SQL query') . '</a></li>
+		<li><a href="manage_page.php?action=rebuildanswerslist">' . _gettext('Rebuild static reply map') . '</a></li>
+		<li><a href="manage_page.php?action=apachelog">' . _gettext('Apache log') . '</a></li>' . "\n";
 		if (KU_APC) $tpl_links .= '<li><a href="manage_page.php?action=apc">APC</a></li>' . "\n";
 		$tpl_links .= '</ul></div>';
 	}
@@ -97,9 +99,7 @@ if (!$manage_class->ValidateSession(true)) {
 		<li><a href="manage_page.php?action=search">' . _gettext('Search posts') . '</a></li>
 		<li><a href="manage_page.php?action=viewthread">'._gettext('View thread (including deleted)').'</a></li>
 		<li><a href="manage_page.php?action=editfiletypes">' . _gettext('Edit filetypes') . '</a></li>
-		<li><a href="manage_page.php?action=editsections">' . _gettext('Edit sections') . '</a></li>
-		<li><a href="manage_page.php?action=rebuildanswerslist">' . 'Пересоздать статическую карту ответов' . '</a></li>
-		<li><a href="manage_page.php?action=apachelog">' . 'Показать лог Apache' . '</a></li>'. "\n";
+		<li><a href="manage_page.php?action=editsections">' . _gettext('Edit sections') . '</a></li>' . "\n";
 	}
 	if ($manage_class->CurrentUserIsAdministrator() || $manage_class->CurrentUserIsModerator()) {
 		$tpl_links .= '</ul></div>';
@@ -131,8 +131,8 @@ if (!$manage_class->ValidateSession(true)) {
 		'<ul>
 		<li><a href="manage_page.php?action=reports">' . _gettext('View Reports') . ' [' . $open_reports[0][0] . ']</a></li>
 		<li><a href="manage_page.php?action=bans">' . _gettext('View/Add/Remove bans') . '</a></li>
-		<li><a href="manage_page.php?action=threadlimit">Сбросить лимит тредов</a></li>
-		<li><a href="manage_page.php?action=verbosestats">Подневная статистика по бордам /sg/ и /vg/</a></li>';
+		<li><a href="manage_page.php?action=threadlimit">' . _gettext('Flush limit of threads') . '</a></li>
+		<li><a href="manage_page.php?action=verbosestats">' . _gettext('Verbose statistics') . '</a></li>';
 		if (KU_APPEAL) $tpl_links .= '<li><a href="manage_page.php?action=appeals">' . _gettext('View Appeals') . '</a></li>';
 		if ($manage_class->CurrentUserIsAdministrator()) {
 			$tpl_links .= '<li><a href="manage_page.php?action=deletepostsbyip">' . _gettext('Delete all posts by IP') . '</a></li>

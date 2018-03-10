@@ -2031,3 +2031,19 @@ msgstr "Информация"
 
 msgid "Catalog"
 msgstr "Каталог"
+
+msgid "Apache log"
+msgstr "Лог Apache"
+
+msgid "Rebuild static reply map"
+msgstr "Пересоздать статическую карту ответов"
+
+msgid "Special threads"
+msgstr "Специальные треды"
+
+msgid "Flush limit of threads"
+msgstr "Сбросить лимит тредов"
+
+msgid "Verbose statistics"
+msgstr "Подневная статистика по бордам /sg/ и /vg/"
+
