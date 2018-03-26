@@ -12,12 +12,12 @@
 											&nbsp;●&nbsp;
 											Причина:
 											<input name="reportreason" size="10" type="text">
-											<input name="reportpost" value="Репорт" type="submit" onclick="delform_submit = 'Report';">	
+											<input name="reportpost" value="Репорт" type="submit" onclick="delform_submit = 'Report'; return js_send_delform();">	
 										</div>
 										<div style="float:right; text-align: right; vertical-align: top;">
 											Пароль:
 											<input name="postpassword" size="8" type="password">
-											<input name="deletepost" value="Удалить пост" type="submit" onclick="delform_submit = 'Delete';">
+											<input name="deletepost" value="Удалить пост" type="submit" onclick="delform_submit = 'Delete'; return js_send_delform();">
 											[<input name="fileonly" id="fileonly" value="on" type="checkbox"><label for="fileonly">только файл</label>]
 										</div>
 									</td>

@@ -15,7 +15,7 @@
 
 {$is_board_page = 1}
 
-<form id="delform" action="{%KU_CGIPATH}/board.php" method="post" enctype="multipart/form-data" onsubmit="return js_send_delform(this);">
+<form id="delform" class="delform-id" action="{%KU_CGIPATH}/board.php" method="post" enctype="multipart/form-data">
 	<input type="hidden" name="board" value="{$board.name}" />
 	{foreach name=thread item=postsa from=$posts}
 		<hr />
