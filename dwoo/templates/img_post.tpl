@@ -1,4 +1,5 @@
-<div{if $post.parentid ne 0} id="repl_kukloshit"{/if}>
+<div{if $post.nodolls ne 1} id="repl_kukloshit"{/if}{if $post.parentid eq 0} class="oppost"{/if}>
+{if $post.nodolls eq 1}<div id="de-main"></div>{/if}
 <table {if $post.parentid eq 0}id="optable"{/if} class="postnode" width="100%">
 	<tbody>
 		<tr>
@@ -22,11 +23,7 @@
 							{if %KU_NEWWINDOW}
 								target="_blank"
 							{/if}
-							{if $istempfile}
-								href="{if $file_path}{$file_path}{else}{$post.file_path}{/if}/tmp/{$post.file}.{$post.file_type}"
-							{else}
-								href="{if $file_path}{$file_path}{else}{$post.file_path}{/if}/src/{$post.file}.{$post.file_type}"
-							{/if}
+							href="{if $file_path}{$file_path}{else}{$post.file_path}{/if}/{if $istempfile}tmp{else}src{/if}/{$post.file}.{$post.file_type}"
 						>
 						{strip}
 							{if isset($post.id3.comments_html)}

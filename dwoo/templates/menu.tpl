@@ -55,7 +55,7 @@ function toggle(button, area) {
 		tog.style.display="none";
 	}
 	button.innerHTML=(tog.style.display)?'+':'&minus;';
-	set_cookie('nav_show_'+area, tog.style.display?'0':'1', 30);
+	setCookie('nav_show_'+area, tog.style.display?'0':'1', 30);
 }
 
 function removeframes() {
@@ -71,7 +71,7 @@ function reloadmain() {
 }
 {/literal}
 function hidedirs() {
-	set_cookie('tcshowdirs', '', 30);
+	setCookie('tcshowdirs', '', 30);
 	{if $files.0 eq $files.1}
 		location.reload(true)
 	{else}
@@ -79,7 +79,7 @@ function hidedirs() {
 	{/if}
 }
 function showdirs() {
-	set_cookie('tcshowdirs', 'yes', 30);
+	setCookie('tcshowdirs', 'yes', 30);
 	{if $files.0 eq $files.1}
 		location.reload(true)
 	{else}

@@ -532,6 +532,9 @@ class Board {
 				$post['thumb_h'] = $filetype_info[$post['file_type']][2];
 			}
 		}
+		
+		if ($_COOKIE["nodolls"] === "1")
+			$post['nodolls'] = 1;
 
 		if($post['pic_spoiler']&&($post['file_type']=='jpg'||$post['file_type']=='gif'||$post['file_type']=='png'))
 		{
