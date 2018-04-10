@@ -11,7 +11,7 @@
 		<a id="postbox"></a>
 	{/if}
 	
-	<form name="postform" id="postform" {if $onlyclone}style="display:none"{/if} action="{%KU_CGIPATH}/board.php" method="post" enctype="multipart/form-data">
+	<form name="postform" id="postform" {if $onlyclone}style="display:none"{/if} action="{%KU_CGIPATH}/board.php" method="post" enctype="multipart/form-data" onsubmit="return js_send_postbox();">
 	<input type="hidden" name="ffdata_savedon" value="" />
 	<input type="hidden" name="board" value="{$board.name}" />
 	<input type="hidden" name="replythread" value="<!sm_threadid>" />
