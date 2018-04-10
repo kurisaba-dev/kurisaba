@@ -3494,9 +3494,11 @@ class Manage {
 			if (!empty($ban_board_id)) {
 				$results = $tc_db->GetAll("SELECT HIGH_PRIORITY * FROM `" . KU_DBPREFIX . "posts` WHERE `boardid` = '" . $ban_board_id . "' AND `id` = " . $tc_db->qstr($_GET['banpost']) . "");
 				if (count($results) > 0) {
+					if (isset($_GET['ban_img_by_post'])) {
+						$ban_hash = $results[0]['banimage_md5'];
+						if ($ban_hash == '') $ban_hash = $results[0]['file_md5'];
+					}
 					$ban_ip = md5_decrypt($results[0]['ip'], KU_RANDOMSEED);
-					$ban_hash = $results[0]['banimage_md5'];
-					if ($ban_hash == '') $ban_hash = $results[0]['file_md5'];
 					$ban_parentid = $results[0]['parentid'];
 				} else {
 					$tpl_page.= _gettext('A post with that ID does not exist.') . '<hr />';
@@ -3506,7 +3508,7 @@ class Manage {
 		$instantban = false;
 		if ((isset($_GET['instant']) || isset($_GET['cp'])) && $ban_ip) {
 			if (isset($_GET['cp'])) {
-					$ban_reason = "You have been banned for posting Child Pornography. Your IP has been logged, and the proper authorities will be notified.";
+				$ban_reason = "You have been banned for posting Child Pornography. Your IP has been logged, and the proper authorities will be notified.";
 			} else {
 				if($_GET['reason']) {
 					$ban_reason = urldecode($_GET['reason']);
@@ -3738,18 +3740,19 @@ class Manage {
 		$tpl_page .= $this->MakeBoardListCheckboxes('bannedfrom', $this->BoardList($_SESSION['manageusername'])) .
 		'</fieldset>';
 
-		if (isset($ban_hash)) {
+		if ($ban_hash != "") {
 			$tpl_page .= '<fieldset>
 			<legend>'. _gettext('Ban file') . '</legend>
 			<input type="hidden" name="hash" value="'. $ban_hash . '" />
 
-			<label for="banhashtime">'. _gettext('Ban file hash for') . ':</label>
-			<input type="text" name="banhashtime" id="banhashtime" />
-			<div class="desc">'. _gettext('The amount of time to ban the hash of the image which was posted under this ID. Leave blank to not ban the image, 0 for an infinite global ban, or any number of seconds for that duration of a global ban.') . '</div><br />
+			<label for="banhashtime">'. _gettext('Ban file hash duration (in seconds)') . ':</label>
+			<input type="text" name="banhashtime" id="banhashtime" value="0" />
+			<div class="desc">'. _gettext('The amount of time to ban the hash of the image which was posted under this ID. Leave blank to not ban the image, 0 for an infinite global ban, or any number of seconds for that duration of a global ban.') . '</div>
+			<div class="desc">'. _gettext('Presets') . ':&nbsp;<a href="#" onclick="document.banform.banhashtime.value=\'3600\';return false;">1hr</a>&nbsp;<a href="#" onclick="document.banform.banhashtime.value=\'86400\';return false;">1d</a>&nbsp;<a href="#" onclick="document.banform.banhashtime.value=\'259200\';return false;">3d</a>&nbsp;<a href="#" onclick="document.banform.banhashtime.value=\'604800\';return false;">1w</a>&nbsp;<a href="#" onclick="document.banform.banhashtime.value=\'1209600\';return false;">2w</a>&nbsp;<a href="#" onclick="document.banform.banhashtime.value=\'2592000\';return false;">30d</a>&nbsp;<a href="#" onclick="document.banform.banhashtime.value=\'31536000\';return false;">1yr</a>&nbsp;<a href="#" onclick="document.banform.banhashtime.value=\'0\';return false;">'. _gettext('never') .'</a></div><br />
 
 			<label for="banhashdesc">'. _gettext('Ban file hash description') . ':</label>
-			<input type="text" name="banhashdesc" id="banhashdesc" />
-			<div class=desc">'. _gettext('The description of the image being banned. Not applicable if the above box is blank.') . '</div>
+			<input type="text" name="banhashdesc" id="banhashdesc" value="' . (isset($ban_post_id) ? ("post " . $ban_post_id) : "") . '" />
+			<div class=desc">'. _gettext('The description of the image being banned.') . '</div>
 			</fieldset>';
 		}
 
@@ -3791,7 +3794,7 @@ class Manage {
 					break;
 			}
 			if (isset($_GET['allbans'])) {
-				$results = $tc_db->GetAll("SELECT HIGH_PRIORITY * FROM `" . KU_DBPREFIX . "banlist` WHERE `type` = '" . $i . "' AND `by` != 'SERVER' ORDER BY `id` DESC");
+				$results = $tc_db->GetAll("SELECT HIGH_PRIORITY * FROM `" . KU_DBPREFIX . "banlist` WHERE `type` = '" . $i . "' ORDER BY `id` DESC");
 				$hiddenbans = 0;
 			} elseif (isset($_GET['limit'])) {
 				$results = $tc_db->GetAll("SELECT HIGH_PRIORITY * FROM `" . KU_DBPREFIX . "banlist` WHERE `type` = '" . $i . "' ORDER BY `id` DESC LIMIT ".intval($_GET['limit']));
@@ -3836,7 +3839,7 @@ class Manage {
 			}
 		}
 		$tpl_page .= '<br /><br /><strong>'. _gettext('File hash bans') . ':</strong><br /><table border="1" width="100%"><tr><th>'. _gettext('Hash') . '</th><th>'. _gettext('Description') . '</th><th>'. _gettext('Ban time') . '</th><th>&nbsp;</th></tr>';
-		$results = $tc_db->GetAll("SELECT HIGH_PRIORITY * FROM `".KU_DBPREFIX."bannedhashes` ". ((!isset($_GET['allbans'])) ? ("LIMIT 5") : ("")));
+		$results = $tc_db->GetAll("SELECT HIGH_PRIORITY * FROM `".KU_DBPREFIX."bannedhashes` ". ((!isset($_GET['allbans'])) ? ("LIMIT 500") : ("")));
 		if (count($results) == 0) {
 			$tpl_page .= '<tr><td colspan="4">'. _gettext('None') . '</td></tr>';
 		} else {

@@ -881,7 +881,7 @@ msgid "Postbox notice"
 msgstr "Уведомления блока отправки сообщений"
 
 msgid "Posting a blacklisted link."
-msgstr "Публикация ссылки, находящаяся в черном списке."
+msgstr "Публикация ссылки, находящейся в черном списке."
 
 msgid "Posting mode: Reply"
 msgstr "Ответ"

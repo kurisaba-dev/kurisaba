@@ -125,7 +125,7 @@ if (isset($_POST['through_js']))
 {
 	if($bans_class->BanCheckSilent(KU_REMOTE_ADDR))
 	{
-		die("USER WAS BANNED FOR SOME POST");
+		die("YOU ARE BANNED FOR SOME POST");
 	}
 }
 else

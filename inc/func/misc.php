@@ -5,15 +5,15 @@ function md5_image($file)
 {
 	$imageDim = getimagesize($file);
 	$image_md5 = '';
-	$img_tmp = '';
+	$img_tmp = false;
 	if      ($imageDim[2] == IMAGETYPE_JPEG) $img_tmp = imagecreatefromjpeg($file);
 	else if ($imageDim[2] == IMAGETYPE_PNG)  $img_tmp = imagecreatefrompng($file);
 	else if ($imageDim[2] == IMAGETYPE_GIF)  $img_tmp = imagecreatefromgif($file);
-	if ($img_tmp !== '')
+	if ($img_tmp !== false)
 	{
 		ob_start();
 		imagepng($img_tmp);
-		$contents =  ob_get_contents();
+		$contents = ob_get_contents();
 		ob_end_clean();
 		$image_md5 = md5($contents);
 		imagedestroy($img_tmp);

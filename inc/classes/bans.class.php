@@ -78,7 +78,7 @@ class Bans {
 
 		$bans = Array();
 		$results = $tc_db->GetAll("SELECT * FROM `".KU_DBPREFIX."banlist` WHERE ((`type` = '0' AND ( `ipmd5` = '" . md5($ip) . "' OR `ipmd5` = '". md5($_COOKIE['tc_previousip']) . "' )) OR `type` = '1') AND (`expired` = 0)" );
-		if (count($results)>0) {
+		if (count($results) > 0) {
 			foreach($results AS $line) {
 				if(($line['type'] == 1 && strpos($ip, md5_decrypt($line['ip'], KU_RANDOMSEED)) === 0) || $line['type'] == 0) {
 					if ($line['until'] != 0 && $line['until'] < time() + KU_ADDTIME){
@@ -86,7 +86,7 @@ class Bans {
 						$line['expired'] = 1;
 						$this->UpdateHtaccess();
 					}
-					if ($line['globalban']!=1) {
+					if ($line['globalban'] != 1) {
 						if ((in_array($board, explode('|', $line['boards'])) || $board == '')) {
 							$line['appealin'] = substr(timeDiff($line['appealat'], true, 2), 0, -1);
 							$bans[] = $line;
@@ -100,11 +100,9 @@ class Bans {
 		}
 		$tc_db->Execute("END TRANSACTION");
 
-		if(count($bans) > 0){
+		if(count($bans) > 0)
 			return true;
-		}
 		return false;
-
 	}
 	
 	/* Add a ip/ip range ban */
