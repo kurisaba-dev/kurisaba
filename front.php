@@ -103,7 +103,7 @@ else
 		"kurisu","daru","okabe","mayuri","ruko","moeka","suzuha","faris","kurisutina",
 		"kurisu","daru","okabe","mayuri","ruko","moeka","suzuha","faris","kurisutina",
 		"kurisu","daru","okabe","mayuri","ruko","moeka","suzuha","faris","kurisutina",
-		"fremy", "hanako", "homura", "tohsaka", "kate", "mary", "rinka", "reimu", "ene", "cirno", "suigintou", "yui", "utsuho", "shinobu", "snusmu"
+		"fremy", "hanako", "homura", "tohsaka", "kate", "mary", "rinka", "reimu", "ene", "cirno", "suigintou", "yui", "utsuho", "shinobu", "snusmu", "nanachi"
 	);
 }
 $bgname  = $bgnames[array_rand($bgnames)];
