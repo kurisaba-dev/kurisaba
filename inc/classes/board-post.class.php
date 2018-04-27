@@ -282,11 +282,11 @@ class Board {
 					{
 						if ($line['file_type'] == 'jpg' || $line['file_type'] == 'png' || $line['file_type'] == 'gif')
 						{
-							$catalog_page .= '<img src="' . KU_BOARDSFOLDER . $this->board['name'] . '/thumb/' . $line['file'] . 's.' . $line['file_type'] . '" alt="' . $line['id'] . '" border="0" /></a><br />';
+							$catalog_page .= '<img src="' . KU_BOARDSFOLDER . $this->board['name'] . '/thumb/' . $line['file'] . 's.' . $line['file_type'] . '" class="raw-thumb" alt="' . $line['id'] . '" border="0" /></a><br />';
 						}
 						else if ($line['file_type'] == 'webm')
 						{
-							$catalog_page .= '<video preload="metadata" controls="" width="368">';
+							$catalog_page .= '<video preload="metadata" controls="" class="raw-thumb" width="368">';
 							$catalog_page .= '<source src="' . KU_BOARDSFOLDER . $this->board['name'] . '/src/' . $line['file'] . '.' . $line['file_type'] . "\" type='video/webm; codecs=\"vp8.0, vorbis\"'>";
 							$catalog_page .= '</video></a><br />';
 						}

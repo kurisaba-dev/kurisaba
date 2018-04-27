@@ -22,7 +22,7 @@
 					{/if}
 					href="{$file_path}/src/{$post.file}.{$post.file_type}">
 				{else}
-					<a href="{$file_path}/src/{$post.file}.{$post.file_type}" onclick="javascript:expandimg('{$post.id}', '{$file_path}/src/{$post.file}.{$post.file_type}', '{$file_path}/thumb/{$post.file}s.{$post.file_type}', '{$post.image_w}', '{$post.image_h}', '{$post.thumb_w}', '{$post.thumb_h}');return false;">
+					<a href="{$file_path}/src/{$post.file}.{$post.file_type}" onclick="javascript:return expandimg(this, '{$file_path}/thumb/{$post.file}s.{$post.file_type}', '{$post.image_w}', '{$post.image_h}', '{$post.thumb_w}', '{$post.thumb_h}');">
 				{/if}
 				{if isset($post.id3.comments_html)}
 					{if $post.id3.comments_html.artist.0 neq ''}
@@ -155,15 +155,7 @@
 			<br />
 		{else}
 		{if $numimages > 0 && $isexpand && $.foreach.postsloop.first}
-				<a href="#top" onclick="javascript:
-				{foreach key=postkey2 item=post2 from=$posts}
-					{if $post2.parentid neq 0}
-						{if $post2.file_type eq 'jpg' || $post2.file_type eq 'gif' || $post2.file_type eq 'png'}
-							expandimg('{$post2.id}', '{$file_path}/src/{$post2.file}.{$post2.file_type}', '{$file_path}/thumb/{$post2.file}s.{$post2.file_type}', '{$post2.image_w}', '{$post2.image_h}', '{$post2.thumb_w}', '{$post2.thumb_h}');
-						{/if}
-					{/if}
-				{/foreach}
-				return false;">{t}Expand all images{/t}</a>
+				<a href="#top" onclick="javascript:return expandallimgs();">{t}Expand all images{/t}</a>
 			{/if}
 
 			<table>
@@ -250,7 +242,7 @@
 								{/if}
 								href="{$file_path}/src/{$post.file}.{$post.file_type}">
 							{else}
-								<a href="{$file_path}/src/{$post.file}.{$post.file_type}" onclick="javascript:expandimg('{$post.id}', '{$file_path}/src/{$post.file}.{$post.file_type}', '{$file_path}/thumb/{$post.file}s.{$post.file_type}', '{$post.image_w}', '{$post.image_h}', '{$post.thumb_w}', '{$post.thumb_h}');return false;">
+								<a href="{$file_path}/src/{$post.file}.{$post.file_type}" onclick="javascript:expandimg(this, '{$file_path}/thumb/{$post.file}s.{$post.file_type}', '{$post.image_w}', '{$post.image_h}', '{$post.thumb_w}', '{$post.thumb_h}');return false;">
 							{/if}
 							{if isset($post.id3.comments_html)}
 								{if $post.id3.comments_html.artist.0 neq ''}
@@ -358,15 +350,7 @@
 					</span>
 			{/if}
 			{if $numimages > 0}
-				<a href="#top" onclick="javascript:
-				{foreach key=postkey2 item=post2 from=$posts}
-					{if $post2.parentid neq 0}
-						{if $post2.file_type eq 'jpg' || $post2.file_type eq 'gif' || $post2.file_type eq 'png'}
-							expandimg('{$post2.id}', '{$file_path}/src/{$post2.file}.{$post2.file_type}', '{$file_path}/thumb/{$post2.file}s.{$post2.file_type}', '{$post2.image_w}', '{$post2.image_h}', '{$post2.thumb_w}', '{$post2.thumb_h}');
-						{/if}
-					{/if}
-				{/foreach}
-				return false;">{t}Expand all images{/t}</a>
+				<a href="#top" onclick="javascript:return expandallimgs();">{t}Expand all images{/t}</a>
 			{/if}
 		{else}
 				</td>

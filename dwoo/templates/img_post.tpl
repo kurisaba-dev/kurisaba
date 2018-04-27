@@ -106,8 +106,7 @@
 								{if %KU_NEWWINDOW}
 									target="_blank"
 								{/if}
-								onclick="javascript:return expandimg('{$post.id}', '{if $file_path}{$file_path}{else}{$post.file_path}{/if}/tmp/{$post.file}.{$post.file_type}',
-								'{if $post.nonstandard_file neq ''}{$post.nonstandard_file}{else}{if $file_path}{$file_path}{else}{$post.file_path}{/if}/tmp/thumb/{$post.file}s.{$post.file_type}{/if}',
+								onclick="javascript:return expandimg(this, '{if $post.nonstandard_file neq ''}{$post.nonstandard_file}{else}{if $file_path}{$file_path}{else}{$post.file_path}{/if}/tmp/thumb/{$post.file}s.{$post.file_type}{/if}',
 								'{$post.image_w}', '{$post.image_h}', '{$post.thumb_w}', '{$post.thumb_h}');" 
 								href="{if $file_path}{$file_path}{else}{$post.file_path}{/if}/tmp/{$post.file}.{$post.file_type}"
 							>
@@ -125,8 +124,7 @@
 								{if %KU_NEWWINDOW}
 									target="_blank"
 								{/if}
-								onclick="javascript:return expandimg('{$post.id}', '{if $file_path}{$file_path}{else}{$post.file_path}{/if}/src/{$post.file}.{$post.file_type}',
-								'{if $post.nonstandard_file neq ''}{$post.nonstandard_file}{else}{if $file_path}{$file_path}{else}{$post.file_path}{/if}/thumb/{$post.file}s.{$post.file_type}{/if}',
+								onclick="javascript:return expandimg(this, '{if $post.nonstandard_file neq ''}{$post.nonstandard_file}{else}{if $file_path}{$file_path}{else}{$post.file_path}{/if}/thumb/{$post.file}s.{$post.file_type}{/if}',
 								'{$post.image_w}', '{$post.image_h}', '{$post.thumb_w}', '{$post.thumb_h}');" 
 								href="{if $file_path}{$file_path}{else}{$post.file_path}{/if}/src/{$post.file}.{$post.file_type}"
 							>
