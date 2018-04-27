@@ -91,18 +91,18 @@ else
 	$skip = array();
 	$characters = array
 	(
-		"kurisu","daru","okabe","mayuri","ruko","moeka","suzuha","faris","kurisutina",
-		"kurisu","daru","okabe","mayuri","ruko","moeka","suzuha","faris","kurisutina",
-		"kurisu","daru","okabe","mayuri","ruko","moeka","suzuha","faris","kurisutina",
-		"kurisu","daru","okabe","mayuri","ruko","moeka","suzuha","faris","kurisutina",
-		"kurisu","daru","okabe","mayuri","ruko","moeka","suzuha","faris","kurisutina",
-		"kurisu","daru","okabe","mayuri","ruko","moeka","suzuha","faris","kurisutina",
-		"kurisu","daru","okabe","mayuri","ruko","moeka","suzuha","faris","kurisutina",
-		"kurisu","daru","okabe","mayuri","ruko","moeka","suzuha","faris","kurisutina",
-		"kurisu","daru","okabe","mayuri","ruko","moeka","suzuha","faris","kurisutina",
-		"kurisu","daru","okabe","mayuri","ruko","moeka","suzuha","faris","kurisutina",
-		"kurisu","daru","okabe","mayuri","ruko","moeka","suzuha","faris","kurisutina",
-		"kurisu","daru","okabe","mayuri","ruko","moeka","suzuha","faris","kurisutina",
+		"kurisu","daru","okabe","mayuri","ruko","moeka","suzuha","faris","kurisutina","leskinen",
+		"kurisu","daru","okabe","mayuri","ruko","moeka","suzuha","faris","kurisutina","leskinen",
+		"kurisu","daru","okabe","mayuri","ruko","moeka","suzuha","faris","kurisutina","leskinen",
+		"kurisu","daru","okabe","mayuri","ruko","moeka","suzuha","faris","kurisutina","leskinen",
+		"kurisu","daru","okabe","mayuri","ruko","moeka","suzuha","faris","kurisutina","leskinen",
+		"kurisu","daru","okabe","mayuri","ruko","moeka","suzuha","faris","kurisutina","leskinen",
+		"kurisu","daru","okabe","mayuri","ruko","moeka","suzuha","faris","kurisutina","leskinen",
+		"kurisu","daru","okabe","mayuri","ruko","moeka","suzuha","faris","kurisutina","leskinen",
+		"kurisu","daru","okabe","mayuri","ruko","moeka","suzuha","faris","kurisutina","leskinen",
+		"kurisu","daru","okabe","mayuri","ruko","moeka","suzuha","faris","kurisutina","leskinen",
+		"kurisu","daru","okabe","mayuri","ruko","moeka","suzuha","faris","kurisutina","leskinen",
+		"kurisu","daru","okabe","mayuri","ruko","moeka","suzuha","faris","kurisutina","leskinen",
 		"fremy", "hanako", "homura", "tohsaka", "kate", "mary", "rinka", "reimu", "ene", "cirno", "suigintou", "yui", "utsuho", "shinobu", "snusmu", "nanachi"
 	);
 }
