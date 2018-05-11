@@ -186,8 +186,7 @@
 					<div class="replieslist">
 						<br>
 						{foreach key=replykey item=reply from=$post.repliesmap}
-							{$reply.start}<a class="ref-reply" onclick="javascript:highlight('{$reply.id}', true);" href="/{$reply.boardname}/res/{$reply.parentid}.html#{$reply.id}">&gt;&gt;{if $board.name != $reply.boardname}{$reply.boardname}/{/if}{$reply.id}{if $reply.you}<span class="youindicator">&nbsp;(You)</span>{/if}</a>
-						{/foreach}
+							{$reply.start}<a class="ref-reply" onclick="javascript:highlight('{$reply.id}', true);" href="/{$reply.boardname}/res/{$reply.parentid}.html#{$reply.id}">&gt;&gt;{if $board.name != $reply.boardname}{$reply.boardname}/{/if}{$reply.id}{if $reply.you}<span class="youindicator">&nbsp;(You)</span>{/if}</a>{/foreach}
 						<script>
 							if (typeof newupd_replymap !== 'undefined')
 							{"{"}

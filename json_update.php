@@ -37,24 +37,26 @@ if ($results == 0)
 }
 
 // Pregenerate replies array and make $return_replymap
+$etalon_md5 = md5(KU_REMOTE_ADDR);
 $return_replymap = array();
-$pregen_replies_q = $tc_db->GetAll("SELECT `to_id`, `from_boardname`, `from_id`, `from_parentid` FROM `".KU_DBPREFIX."answers` JOIN `posts` ON `to_id` = `id` AND `to_boardid` = `boardid` WHERE `to_boardid` = '" . $board_class->board['id'] . "' AND `to_parentid` = " . $tc_db->qstr($thread) . " AND `IS_DELETED` = 0");
+$pregen_replies_q = $tc_db->GetAll("SELECT `to_id`, `from_boardname`, `from_id`, `from_parentid`, c.ipmd5 AS ipmd5 FROM `".KU_DBPREFIX."answers` INNER JOIN `".KU_DBPREFIX."posts` AS `b` ON `to_id` = b.id AND `to_boardid` = b.boardid INNER JOIN `".KU_DBPREFIX."posts` AS `c` ON `from_id` = c.id AND `from_boardid` = c.boardid  WHERE `to_boardid` = '" . $board_class->board['id'] . "' AND `to_parentid` = " . $tc_db->qstr($thread) . " AND b.IS_DELETED = 0 AND c.IS_DELETED = 0");
 if (count($pregen_replies_q) > 0)
 {
 	foreach($pregen_replies_q as $reply_entry)
 	{
 		$postid = $reply_entry['to_id'];
-		if(!key_exists($postid,$return_replymap))
-		{
+		if(!key_exists($postid,$return_replymap)) {
 			$return_replymap[$postid]=array();
 		}
 		// Raw map; remove duplicates and sort on the client side.
-		array_push($return_replymap[$postid],array
-		(
+		$a = array(
 			'boardname'   =>  $reply_entry['from_boardname'],
 			'id'          =>  $reply_entry['from_id'],
 			'parentid'    => ($reply_entry['from_parentid'] == 0) ? $reply_entry['from_id'] : $reply_entry['from_parentid']
-		));
+		);
+		if ($etalon_md5 == $reply_entry['ipmd5'])
+			$a['you'] = 1;
+		array_push($return_replymap[$postid],$a);
 	}
 }
 
