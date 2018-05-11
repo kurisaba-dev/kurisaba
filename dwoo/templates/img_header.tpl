@@ -247,8 +247,6 @@ function scrolling(elem, direction) {
 		<tr>
 			<td width="13" class="border-left"></td>
 			<td class="content-background" style="padding:9px">
-				<div class="adminbar">
-				</div>
 				<span class="oldsearch" style="float: right;">
 					Перейти:
 					<form style="display: inline;" action="/read.php" method="get">
@@ -267,3 +265,4 @@ function scrolling(elem, direction) {
 				</span>
 				<script>Settings.oldSearch(false);</script>
 				<br>
+				<span class="adminbar"></span>
