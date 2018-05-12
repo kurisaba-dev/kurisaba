@@ -17,6 +17,9 @@
 		var ispage = true;
 {/if}
 //--></script>
+{if $replythread ne '0'}
+<link rel="canonical" href="{%KU_WEBPATH}/{$board.name}/res/{$replythread}.html" />
+{/if}
 <!-- <link href='https://fonts.googleapis.com/css?family=Roboto:400,700,400italic,700italic&subset=latin,cyrillic' rel='stylesheet' type='text/css'> -->
 <link rel="stylesheet" type="text/css" href="{$cwebpath}css/img_global.css?v={%KU_CSSVER}" />
 {loop $ku_styles}
