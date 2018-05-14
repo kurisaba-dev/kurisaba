@@ -244,8 +244,8 @@ border: solid 1px #1d1f21;
 color: #BB2222;
 }
 
-.reply blockquote, blockquote :last-child {
-margin-bottom: 0.8em;
+.reply blockquote {
+margin-bottom: 1.6em;
 }
 
 li a:hover {

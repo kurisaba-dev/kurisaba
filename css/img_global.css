@@ -162,10 +162,6 @@ pre {
 	padding: 1em 0.5em 1em 0.5em;
 }
 
-.reply blockquote, blockquote :last-child {
-	margin-bottom: 0em;
-}
-
 .reflink a {
 	color: #333333;
 	text-decoration: none;
