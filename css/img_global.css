@@ -374,10 +374,6 @@ img.latex, object.latex  {
 	max-width: 960px;
 }
 
-.prettyprint br {
-	display: none;
-}
-
 .reply {
 	max-width: 100%;
 	width: 100%;
