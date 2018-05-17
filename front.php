@@ -91,19 +91,19 @@ else
 	$skip = array();
 	$characters = array
 	(
-		"kurisu","daru","okabe","mayuri","ruko","moeka","suzuha","faris","kurisutina","leskinen",
-		"kurisu","daru","okabe","mayuri","ruko","moeka","suzuha","faris","kurisutina","leskinen",
-		"kurisu","daru","okabe","mayuri","ruko","moeka","suzuha","faris","kurisutina","leskinen",
-		"kurisu","daru","okabe","mayuri","ruko","moeka","suzuha","faris","kurisutina","leskinen",
-		"kurisu","daru","okabe","mayuri","ruko","moeka","suzuha","faris","kurisutina","leskinen",
-		"kurisu","daru","okabe","mayuri","ruko","moeka","suzuha","faris","kurisutina","leskinen",
-		"kurisu","daru","okabe","mayuri","ruko","moeka","suzuha","faris","kurisutina","leskinen",
-		"kurisu","daru","okabe","mayuri","ruko","moeka","suzuha","faris","kurisutina","leskinen",
-		"kurisu","daru","okabe","mayuri","ruko","moeka","suzuha","faris","kurisutina","leskinen",
-		"kurisu","daru","okabe","mayuri","ruko","moeka","suzuha","faris","kurisutina","leskinen",
-		"kurisu","daru","okabe","mayuri","ruko","moeka","suzuha","faris","kurisutina","leskinen",
-		"kurisu","daru","okabe","mayuri","ruko","moeka","suzuha","faris","kurisutina","leskinen",
-		"fremy", "hanako", "homura", "tohsaka", "kate", "mary", "rinka", "reimu", "ene", "cirno", "suigintou", "yui", "utsuho", "shinobu", "snusmu", "nanachi"
+		"kurisu","daru","okabe","mayuri","ruka","moeka","suzuha","faris","kurisutina","leskinen",
+		"kurisu","daru","okabe","mayuri","ruka","moeka","suzuha","faris","kurisutina","leskinen",
+		"kurisu","daru","okabe","mayuri","ruka","moeka","suzuha","faris","kurisutina","leskinen",
+		"kurisu","daru","okabe","mayuri","ruka","moeka","suzuha","faris","kurisutina","leskinen",
+		"kurisu","daru","okabe","mayuri","ruka","moeka","suzuha","faris","kurisutina","leskinen",
+		"kurisu","daru","okabe","mayuri","ruka","moeka","suzuha","faris","kurisutina","leskinen",
+		"kurisu","daru","okabe","mayuri","ruka","moeka","suzuha","faris","kurisutina","leskinen",
+		"kurisu","daru","okabe","mayuri","ruka","moeka","suzuha","faris","kurisutina","leskinen",
+		"kurisu","daru","okabe","mayuri","ruka","moeka","suzuha","faris","kurisutina","leskinen",
+		"kurisu","daru","okabe","mayuri","ruka","moeka","suzuha","faris","kurisutina","leskinen",
+		"kurisu","daru","okabe","mayuri","ruka","moeka","suzuha","faris","kurisutina","leskinen",
+		"kurisu","daru","okabe","mayuri","ruka","moeka","suzuha","faris","kurisutina","leskinen",
+		"hanako", "homura", "tohsaka", "kate", "mary", "reimu", "ene", "cirno", "yui", "nanachi"
 	);
 }
 $bgname  = $bgnames[array_rand($bgnames)];
