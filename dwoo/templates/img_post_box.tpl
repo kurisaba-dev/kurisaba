@@ -1,7 +1,9 @@
 {if not $onlyclone}
 	<hr />
 	<div id="formdown" style="position: relative; float: right; text-align: right; right: 0px;">
-		<a onclick="javascript:rswap.swap();return true;" href="#boardlist_footer"><img src="/images/down.gif"></a>
+		<a href="#boardlist_footer" onclick="javascript:rswap.swap();return true;" title="Вниз">
+			<img src="/css/icons/blank.gif" border="0" class="downscroll spritebtn">
+		</a>
 	</div>
 {/if}
 
@@ -37,7 +39,7 @@
 						{t}Name{/t}</td>
 					<td>
 						<input type="text" name="name" size="76" maxlength="{%KU_MAXNAMELENGTH}" accesskey="n" style="width: 500px;"/>
-						<a href="#" onclick="javascript:emgr_ui_onclick();return false;" title="История записей" style="vertical-align: middle;">
+						<a href="#" onclick="javascript:emgr_ui_onclick();return false;" title="История записей">
 							<img src="/css/icons/blank.gif" border="0" class="spritebtn editmgr">
 						</a>
 					</td>
@@ -102,12 +104,12 @@
 						Прикрепить
 					</td>
 					<td>
-						<input type="radio" name="attach_type" value="file" checked onchange="showembedfield(this);"> Открыть файл 
-						<input type="radio" name="attach_type" value="drop" onchange="showembedfield(this);"> Перетащить файл
+						<label><input class="stradio" type="radio" name="attach_type" value="file" checked onchange="showembedfield(this);"> Открыть файл</label>
+						<label><input class="stradio" type="radio" name="attach_type" value="drop" onchange="showembedfield(this);"> Перетащить файл</label>
 						{if ($board.uploadtype eq 1 || $board.uploadtype eq 2) && $board.embeds_allowed neq ''}
-							<input type="radio" name="attach_type" value="embed" onchange="showembedfield(this);"> Видео
+							<label><input class="stradio" type="radio" name="attach_type" value="embed" onchange="showembedfield(this);"> Видео</label>
 						{/if}
-						<input type="radio" name="attach_type" value="link" onchange="showembedfield(this);"> Ссылка
+						<label><input class="stradio" type="radio" name="attach_type" value="link" onchange="showembedfield(this);"> Ссылка</label>
 					</td>
 				</tr>
 				<tr id="attachfile_tr" style="height: 26px;">
@@ -117,7 +119,7 @@
 					<td>
 						<input type="file" name="imagefile" id="imagefile" style="width: 440px;" accesskey="f" />
 						{if $replythread eq 0 && $board.enablenofile eq 1 }
-							[<input type="checkbox" name="nofile" id="nofile" accesskey="q" /><label for="nofile"> {t}No File{/t}</label>]
+							[<input class="stcheckbox" type="checkbox" name="nofile" id="nofile" accesskey="q" /><label for="nofile"> {t}No File{/t}</label>]
 						{/if}
 						<input type="button" value="Очистить" onclick="document.forms['postform'].imagefile.value='';" style="width: 80px;" >
 					</td>
@@ -191,13 +193,13 @@
 					Опции</td>
 				<td>
 					<label for="sage">
-						<input id="sage" type="checkbox" name="em" value="sage" style="vertical-align: middle;">sage
+						<input id="sage" class="stcheckbox" type="checkbox" name="em" value="sage">sage
 					</label>
 					<label for="gotothread">
-						<input id="gotothread" type="checkbox" checked name="redirecttothread" value="1" style="vertical-align: middle;">noko
+						<input id="gotothread" class="stcheckbox" type="checkbox" checked name="redirecttothread" value="1">noko
 					</label>
 					<label for="picspoiler">
-						<input id="picspoiler" type="checkbox" name="picspoiler" value="1" style="vertical-align: middle;">картинку под спойлер
+						<input id="picspoiler" class="stcheckbox" type="checkbox" name="picspoiler" value="1">картинку под спойлер
 					</label>
 					<input id="submit_through_js" type="checkbox" checked name="submit_through_js" value="1" style="display:none;">
 					&nbsp;&nbsp;&nbsp;&nbsp;<a href="#" onclick="post_preview(event,document.getElementById('postform'));return false;">Предпросмотр поста</a>

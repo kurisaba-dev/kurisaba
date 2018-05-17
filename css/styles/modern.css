@@ -191,7 +191,7 @@ table td {
 }
 
 .spritebtn {
-	background-image: url('/css/icons/black.gif');
+	background-image: url('/css/icons/white.gif');
 	opacity: 0.3;
 }
 .spritebtn:hover {

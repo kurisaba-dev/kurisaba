@@ -111,6 +111,7 @@ form .trap {
 	border-radius: 0px 0px 5px 5px;
 	z-index:100;
 	left: 20px;
+	box-sizing: border-box;
 }
 
 .code_full {
@@ -257,20 +258,12 @@ pre {
 	border: none;
 }
 
-.extrabtns, [id^=dnb] {
-	vertical-align: middle;
-}
-
 .btngroup {
 	white-space: nowrap;
 }
 
 .reply ._country_ {
 	margin-left: 4px;
-}
-
-.extrabtns a {
-	font-size: 0px;
 }
  
 .hidethread {
@@ -297,6 +290,10 @@ pre {
 	background-position: -16px -64px;
 }
 
+.downscroll {
+	background-position: -32px -64px;
+}
+
 .expandthread {
 	background-position: 0px -16px;
 }
@@ -305,6 +302,7 @@ pre {
 	background-color: #7f7f7f;
 	background-image: url('icons/white.gif');
 	border-radius: 3px;
+	vertical-align: middle;
 	-webkit-transition: background-color 0.3s, border-color 0.3s;
 	-moz-transition: background-color 0.3s, border-color 0.3s;
 	-ms-transition: background-color 0.3s, border-color 0.3s;
@@ -428,6 +426,11 @@ border-radius: 5px;
     margin-bottom: 2px;
     margin-top: 2px;
 }*/
+
+.stcheckbox, .stradio {
+	vertical-align: middle;
+	margin: 0.23em;
+}
 
 .qreplyform {
 	padding: 3px;

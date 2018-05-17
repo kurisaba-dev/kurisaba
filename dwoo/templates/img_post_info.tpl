@@ -1,6 +1,6 @@
 <a name="{$post.id}"></a>
 <label>
-	<input type="checkbox" name="post[]" value="{$post.id}" />
+	<input class="stcheckbox" type="checkbox" name="post[]" value="{$post.id}" />
 
 	{if $post.subject neq ''}
 		<span class="filetitle">

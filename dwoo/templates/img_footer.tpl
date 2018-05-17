@@ -18,7 +18,7 @@
 											Пароль:
 											<input name="postpassword" size="8" type="password">
 											<input name="deletepost" value="Удалить пост" type="submit" onclick="delform_submit = 'Delete'; return js_send_delform();">
-											[<input name="fileonly" id="fileonly" value="on" type="checkbox"><label for="fileonly">только файл</label>]
+											[<input name="fileonly" id="fileonly" value="on" class="stcheckbox" type="checkbox"><label for="fileonly">только файл</label>]
 										</div>
 									</td>
 								</tr>
