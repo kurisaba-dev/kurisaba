@@ -638,25 +638,17 @@ class Board {
 		}
 		else
 		{
-			$tpl['title'] .= '/' . $this->board['name'] . '/' . $replythread;
 			if (KU_DIRTITLE)
 			{
 				if ($replythread != 0)
 				{
-					$title = '';
-					$results = $tc_db->GetAll("SELECT * FROM `".KU_DBPREFIX."posts` WHERE `boardid` = '" . $this->board['id'] . "' AND `id` = ".$tc_db->qstr($replythread)." LIMIT 1");
-					if (count($results)==0)
-					{
+					$results = $tc_db->GetAll("SELECT subject FROM `".KU_DBPREFIX."posts` WHERE `boardid` = '" . $this->board['id'] . "' AND `id` = ".$tc_db->qstr($replythread)." LIMIT 1");
+					if (count($results) == 0)
 						exitWithErrorPage(_gettext('Invalid post ID.'));
-					}
-					else
-					{
-						foreach ($results[0] as $key=>$line) {
-							if ($key == 'subject') $title = $line;
-						}
-					}
-					if ($title != '') $tpl['title'] .= ' - ' . $title;
+					$title = $results[0]['subject'];
+					if (($title != '') && (is_string($title))) $tpl['title'] .= $title . ' - ';
 				}
+				$tpl['title'] .= '/' . $this->board['name'] . '/' . $replythread;
 			}
 		}
 
