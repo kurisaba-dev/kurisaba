@@ -46,13 +46,11 @@
 				</tr>
 			{/if}
 			
-			<span class="extrabtns postboxcontrol" style="display: none; padding-top: 5px;">
+			<span class="extrabtns postboxcontrol" style="display: none;">
 				<span class="qrpinner">
 					<a href="#" onclick="javascript:$('#postform').pin();return false;" title="Прикрепить / Открепить">
-						<img src="/css/icons/blank.gif" border="0" class="spritebtn pinner">
-					</a>
+						<img src="/css/icons/blank.gif" border="0" class="spritebtn pinner"></a>
 				</span>
-				&nbsp;
 				<a href="#" onclick="javascript:quickreply_hide();return false;" title="Закрыть">
 					<img src="/css/icons/blank.gif" border="0" class="closebox spritebtn">
 				</a>

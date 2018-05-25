@@ -60,9 +60,15 @@
 </span>
 {strip}
 	{if $post.parentid neq 0}
-		<a class="extrabtns" href="#" onclick="hidepost_num('{$board.name}',{$post.id});return false;" title="Скрыть этот пост">
-			<img src="{$boardpath}css/icons/blank.gif" border="0" class="hidethread spritebtn" alt="Скрыть этот пост" />
+		<a class="extrabtns" href="#" onclick="hidepost_num('{$board.name}',{$post.id});return false;" title="Скрыть пост">
+			<img src="{$boardpath}css/icons/blank.gif" border="0" class="hidethread spritebtn" alt="Скрыть пост" />
 		</a>
+	{else}
+		<span id="hide{$post.id}">
+			<a href="#" onclick="javascript:togglethread('{$post.id}');return false;" title="Скрыть тред">
+				<img src="{$boardpath}css/icons/blank.gif" border="0" class="hidethread spritebtn" alt="Скрыть тред" />
+			</a>
+		</span>
 	{/if}
 {/strip}
 <span class="postnumber">
@@ -71,7 +77,6 @@
 {if $board.showid}
 	<img src="data:image/png;base64,{"{"}rainbow($post.ipmd5, {if $post.parentid eq 0}$post.id{else}$post.parentid{/if});{"}"}" />
 {/if}
-
 <span class="extrabtns">
 	{if $post.id != '?????'}
 		{if $is_board_page && $post.parentid eq 0}
@@ -82,24 +87,16 @@
 			{if $post.stickied eq 1}
 				<img style="border: 0;" src="{$boardpath}css/images/sticky.gif" alt="{t}Stickied{/t}" />
 			{/if}
-
-			<span id="hide{$post.id}">
-				<a href="#" onclick="javascript:togglethread('{$post.id}');return false;" title="Скрыть тред">
-					<img src="{$boardpath}css/icons/blank.gif" border="0" class="hidethread spritebtn" alt="Скрыть тред" />
-				</a>
-			</span>
 		{/if}
 		{if %KU_QUICKREPLY}
-			<span style="margin-left: 4px;">
-				{strip}
-					<a href="#" data-parent="{if $post.parentid eq 0}{$post.id}{else}{$post.parentid}{/if}" data-forceexternalboard="{if $forceexternalboard}yes{else}no{/if}" data-boardname="{$board.name}" data-maxfilesize="{$board.maximagesize}" data-postnum="{$post.id}" class="qrl" title="{t}Quick Reply{/t}{if not $is_board_page}  в тред {if $post.parentid eq 0}{$post.id}{else}{$post.parentid}{/if}{/if}">
-						<img src="{$cwebpath}css/icons/blank.gif" border="0" class="quickreply spritebtn" alt="quickreply">
-					</a>
-					<a href="#" data-parent="{if $post.parentid eq 0}{$post.id}{else}{$post.parentid}{/if}" data-forceexternalboard="{if $forceexternalboard}yes{else}no{/if}" data-boardname="{$board.name}" data-maxfilesize="{$board.maximagesize}" data-postnum="{$post.id}" class="qed" style="margin-left: 4px;" title="Переотправить пост {$post.id}">
-						<img src="{$cwebpath}css/icons/blank.gif" border="0" class="quickedit spritebtn" alt="quickedit">
-					</a>
-				{/strip}
-			</span>
+			{strip}
+				<a href="#" data-parent="{if $post.parentid eq 0}{$post.id}{else}{$post.parentid}{/if}" data-forceexternalboard="{if $forceexternalboard}yes{else}no{/if}" data-boardname="{$board.name}" data-maxfilesize="{$board.maximagesize}" data-postnum="{$post.id}" class="qrl" title="{t}Quick Reply{/t}{if not $is_board_page}  в тред {if $post.parentid eq 0}{$post.id}{else}{$post.parentid}{/if}{/if}">
+					<img src="{$cwebpath}css/icons/blank.gif" border="0" class="quickreply spritebtn" alt="quickreply">
+				</a>
+				<a href="#" data-parent="{if $post.parentid eq 0}{$post.id}{else}{$post.parentid}{/if}" data-forceexternalboard="{if $forceexternalboard}yes{else}no{/if}" data-boardname="{$board.name}" data-maxfilesize="{$board.maximagesize}" data-postnum="{$post.id}" class="qed" style="margin-left: 4px;" title="Переотправить пост {$post.id}">
+					<img src="{$cwebpath}css/icons/blank.gif" border="0" class="quickedit spritebtn" alt="quickedit">
+				</a>
+			{/strip}
 		{/if}
 	{/if}
 
