@@ -59,10 +59,7 @@ if (!window.prettyPrint) {
 <!-- <script src="{%KU_WEBPATH}/lib/javascript/kusaba.new.js?v={%KU_JSVER}"></script> -->
 <script>
 	document.write('<script src="{$cwebpath}lib/javascript/kusaba.new.js?v={%KU_JSVER}"><\/script>');
-</script>				
-<script><!--
-	var hiddenthreads = getCookie('hiddenthreads').split('!');
-//--></script>
+</script>
 {if %KU_REACT_ENA}
 <script src="{%KU_CLI_REACT_API}/socket.io/socket.io.js"></script>
 {/if}
@@ -197,11 +194,11 @@ function scrolling(elem, direction) {
 		</span>
 		
 		{foreach name=sections item=sect from=$boardlist}
-			<b  class="olm-link">[<a href="#" class="sect-exr" id="menubrdlist" data-toexpand="{$sect.abbreviation}">{$sect.nick}</a>]</b>
+			<b  class="olm-link">[<a href="#" class="sect-exr" id="menubrdlist" onclick="return menuClickExpandElem(this);" data-toexpand="{$sect.abbreviation}">{$sect.nick}</a>]</b>
 		{/foreach}
 		
-		<span class="olm-link">[<a href="#" class="sect-exr" data-toexpand="_options">Настройки</a>]</span>
-		<span class="olm-link newsearch">[<a href="#" class="sect-exr" data-toexpand="_search">Поиск</a>]</span>
+		<span class="olm-link">[<a href="#" class="sect-exr" onclick="return menuClickExpandElem(this);" data-toexpand="_options">Настройки</a>]</span>
+		<span class="olm-link newsearch">[<a href="#" class="sect-exr" onclick="return menuClickExpandElem(this);" data-toexpand="_search">Поиск</a>]</span>
 
 		{foreach name=sections item=sect from=$boardlist}
 			<div class="menu-sect" id="ms-{$sect.abbreviation}">

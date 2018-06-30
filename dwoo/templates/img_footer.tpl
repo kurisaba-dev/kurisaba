@@ -150,7 +150,3 @@
 		</tr>
 	</tbody>
 </table>
-<script type="text/javascript">
-    // PostPreviews.setupPreviews(document);
-    delandbanlinks();
-</script>
