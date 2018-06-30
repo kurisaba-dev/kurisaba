@@ -74,6 +74,12 @@ if ($board_class->board['type'] == 1) {
 			$i = 0;
 			foreach($postids as $key=>$postid) {
 				if (is_numeric($key)) {
+					if (intval($postid) < 0) {
+						if ($singlepost)
+							die("invalid post id");
+						else
+							exitWithErrorPage("invalid post id");
+					}
 					if($i != 0)
 						$postidquery .= " OR ";
 					$postidquery .= "(`id` = ".intval($postid)." AND ";
