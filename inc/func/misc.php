@@ -29,8 +29,22 @@ function file_get_contents_remote($url)
 	if(($err = curl_error($ch)) != '') return 'curl_setopt(CURLOPT_HEADER): '. $err;
 	curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 	if(($err = curl_error($ch)) != '') return 'curl_setopt(CURLOPT_RETURNTRANSFER): '. $err;
-	curl_setopt($ch, CURLOPT_INTERFACE, /*"venet0:0"*/ /*"tunb"*/ KU_CURL_INTERFACE );
-	if(($err = curl_error($ch)) != '') return 'curl_setopt(CURLOPT_INTERFACE): '. $err;
+	curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+	curl_setopt($ch, CURLOPT_MAXREDIRS, 4);
+	if (KU_CURL_PROXY == "interface") {
+		curl_setopt($ch, CURLOPT_INTERFACE, /*"venet0:0"*/ /*"tunb"*/ KU_CURL_INTERFACE );
+		if(($err = curl_error($ch)) != '') return 'curl_setopt(CURLOPT_INTERFACE): '. $err;
+	} else if (KU_CURL_PROXY == "vpnbook") {
+		curl_setopt($ch, CURLOPT_COOKIEJAR, "");
+		if(($err = curl_error($ch)) != '') return 'curl_setopt(CURLOPT_COOKIEJAR): '. $err;
+		curl_setopt($ch, CURLOPT_URL, "https://frproxy.vpnbook.com/includes/process.php?action=update");
+		if(($err = curl_error($ch)) != '') return 'curl_setopt(CURLOPT_URL): '. $err;
+		curl_setopt($ch, CURLOPT_POST, 1);
+		curl_setopt($ch, CURLOPT_POSTFIELDS, array('u' => $url, 'webproxylocation' => 'random'));
+		if(($err = curl_error($ch)) != '') return 'curl_setopt(CURLOPT_POSTFIELDS): '. $err;
+	} else if ((KU_CURL_PROXY != "none")) {
+		return "curl: insufficient KU_CURL_PROXY";
+	}
 	$ret = curl_exec($ch);
 	if(($err = curl_error($ch)) != '') return 'curl_exec(): '. $err;
 	curl_close($ch);
