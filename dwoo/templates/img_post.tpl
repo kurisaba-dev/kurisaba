@@ -1,4 +1,4 @@
-<div{if $post.nodolls ne 1} id="repl_kukloshit"{/if}{if $post.parentid eq 0} class="oppost"{/if}>
+<div{if $post.nodolls ne 1} id="repl_kukloshit"{/if}{if $post.parentid eq 0} class="oppost workaround"{/if}>
 {if $post.nodolls eq 1}<div id="de-main"></div>{/if}
 <table {if $post.parentid eq 0}id="optable"{/if} class="postnode" width="100%">
 	<tbody>
@@ -147,13 +147,11 @@
 						</div>
 					{else}
 						{if $post.file_type eq 'webm'}
+						<a href="fkdc" onclick="return false;" class="workaround">
 							<video id="thumblink{$post.id}" preload="metadata" controls="" width="480" class="thumb" {if $post.id == '?????'}onclick="skip_close_preview = 2;"{/if}>
-								{if $istempfile}
-									<source src="{if $file_path}{$file_path}{else}{$post.file_path}{/if}/tmp/{$post.file}.{$post.file_type}" type='video/webm; codecs="vp8.0, vorbis"'>
-								{else}
-									<source src="{if $file_path}{$file_path}{else}{$post.file_path}{/if}/src/{$post.file}.{$post.file_type}" type='video/webm; codecs="vp8.0, vorbis"'>
-								{/if}
+									<source src="{if $file_path}{$file_path}{else}{$post.file_path}{/if}/{if $istempfile}tmp{else}src{/if}/{$post.file}.{$post.file_type}" type='video/webm; codecs="vp8.0, vorbis"'>
 							</video>
+						</a>
 						{else}
 							<a id="thumblink{$post.id}"
 								{if $post.file_type eq 'mp3' or $post.file_type eq 'ogg'} class="audiowrap" {/if}
