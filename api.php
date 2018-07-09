@@ -5,6 +5,9 @@
 // 2. JSON string as form data ("json" parameter);
 // 3. JSON raw data.
 
+/* example:
+curl -s "https://kurisaba.lan/api.php" --data '{"version":"1.1","method":"get_posts_by_id","id":"1","params":{"board":"sg", "ids":[206]}}' */
+
 require 'config.php';
 //require KU_ROOTDIR . 'inc/functions.php';
 //require KU_ROOTDIR . 'inc/classes/board-post.class.php';
