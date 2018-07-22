@@ -449,7 +449,7 @@ class Board {
 		$ref_id = $matches[3];
 		$comparing_md5 = $tc_db->GetOne("SELECT `ipmd5` FROM `" . KU_DBPREFIX . "posts` WHERE `boardid` = " . $tc_db->qstr($board_id) . " AND `id` = " . $tc_db->qstr($ref_id));
 		if ($etalon_md5 != $comparing_md5) return $matches[0];
-		return str_replace('</a>', '<span class="youindicator">&nbsp;(You)</span></a>', $matches[0]);
+		return str_replace('</a>', '<span class="youindicator"> (You)</span></a>', $matches[0]);
 	}
 	
 	function BuildPost($post, $page, $pregen_replies_q = false, $temporary = false) {
@@ -472,7 +472,7 @@ class Board {
 		$post['youindicator'] = '';
 		if (md5(KU_REMOTE_ADDR) == $post['ipmd5'])
 		{
-			$post['youindicator'] = '<span class="youindicator">&nbsp;<strong>(You)</strong></span>';
+			$post['youindicator'] = '<span class="youindicator"> <strong>(You)</strong></span>';
 		}
 
 		// (You) indicator in message
