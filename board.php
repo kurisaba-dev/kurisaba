@@ -36,13 +36,13 @@ if (isset($_POST['through_js']))
 {
 	function kurisaba_exit($errormsg, $extended = '', $posttext = '', $template = '/error.tpl', $boardname = '')
 	{
-		if ($extended != '') $extended = '<br />'.$extended;
-		die($errormsg.$extended);
+		if ($extended != '') $extended = "<br />" .$extended;
+		die(json_encode(Array("error" => $errormsg . $extended)));
 	}
 
-	function kurisaba_redirect($url, $ispost = false, $file = '')
+	function kurisaba_redirect($url, $ispost = false, $file = '', $newpostnum = -1)
 	{
-		die('REDIRECT-TO:'.$url);
+		die(json_encode(Array("redirect_to" => $url, "newpostnum" => $newpostnum)) );
 	}
 }
 else
@@ -52,7 +52,7 @@ else
 		exitWithErrorPage($errormsg, $extended, $posttext, $template, $boardname);
 	}
 
-	function kurisaba_redirect($url, $ispost = false, $file = '')
+	function kurisaba_redirect($url, $ispost = false, $file = '', $newpostnum = -1)
 	{
 		do_redirect($url, $ispost, $file);
 	}
@@ -724,17 +724,13 @@ if($operation_post) // it's `noreturn`.
 
 	if( $_POST['redirecttothread'] == 1 || $_POST['em'] == 'return' || $_POST['em'] == 'noko') {
 		setcookie('tothread', 'on', time() + KU_ADDTIME + (365 * 24 * 3600), '/');
-		if ($thread_replyto == "0") {
-			if (isset($_POST['plus50'])) $post_id .= '+50';
-			if (isset($_POST['minus100'])) $post_id .= '-100';
-			kurisaba_redirect(KU_BOARDSPATH . '/' . $board_class->board['name'] . '/res/' . $post_id . '.html#boardlist_footer', true, $imagefile_name);
-		} else {
-			if (isset($_POST['plus50'])) $thread_replyto .= '+50';
-			if (isset($_POST['minus100'])) $thread_replyto .= '-100';
-			kurisaba_redirect(KU_BOARDSPATH . '/' . $board_class->board['name'] . '/res/' . $thread_replyto . '.html#boardlist_footer', true, $imagefile_name);
-		}
+		$tothread_num = $thread_replyto;
+		if ($tothread_num == "0") $tothread_num = $post_id;
+		if (isset($_POST['plus50'])) $tothread_num .= '+50';
+		if (isset($_POST['minus100'])) $tothread_num .= '-100';
+		kurisaba_redirect(KU_BOARDSPATH . '/' . $board_class->board['name'] . '/res/' . $tothread_num . '.html#boardlist_footer', true, $imagefile_name, $post_id);
 	} else {
 		setcookie('tothread', 'off', time() + KU_ADDTIME + (365 * 24 * 3600), '/');
-		kurisaba_redirect(KU_BOARDSPATH . '/' . $board_class->board['name'] . '/', true, $imagefile_name);
+		kurisaba_redirect(KU_BOARDSPATH . '/' . $board_class->board['name'] . '/', true, $imagefile_name, $post_id);
 	}
 }
