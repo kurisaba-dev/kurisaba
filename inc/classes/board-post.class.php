@@ -676,7 +676,7 @@ class Board {
 		if ($this->board['type'] != 1) {
 			$styles =  explode(':', KU_STYLES);
 			$defaultstyle = $this->board['defaultstyle'];
-			if(empty($defaultstyle)) $defaultstyle = KU_DEFAULTSTYLE;
+			if(empty($defaultstyle)) $defaultstyle = KU_ACTIVESTYLE;
 			$this->dwoo_data->assign('ku_styles', $styles);
 			$this->dwoo_data->assign('ku_defaultstyle', $defaultstyle);
 		} else {

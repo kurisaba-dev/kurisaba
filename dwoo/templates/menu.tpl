@@ -8,7 +8,7 @@
 {if %KU_MENUTYPE eq 'normal'}
 	<link rel="stylesheet" type="text/css" href="{$boardpath}css/menu_global.css?v={%KU_CSSVER}" />
 	{loop $styles}
-		<link rel="{if $ neq %KU_DEFAULTMENUSTYLE}alternate {/if}stylesheet" type="text/css" href="{%KU_WEBFOLDER}css/styles/menu_{$}.css?v={%KU_CSSVER}" title="{$|capitalize}" />
+		<link rel="{if $ neq %KU_ACTIVESTYLE}alternate {/if}stylesheet" type="text/css" href="{%KU_WEBFOLDER}css/styles/menu_{$}.css?v={%KU_CSSVER}" title="{$|capitalize}" />
 	{/loop}
 {else}
 	{literal}<style type="text/css">body { margin: 0px; } h1 { font-size: 1.25em; } h2 { font-size: 0.8em; font-weight: bold; color: #CC3300; } ul { list-style-type: none; padding: 0px; margin: 0px; } li { font-size: 0.8em; padding: 0px; margin: 0px; }</style>{/literal}
@@ -123,7 +123,7 @@ function iter_obj(object, callback) {
 {else}
 	<li><a onclick="hidedirs();" href="{$files.0}" target="_self">[{t}Hide Directories{/t}]</a></li>
 {/if}
-{if %KU_MENUSTYLESWITCHER && %KU_MENUTYPE eq 'normal'}
+{if %KU_STYLESWITCHER && %KU_MENUTYPE eq 'normal'}
 	<li id="sitestyles" data-expanded="0"><span id="sitestyles-normal"><a onclick="showstyleswitcher(); return false;" href="#" target="_self">[{t}Site Styles{/t}]</a></span>
 <span id="sitestyles-expanded" style="display:none">
 	<a onclick="showstyleswitcher(); return false;" href="#" target="_self">[{t}Styles{/t}]</a>:

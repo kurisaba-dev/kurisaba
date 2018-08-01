@@ -55,7 +55,7 @@ class Menu {
 		$dwoo_data->assign('special_threads', $special_threads_html);
 		
 		if (KU_MENUTYPE == 'normal') {
-			$dwoo_data->assign('styles', explode(':', KU_MENUSTYLES));
+			$dwoo_data->assign('styles', explode(':', KU_STYLES));
 		}
 
 		if ($savetofile) {

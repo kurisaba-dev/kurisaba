@@ -111,7 +111,7 @@ function exitWithErrorPage($errormsg, $extended = '', $posttext = '', $template 
 		$board_class = new Board('');
 	}
 
-	$dwoo_data->assign('styles', explode(':', KU_MENUSTYLES));
+	$dwoo_data->assign('styles', explode(':', KU_STYLES));
 	$dwoo_data->assign('errormsg', $errormsg);
 	$dwoo_data->assign('boardname', $boardname);
 

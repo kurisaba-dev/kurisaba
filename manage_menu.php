@@ -31,7 +31,7 @@ require KU_ROOTDIR . 'inc/functions.php';
 require KU_ROOTDIR . 'inc/classes/manage.class.php';
 
 $manage_class = new Manage();
-$dwoo_data->assign('styles', explode(':', KU_MENUSTYLES));
+$dwoo_data->assign('styles', explode(':', KU_STYLES));
 
 
 $tpl_links = '';

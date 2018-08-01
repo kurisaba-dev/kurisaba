@@ -38,8 +38,7 @@ require KU_ROOTDIR . 'inc/classes/board-post.class.php';
 require KU_ROOTDIR . 'inc/classes/bans.class.php';
 require KU_ROOTDIR . 'inc/AYAH/ayah.php';
 
-$dwoo_data->assign('styles', explode(':', KU_MENUSTYLES));
-
+$dwoo_data->assign('styles', explode(':', KU_STYLES));
 
 $manage_class = new Manage();
 $bans_class = new Bans();
