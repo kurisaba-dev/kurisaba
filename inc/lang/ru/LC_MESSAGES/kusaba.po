@@ -406,7 +406,7 @@ msgid "File was not fully uploaded.  Please go back and try again."
 msgstr "Файл загружен не полностью, вернитесь назад и повторите попытку."
 
 msgid "File<br />Removed"
-msgstr "Фейл<br />Удален"
+msgstr "Файл<br />Удален"
 
 msgid "Filetype added."
 msgstr "Добавлен тип файла."

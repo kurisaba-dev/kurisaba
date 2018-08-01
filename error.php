@@ -232,6 +232,7 @@ if (preg_match("/^\/[a-z]+\/src\/[0-9]+\.jpg$/", $address, $matches))
 {
 	$content = curl_get(KU_STORAGE_PREFIX . $address, KU_STORAGE_IP);
 	if ($content !== false) {
+		http_response_code(200); header("Status: 200 OK");
 		header('Content-type: image/jpeg');
 		echo $content;
 		exit();

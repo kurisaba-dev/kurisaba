@@ -14,10 +14,10 @@
 	{literal}<style type="text/css">body { margin: 0px; } h1 { font-size: 1.25em; } h2 { font-size: 0.8em; font-weight: bold; color: #CC3300; } ul { list-style-type: none; padding: 0px; margin: 0px; } li { font-size: 0.8em; padding: 0px; margin: 0px; }</style>{/literal}
 {/if}
 
-<script type="text/javascript"><!--
-			// var style_cookie_site = "kustyle_site";
-			var style_cookie = "kustyle";
-		//--></script>
+<script type="text/javascript">
+	var style_cookie = "kustyle";
+	var ku_boardspath = '{%KU_BOARDSPATH}';
+</script>
 <link rel="shortcut icon" href="{%KU_WEBFOLDER}favicon.ico" />
 <script type="text/javascript" src="{%KU_WEBFOLDER}lib/javascript/gettext.js"></script>
 <!-- <script type="text/javascript" src="{%KU_WEBFOLDER}lib/javascript/menu.js"></script> -->

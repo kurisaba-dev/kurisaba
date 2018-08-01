@@ -472,7 +472,7 @@ class Board {
 		$post['youindicator'] = '';
 		if (md5(KU_REMOTE_ADDR) == $post['ipmd5'])
 		{
-			$post['youindicator'] = '<span class="youindicator"> <strong>(You)</strong></span>';
+			$post['youindicator'] = '<span class="youindicator youpost"> <strong>(You)</strong></span>';
 		}
 
 		// (You) indicator in message
