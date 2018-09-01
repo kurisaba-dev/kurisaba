@@ -38,7 +38,7 @@
 					<td class="postblock">
 						{t}Name{/t}</td>
 					<td>
-						<input type="text" name="name" size="76" maxlength="{%KU_MAXNAMELENGTH}" accesskey="n" style="width: 500px;"/>
+						<input type="text" name="name" size="76" maxlength="{%KU_MAXNAMELENGTH}" accesskey="n" style="width: 455px;"/>
 						<a href="#" onclick="javascript:emgr_ui_onclick();return false;" title="История записей">
 							<img src="/css/icons/blank.gif" border="0" class="spritebtn editmgr">
 						</a>
@@ -115,11 +115,11 @@
 						{t}File{/t}
 					</td>
 					<td>
-						<input type="file" name="imagefile" id="imagefile" style="width: 440px;" accesskey="f" />
+						<input type="file" name="imagefile" id="imagefile" style="width: 430px;" accesskey="f" />
 						{if $replythread eq 0 && $board.enablenofile eq 1 }
 							[<input class="stcheckbox" type="checkbox" name="nofile" id="nofile" accesskey="q" /><label for="nofile"> {t}No File{/t}</label>]
 						{/if}
-						<input type="button" value="Очистить" onclick="document.forms['postform'].imagefile.value='';" style="width: 80px;" >
+						<input type="button" value="Очистить" onclick="document.forms['postform'].imagefile.value='';">
 					</td>
 				</tr>
 				<tr id="attachdrop_tr" style="height: 26px; display: none;">

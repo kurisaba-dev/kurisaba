@@ -468,7 +468,11 @@ if($operation_post) // it's `noreturn`.
 	$post_tag = $posting_class->GetPostTag();
 
 	if ($post_isreply) {
-		if ($imagefile_name == '' && !$is_oekaki && $post_message == '' && $_POST['embed'] == '' && $_POST['drop_file_name'] == '' && $_POST['embedlink'] == '') {
+		if (!$is_oekaki && $post_message == '')
+		if (($_POST['attach_type'] == 'embed' && $_POST['embed'] == '') ||
+				($_POST['attach_type'] == 'file' && $imagefile_name == '') ||
+				($_POST['attach_type'] == 'drop' && (!isset($_POST['drop_file_name']) || $_POST['drop_file_name'] == '')) ||
+				($_POST['attach_type'] == 'link' && $_POST['embedlink'] == '')) {
 			kurisaba_exit(_gettext('An image, video, or message, is required for a reply.'),'',$_POST['message']);
 		}
 	} else {

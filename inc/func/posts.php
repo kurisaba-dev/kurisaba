@@ -91,8 +91,10 @@ function createThumbnail($name, $filename, $new_w, $new_h) {
 		else
 		{
 			$convert = 'convert ' . escapeshellarg($name);
+			/* $convert .= ' -auto-orient'; */ /* that's bad idea to enable while w and h are already defined */
 			$convert .= ' -resize ' . $new_w . 'x' . $new_h;
 			$convert .= ' -quality 90';
+			$convert .= ' -strip'; /* disable auto color correction, reduce size */
 			$convert .= ' ' . escapeshellarg($filename);
 			exec($convert);
 			if (is_file($filename)) return 0; else return 2;
