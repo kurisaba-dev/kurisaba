@@ -235,15 +235,21 @@
 						<li>?????</li>
 						<li>El Psy Congroo.</li>
 					</ul>
-					<script type="text/javascript">
-						if (getCookie('ku_showblotter') != '1')
-						{
-							hideblotter();
-						}
-					</script>
 				</td>
 			</tr>
 		</tbody>
 	</table>
 	</form>
+	<script type="text/javascript">
+		if (getCookie('ku_showblotter') != '1') {
+			hideblotter();
+		}
+		document.forms.postform.email.value = "";
+		window.addEventListener('DOMContentLoaded', function() {
+			document.forms.postform.email.value = "";
+			setTimeout(function() {
+				document.forms.postform.email.value = "";
+			}, 18000);
+		});
+	</script>
 </div>

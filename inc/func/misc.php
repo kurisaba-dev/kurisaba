@@ -48,7 +48,6 @@ function file_get_contents_remote($url)
 	$ret = curl_exec($ch);
 	if(($err = curl_error($ch)) != '') return 'curl_exec(): '. $err;
 	curl_close($ch);
-	if(($err = curl_error($ch)) != '') return 'curl_close(): '. $err;
 	return $ret;
 }
 

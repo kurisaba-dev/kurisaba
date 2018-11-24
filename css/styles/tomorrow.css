@@ -175,10 +175,11 @@ input[type="text"], input[type="password"], input:not([type]), input[type="submi
 	border: #555 solid 1px;
 	color: #c5c8c6;
 	background-color: #383838;
+	transition: border 0.13s ease-in-out;
 }
 
 input[type="text"]:focus, input[type="password"]:focus, input:not([type]):focus, input[type="submit"]:focus, input[type="button"]:focus, select:focus, textarea:focus {
-	border : #000 solid 1px;
+	border : #888 solid 1px;
 }
 
 input[type="submit"], input[type="button"] {

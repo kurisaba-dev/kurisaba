@@ -30,6 +30,14 @@
  * @package kusaba
  */
 
+session_start();
+require 'config.php';
+require KU_ROOTDIR . 'inc/functions.php';
+require KU_ROOTDIR . 'inc/classes/board-post.class.php';
+require KU_ROOTDIR . 'inc/classes/bans.class.php';
+require KU_ROOTDIR . 'inc/classes/posting.class.php';
+require KU_ROOTDIR . 'inc/classes/parse.class.php';
+
  // STAGE 1: Check type of operation and specifically format return actions.
  
 if (isset($_POST['through_js']))
@@ -61,17 +69,9 @@ else
 if(isset($_POST['preview_mode'])) $preview = true;
 
 // Test for a spam bot (which sends 'email' through POST)
-if (isset($_POST['email']) && !empty($_POST['email'])) { kurisaba_exit('Spam bot detected'); }
+if (isset($_POST['email']) && !empty($_POST['email'])) { kurisaba_exit('Spam bot detected. (probably, you need to remove "remember password" for this website in browser?)'); }
 
 // STAGE 2: Do the primary initializations
-
-session_start();
-require 'config.php';
-require KU_ROOTDIR . 'inc/functions.php';
-require KU_ROOTDIR . 'inc/classes/board-post.class.php';
-require KU_ROOTDIR . 'inc/classes/bans.class.php';
-require KU_ROOTDIR . 'inc/classes/posting.class.php';
-require KU_ROOTDIR . 'inc/classes/parse.class.php';
 
 $bans_class = new Bans();
 $parse_class = new Parse();

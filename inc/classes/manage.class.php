@@ -1870,20 +1870,20 @@ class Manage {
 		if (!$thread ) {
 			$thread = "0";
 		}
+		$tpl_page .= "
+			<style type=\"text/css\">
+			input {
+				display: inline !important;
+				width: auto !important;
+				float: none !important;
+				margin-bottom: 0px !important;
+			}
+			th,td {
+				font-size: 14px !important;
+			}
+			</style>";
 		if (!$board) {
 			$results = $tc_db->GetAll("SELECT HIGH_PRIORITY `name`, `id` FROM `". KU_DBPREFIX . "boards` ORDER BY `name` ASC");
-			$tpl_page .= "
-				<style type=\"text/css\">
-				input {
-					display: inline !important;
-					width: auto !important;
-					float: none !important;
-					margin-bottom: 0px !important;
-				}
-				th,td {
-					font-size: 14px !important;
-				}
-				</style>";
 			$tpl_page .= '<form method="get" action=""><input type="hidden" name="action" value="viewthread" />'. _gettext('Select Board') .': <select name="board">';
 			foreach ($results as $line) {
 				$name = $line['name'];
@@ -1891,133 +1891,125 @@ class Manage {
 				$tpl_page .= "<option value=\"$name\">/$name/</option>";
 			}
 			$tpl_page .= '</select>&nbsp;<input type=submit value="'. _gettext('Go') .'" />';
-		} else {
-			$board_id = $tc_db->GetOne("SELECT HIGH_PRIORITY `id` FROM `". KU_DBPREFIX . "boards` WHERE `name` = ".$tc_db->qstr($board));
-			$tpl_page .= "
-				<style type=\"text/css\">
-				input {
-					display: inline !important;
-					width: auto !important;
-					float: none !important;
-					margin-bottom: 0px !important;
-				}
-				th,td {
-					font-size: 14px !important;
-				}
-				</style>
-				<form method=\"get\" action=\"\">
-				<input type=\"hidden\" name=\"action\" value=\"viewthread\" />
-				<input type=\"hidden\" name=\"board\" value=\"$board\" />";
-			if ($thread == "0" ) {
-				$tpl_page .= "<h2>". sprintf(_gettext('All threads on /%s/'), $board) ."</h2>";
-				$results = $tc_db->GetAll("SELECT HIGH_PRIORITY * FROM `" . KU_DBPREFIX . "posts` WHERE `boardid` = $board_id AND (`id` = ".$tc_db->qstr($thread)." OR `parentid` = ".$tc_db->qstr($thread).") ORDER BY `id` DESC");
-			} else {
-				$tpl_page .= "<h2>". sprintf(_gettext('Thread %s on /%s/'), $thread, $board) ."</h2>";
-				$results = $tc_db->GetAll("SELECT HIGH_PRIORITY * FROM `" . KU_DBPREFIX . "posts` WHERE `boardid` = $board_id AND (`id` = ".$tc_db->qstr($thread)." OR `parentid` = ".$tc_db->qstr($thread).") ORDER BY `id` ASC");
-			}
-			$time = round(microtime(), 5);
-			$first = "1";
-			foreach ($results as $line) {
-				$bans = "";
-				$id = $line['id'];
-				$ip = md5_decrypt($line['ip'], KU_RANDOMSEED);
-				$filename = $line['file'];
-				$file_original = $line['file_original'];
-				$filetype = $line['file_type'];
-				$filesize_formatted = $line['file_size_formatted'];
-				$image_w = $line['image_w'];
-				$image_h = $line['image_h'];
-				$message = $line['message'];
-				$name = $line['name'];
-				$tripcode = $line['tripcode'];
-				$timestamp = date(r, $line['timestamp']);
-				$subject = $line['subject'];
-				$posterauthority = $line['posterauthority'];
-				$deleted = isset($line['IS_DELETED']) ? $line['IS_DELETED'] : $line['is_deleted'] ;
-				if ($thread == "0") {
-					$view = "<a href=\"?action=viewthread&board=$board&thread=$id\">". _gettext('View') ."</a>";
-					if ($deleted == "1")
-					{
-						$view .= "|<a href=\"?action=restorethread&board=$board&thread=$id\">". _gettext('Восстановить') ."</a>";
-					}
-					$view = '['.$view.']';
-				} else {
-					$view = "";
-				}
-				if ($name == "") {
-					$name = _gettext('Anonymous');
-				} else {
-					$name = "<font color=\"blue\">$name</font>";
-				}
-				if ($tripcode != "") {
-					$tripcode = "<font color=\"green\">!$tripcode</font>";
-				}
-				if ($subject != "") {
-					$subject = "<font color=\"red\">$subject</font> - ";
-				}
-				if ($posterauthority == "1") {
-					$posterauthority = "<font color=\"purple\"><strong>##Admin##</strong></font>";
-				} elseif ($posterauthority == "2") {
-					$posterauthority = "<font color=\"red\"><strong>##Mod##</strong></font>";
-				} else {
-					$posterauthority = "";
-				}
-				if ($deleted == "1") {
-					$deleted = "<font color=green><blink><strong>". _gettext('DELETED') ."</strong></blink></font> - ";
-				} else {
-					$deleted = "";
-					$bans = "</td><td width=80px style=\"text-align: right; vertical-align: top;\">[<a href=\"manage_page.php?action=delposts&boarddir=$board&delpostid=$id&noreturn=true\">D</a> <a href=\"manage_page.php?action=delposts&boarddir=$board&delpostid=$id&do_ban=true\">&amp;</a> <a href=\"manage_page.php?action=bans&banboard=$board&banpost=$id\">B</a>]";
-				}
-
-
-				if ($bans == "") {
-				$bans = "</td><td>&nbsp;</td>";
-				}
-				$tpl_page .= "
-					<table style=\"text-align: left; width: 100%;\" border=\"1\" cellpadding=\"0\" cellspacing=\"0\">
-						<tbody>
-							<tr>
-								<td style=\"vertical-align: top;\">$deleted$subject$name$tripcode $posterauthority $timestamp ". _gettext('No.') ." $id ". _gettext('IP') .": $ip $view $bans
-								</td>
-							</tr>
-				";
-				if ($filename != "") {
-					$tpl_page .= "
-						<tr>
-							<td colspan=\"2\" style=\"vertical-align: top;\">". _gettext('File') .": <a href=\"". KU_WEBPATH ."/$board/src/$filename.$filetype\" target=_new>$filename.$filetype</a> -( $filesize_formatted, {$image_w}x{$image_h}, $file_original.$filetype )</td>
-						</tr>
-					";
-				}
-				$tpl_page .= "
-				</tbody></table>
-								<table style=\"text-align: left; width: 100%;\" border=\"1\" cellpadding=\"0\" cellspacing=\"0\">
-						<tbody>
-				<tr>";
-
-
-				if ($filename != "") {
-					$tpl_page .= "
-						<td style=\"vertical-align: top; width: 200px;\"><center><a href=\"". KU_WEBPATH ."/$board/src/$filename.$filetype\" target=\"_new\"><img src=\"". KU_WEBPATH ."/$board/thumb/{$filename}s.$filetype\" border=\"0\"></a></center></td>
-					";
-				}
-				if ($message == "") {
-					$message = "&nbsp;";
-				}
-				$tpl_page .= "<td style=\"vertical-align: top; height: 100%;\">$message</td></tr></tbody></table><br />";
-				$first = "0";
-			}
-			$time2 = round(microtime(), 5);
-			$generation = $time2 - $time;
-			$generation = abs($generation);
-			$tpl_page .= '
-			'. _gettext('Render Time') .':'. $generation .' '._gettext('Seconds').'
-			<!--<h2>'. _gettext('Ban') .'</h2>
-			'. _gettext('Reason') .': <input type="text" name="banreason" value="'. _gettext('You Are Banned') .'" />&nbsp;&nbsp;
-			'. _gettext('Duration') .': <input type="text" name="banduration" value="0" />&nbsp;&nbsp;
-			'. _gettext('Appeal') .': <input type="text" name="banappeal" value="0" />&nbsp;&nbsp;
-			<input type="submit" value="'. _gettext('Submit') .'" />-->
-			</form>';
+			return;
 		}
+
+		$board_id = $tc_db->GetOne("SELECT HIGH_PRIORITY `id` FROM `". KU_DBPREFIX . "boards` WHERE `name` = ".$tc_db->qstr($board));
+		$tpl_page .= "
+			<form method=\"get\" action=\"\">
+			<input type=\"hidden\" name=\"action\" value=\"viewthread\" />
+			<input type=\"hidden\" name=\"board\" value=\"$board\" />";
+		if ($thread == "0" ) {
+			$tpl_page .= "<h2>". sprintf(_gettext('All threads on /%s/'), $board) ."</h2>";
+			$results = $tc_db->GetAll("SELECT HIGH_PRIORITY * FROM `" . KU_DBPREFIX . "posts` WHERE `boardid` = $board_id AND (`id` = ".$tc_db->qstr($thread)." OR `parentid` = ".$tc_db->qstr($thread).") ORDER BY `id` DESC");
+		} else {
+			$tpl_page .= "<h2>". sprintf(_gettext('Thread %s on /%s/'), $thread, $board) ."</h2>";
+			$results = $tc_db->GetAll("SELECT HIGH_PRIORITY * FROM `" . KU_DBPREFIX . "posts` WHERE `boardid` = $board_id AND (`id` = ".$tc_db->qstr($thread)." OR `parentid` = ".$tc_db->qstr($thread).") ORDER BY `id` ASC");
+		}
+		$time = round(microtime(), 5);
+		$first = "1";
+		foreach ($results as $line) {
+			$bans = "";
+			$id = $line['id'];
+			$ip = md5_decrypt($line['ip'], KU_RANDOMSEED);
+			$filename = $line['file'];
+			$file_original = $line['file_original'];
+			$filetype = $line['file_type'];
+			$filesize_formatted = $line['file_size_formatted'];
+			$image_w = $line['image_w'];
+			$image_h = $line['image_h'];
+			$thumb_w = $line['thumb_w'];
+			$thumb_h = $line['thumb_h'];
+			$message = $line['message'];
+			$name = $line['name'];
+			$tripcode = $line['tripcode'];
+			$timestamp = date(r, $line['timestamp']);
+			$subject = $line['subject'];
+			$posterauthority = $line['posterauthority'];
+			$deleted = isset($line['IS_DELETED']) ? $line['IS_DELETED'] : $line['is_deleted'];
+			$deleted = $deleted == "1" ? true : false;
+			if ($thread == "0") {
+				$view = "<a href=\"?action=viewthread&board=$board&thread=$id\">". _gettext('View') ."</a>";
+				if ($deleted)
+				{
+					$view .= "|<a href=\"?action=restorethread&board=$board&thread=$id\">". _gettext('Undelete') ."</a>";
+				}
+				$view = '['.$view.']';
+			} else {
+				$view = "";
+			}
+			if ($name == "") {
+				$name = _gettext('Anonymous');
+			} else {
+				$name = "<font color=\"blue\">$name</font>";
+			}
+			if ($tripcode != "") {
+				$tripcode = "<font color=\"green\">!$tripcode</font>";
+			}
+			if ($subject != "") {
+				$subject = "<font color=\"red\">$subject</font> - ";
+			}
+			if ($posterauthority == "1") {
+				$posterauthority = "<font color=\"purple\"><strong>##Admin##</strong></font>";
+			} elseif ($posterauthority == "2") {
+				$posterauthority = "<font color=\"red\"><strong>##Mod##</strong></font>";
+			} else {
+				$posterauthority = "";
+			}
+			if ($deleted) {
+				$deleted = "<font color=green><blink><strong>". _gettext('DELETED') ."</strong></blink></font> - ";
+			} else {
+				$deleted = "";
+				$bans = "</td><td width=80px style=\"text-align: right; vertical-align: top;\">[<a href=\"manage_page.php?action=delposts&boarddir=$board&delpostid=$id&noreturn=true\">D</a> <a href=\"manage_page.php?action=delposts&boarddir=$board&delpostid=$id&do_ban=true\">&amp;</a> <a href=\"manage_page.php?action=bans&banboard=$board&banpost=$id\">B</a>]";
+			}
+
+
+			if ($bans == "") {
+			$bans = "</td><td>&nbsp;</td>";
+			}
+			$tpl_page .= "
+				<table style=\"text-align: left; width: 100%;\" border=\"1\" cellpadding=\"0\" cellspacing=\"0\">
+					<tbody>
+						<tr>
+							<td style=\"vertical-align: top;\">$deleted$subject$name$tripcode $posterauthority $timestamp ". _gettext('No.') ." $id ". _gettext('IP') .": $ip $view $bans
+							</td>
+						</tr>
+			";
+			if ($filename != "") {
+				$tpl_page .= "
+					<tr>
+						<td colspan=\"2\" style=\"vertical-align: top;\">". _gettext('File') .": <a href=\"". KU_WEBPATH ."/$board/src/$filename.$filetype\" target=_new>$filename.$filetype</a> -( $filesize_formatted, {$image_w}x{$image_h}, $file_original.$filetype )</td>
+					</tr>
+				";
+			}
+			$tpl_page .= "
+			</tbody></table>
+							<table style=\"text-align: left; width: 100%;\" border=\"1\" cellpadding=\"0\" cellspacing=\"0\">
+					<tbody>
+			<tr>";
+
+
+			if ($filename != "" && !$deleted) {
+				$tpl_page .= "
+					<td style=\"vertical-align: top; width: 300px;\"><center><a href=\"". KU_WEBPATH ."/$board/src/$filename.$filetype\" target=\"_new\"><img src=\"". KU_WEBPATH ."/$board/thumb/{$filename}s.$filetype\" height=\"$thumb_h\" width=\"$thumb_w\" border=\"0\"></a></center></td>";
+			}
+			if ($message == "") {
+				$message = "&nbsp;";
+			}
+			$tpl_page .= "<td style=\"vertical-align: top; height: 100%;\">$message</td></tr></tbody></table><br />";
+			$first = "0";
+		}
+		$time2 = round(microtime(), 5);
+		$generation = $time2 - $time;
+		$generation = abs($generation);
+		$tpl_page .= '
+		'. _gettext('Render Time') .':'. $generation .' '._gettext('Seconds').'
+		<!--<h2>'. _gettext('Ban') .'</h2>
+		'. _gettext('Reason') .': <input type="text" name="banreason" value="'. _gettext('You Are Banned') .'" />&nbsp;&nbsp;
+		'. _gettext('Duration') .': <input type="text" name="banduration" value="0" />&nbsp;&nbsp;
+		'. _gettext('Appeal') .': <input type="text" name="banappeal" value="0" />&nbsp;&nbsp;
+		<input type="submit" value="'. _gettext('Submit') .'" />-->
+		</form>';
 	}
 
 	/* View a thread marked as deleted */
