@@ -171,14 +171,14 @@ td {
 	padding : 0;
 }
 
-input[type="text"], input[type="password"], input:not([type]), input[type="submit"], input[type="button"], select, textarea {
+input[type="text"], input[type="password"], input:not([type]), input[type="submit"], input[type="button"], select, textarea, .stchkbox + span:before, .stradio + span:before {
 	border: #555 solid 1px;
 	color: #c5c8c6;
 	background-color: #383838;
 	transition: border 0.13s ease-in-out;
 }
 
-input[type="text"]:focus, input[type="password"]:focus, input:not([type]):focus, input[type="submit"]:focus, input[type="button"]:focus, select:focus, textarea:focus {
+input[type="text"]:focus, input[type="password"]:focus, input:not([type]):focus, input[type="submit"]:focus, input[type="button"]:focus, select:focus, textarea:focus, .stchkbox:focus + span:before, .stradio:focus + span:before {
 	border : #888 solid 1px;
 }
 
@@ -277,3 +277,36 @@ li a {
 .ulsearch {
     background: #282a2e !important;
 }
+
+.stchkbox, .stradio {
+	position: absolute;
+	z-index: -1;
+	opacity: 0;
+}
+
+.stchkbox + span:before, .stradio + span:before {
+	font-size: 1.2em;
+	width: 0.7em;
+	height: 0.7em;
+	margin: 0.2em;
+	padding: 0;
+	display: inline-block;
+	content: " ";
+	text-align: center;
+	overflow: hidden;
+	vertical-align: middle;
+}
+
+.stchkbox + span:before {
+	line-height: 0.65em;
+}
+
+.stradio + span:before {
+	border-radius: 100%;
+	line-height: 0.7em;
+}
+
+.stchkbox:checked + span:before { content: '\2714'; }
+.stchkbox:disabled + span:before, .stradio:disabled + span:before { border-color: #777; color: #777; }
+
+.stradio:checked + span:before { content: '\25E3'; }

@@ -4,7 +4,7 @@
 	<tr>
 	<td>
 	{t}Delete post{/t}
-	[<input class="stcheckbox" type="checkbox" name="fileonly" id="fileonly" value="on" /><label for="fileonly">{t}File Only{/t}</label>]<br />{t}Password{/t}
+	[<label><input class="stchkbox" type="checkbox" name="fileonly" id="fileonly" value="on" /><span> {t}File Only{/t}</span></label>]<br />{t}Password{/t}
 	<input type="password" name="postpassword" size="8" />&nbsp;<input name="deletepost" value="{t}Delete{/t}" type="submit" />
 
 	{if $board.enablereporting eq 1}

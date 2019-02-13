@@ -102,12 +102,12 @@
 						Прикрепить
 					</td>
 					<td>
-						<label><input class="stradio" type="radio" name="attach_type" value="file" checked onchange="showembedfield(this);"> Открыть файл</label>
-						<label><input class="stradio" type="radio" name="attach_type" value="drop" onchange="showembedfield(this);"> Перетащить файл</label>
+						<label><input class="stradio" type="radio" name="attach_type" value="file" checked onchange="showembedfield(this);"><span> Открыть файл</span></label>
+						<label><input class="stradio" type="radio" name="attach_type" value="drop" onchange="showembedfield(this);"><span> Перетащить файл</span></label>
 						{if ($board.uploadtype eq 1 || $board.uploadtype eq 2) && $board.embeds_allowed neq ''}
-							<label><input class="stradio" type="radio" name="attach_type" value="embed" onchange="showembedfield(this);"> Видео</label>
+							<label><input class="stradio" type="radio" name="attach_type" value="embed" onchange="showembedfield(this);"><span> Видео</span></label>
 						{/if}
-						<label><input class="stradio" type="radio" name="attach_type" value="link" onchange="showembedfield(this);"> Ссылка</label>
+						<label><input class="stradio" type="radio" name="attach_type" value="link" onchange="showembedfield(this);"><span> Ссылка</span></label>
 					</td>
 				</tr>
 				<tr id="attachfile_tr" style="height: 26px;">
@@ -117,7 +117,7 @@
 					<td>
 						<input type="file" name="imagefile" id="imagefile" style="width: 430px;" accesskey="f" />
 						{if $replythread eq 0 && $board.enablenofile eq 1 }
-							[<input class="stcheckbox" type="checkbox" name="nofile" id="nofile" accesskey="q" /><label for="nofile"> {t}No File{/t}</label>]
+							[<label><input class="stchkbox" type="checkbox" name="nofile" id="nofile" accesskey="q" /><span>{t}No File{/t}</span></label>]
 						{/if}
 						<input type="button" value="Очистить" onclick="document.forms['postform'].imagefile.value='';">
 					</td>
@@ -190,14 +190,14 @@
 				<td class="postblock">
 					Опции</td>
 				<td>
-					<label for="sage">
-						<input id="sage" class="stcheckbox" type="checkbox" name="em" value="sage">sage
+					<label>
+						<input id="sage" class="stchkbox" type="checkbox" name="em" value="sage"><span> sage</span>
 					</label>
-					<label for="gotothread">
-						<input id="gotothread" class="stcheckbox" type="checkbox" checked name="redirecttothread" value="1">noko
+					<label>
+						<input id="gotothread" class="stchkbox" type="checkbox" checked name="redirecttothread" value="1"><span> noko</span>
 					</label>
-					<label for="picspoiler">
-						<input id="picspoiler" class="stcheckbox" type="checkbox" name="picspoiler" value="1">картинку под спойлер
+					<label>
+						<input id="picspoiler" class="stchkbox" type="checkbox" name="picspoiler" value="1"><span> картинку под спойлер</span>
 					</label>
 					<input id="submit_through_js" type="checkbox" checked name="submit_through_js" value="1" style="display:none;">
 					&nbsp;&nbsp;&nbsp;&nbsp;<a href="#" onclick="post_preview(event,document.getElementById('postform'));return false;">Предпросмотр поста</a>
