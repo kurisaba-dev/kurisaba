@@ -171,20 +171,20 @@ td {
 	padding : 0;
 }
 
-input[type="text"], input[type="password"], input:not([type]), input[type="submit"], input[type="button"], select, textarea, .stchkbox + span:before, .stradio + span:before {
+input[type="text"], input[type="password"], input:not([type]), input[type="submit"], input[type="button"], select, textarea, .stchkbox + span:before, .stradio + span:before, .stfile + span {
 	border: #555 solid 1px;
 	color: #c5c8c6;
 	background-color: #383838;
 	transition: border 0.13s ease-in-out;
 }
 
-input[type="text"]:focus, input[type="password"]:focus, input:not([type]):focus, input[type="submit"]:focus, input[type="button"]:focus, select:focus, textarea:focus, .stchkbox:focus + span:before, .stradio:focus + span:before {
+input[type="text"]:focus, input[type="password"]:focus, input:not([type]):focus, input[type="submit"]:focus, input[type="button"]:focus, select:focus, textarea:focus, .stchkbox:focus + span:before, .stradio:focus + span:before, .stfile:focus + span, .stfile.has-focus + span, .stfile:active + span {
 	border : #888 solid 1px;
 }
 
-input[type="submit"], input[type="button"] {
+/*input[type="submit"], input[type="button"] {
 	padding: 0.1em 0.7em 0.1em 0.7em;
-}
+}*/
 
 /* code duplicate */
 input[type=file]::-webkit-file-upload-button {
@@ -278,7 +278,7 @@ li a {
     background: #282a2e !important;
 }
 
-.stchkbox, .stradio {
+.stchkbox, .stradio, .stfile {
 	position: absolute;
 	z-index: -1;
 	opacity: 0;
@@ -295,6 +295,16 @@ li a {
 	text-align: center;
 	overflow: hidden;
 	vertical-align: middle;
+}
+
+.stfile + span {
+	display: inline-block !important;
+	vertical-align: middle;
+	width: 14em;
+	text-align: center;
+	overflow: hidden;
+	padding-right: 0.2em;
+	padding-left: 0.2em;
 }
 
 .stchkbox + span:before {

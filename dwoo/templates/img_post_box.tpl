@@ -115,11 +115,36 @@
 						{t}File{/t}
 					</td>
 					<td>
-						<input type="file" name="imagefile" id="imagefile" style="width: 430px;" accesskey="f" />
+						<label><input type="file" name="imagefile" id="imagefile" style="width: 430px;" accesskey="f" /><span style="display:none">Файл</span></label>
 						{if $replythread eq 0 && $board.enablenofile eq 1 }
 							[<label><input class="stchkbox" type="checkbox" name="nofile" id="nofile" accesskey="q" /><span>{t}No File{/t}</span></label>]
 						{/if}
-						<input type="button" value="Очистить" onclick="document.forms['postform'].imagefile.value='';">
+						<input type="button" id="fileclear" value="Очистить" onclick="fileClearFunc();">
+						<script>
+							var i = document.getElementById("imagefile");
+							i.classList.add("stfile");
+							i.addEventListener('focus', function() { document.getElementById("imagefile").classList.add('has-focus'); });
+							i.addEventListener('blur', function() { document.getElementById("imagefile").classList.remove('has-focus'); });
+							window.fileChangeFunc = function() {
+								var name = document.getElementById("imagefile").value;
+								var span = i.nextElementSibling;
+								name = name.split('\\').pop().split('/').pop();
+								if (name.length > 20) {
+									name = name.substr(0, 18) + "...";
+								}
+								if (name == "") {
+									span.innerHTML = "Файл не выбран";
+								} else {
+									span.innerHTML = name.replace(new RegExp('[&<"\']', 'g'), '');
+								}
+							}
+							window.fileClearFunc = function() {
+								document.forms['postform'].imagefile.value='';
+								fileChangeFunc();
+							}
+							i.addEventListener('change', fileChangeFunc);
+							fileClearFunc();
+						</script>
 					</td>
 				</tr>
 				<tr id="attachdrop_tr" style="height: 26px; display: none;">
