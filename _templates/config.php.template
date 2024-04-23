@@ -236,6 +236,13 @@ _setlocale(LC_ALL, KU_LOCALE);
 _bindtextdomain('kusaba', KU_ROOTDIR . 'inc/lang');
 _bind_textdomain_codeset('kusaba', KU_CHARSET);
 
+// Cookies
+function setcookie_strict(string $name, string $value = "", int $expires_or_options = 0, string $path = "", string $domain = "", bool $secure = false, bool $httponly = false): bool
+{
+	// PHP < 7.3.0 (unsupported for now): return setcookie($name, $value, $expires_or_options, $path, $domain, $secure, $httponly);
+	return setcookie($name, $value, [ 'expires' => $expires_or_options, 'path' => $path, 'domain' => $domain, 'secure' => $secure, 'httponly' => $httponly, 'samesite' => 'Strict' ]);
+}
+
 // SQL  database
 if (!isset($tc_db) && !isset($preconfig_db_unnecessary)) {
 	$tc_db = &NewADOConnection(KU_DBTYPE);

@@ -140,10 +140,10 @@ class Manage {
 		if (isset($_SESSION['manageusername'])) {
 			$results = $tc_db->GetAll("SELECT HIGH_PRIORITY `boards` FROM `" . KU_DBPREFIX . "staff` WHERE `username` = " . $tc_db->qstr($_SESSION['manageusername']) . " LIMIT 1");
 			if ($this->CurrentUserIsAdministrator() || $results[0][0] == 'allboards') {
-				setcookie("kumod", "allboards", time() + KU_ADDTIME + 3600, KU_BOARDSFOLDER, KU_DOMAIN);
+				setcookie_strict("kumod", "allboards", time() + KU_ADDTIME + 3600, KU_BOARDSFOLDER, KU_DOMAIN);
 			} else {
 				if ($results[0][0] != '') {
-					setcookie("kumod", $results[0][0], time() + KU_ADDTIME + 3600, KU_BOARDSFOLDER, KU_DOMAIN);
+					setcookie_strict("kumod", $results[0][0], time() + KU_ADDTIME + 3600, KU_BOARDSFOLDER, KU_DOMAIN);
 				}
 			}
 		}
@@ -161,7 +161,7 @@ class Manage {
 	function Logout() {
 		global $tc_db, $tpl_page;
 
-		setcookie('kumod', '', 1000000, KU_BOARDSFOLDER, KU_DOMAIN);
+		setcookie_strict('kumod', '', 1000000, KU_BOARDSFOLDER, KU_DOMAIN);
 
 		session_destroy();
 		unset($_SESSION['manageusername']);

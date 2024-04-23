@@ -231,7 +231,7 @@ function do_redirect($url, $ispost = false, $file = '') {
 	$headermethod = true;
 
 	if ($headermethod) {
-		setcookie('tothread', $gtt, 0, '/', KU_DOMAIN);
+		setcookie_strict('tothread', $gtt, 0, '/', KU_DOMAIN);
 		if ($ispost) {
 			header('Location: ' . $url);
 		} else {

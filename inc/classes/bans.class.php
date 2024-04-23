@@ -139,7 +139,7 @@ class Bans {
 	function DisplayBannedMessage($bans, $board='', $javascript_stub = false) {
 	
 		/* Set a cookie with the users current IP address in case they use a proxy to attempt to make another post */
-		setcookie('tc_previousip', KU_REMOTE_ADDR, (time() + KU_ADDTIME + 604800), KU_BOARDSFOLDER);
+		setcookie_strict('tc_previousip', KU_REMOTE_ADDR, (time() + KU_ADDTIME + 604800), KU_BOARDSFOLDER);
 
 		require_once KU_ROOTDIR . 'lib/dwoo.php';
 

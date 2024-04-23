@@ -388,7 +388,7 @@ if($operation_post) // it's `noreturn`.
 		}
 
 		if (isset($_POST['rememberformatting'])) {
-			setcookie('kuformatting', urldecode($_POST['formatting']), time() + KU_ADDTIME + (365 * 24 * 3600), '/', KU_DOMAIN);
+			setcookie_strict('kuformatting', urldecode($_POST['formatting']), time() + KU_ADDTIME + (365 * 24 * 3600), '/', KU_DOMAIN);
 		}
 	}
 
@@ -691,14 +691,14 @@ if($operation_post) // it's `noreturn`.
 			}
 
 			if ($post['name_save'] && isset($_POST['name'])) {
-				setcookie('name', urldecode($_POST['name']), time() + KU_ADDTIME + (365 * 24 * 3600), '/', KU_DOMAIN);
+				setcookie_strict('name', urldecode($_POST['name']), time() + KU_ADDTIME + (365 * 24 * 3600), '/', KU_DOMAIN);
 			}
 
 			if ($post['email_save']) {
-				setcookie('email', urldecode($post['email']), time() + KU_ADDTIME + (365 * 24 * 3600), '/', KU_DOMAIN);
+				setcookie_strict('email', urldecode($post['email']), time() + KU_ADDTIME + (365 * 24 * 3600), '/', KU_DOMAIN);
 			}
 
-			setcookie('postpassword', urldecode($_POST['postpassword']), time() + KU_ADDTIME + (365 * 24 * 3600), '/');
+			setcookie_strict('postpassword', urldecode($_POST['postpassword']), time() + KU_ADDTIME + (365 * 24 * 3600), '/');
 		} else {
 			kurisaba_exit(_gettext('Could not copy uploaded image.'),'',$_POST['message']);
 		}
@@ -727,14 +727,14 @@ if($operation_post) // it's `noreturn`.
 	}
 
 	if( $_POST['redirecttothread'] == 1 || $_POST['em'] == 'return' || $_POST['em'] == 'noko') {
-		setcookie('tothread', 'on', time() + KU_ADDTIME + (365 * 24 * 3600), '/');
+		setcookie_strict('tothread', 'on', time() + KU_ADDTIME + (365 * 24 * 3600), '/');
 		$tothread_num = $thread_replyto;
 		if ($tothread_num == "0") $tothread_num = $post_id;
 		if (isset($_POST['plus50'])) $tothread_num .= '+50';
 		if (isset($_POST['minus100'])) $tothread_num .= '-100';
 		kurisaba_redirect(KU_BOARDSPATH . '/' . $board_class->board['name'] . '/res/' . $tothread_num . '.html#boardlist_footer', true, $imagefile_name, $post_id);
 	} else {
-		setcookie('tothread', 'off', time() + KU_ADDTIME + (365 * 24 * 3600), '/');
+		setcookie_strict('tothread', 'off', time() + KU_ADDTIME + (365 * 24 * 3600), '/');
 		kurisaba_redirect(KU_BOARDSPATH . '/' . $board_class->board['name'] . '/', true, $imagefile_name, $post_id);
 	}
 }
