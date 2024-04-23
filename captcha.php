@@ -12,7 +12,7 @@ elseif($_COOKIE['captchalang'] == 'num') {
 	}
 }
 else $captcha = generate_code($ltrs);
-session_start();
+session_start(['cookie_samesite' => 'Strict']);
 function img_code($code) {
 	$scolor=style_to_captcha_color(isset($_COOKIE['kustyle']) ? $_COOKIE['kustyle'] : '');
 	$linenum = 5; 

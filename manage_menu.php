@@ -23,7 +23,7 @@
  * @package kusaba
  */
 
-session_start();
+session_start(['cookie_samesite' => 'Strict']);
 
 require 'config.php';
 require KU_ROOTDIR . 'lib/dwoo.php';

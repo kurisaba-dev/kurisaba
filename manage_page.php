@@ -28,7 +28,7 @@
  */
 
 session_set_cookie_params(60 * 60 * 24 * 100); /* 100 Days */
-session_start();
+session_start(['cookie_samesite' => 'Strict']);
 
 require 'config.php';
 require KU_ROOTDIR . 'lib/dwoo.php';

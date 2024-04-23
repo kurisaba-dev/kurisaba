@@ -30,7 +30,7 @@
  * @package kusaba
  */
 
-session_start();
+session_start(['cookie_samesite' => 'Strict']);
 require 'config.php';
 require KU_ROOTDIR . 'inc/functions.php';
 require KU_ROOTDIR . 'inc/classes/board-post.class.php';
