@@ -23,6 +23,9 @@
 <!-- <script type="text/javascript" src="{%KU_WEBFOLDER}lib/javascript/menu.js"></script> -->
 <script src="{%KU_WEBFOLDER}lib/javascript/jquery-1.11.1.min.js"></script>
 <script type="text/javascript" src="{%KU_WEBFOLDER}lib/javascript/kusaba.new.js?v={%KU_JSVER}"></script>
+<script type="text/javascript"><!--
+var _SITENAME = '{%KU_NAME}';
+//--></script>
 	<script src="lib/javascript/frame.js?v={%KU_JSVER}"></script>
 <script type="text/javascript"><!--
 var ku_boardspath = '{%KU_BOARDSPATH}';
