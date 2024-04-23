@@ -21,9 +21,9 @@
 <link rel="canonical" href="{%KU_WEBPATH}/{$board.name}/res/{$replythread}.html" />
 {/if}
 <!-- <link href='https://fonts.googleapis.com/css?family=Roboto:400,700,400italic,700italic&subset=latin,cyrillic' rel='stylesheet' type='text/css'> -->
-<link rel="stylesheet" type="text/css" href="{$cwebpath}css/img_global.css?v={%KU_CSSVER}" />
+<link rel="stylesheet" type="text/css" href="{%KU_WEBPATH}/css/img_global.css?v={%KU_CSSVER}" />
 {loop $ku_styles}
-	<link rel="{if $ neq $__.ku_defaultstyle}alternate {/if}stylesheet" type="text/css" href="{$__.cwebpath}css/styles/{$}.css?v={%KU_CSSVER}" title="{$|capitalize}" />
+	<link rel="{if $ neq $__.ku_defaultstyle}alternate {/if}stylesheet" type="text/css" href="{%KU_WEBPATH}/css/styles/{$}.css?v={%KU_CSSVER}" title="{$|capitalize}" />
 {/loop}
 <link href="{$cwebpath}css/prettify.css" type="text/css" rel="stylesheet" />
 {if $locale eq 'ja'}
@@ -41,24 +41,24 @@
 <!-- <script src="//cdnjs.cloudflare.com/ajax/libs/headjs/1.0.3/head.load.min.js"></script> -->
 <script>
 if (!window.head) {
-	document.write('<script src="{$cwebpath}lib/javascript/head.load.min.js"><\/script>');
+	document.write('<script src="/lib/javascript/head.load.min.js"><\/script>');
 }
 </script>
 <!-- <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script> -->
 <script>
 if (!window.jQuery) {
-	document.write('<script src="{$cwebpath}lib/javascript/jquery-1.11.1.min.js"><\/script>');
+	document.write('<script src="/lib/javascript/jquery-1.11.1.min.js"><\/script>');
 }
 </script>
 <!-- <script src="//cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.min.js"></script> -->
 <script>
 if (!window.prettyPrint) {
-	document.write('<script src="{$cwebpath}lib/javascript/prettify/prettify.js"><\/script>');
+	document.write('<script src="/lib/javascript/prettify/prettify.js"><\/script>');
 }
 </script>
 <!-- <script src="{%KU_WEBPATH}/lib/javascript/kusaba.new.js?v={%KU_JSVER}"></script> -->
 <script>
-	document.write('<script src="{$cwebpath}lib/javascript/kusaba.new.js?v={%KU_JSVER}"><\/script>');
+	document.write('<script src="/lib/javascript/kusaba.new.js?v={%KU_JSVER}"><\/script>');
 </script>
 {if %KU_REACT_ENA}
 <script src="{%KU_CLI_REACT_API}/socket.io/socket.io.js"></script>
