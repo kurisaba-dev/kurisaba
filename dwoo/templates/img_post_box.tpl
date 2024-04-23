@@ -251,14 +251,8 @@
 								{t}None{/t}
 							{/if}
 						</li>
-						<li>{t}Maximum file size allowed is{/t} {math "round(x/1024)" x=$board.maximagesize} KB.</li>
+						<li>{t}Максимальный размер прикреплённого файла {/t} {math "round(x/1024)" x=$board.maximagesize} KB.</li>
 						<li>Максимальный размер поста 30 KB.</li>
-						<li>Запрещен постинг ЦП.</li>
-						<li>Запрещены вайп и реклама.</li>
-						<li>Шитпостинг не нужен. Это не /b/.</li>
-						<li>Обо всём остальном смотри <a href="/faq/">FAQ</a>.</li>
-						<li>?????</li>
-						<li>El Psy Congroo.</li>
 					</ul>
 				</td>
 			</tr>

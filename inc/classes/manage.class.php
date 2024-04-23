@@ -148,7 +148,7 @@ class Manage {
 			}
 		}
 	}
-  
+
   function CheckToken($posttoken) {
     if ($posttoken != $_SESSION['token']) {
       // Something is strange
@@ -327,7 +327,7 @@ class Manage {
 		}
 		return $count;
 	}
-	
+
 	/*
 	* +------------------------------------------------------------------------------+
 	* Manage pages
@@ -394,7 +394,7 @@ class Manage {
 		$tc_db->Execute("UPDATE `" . KU_DBPREFIX . "kurisaba_ext_data` SET `value` = " . $tc_db->qstr(time() + KU_ADDTIME) . " WHERE `name` = ". $tc_db->qstr("threadlimit_timestamp"));
 		$results = $tc_db->GetOne("SELECT `value` FROM `" . KU_DBPREFIX . "kurisaba_ext_data` WHERE `name` = " . $tc_db->qstr("threadlimit_timestamp"));
 		$timestamp_from_db = formatDate($results, 'post', $CURRENTLOCALE);
-		
+
 		$tpl_page .= '<h2>Момент отсчёта лимита тредов установлен на: ' . $timestamp_from_db . ' </h2><br />Теперь в течение 24 часов с этого момента на борде можно создать '.KU_MAXTHREADSADAY.' тредов.';
 	}
 
@@ -408,25 +408,25 @@ class Manage {
 		$timestamp = floor($timestamp / 86400) * 86400;
 		$vgposts = $tc_db->GetAll("SELECT `timestamp` FROM `" . KU_DBPREFIX . "posts` WHERE `boardid` = '5'");
 		$sgposts = $tc_db->GetAll("SELECT `timestamp` FROM `" . KU_DBPREFIX . "posts` WHERE `boardid` = '9'");
-		
-		
+
+
 		while ($timestamp < time() + KU_ADDTIME + 86400)
 		{
 			$date = date('j.m.Y', $timestamp);
-			
+
 			$sgposts_today = 0;
 			foreach ($sgposts as $sgpost) { if ($sgpost['timestamp'] >= $timestamp && $sgpost['timestamp'] < $timestamp + 86400) ++$sgposts_today;}
-			
+
 			$vgposts_today = 0;
 			foreach ($vgposts as $vgpost) { if ($vgpost['timestamp'] >= $timestamp && $vgpost['timestamp'] < $timestamp + 86400) ++$vgposts_today;}
 
 			$tpl_page .= '<tr><td>'.$date.'</td><td>'.$sgposts_today.'</td><td>'.$vgposts_today.'</td></tr>';
 			$timestamp += 86400;
 		}
-		
+
 		$tpl_page .= '</table>';
 	}
-	
+
 	function statistics() {
 		global $tc_db, $tpl_page;
 
@@ -980,7 +980,7 @@ class Manage {
 				}
 			}
 		}
-		
+
 		$tpl_page .= '<h2>'. _gettext('Add board') . '</h2><br />
 		<form action="manage_page.php?action=adddelboard_mod" method="post">
     	<input type="hidden" name="token" value="' . $_SESSION['token'] . '" />
@@ -1122,7 +1122,7 @@ class Manage {
 						$tc_db->Execute("DELETE FROM `" . KU_DBPREFIX . "posts` WHERE `boardid` = '" . $board_id . "'");
 						$tc_db->Execute("DELETE FROM `" . KU_DBPREFIX . "boards` WHERE `id` = '" . $board_id . "'");
 						$tc_db->Execute("DELETE FROM `" . KU_DBPREFIX . "board_filetypes` WHERE `boardid` = '" . $board_id . "'");
-						
+
 						/*     Remove rights for all mods     */
 						$staffresults = $tc_db->GetAll("SELECT `id`, `boards` FROM `" .KU_DBPREFIX. "staff` WHERE `boards` != 'allboards'");
 						foreach($staffresults as $moder) {
@@ -1141,7 +1141,7 @@ class Manage {
 									$tc_db->Execute("UPDATE `" . KU_DBPREFIX . "wordfilter` SET `boards` = " . $tc_db->qstr(implode('|',$filtered)) . " WHERE `id` = '" . $line['id'] . "'");
 							}
 						}
-				
+
 						require_once KU_ROOTDIR . 'inc/classes/menu.class.php';
 						$menu_class = new Menu();
 						$menu_class->Generate();
@@ -1194,7 +1194,7 @@ class Manage {
 						$tc_db->Execute("DELETE FROM `" . KU_DBPREFIX . "posts` WHERE `boardid` = '" . $board_id . "'");
 						$tc_db->Execute("DELETE FROM `" . KU_DBPREFIX . "boards` WHERE `id` = '" . $board_id . "'");
 						$tc_db->Execute("DELETE FROM `" . KU_DBPREFIX . "board_filetypes` WHERE `boardid` = '" . $board_id . "'");
-						
+
 						/*     Remove rights for all mods     */
 						$staffresults = $tc_db->GetAll("SELECT `id`, `boards` FROM `" .KU_DBPREFIX. "staff` WHERE `boards` != 'allboards'");
 						foreach($staffresults as $moder) {
@@ -1245,7 +1245,7 @@ class Manage {
 
 		return $output;
 	}
-	
+
 	/* Replace words in posts with something else */
 	function wordfilter() {
 		global $tc_db, $tpl_page;
@@ -1303,9 +1303,9 @@ class Manage {
 						management_addlogentry(_gettext('Removed word from wordfilter') . ': '. $del_word, 11);
 					}
 					else {
-						
+
 					}
-					
+
 				} else {
 					$tpl_page .= _gettext('That ID does not exist.');
 				}
@@ -1347,7 +1347,7 @@ class Manage {
 								$tpl_page .= ' /><br />';
 							}
 							$tpl_page .= '<br />
-							
+
 							<input type="submit" value="'. _gettext('Edit word') .'" />
 
 							</form>';
@@ -1413,7 +1413,7 @@ class Manage {
 
 		$results = $tc_db->GetAll("SELECT HIGH_PRIORITY * FROM `" . KU_DBPREFIX . "wordfilter`");
 		if ($results > 0 && count($boardlist) > 0) {
-			
+
 			$tpl_page .= '<table border="1" width="100%"><tr><th>'. _gettext('Word') . '</th><th>'. _gettext('Replacement') . '</th><th>'. _gettext('Boards') . '</th><th>&nbsp;</th></tr>'. "\n";
 			foreach($results as $line) {
 				$belong = true;
@@ -1647,7 +1647,7 @@ class Manage {
 						'<input type="submit" value="'. _gettext('IP Search') . '" />'. "\n";
 		}
 	}
-	
+
 	function remove_spaces($str) {
 		return str_replace(" ", "", $str);
 	}
@@ -1837,7 +1837,7 @@ class Manage {
 
 		$boardid = $tc_db->GetOne("SELECT HIGH_PRIORITY `id` FROM `" . KU_DBPREFIX . "boards` WHERE `name` = " . $tc_db->qstr($board));
 
-		
+
 		$lines = $tc_db->GetAll("SELECT * FROM `" . KU_DBPREFIX . "posts` WHERE `boardid` = " . $tc_db->qstr($boardid) . " AND `IS_DELETED` = 1 AND `id` = " . $tc_db->qstr($thread));
 		if (count($lines) == 0)
 		{
@@ -1850,11 +1850,11 @@ class Manage {
 			$deleted_at = date(r, $timestamp);
 			$deleted_timestamp_limit = $timestamp - 30;
 			$restore_to = date(r, $deleted_timestamp_limit);
-			
+
 			$tpl_page .= '<p>Тред ' . $board . '/' . $thread . ' удалён ' . $deleted_at . '(' . $timestamp . '); будут восстановлены все посты на ' . $restore_to . ' (' . $deleted_timestamp_limit . ').</p>';
-			
+
 			$tc_db->Execute("UPDATE `" . KU_DBPREFIX . "posts` SET `IS_DELETED` = 0, `deleted_timestamp` = 0 WHERE (`id` = " . $tc_db->qstr($thread) . " OR `parentid` = " . $tc_db->qstr($thread) . ") AND `boardid` = " . $tc_db->qstr($boardid) . " AND `deleted_timestamp` > " . $deleted_timestamp_limit);
-			
+
 			$tpl_page .= '<p>Тред ' . $board . '/' . $thread . ' восстановлен на момент за 30 секунд до удаления.</p>';
 
 			management_addlogentry('Восстановлен тред' . ' #<a href="?action=viewthread&thread='. $thread . '&board='. $board . '#'. $thread . '">'. $thread . '</a> - /'. $board . '/', 7);
@@ -2085,7 +2085,7 @@ class Manage {
 	function editfiletypes() {
 		global $tc_db, $tpl_page;
 		$this->AdministratorsOnly();
-		
+
 		$tpl_page .= '<h2>'. _gettext('Edit filetypes') . '</h2><br />';
 		if (isset($_GET['do'])) {
 			if ($_GET['do'] == 'addfiletype') {
@@ -2302,7 +2302,7 @@ class Manage {
 			$boardnames[$line['id']] = $line['name'];
 			$boardids[$line['name']] = $line['id'];
 		}
-		
+
 		$tc_db->Execute("TRUNCATE TABLE `" . KU_DBPREFIX . "answers`");
 
 		$nposts = 0;
@@ -2312,7 +2312,7 @@ class Manage {
 				"WHERE `IS_DELETED` = 0 AND `id` >= " . $step . " AND `id` < " . ($step + 10000));
             if (count($results) == 0)
                 break;
-           
+
             foreach ($results as $key=>$value)
             {
                 $results[$key]['boardname'] = $boardnames[$value['boardid']];
@@ -2320,13 +2320,13 @@ class Manage {
             AnswerMapAdd($results, $boardids);
 			$nposts = $nposts + count($results);
         }
-		
+
 		$nrecords = $tc_db->GetOne("SELECT COUNT(*) FROM `" . KU_DBPREFIX . "answers`");
 		$ntime = time() - $starttime;
 		management_addlogentry('Перегенерация карты ответов закончена. '.$nrecords.' ответов для '.$nposts.' постов, '.$ntime.' секунд.');
 		$tpl_page .= 'Готово. Записано '.$nrecords.' ответов для '.$nposts.' постов. Затрачено '.$ntime.' секунд.';
 	}
-	
+
 	/*
 	* +------------------------------------------------------------------------------+
 	* Boards Pages
@@ -2401,7 +2401,7 @@ class Manage {
 								management_addlogentry(_gettext('Updated board configuration') . " - /" . $_GET['updateboard'] . "/", 4);
 							}
 							else $tpl_page .= _gettext('Sorry, a generic error has occurred.');
-							
+
 						} else {
 							$tpl_page .= _gettext('Sorry, embed may only be enabled on normal imageboards.');
 						}
@@ -2711,7 +2711,7 @@ class Manage {
 
 					$tpl_page .= '</select>
 					<div class="desc">'. _gettext('The style which will be set when the user first visits the board.') .' '. _gettext('Default') .': <strong>'. _gettext('Use Default') .'</strong></div><br />';
-					
+
 					/* Submit form */
 					$tpl_page .= '<input type="submit" value="Обновить доску" />
 					</form>
@@ -2789,15 +2789,15 @@ class Manage {
 							management_addlogentry(_gettext('Updated board configuration') . " - /" . $_GET['updateboard'] . "/", 4);
 						}
 						else $tpl_page .= _gettext('Sorry, a generic error has occurred.');
-					} 
+					}
 					else {
 						$tpl_page .= _gettext('Sorry, a generic error has occurred.');
-					} 
+					}
 				}
 				else {
 					$tpl_page .= _gettext('Integer values must be entered correctly.');
 				}
-			} 
+			}
 			else {
 				$tpl_page .= _gettext('Unable to locate a board named') . ' <strong>'. $_GET['updateboard'] . '</strong>.';
 			}
@@ -3460,7 +3460,7 @@ class Manage {
 	/* Addition, modification, deletion, and viewing of bans */
 	function bans() {
 		global $tc_db, $tpl_page, $bans_class;
-		
+
 		$this->ModeratorsOnly();
 		$reason = KU_BANREASON;
 		$ban_ip = ''; $ban_hash = ''; $ban_parentid = 0; $multiban = Array();
@@ -3561,7 +3561,7 @@ class Manage {
 				}
 				$ban_ip = ($instantban) ? $ban_ip : $_POST['ip'];
 				$ban_duration = ($_POST['seconds'] == 0 || $instantban) ? 0 : $_POST['seconds'];
-				
+
 				$ban_reason = ($instantban) ? $ban_reason : $_POST['reason'];
 				$ban_note = ($instantban) ? '' : $_POST['staffnote'];
 				$ban_appealat = 0;
@@ -3571,7 +3571,7 @@ class Manage {
 				}
 				if (isset($_POST['multiban']))
 					$ban_ips = unserialize($_POST['multiban']);
-				else 
+				else
 					$ban_ips = Array($ban_ip);
 				$i = 0;
 				foreach ($ban_ips as $ban_ip) {
@@ -3589,7 +3589,7 @@ class Manage {
 							else
 								$postids = unserialize($_POST['quickmultibanpostid']);
 							$results = $tc_db->GetAll("SELECT HIGH_PRIORITY `parentid`, `message` FROM `".KU_DBPREFIX."posts` WHERE `boardid` = " . $tc_db->qstr($ban_board_id) . " AND `id` = ".$tc_db->qstr($postids[$i])." LIMIT 1");
-								
+
 							foreach($results AS $line) {
 								$tc_db->Execute("UPDATE `".KU_DBPREFIX."posts` SET `message` = ".$tc_db->qstr($line['message'] . $ban_msg)." WHERE `boardid` = " . $tc_db->qstr($ban_board_id) . " AND `id` = ".$tc_db->qstr($postids[$i]));
 								clearPostCache($postids[$i], $ban_board_id);
@@ -3713,7 +3713,7 @@ class Manage {
 			<select name="type" id="type"><option value="0">'. _gettext('Single IP') . '</option><option value="1">'. _gettext('IP Range') . '</option><option value="2">'. _gettext('Whitelist') . '</option></select>
 			<div class="desc">'. _gettext('The type of ban. A single IP can be banned by providing the full address. A whitelist ban prevents that IP from being banned. An IP range can be banned by providing the IP range you would like to ban, in this format: 123.123.12') . '</div><br />';
 		}
-		
+
 		if ($isquickban && KU_BANMSG != '') {
 			$tpl_page .= '<label for="addbanmsg">'. _gettext('Add ban message') . ':</label>
 			<input type="checkbox" name="addbanmsg" id="addbanmsg" checked="checked" />
@@ -3995,7 +3995,7 @@ class Manage {
 				else
 					$ips = Array($_POST['ip']);
 				foreach  ($ips as $ip) {
-					$i = 0;				
+					$i = 0;
 					$post_list = $tc_db->GetAll("SELECT `id`, `boardid` FROM `" . KU_DBPREFIX . "posts` WHERE `boardid` IN (" . $board_ids . ") AND `IS_DELETED` = '0' AND `ipmd5` = '" . md5($ip) . "'");
 					if (count($post_list) > 0) {
 						foreach ($post_list as $post) {
@@ -4381,7 +4381,7 @@ class Manage {
 				file_put_contents(KU_ROOTDIR . $_GET['updateboard']. '/spam.txt', $_POST['spam']);
 				management_addlogentry(_gettext('Updated spam list') . " - /" . $_GET['updateboard'] . "/", 4);
 				$tpl_page .= '<hr />'. _gettext('Spam.txt successfully edited.') .'<hr />';
-			} 
+			}
 			else {
 				$tpl_page .= _gettext('Unable to locate a board named') . ' <strong>'. $_GET['updateboard'] . '</strong>.';
 			}
@@ -4397,8 +4397,8 @@ class Manage {
 				$tpl_page .= '<p>Доска: '. $_POST['board'] . '</p>' . "\n" .
 					'<p><b>PROTIP: </b>'._gettext("You don't have to include all variations of the word since it's done autamatically.").'</p>'.
 					'<form action="?action=spam&updateboard=' . $_POST['board'] . '" method="post">'. "\n" .
-          			'<input type="hidden" name="token" value="' . $_SESSION['token'] . '" />' . "\n" . 
-          			'<input type="hidden" name="updateboard" value="' . $_POST['board'] . '" />' . "\n" . 
+          			'<input type="hidden" name="token" value="' . $_SESSION['token'] . '" />' . "\n" .
+          			'<input type="hidden" name="updateboard" value="' . $_POST['board'] . '" />' . "\n" .
 					'<textarea name="spam" rows="25" cols="80">' . $content . '</textarea><br />' . "\n" .
 					'<input type="submit" value="'. _gettext('Submit') .'" />'. "\n" .
 					'</form>'. "\n";
