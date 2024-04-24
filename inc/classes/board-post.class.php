@@ -634,7 +634,7 @@ class Board {
 			{
 				$current_board=$special_thread[1];
 			}
-			else if($special_thread[0] == 'THREAD')
+			else if($special_thread[0] == 'THREAD' || $special_thread[0] == 'HIDDEN')
 			{
 				if($special_thread[2] == '/faq/') $faq_enabled = true;
 			}

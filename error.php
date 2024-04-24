@@ -67,7 +67,7 @@ if(preg_match("/^\/([A-Z0-9a-z\/]+?)\/$/", $address, $matches) || preg_match("/^
 			{
 				$current_board = $special_thread[1];
 			}
-			else // if($special_thread[0] == 'THREAD')
+			else if($special_thread[0] == 'THREAD' || $special_thread[0] == 'HIDDEN')
 			{
 				if ($special_thread[2] == '/'.$matches[1].'/') $redirect_to = '/'.$current_board.'/res/'.$special_thread[1].'.html';
 			}

@@ -125,7 +125,7 @@ INSERT INTO `kurisaba_ext_data` (`id`, `name`, `value`) VALUES
 (4, 'thread_cirno', '/a/9'),
 (5, 'thread_faq', '/d/1'),
 (6, 'thread_dev', '/d/2'),
-(7, 'special_threads', 'BOARD b\r\nSPECIALTHREAD /b/b/ /b/b/ Random Thread\r\nTHREAD 100 /some/ Some Thread\r\nBOARD d\r\nSPECIALTHREAD /d/ /d/ Development\r\nBOARD a\r\nTHREAD 1 /a/a/ General Anime\r\nSPECIALTHREAD /9/ /9/ Cirno Thread\r\n');
+(7, 'special_threads', 'BOARD b\r\nTHREAD 100 /some/ Some Thread\r\nBOARD d\r\nBOARD a\r\nTHREAD 1 /a/a/ General Anime\r\nHIDDEN 9 /9/ Cirno Thread\r\n');
 
 CREATE TABLE IF NOT EXISTS `loginattempts` (
   `username` varchar(255) NOT NULL,

@@ -44,9 +44,12 @@ class Menu {
 				$special_threads_html .= '<li><strong>/'.$special_thread[1].'/:</strong></li>';
 				$current_board=$special_thread[1];
 			}
-			else if($special_thread[0] == 'THREAD')
+			else if($special_thread[0] == 'THREAD' || $special_thread[0] == 'HIDDEN')
 			{
-				$special_threads_html .= '<li><a href="/'.$current_board.'/res/'.$special_thread[1].'.html" class="boardlink">'.$special_thread[2].' - '.$special_thread[3].'</a></li>';
+				if($special_thread[0] == 'THREAD')
+				{
+					$special_threads_html .= '<li><a href="/'.$current_board.'/res/'.$special_thread[1].'.html" class="boardlink">'.$special_thread[2].' - '.$special_thread[3].'</a></li>';
+				}
 				if($special_thread[2] == '/faq/') $faq_enabled = true;
 			}
 		}
