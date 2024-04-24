@@ -452,7 +452,7 @@ class Board {
 		return str_replace('</a>', '<span class="youindicator"> (You)</span></a>', $matches[0]);
 	}
 	
-	function BuildPost($post, $page, $pregen_replies_q = false, $temporary = false) {
+	function BuildPost($post, $page, $pregen_replies_q = false, $temporary = false, $single = false) {
 		global $tc_db, $CURRENTLOCALE;
 
 		$post['board'] = $this->board;
@@ -494,7 +494,7 @@ class Board {
 			$post['message'] = stripslashes($post['message']);
 		}
 		$post['timestamp_formatted'] = formatDate($post['timestamp'], 'post', $CURRENTLOCALE, $dateEmail);
-		$post['reflink'] = formatReflink($this->board['name'], (($post['parentid'] == 0) ? ($post['id']) : ($post['parentid'])), $post['id'], $CURRENTLOCALE);
+		$post['reflink'] = formatReflink($this->board['name'], (($post['parentid'] == 0) ? ($post['id']) : ($post['parentid'])), $post['id'], $CURRENTLOCALE, $single);
 		if (isset($this->board['filetypes']) && in_array($post['file_type'], $this->board['filetypes'])) {
 			$post['videobox'] = embeddedVideoBox($post);
 		}

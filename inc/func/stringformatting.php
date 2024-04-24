@@ -82,17 +82,18 @@ function formatDate($timestamp, $type = 'post', $locale = 'en', $email = '') {
 /**
  * Format the provided input into a reflink, which follows the Japanese locale if it is set.
  */
-function formatReflink($post_board, $post_thread_start_id, $post_id, $locale = 'en') {
+function formatReflink($post_board, $post_thread_start_id, $post_id, $locale = 'en', $fullpath = false) {
 	$return = '	';
+	$board = $fullpath ? $post_board . '/' : '';
 
 	$reflink_noquote = '<a href="' . KU_BOARDSFOLDER . $post_board . '/res/' . $post_thread_start_id . '.html#' . $post_id . '" class="shl">';
 
 	$reflink_quote = '<a href="' . KU_BOARDSFOLDER . $post_board . '/res/' . $post_thread_start_id . '.html#i' . $post_id . '" onclick="return insert_postnum(\'' . $post_id . '\');">';
 
 	if ($locale == 'ja') {
-		$return .= $reflink_quote . formatJapaneseNumbers($post_id) . '</a>' . $reflink_noquote . '番</a>';
+		$return .= $reflink_quote . $post_board . formatJapaneseNumbers($post_id) . '</a>' . $reflink_noquote . '番</a>';
 	} else {
-		$return .= $reflink_noquote . 'No.&nbsp;' . '</a>' . $reflink_quote . $post_id . '</a>';
+		$return .= $reflink_noquote . 'No.&nbsp;' . '</a>' . $reflink_quote . $post_board . $post_id . '</a>';
 	}
 
 	return $return . "\n";

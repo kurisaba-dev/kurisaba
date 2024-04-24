@@ -52,12 +52,13 @@ foreach ($results as $key=>$post)
 	$post['file_path'] = KU_BOARDSPATH . '/' . $post_board_class->board['name'];
 	$thread = ($post['parentid'] == 0) ? $post['id'] : $post['parentid'];
 	$extname = '/'.$post_board_class->board['name'].'/'.$thread;
-	if ($post['parent_subject'] !== null)
+	if($post['parentid'] == 0 && $post['subject'] != "") $extname = $post['subject'];
+	elseif ($post['parent_subject'] !== null)
 		if ($post['parent_subject'] != "")
 			$extname = $post['parent_subject'];
-	$post['externalreference'] = '['. $extname .']';
+	$post['externalreference'] = '[<a href= ' . $post['file_path'] . '/res/' . $thread . '.html">'. $extname .'</a>]';
 
-	$results[$key] = $post_board_class->BuildPost($post, false);
+	$results[$key] = $post_board_class->BuildPost($post, false, false, false, true);
 }
 
 $board_class->dwoo_data->assign('posts', $results);
