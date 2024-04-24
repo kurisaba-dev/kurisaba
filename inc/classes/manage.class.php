@@ -1024,7 +1024,7 @@ class Manage {
 			if (strtolower($dir) != 'allboards') {
 				$results = $tc_db->GetAll("SELECT HIGH_PRIORITY * FROM `" . KU_DBPREFIX . "boards` WHERE `name` = " . $tc_db->qstr($dir) . "");
 				if (count($results) == 0) {
-					if (mkdir(KU_BOARDSDIR . $dir, 0777) && mkdir(KU_BOARDSDIR . $dir . '/res', 0777) && mkdir(KU_BOARDSDIR . $dir . '/src', 0777) && mkdir(KU_BOARDSDIR . $dir . '/thumb', 0777)) {
+					if (mkdir(KU_BOARDSDIR . $dir, 0777) && mkdir(KU_BOARDSDIR . $dir . '/res', 0777) && mkdir(KU_BOARDSDIR . $dir . '/src', 0777) && mkdir(KU_BOARDSDIR . $dir . '/thumb', 0777) && mkdir(KU_BOARDSDIR . $dir . '/tmp', 0777) && mkdir(KU_BOARDSDIR . $dir . '/tmp/thumb', 0777)) {
 						file_put_contents(KU_BOARDSDIR . $dir . '/.htaccess', 'DirectoryIndex '. 'board.html' . '');
 						file_put_contents(KU_BOARDSDIR . $dir . '/src/.htaccess', 'AddType text/plain .ASM .C .CPP .CSS .JAVA .JS .LSP .PHP .PL .PY .RAR .SCM .TXT'. "\n" . 'SetHandler default-handler');
 						if ($_POST['firstpostid'] < 1) {
@@ -1073,7 +1073,7 @@ class Manage {
 				}
 				$moderating = array_intersect($moderating, $xba);
 				unset($exb);
-				if (mkdir(KU_BOARDSDIR . $dir, 0777) && mkdir(KU_BOARDSDIR . $dir . '/res', 0777) && mkdir(KU_BOARDSDIR . $dir . '/src', 0777) && mkdir(KU_BOARDSDIR . $dir . '/thumb', 0777)) {
+				if (mkdir(KU_BOARDSDIR . $dir, 0777) && mkdir(KU_BOARDSDIR . $dir . '/res', 0777) && mkdir(KU_BOARDSDIR . $dir . '/src', 0777) && mkdir(KU_BOARDSDIR . $dir . '/thumb', 0777) && mkdir(KU_BOARDSDIR . $dir . '/tmp', 0777) && mkdir(KU_BOARDSDIR . $dir . '/tmp/thumb', 0777)) {
 					/* Add mod rights */
 					$moderating[] = $dir;
 					$tc_db->Execute("UPDATE `" . KU_DBPREFIX . "staff` SET `boards` = " . $tc_db->qstr(implode('|',$moderating)) . " WHERE `username` = '" . $_SESSION['manageusername'] . "'");

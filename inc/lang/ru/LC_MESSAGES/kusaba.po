@@ -238,7 +238,7 @@ msgid "Continue"
 msgstr "Продолжить"
 
 msgid "Could not copy uploaded image."
-msgstr "невозможно скопировать загруженное изображение."
+msgstr "Невозможно скопировать загруженное изображение."
 
 msgid "Could not create thumbnail."
 msgstr "Невозможно создать предварительный просмотр."

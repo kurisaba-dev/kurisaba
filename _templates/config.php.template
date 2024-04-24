@@ -44,6 +44,7 @@ if (!$cache_loaded) {
 		$cf['KU_CSSVER']         = '005';                   // "Версия" CSS. Можно менять при изменении css-файлов, если используется кэширующий прокси, на котором нельзя сбросить кэш.
 		$cf['KU_JSVER']          = '007';                   // "Версия" JS. Можно менять при изменении javascript-файлов, если используется кэширующий прокси, на котором нельзя сбросить кэш.
 		$cf['KU_FFMPEGPATH']     = '/usr/local/bin/ffmpeg'; // Путь к FFMPEG для создания картинок-превьюшек WEBM. На данный момент не используется.
+		$cf['KU_CURL_PROXY']     = 'none';                  // Если нужен прокси для загрузки
 		$cf['KU_CURL_INTERFACE'] = '';                      // Сетевой интерфейс для загрузки файла по ссылке (например, 'tun0'). Чтобы при загрузке файла не палить IP, рекомендуется поднять VPN до какого-нибудь сервера, который не жалко подставлять под DDoS и указать здесь сетевой интерфейс VPN.
 
 	// Настройки базы данных
@@ -174,6 +175,12 @@ if (!$cache_loaded) {
 	// Debug
 		$cf['KU_DEBUG'] = false; // When enabled, debug information will be printed (Warning: all queries will be shown publicly)
 
+	// Host and domain stuff
+		$cf['KU_HOST'] = isset($_SERVER['HTTP_HOST'])? preg_replace("/[^A-Za-z0-9.:]/", '', $_SERVER['HTTP_HOST'] ) : $cf['KU_BASE_HOST']; // escape string
+		$cf['KU_DOMAIN'] = '.' . $cf['KU_HOST']; // Used in cookies for the domain parameter.  Should be a period and then the top level domain, which will allow the cookies to be set for all subdomains.
+		$cf['KU_WEBPATH'] = $cf['KU_PROTO'] . $cf['KU_HOST'];
+		$cf['KU_REMOTE_ADDR'] = $_SERVER['REMOTE_ADDR'];
+
 	// Board subdomain/alternate directory (optional, change to enable)
 		// DO NOT CHANGE THESE IF YOU DO NOT KNOW WHAT YOU ARE DOING!!
 		$cf['KU_BOARDSDIR']    = $cf['KU_ROOTDIR'];
@@ -189,12 +196,6 @@ if (!$cache_loaded) {
 	// Post-configuration actions, don't modify these
 		$cf['KU_TAGS']       = serialize($cf['KU_TAGS']);
 		$cf['KU_TRIPS']      = serialize($cf['KU_TRIPS']);
-
-	// Host and domain stuff
-		$cf['KU_HOST'] = isset($_SERVER['HTTP_HOST'])? preg_replace("/[^A-Za-z0-9.:]/", '', $_SERVER['HTTP_HOST'] ) : $cf['KU_BASE_HOST']; // escape string
-		$cf['KU_DOMAIN'] = '.' . $cf['KU_HOST']; // Used in cookies for the domain parameter.  Should be a period and then the top level domain, which will allow the cookies to be set for all subdomains.
-		$cf['KU_WEBPATH'] = $cf['KU_PROTO'] . $cf['KU_HOST'];
-		$cf['KU_REMOTE_ADDR'] = $_SERVER['REMOTE_ADDR'];
 
 		if (substr($cf['KU_WEBFOLDER'], -2) == '//') { $cf['KU_WEBFOLDER'] = substr($cf['KU_WEBFOLDER'], 0, -1); }
 		if (substr($cf['KU_BOARDSFOLDER'], -2) == '//') { $cf['KU_BOARDSFOLDER'] = substr($cf['KU_BOARDSFOLDER'], 0, -1); }
