@@ -91,9 +91,9 @@ function formatReflink($post_board, $post_thread_start_id, $post_id, $locale = '
 	$reflink_quote = '<a href="' . KU_BOARDSFOLDER . $post_board . '/res/' . $post_thread_start_id . '.html#i' . $post_id . '" onclick="return insert_postnum(\'' . $post_id . '\');">';
 
 	if ($locale == 'ja') {
-		$return .= $reflink_quote . $post_board . formatJapaneseNumbers($post_id) . '</a>' . $reflink_noquote . '番</a>';
+		$return .= $reflink_quote . $board . formatJapaneseNumbers($post_id) . '</a>' . $reflink_noquote . '番</a>';
 	} else {
-		$return .= $reflink_noquote . 'No.&nbsp;' . '</a>' . $reflink_quote . $post_board . $post_id . '</a>';
+		$return .= $reflink_noquote . 'No.&nbsp;' . '</a>' . $reflink_quote . $board . $post_id . '</a>';
 	}
 
 	return $return . "\n";
