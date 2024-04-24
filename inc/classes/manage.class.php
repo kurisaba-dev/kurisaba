@@ -1657,35 +1657,19 @@ class Manage {
 		global $tc_db, $tpl_page;
 		$this->AdministratorsOnly();
 
-		$tpl_page .= '<h2>'. _gettext('Специальные треды Курисача') .'</h2><br />'. "\n";
+		$tpl_page .= '<h2>'. _gettext('Короткие ссылки на треды') .'</h2><br />'. "\n";
 
-		if (isset($_GET['thread_random']) && isset($_GET['thread_cirno']) && isset($_GET['thread_faq']) && isset($_GET['thread_dev']))
+		if (isset($_GET['special_threads']))
 		{
-			$tc_db->Execute("UPDATE `" . KU_DBPREFIX . "kurisaba_ext_data` SET `value` = " . $tc_db->qstr($this->remove_spaces($_GET['thread_random'])) . " WHERE `name` = 'thread_random'");
-			$tc_db->Execute("UPDATE `" . KU_DBPREFIX . "kurisaba_ext_data` SET `value` = " . $tc_db->qstr($this->remove_spaces($_GET['thread_cirno'])) . " WHERE `name` = 'thread_cirno'");
-			$tc_db->Execute("UPDATE `" . KU_DBPREFIX . "kurisaba_ext_data` SET `value` = " . $tc_db->qstr($this->remove_spaces($_GET['thread_faq'])) . " WHERE `name` = 'thread_faq'");
-			$tc_db->Execute("UPDATE `" . KU_DBPREFIX . "kurisaba_ext_data` SET `value` = " . $tc_db->qstr($this->remove_spaces($_GET['thread_dev'])) . " WHERE `name` = 'thread_dev'");
 			$tc_db->Execute("UPDATE `" . KU_DBPREFIX . "kurisaba_ext_data` SET `value` = " . $tc_db->qstr($_GET['special_threads']) . " WHERE `name` = 'special_threads'");
 			$tpl_page .= _gettext('Данные обновлены.<br />'). "\n";
 		}
 		else
 		{
-			$thread_random   = $tc_db->GetOne("SELECT `value` FROM `" . KU_DBPREFIX . "kurisaba_ext_data` WHERE `name` = 'thread_random'");
-			$thread_cirno    = $tc_db->GetOne("SELECT `value` FROM `" . KU_DBPREFIX . "kurisaba_ext_data` WHERE `name` = 'thread_cirno'");
-			$thread_faq      = $tc_db->GetOne("SELECT `value` FROM `" . KU_DBPREFIX . "kurisaba_ext_data` WHERE `name` = 'thread_faq'");
-			$thread_dev      = $tc_db->GetOne("SELECT `value` FROM `" . KU_DBPREFIX . "kurisaba_ext_data` WHERE `name` = 'thread_dev'");
 			$special_threads = $tc_db->GetOne("SELECT `value` FROM `" . KU_DBPREFIX . "kurisaba_ext_data` WHERE `name` = 'special_threads'");
 			$tpl_page .= '<form action="?" method="get">'. "\n" .
 						'<input type="hidden" name="action" value="specialthreads" />'. "\n" .
-						'<label for="thread_random">Random:</label>'. "\n" .
-						'<input type="text" name="thread_random" value="'. $thread_random . '" /><br />'. "\n" .
-						'<label for="thread_dev">Development:</label>'. "\n" .
-						'<input type="text" name="thread_dev" value="'. $thread_dev . '" /><br />'. "\n" .
-						'<label for="thread_faq">FAQ:</label>'. "\n" .
-						'<input type="text" name="thread_faq" value="'. $thread_faq . '" /><br />'. "\n" .
-						'<label for="thread_cirno">Cirno:</label>'. "\n" .
-						'<input type="text" name="thread_cirno" value="'. $thread_cirno . '" /><br /><br />'. "\n" .
-						'<label for="special_threads">Список тредов для меню:</label><br>'. "\n" .
+						'<label for="special_threads">Список тредов для меню (см. README.md):</label><br>'. "\n" .
 						'<textarea name="special_threads" cols="80" rows="35">'. $special_threads . '</textarea><br /><br />' . "\n" .
 						'<input type="submit" value="'. _gettext('Обновить данные') . '" />'. "\n";
 		}

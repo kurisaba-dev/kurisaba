@@ -67,43 +67,11 @@ if(preg_match("/^\/([A-Z0-9a-z\/]+?)\/$/", $address, $matches) || preg_match("/^
 			{
 				$current_board = $special_thread[1];
 			}
-			else if($special_thread[0] == 'THREAD')
+			else // if($special_thread[0] == 'THREAD')
 			{
 				if ($special_thread[2] == '/'.$matches[1].'/') $redirect_to = '/'.$current_board.'/res/'.$special_thread[1].'.html';
 			}
-			else if($special_thread[0] == 'SPECIALTHREAD')
-			{
-				if ($special_thread[2] == '/'.$matches[1].'/') $redirect_to = $special_thread[1];
-				else if ($special_thread[2] == '/'.$matches[1]) $redirect_to = $special_thread[1];
-			}
-			else
-			{
-				if ($matches[1] == 'faq') $redirect_to = '/faq/';
-			}
 		}
-
-		$thread_random = $tc_db->GetOne("SELECT `value` FROM `" . KU_DBPREFIX . "kurisaba_ext_data` WHERE `name` = 'thread_random'");
-		$thread_cirno  = $tc_db->GetOne("SELECT `value` FROM `" . KU_DBPREFIX . "kurisaba_ext_data` WHERE `name` = 'thread_cirno'");
-		$thread_faq    = $tc_db->GetOne("SELECT `value` FROM `" . KU_DBPREFIX . "kurisaba_ext_data` WHERE `name` = 'thread_faq'");
-		$thread_dev    = $tc_db->GetOne("SELECT `value` FROM `" . KU_DBPREFIX . "kurisaba_ext_data` WHERE `name` = 'thread_dev'");
-
-		$thread_random_link = preg_replace('/^\/([^\/]+?)\/(.+?)$/','/$1/res/$2.html',$thread_random);
-		$thread_cirno_link  = preg_replace('/^\/([^\/]+?)\/(.+?)$/','/$1/res/$2.html',$thread_cirno);
-		$thread_faq_link    = preg_replace('/^\/([^\/]+?)\/(.+?)$/','/$1/res/$2.html',$thread_faq);
-		$thread_dev_link    = preg_replace('/^\/([^\/]+?)\/(.+?)$/','/$1/res/$2.html',$thread_dev);
-			
-		$redirect_to = strtr($redirect_to, array
-		(
-			'/sg/sg/' => $thread_random_link,
-			'/sg/sg' => $thread_random_link,
-			'/9/' => $thread_cirno_link,
-			'/9' => $thread_cirno_link,
-			'/faq/' => $thread_faq_link,
-			'/faq' => $thread_faq_link,
-			'/d/' => $thread_dev_link,
-			'/d' => $thread_dev_link
-		));
-		
 		if($redirect_to != '')
 		{
 			header('Location: ' . KU_WEBPATH . $redirect_to); die();
