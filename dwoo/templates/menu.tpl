@@ -120,7 +120,10 @@ function iter_obj(object, callback) {
 </head>
 <body style="overflow: auto;">
 <h1><a href="{%KU_WEBFOLDER}" target="_top" title="{t}Front Page{/t}">{%KU_NAME}</a></h1>
-<ul>	<li><a href="/faq/" class="boardlink">[ FAQ ]</a></li>
+<ul>
+{if $faq_enabled}
+    <li><a href="/faq/" class="boardlink">[ FAQ ]</a></li>
+{/if}
 {if $showdirs eq 0}
 	<li><a onclick="showdirs();" href="{$files.1}" target="_self">[{t}Show Directories{/t}]</a></li>
 {else}
@@ -139,6 +142,7 @@ function iter_obj(object, callback) {
 	<li id="removeframes"><a href="#" onclick="removeframes(); return false;" target="_self">[{t}Remove Frames{/t}]</a></li>
 {/if *}
 <li id="refreshnewposts"><a href="#" onclick="updatenewpostscount(); return false;" target="_self">Обновить</a></li>
+<li><a href="{%KU_BOARDSPATH}/single.php" class="boardlink">[ Однопоток постов ]</a></li>
 </ul>
 {if empty($boards)}
 	<ul>
@@ -176,7 +180,8 @@ function iter_obj(object, callback) {
 			{/foreach}
 		{else}
 			<li>{t}No visible boards{/t}</li>
-		{/if}				<li><a href="{%KU_BOARDSPATH}/single.php" class="boardlink">[ Однопоток постов ]</a></li>		</ul>
+		{/if}
+		</ul>
 		{if %KU_MENUTYPE eq 'normal'}
 			</div>
 		{/if}

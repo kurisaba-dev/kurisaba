@@ -622,6 +622,25 @@ class Board {
 	function PageHeader($replythread = '0', $liststart = '0', $liststooutput = '-1', $overridetitle = '') {
 		global $tc_db, $CURRENTLOCALE;
 
+		$faq_enabled = false;
+		$special_threads = $tc_db->GetOne("SELECT `value` FROM `" . KU_DBPREFIX . "kurisaba_ext_data` WHERE `name` = 'special_threads'");
+		$special_threads = preg_replace('/ +/', ' ', $special_threads);
+		$special_threads = explode("\n", $special_threads);
+		$current_board='';
+		foreach ($special_threads as $special_thread)
+		{
+			$special_thread = explode(' ', trim($special_thread), 4);
+			if($special_thread[0] == 'BOARD')
+			{
+				$current_board=$special_thread[1];
+			}
+			else if($special_thread[0] == 'THREAD')
+			{
+				if($special_thread[2] == '/faq/') $faq_enabled = true;
+			}
+		}
+
+
 		$tpl = Array();
 
 		$tpl['htmloptions'] = ((KU_LOCALE == 'he' && empty($this->board['locale'])) || $this->board['locale'] == 'he') ? ' dir="rtl"' : '' ;

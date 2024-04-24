@@ -174,10 +174,13 @@ function scrolling(elem, direction) {
 		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 		
 		<span class="olm-link">[<a target="_top" href="{%KU_BOARDSFOLDER}">Главная</a>]</span>
-		[<a href="{%KU_WEBPATH}/kusaba.php" target="_top">{t}Фрейм{/t}</a>]
+		{if %KU_MAINPAGE ne 'kusaba.php'}
+			[<a href="{%KU_WEBPATH}/kusaba.php" target="_top">{t}Фрейм{/t}</a>]
+		{/if}
 		[<a href="{%KU_WEBPATH}/single.php">Однопоток</a>]
-		[<a href="{%KU_WEBPATH}/faq/">FAQ</a>]
-
+		{if $faq_enabled}
+			[<a href="{%KU_WEBPATH}/faq/">FAQ</a>]
+		{/if}
 		<span class="mobile-nav-disabled" id="mn-normalboards" style="display:none"> 
 			<select onchange="javascript:if(selectedIndex != 0) location.href='{%KU_WEBPATH}/' + this.options[this.selectedIndex].value;">
 				<option><strong>{t}Boards{/t}</strong></option>
