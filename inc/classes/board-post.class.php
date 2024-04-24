@@ -692,6 +692,7 @@ class Board {
 		$this->dwoo_data->assign('ad_right', $ad_right);
 		$this->dwoo_data->assign('board', $this->board);
 		$this->dwoo_data->assign('replythread', $replythread);
+		$this->dwoo_data->assign('faq_enabled', $faq_enabled);
 		if ($this->board['type'] != 1) {
 			$styles =  explode(':', KU_STYLES);
 			$defaultstyle = $this->board['defaultstyle'];
