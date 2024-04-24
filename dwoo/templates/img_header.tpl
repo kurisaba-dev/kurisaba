@@ -224,8 +224,8 @@ function scrolling(elem, direction) {
 		<div class="menu-sect" id="ms-_search">
 			<table><tr><td>Перейти к посту:</td><td>
 				<form style="display: inline;" action="/read.php" method="get">
-					<input size="3" name="b" value="sg" type="text">
-					<input size="7" name="p" value="206" type="text" class="defaultfield" id="searchposttop" onfocus="check_field('searchposttop',true);" onblur="check_field('searchposttop',false);">
+					<input size="3" name="b" value="{%KU_SEARCH_BOARD}" type="text">
+					<input size="7" name="p" value="{%KU_SEARCH_THREAD}" type="text" class="defaultfield" id="searchposttop" onfocus="check_field('searchposttop',true);" onblur="check_field('searchposttop',false);">
 					<input value="Перейти" type="submit">
 					<input name="t" value="0" type="hidden">
 					<input name="issearch" value="true" type="hidden">
@@ -233,7 +233,7 @@ function scrolling(elem, direction) {
 			</td></tr>
 			<tr><td>Поиск по тексту поста:</td><td>
 				<form style="display: inline;" method="get" action="/read.php">
-					<input size="3" name="b" value="sg" type="text">
+					<input size="3" name="b" value="{%KU_SEARCH_BOARD}" type="text">
 					<input size="25" name="v" value="{$search_phrase}" type="text" class="defaultfield" id="searchtexttop" onfocus="check_field('searchtexttop',true);" onblur="check_field('searchtexttop',false);">
 					<input value="Искать" type="submit">
 				</form>
@@ -250,15 +250,15 @@ function scrolling(elem, direction) {
 				<span class="oldsearch" style="float: right;">
 					Перейти:
 					<form style="display: inline;" action="/read.php" method="get">
-						<input size="3" name="b" value="sg" type="text">
-						<input size="7" name="p" value="206" type="text" class="defaultfield" id="searchpostmain" onfocus="check_field('searchpostmain',true);" onblur="check_field('searchpostmain',false);">
+						<input size="3" name="b" value="{%KU_SEARCH_BOARD}" type="text">
+						<input size="7" name="p" value="{%KU_SEARCH_THREAD}" type="text" class="defaultfield" id="searchpostmain" onfocus="check_field('searchpostmain',true);" onblur="check_field('searchpostmain',false);">
 						<input value="Перейти" type="submit">
 						<input name="t" value="0" type="hidden">
 						<input name="issearch" value="true" type="hidden">
 					</form>
 					Поиск:
 					<form style="display: inline;" method="get" action="/read.php">
-						<input size="3" name="b" value="sg" type="text">
+						<input size="3" name="b" value="{%KU_SEARCH_BOARD}" type="text">
 						<input size="25" name="v" value="{$search_phrase}" type="text" class="defaultfield" id="searchtextmain" onfocus="check_field('searchtextmain',true);" onblur="check_field('searchtextmain',false);">
 						<input value="Искать" type="submit">
 					</form>

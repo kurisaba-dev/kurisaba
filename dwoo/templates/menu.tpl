@@ -193,15 +193,15 @@ function iter_obj(object, callback) {
 <div id="search">
 <ul>
 <li>Перейти к посту:<form method="get" action="/read.php">
-<input type="text" size="3" name="b" value="sg"></input>
-<input type="text" size="7" name="p" value="206" class="defaultfield" id="searchpostmenu" onfocus="check_field('searchpostmenu',true);" onblur="check_field('searchpostmenu',false);"></input>
+<input type="text" size="3" name="b" value="{%KU_SEARCH_BOARD}"></input>
+<input type="text" size="7" name="p" value="{%KU_SEARCH_THREAD}" class="defaultfield" id="searchpostmenu" onfocus="check_field('searchpostmenu',true);" onblur="check_field('searchpostmenu',false);"></input>
 <input type="submit" value="Go!"></input>
 <input type="hidden" name="t" value="0"></input>
 <input type="hidden" name="issearch" value="true"></input>
 </form>
 <span style="font-size: 8px">&nbsp;</span></li>
 <li>Поиск текста на борде:<form method="get" action="/read.php">
-<input type="text" size="3" name="b" value="sg"></input>
+<input type="text" size="3" name="b" value="{%KU_SEARCH_BOARD}"></input>
 <input type="text" size="7" name="v" value="{$search_phrase}" class="defaultfield" id="searchtextmenu" onfocus="check_field('searchtextmenu',true);" onblur="check_field('searchtextmenu',false);"></input>
 <input type="submit" value="Go!"></input>
 </form>
