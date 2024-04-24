@@ -266,5 +266,5 @@ if ($error == '')
 	}
 }
 header('Content-type: text/html; charset=utf-8');
-exitWithErrorPage($error, '<a href="/front.php">Вернуться на главную</a>');
+exitWithErrorPage($error, '<a href="/' . KU_MAINPAGE . '">Вернуться на главную</a>');
 ?>

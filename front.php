@@ -1,5 +1,12 @@
 <?php
 require_once 'config.php';
+
+if (KU_MAINPAGE != "front.php")
+{
+    header("Location: " . KU_WEBPATH . "/" . KU_MAINPAGE);
+    die();
+}
+
 require_once KU_ROOTDIR . 'lib/dwoo.php';
 require_once KU_ROOTDIR . 'inc/functions.php';
 require_once KU_ROOTDIR . 'inc/classes/bans.class.php';
