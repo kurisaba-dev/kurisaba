@@ -299,7 +299,21 @@ if ($board_class->board['type'] == 1) {
 				$post['n'] = 2 + $tc_db->GetOne("SELECT COUNT(*) FROM `" . KU_DBPREFIX . "posts` WHERE `boardid` = " . $board_class->board['id'] ." AND `IS_DELETED` = 0 AND `id` < " . $tc_db->qstr($post['id']) . " AND `parentid` = " . $tc_db->qstr($post['parentid']));
 			}
 		}
-		$results[$key] = $board_class->BuildPost($post, false);
+		if($_SERVER['HTTP_REFERER'] == KU_WEBPATH . '/single.php')
+		{
+			$extname = '/'.$post_board_class->board['name'].'/'.$thread;
+			if($post['parentid'] == 0 && $post['subject'] != "") $extname = $post['subject'];
+			else
+			{
+				$parent_subject = $tc_db->GetOne("SELECT `subject` FROM `" . KU_DBPREFIX . "posts` WHERE `boardid` = " . $board_class->board['id'] ." AND `IS_DELETED` = 0 AND `id` = " . $tc_db->qstr($post['parentid']));
+				if ($parent_subject != "") $extname = $parent_subject;
+			}
+			$post['externalreference'] = '[<a href="' . KU_WEBPATH . '/' . $board . '/res/' . $thread . '.html">'. $extname .'</a>]';
+			$results[$key] = $board_class->BuildPost($post, false, false, false, true);
+		else
+		{
+			$results[$key] = $board_class->BuildPost($post, false);
+		}
 	}
 
 	$board_class->dwoo_data->assign('posts', $results);
