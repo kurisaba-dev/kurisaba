@@ -12,8 +12,8 @@ class Parse {
 	var $boardid;
   
 	function urlcallback($matches) {
-		if(str_contains($matches[2].$matches[3],KU_WEBPATH))
-			return $matches[1].'<a href="'.$matches[2].$matches[3].'">'.$matches[2].htmlspecialchars(urldecode($matches[3]), ENT_QUOTES).'</a>';
+		if(strstr($matches[2].$matches[3],KU_WEBPATH) != false)
+			return $matches[1].'<a target="_self" href="'.$matches[2].$matches[3].'">'.$matches[2].htmlspecialchars(urldecode($matches[3]), ENT_QUOTES).'</a>';
 		return $matches[1].'<a target="_blank" href="'.$matches[2].$matches[3].'">'.$matches[2].htmlspecialchars(urldecode($matches[3]), ENT_QUOTES).'</a>';
 	}
 	function exturlcallback($matches) {
@@ -54,10 +54,15 @@ class Parse {
       '`\[cut\](.+?)\[/cut\]`is', 
       '`\[cutline\](.+?)\[/cutline\]`is', 
       '`\[lination_modified_by_homu_nyan\](.+?)\[/lination_modified_by_homu_nyan\]`is', 
+      '`\[url=&quot;'.KU_WEBPATH.'(.+?)&quot;\](.+?)\[/url\]`is',
       '`\[url='.KU_WEBPATH.'(.+?)\](.+?)\[/url\]`is',
+      '`\[url=&quot;https://(.+?)&quot;\](.+?)\[/url\]`is',
       '`\[url=https://(.+?)\](.+?)\[/url\]`is',
+      '`\[url=&quot;http://(.+?)&quot;\](.+?)\[/url\]`is',
       '`\[url=http://(.+?)\](.+?)\[/url\]`is',
+      '`\[url=&quot;ftp://(.+?)&quot;\](.+?)\[/url\]`is',
       '`\[url=ftp://(.+?)\](.+?)\[/url\]`is',
+      '`\[url=&quot;(.+?)&quot;\](.+?)\[/url\]`is',
       '`\[url=(.+?)\](.+?)\[/url\]`is',
       '`\[caps\](.+?)\[/caps\]`is',
       '`&quot;(.+?)&quot;`is',
@@ -86,9 +91,14 @@ class Parse {
 	  '<span class="cutspoiler" onclick="cutspoiler_cb(this)"><span>Развернуть</span><span style="display: none;">\\1</span></span>',
       '<table class="lination"><tr><td><img src="/images/lina.png"/></td><td><div class="bubble">\\1</div></td></tr></table>',
       '<a href="'.KU_WEBPATH.'\\1">\\2</a>',
+      '<a href="'.KU_WEBPATH.'\\1">\\2</a>',
+      '<a target="_blank" href="https://\\1">\\2</a>',
       '<a target="_blank" href="https://\\1">\\2</a>',
       '<a target="_blank" href="http://\\1">\\2</a>',
+      '<a target="_blank" href="http://\\1">\\2</a>',
       '<a target="_blank" href="ftp://\\1">\\2</a>',
+      '<a target="_blank" href="ftp://\\1">\\2</a>',
+      '<a target="_blank" href="http://\\1">\\2</a>',
       '<a target="_blank" href="http://\\1">\\2</a>',
       '<span style="text-transform: uppercase;">\\1</span>',
       '«\\1»',
