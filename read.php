@@ -299,7 +299,7 @@ if ($board_class->board['type'] == 1) {
 				$post['n'] = 2 + $tc_db->GetOne("SELECT COUNT(*) FROM `" . KU_DBPREFIX . "posts` WHERE `boardid` = " . $board_class->board['id'] ." AND `IS_DELETED` = 0 AND `id` < " . $tc_db->qstr($post['id']) . " AND `parentid` = " . $tc_db->qstr($post['parentid']));
 			}
 		}
-		if($_SERVER['HTTP_REFERER'] == KU_WEBPATH . '/single.php')
+		if(isset($_SERVER['HTTP_REFERER']) && $_SERVER['HTTP_REFERER'] == KU_WEBPATH . '/single.php')
 		{
 			$extname = '/'.$post_board_class->board['name'].'/'.$thread;
 			if($post['parentid'] == 0 && $post['subject'] != "") $extname = $post['subject'];
@@ -310,6 +310,7 @@ if ($board_class->board['type'] == 1) {
 			}
 			$post['externalreference'] = '[<a href="' . KU_WEBPATH . '/' . $board . '/res/' . $thread . '.html">'. $extname .'</a>]';
 			$results[$key] = $board_class->BuildPost($post, false, false, false, true);
+		}
 		else
 		{
 			$results[$key] = $board_class->BuildPost($post, false);
