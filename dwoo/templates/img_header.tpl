@@ -7,6 +7,7 @@
 		var ku_boardspath = '{%KU_BOARDSPATH}';
 		var ku_boardsdir = '{%KU_BOARDSDIR}';
 		var ku_cgipath = '{%KU_CGIPATH}';
+		var ku_defaultboard = '{%KU_DEFAULTBOARD}';
 		var ku_maxfilesize = {$maxfilesize};
 		var style_cookie = "kustyle";
 		var locale = '{$locale}';

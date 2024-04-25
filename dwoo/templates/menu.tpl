@@ -17,6 +17,7 @@
 <script type="text/javascript">
 	var style_cookie = "kustyle";
 	var ku_boardspath = '{%KU_BOARDSPATH}';
+	var ku_defaultboard = '{%KU_DEFAULTBOARD}';
 </script>
 <link rel="shortcut icon" href="{%KU_WEBFOLDER}favicon.ico" />
 <script type="text/javascript" src="{%KU_WEBFOLDER}lib/javascript/gettext.js"></script>

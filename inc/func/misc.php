@@ -161,7 +161,6 @@ function AnswerMapAdd($ans_req, $boardids)
 		for ($i = 0; $i < count($arr[0]); $i++)
 		{
 			$answer_boardname = $arr[1][$i];
-			if ($answer_boardname == 'b') $answer_boardname = 'sg'; // Claire hack; only has meaning for kurisach.
 			$answer_parentid  = $arr[2][$i];
 			$answer_id        = $arr[3][$i];
 			$answer_boardid   = $boardids[$answer_boardname];
