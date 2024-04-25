@@ -84,7 +84,7 @@ function formatDate($timestamp, $type = 'post', $locale = 'en', $email = '') {
  */
 function formatReflink($post_board, $post_thread_start_id, $post_id, $locale = 'en', $fullpath = false) {
 	$return = '	';
-	$board = $fullpath ? $post_board . '/' : '';
+	$board = $fullpath ? '/' . $post_board . '/' : '';
 
 	$reflink_noquote = '<a href="' . KU_BOARDSFOLDER . $post_board . '/res/' . $post_thread_start_id . '.html#' . $post_id . '" class="shl">';
 
