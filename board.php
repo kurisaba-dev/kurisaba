@@ -670,7 +670,6 @@ if($operation_post) // it's `noreturn`.
 
 			// Fromatting of topic subject
 			$patterns = array(
-				'`- `',
 				'`\(c\)`',
 				'`\(C\)`',
 				'`\(с\)`',
@@ -679,13 +678,13 @@ if($operation_post) // it's `noreturn`.
 				'`\(тм\)`',
 				'`-&gt;`',
 				'`&lt;-`',
+				'`- `',
 				'`\*(.+?)\*`is',
 				'`%%(.+?)%%`is',
 				'`~~(.+?)~~`is',
 				'`&quot;(.+?)&quot;`is'
 			);
 			$replaces =  array(
-				'&mdash; ',
 				'&copy;',
 				'&copy;',
 				'&copy;',
@@ -694,6 +693,7 @@ if($operation_post) // it's `noreturn`.
 				'&trade;',
 				'&rarr;',
 				'&larr;',
+				'&mdash; ',
 				'<i>\\1</i>',
 				'<span class="spoiler">\\1</span>',
 				'<strike>\\1</strike>',
