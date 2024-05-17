@@ -667,7 +667,40 @@ if($operation_post) // it's `noreturn`.
 				$board_class->PrintPage('', $page, true);
 				die;
 			}
-			
+
+			// Fromatting of topic subject
+			$patterns = array(
+				'- ',
+				'`\(c\)`',
+				'`\(C\)`',
+				'`\(с\)`',
+				'`\(С\)`',
+				'`\(tm\)`',
+				'`\(тм\)`',
+				'`-&gt;`',
+				'`&lt;-`',
+				'`\*(.+?)\*`is',
+				'`%%(.+?)%%`is',
+				'`~~(.+?)~~`is',
+				'`&quot;(.+?)&quot;`is'
+			);
+			$replaces =  array(
+				'&mdash; '
+				'&copy;',
+				'&copy;',
+				'&copy;',
+				'&copy;',
+				'&trade;',
+				'&trade;',
+				'&rarr;',
+				'&larr;',
+				'<i>\\1</i>',
+				'<span class="spoiler">\\1</span>',
+				'<strike>\\1</strike>',
+				'«\\1»'
+			);
+			$post['subject'] = preg_replace($patterns, $replaces, $post['subject']);
+
 			$post_id = $post_class->Insert($thread_replyto, $post['name'], $post['tripcode'], $post['email'], $post['subject'], addslashes($post['message']), $post['message_source'], $upload_class->file_name, $upload_class->original_file_name, $filetype_withoutdot, $upload_class->file_md5, $upload_class->image_md5, $upload_class->imgWidth, $upload_class->imgHeight, $upload_class->file_size, $upload_class->imgWidth_thumb, $upload_class->imgHeight_thumb, $post_passwordmd5, time() + KU_ADDTIME, time() + KU_ADDTIME, KU_REMOTE_ADDR, $user_authority_display, $sticky, $lock, $board_class->board['id'], $post['country'], $post['pic_spoiler'], $post['pic_animated']);
 			if ($post_id == -1)
 			{
