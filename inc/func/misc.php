@@ -72,7 +72,7 @@ function mime_to_extension($mime_type)
 		'image/webp' => '.webp',
 		'image/png'  => '.png',
 		'audio/mp3'  => '.mp3',
-		'audio/m4a'  => '.m4a',
+		'audio/x-m4a'  => '.m4a',
 		'audio/ogg'  => '.ogg',
 		'video/webm' => '.webm',
 		'video/mp4'  => '.mp4'
