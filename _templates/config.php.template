@@ -147,7 +147,7 @@ if (!$cache_loaded) {
 		$cf['KU_THUMBHEIGHT']      = 255;  // Максимальная высота предпросмотра картинки в ОП-посте.
 		$cf['KU_REPLYTHUMBWIDTH']  = 255;  // Максимальная ширина предпросмотра картинки в ответе в тред.
 		$cf['KU_REPLYTHUMBHEIGHT'] = 255;  // Максимальная высота предпросмотра картинки в ответе в тред.
-		$cf['KU_THUMBMETHOD']      = 'imagemagick+gifsicle'; // Метод создания предпросмотра jpg, gif и png ('gd' или 'imagemagick+gifsicle'). Анимированные предпросмотры доступны только в последнем варианте.
+		$cf['KU_THUMBMETHOD']      = 'imagemagick+gifsicle'; // Метод создания предпросмотра jpg, gif, webm и png ('gd' или 'imagemagick+gifsicle'). Анимированные предпросмотры доступны только в последнем варианте.
 		$cf['KU_THUMBMSG']         = false; // Показывать сообщение "Thumbnail displayed, click image for full size." у предпросмотров картинок.
 
 	// Теги файлов для upload-досок. Для отключения можно установить в ''.

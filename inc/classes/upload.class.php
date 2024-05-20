@@ -313,7 +313,7 @@ class Upload {
 						if (!is_file($file['tmp_name']) || !is_readable($file['tmp_name'])) {
 							$pass = false;
 						} else {
-							if(in_array($this->file_type, array('.jpg', '.gif', '.png'))) {
+							if(in_array($this->file_type, array('.jpg', '.gif', '.webp', '.png'))) {
 								if (!@getimagesize($file['tmp_name'])) {
 									$pass = false;
 								}
@@ -448,7 +448,7 @@ class Upload {
 								{
 									return _gettext('A file by that name already exists');
 								}
-								if($this->file_type == '.mp3' || $this->file_type == '.ogg')
+								if($this->file_type == '.mp3' || $this->file_type == '.ogg' || $this->file_type == '.m4a')
 								{
 									require_once(KU_ROOTDIR . 'lib/getid3/getid3.php');
 
@@ -474,6 +474,9 @@ class Upload {
 										} else if (preg_match("/gif/", $mime)) {
 											$ext = ".gif";
 											imagegif($im, $this->file_location.".tmp");
+										} else if (preg_match("/webp/", $mime)) {
+											$ext = ".webp";
+											imagewebp($im, $this->file_location.".tmp");
 										}
 										$this->file_thumb_location = KU_BOARDSDIR . $board_class->board['name'] . '/' . $thumbdir . '/' . $this->file_name .'s'. $ext;
 										if (!$this->isreply)

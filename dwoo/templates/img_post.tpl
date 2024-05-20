@@ -14,7 +14,7 @@
 				{if ($post.file neq '' || $post.file_type neq '' ) && (($post.videobox eq '' && $post.file neq '') && $post.file neq 'removed')}
 					{if $post.parentid neq 0}<br />{/if}
 					<span class="filesize">
-						{if $post.file_type eq 'mp3' or $post.file_type eq 'ogg'}
+						{if $post.file_type eq 'mp3' or $post.file_type eq 'ogg' or $post.file_type eq 'm4a'}
 							{t}Audio{/t}
 						{else}
 							{t}File{/t}
@@ -40,7 +40,7 @@
 									{$post.file_original}.{$post.file_type}
 								{/if}
 							{else}
-								{if $post.file_type eq 'webm' or $post.file_type eq 'mp3' or $post.file_type eq 'ogg'}
+								{if $post.file_type eq 'webm' or $post.file_type eq 'mp3' or $post.file_type eq 'ogg' or $post.file_type eq 'm4a' or $post.file_type eq 'mp4'}
 									{$post.file_original}.{$post.file_type}
 								{else}
 									{$post.file}.{$post.file_type}
@@ -66,7 +66,7 @@
 									, {$post.image_w}x{$post.image_h}
 								{/if}
 							)
-							{if $post.file_type eq 'jpg' or $post.file_type eq 'gif' or $post.file_type eq 'png'}
+							{if $post.file_type eq 'jpg' or $post.file_type eq 'gif' or $post.file_type eq 'png' or $post.file_type eq 'webp'}
 								&nbsp;
 								<a class="extrabtns" target="_blank" href="https://www.google.com/searchbyimage?image_url={$file_path}/src/{$post.file}.{$post.file_type}" title="Искать картинку в гугле">
 									<img src="{$boardpath}css/icons/blank.gif" border="0" class="searchpicg spritebtn sb-l" alt="Искать картинку в гугле">
@@ -85,7 +85,7 @@
 					</span>
 					{if %KU_THUMBMSG}
 						<span class="thumbnailmsg"> 
-							{if $post.file_type neq 'jpg' && $post.file_type neq 'gif' && $post.file_type neq 'png' && $post.videobox eq ''}
+							{if $post.file_type neq 'jpg' && $post.file_type neq 'gif' && $post.file_type neq 'webp' && $post.file_type neq 'png' && $post.videobox eq ''}
 								{t}Extension icon displayed, click image to open file.{/t}
 							{else}
 								{t}Thumbnail displayed, click image for full size.{/t}
@@ -94,7 +94,7 @@
 					{/if}
 					{if $post.parentid eq 0}<br />{/if}
 				{/if}
-				{if $post.videobox eq '' && $post.file neq '' && ( $post.file_type eq 'jpg' || $post.file_type eq 'gif' || $post.file_type eq 'png')}
+				{if $post.videobox eq '' && $post.file neq '' && ( $post.file_type eq 'jpg' || $post.file_type eq 'gif' || $post.file_type eq 'webp' || $post.file_type eq 'png')}
 					{if $post.parentid neq 0}<br />{/if}
 					{if $post.file eq 'removed'}
 						<div id="thumblink{$post.id}" class="nothumb">
@@ -154,7 +154,7 @@
 						</a>
 						{else}
 							<a id="thumblink{$post.id}"
-								{if $post.file_type eq 'mp3' or $post.file_type eq 'ogg'} class="audiowrap" {/if}
+								{if $post.file_type eq 'mp3' or $post.file_type eq 'ogg' or $post.file_type eq 'm4a'} class="audiowrap" {/if}
 								{if %KU_NEWWINDOW}
 									target="_blank"
 								{/if}								

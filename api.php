@@ -74,7 +74,7 @@ function gen_posts($skipreflinks, $msgsource, $replyformat, $boardid, $dbdata, $
 		if ($extended)
 		{
 			$numreplies = $tc_db->GetOne("SELECT COUNT(*) FROM `" . KU_DBPREFIX . "posts` WHERE `boardid` = " . $boardid . " AND `parentid` = "  . $tc_db->qstr($dbentry['id']) . " AND IS_DELETED = 0");
-			$numpicreplies = $tc_db->GetOne("SELECT COUNT(*) FROM `" . KU_DBPREFIX . "posts` WHERE `boardid` = " . $boardid . " AND `parentid` = "  . $tc_db->qstr($dbentry['id']) . " AND `file_type` IN ('jpg', 'png', 'gif') AND IS_DELETED = 0");
+			$numpicreplies = $tc_db->GetOne("SELECT COUNT(*) FROM `" . KU_DBPREFIX . "posts` WHERE `boardid` = " . $boardid . " AND `parentid` = "  . $tc_db->qstr($dbentry['id']) . " AND `file_type` IN ('jpg', 'png', 'gif', 'webp') AND IS_DELETED = 0");
 			
 			$lastreplies = Array();
 			$dbdata3 = $tc_db->GetAll("SELECT * FROM `" . KU_DBPREFIX . "posts` WHERE `boardid` = " . $boardid . " AND `parentid` = " . $tc_db->qstr($dbentry['id']) . " AND IS_DELETED = 0 ORDER BY `id` DESC LIMIT " . $previewnum);

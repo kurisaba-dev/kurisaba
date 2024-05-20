@@ -1631,7 +1631,7 @@ class Manage {
 
 					$real_parentid = ($line['parentid'] == 0) ? $line['id'] : $line['parentid'];
 
-					$tpl_page .= '<tr><td><a href="'. KU_BOARDSPATH . '/'. $line['boardname'] . '/res/'. $real_parentid . '.html#'. $line['id'] . '">/'. $line['boardname'] . '/'. $line['id'] . '</td><td>'. (($line['file_type'] == 'jpg' || $line['file_type'] == 'gif' || $line['file_type'] == 'png') ? ('<a href="'. KU_WEBPATH .'/'. $line['boardname'] . '/src/'. $line['file'] . '.'. $line['file_type'] . '"><img border=0 src="'. KU_WEBPATH .'/'. $line['boardname'] . '/thumb/'. $line['file'] . 's.'. $line['file_type'] . '"></a>') : ('')) . '</td><td>'. $line['message'] . '</td><td>'. md5_decrypt($line['ip'], KU_RANDOMSEED) . '</tr>';
+					$tpl_page .= '<tr><td><a href="'. KU_BOARDSPATH . '/'. $line['boardname'] . '/res/'. $real_parentid . '.html#'. $line['id'] . '">/'. $line['boardname'] . '/'. $line['id'] . '</td><td>'. (($line['file_type'] == 'jpg' || $line['file_type'] == 'gif' || $line['file_type'] == 'webp' || $line['file_type'] == 'png') ? ('<a href="'. KU_WEBPATH .'/'. $line['boardname'] . '/src/'. $line['file'] . '.'. $line['file_type'] . '"><img border=0 src="'. KU_WEBPATH .'/'. $line['boardname'] . '/thumb/'. $line['file'] . 's.'. $line['file_type'] . '"></a>') : ('')) . '</td><td>'. $line['message'] . '</td><td>'. md5_decrypt($line['ip'], KU_RANDOMSEED) . '</tr>';
 				}
 				$tpl_page .= '</table>'. "\n";
 			} else {
@@ -2973,11 +2973,11 @@ class Manage {
 		if($file['error'] === UPLOAD_ERR_OK) {
 			$path_parts = pathinfo($file["name"]);
 			$extension = strtolower($path_parts['extension']);
-			if(in_array($extension, array('jpg', 'jpeg', 'gif', 'png'))) {
+			if(in_array($extension, array('jpg', 'jpeg', 'gif', 'png', 'webp'))) {
 				//then we check actual type
 				$size = getimagesize($file['tmp_name']);
 				if($size[0] == 300 && $size[1] == 100) {
-					if(($size[2]==IMAGETYPE_PNG && $extension == 'png') || ($size[2]==IMAGETYPE_GIF && $extension == 'gif') || ($size[2]==IMAGETYPE_JPEG && ($extension == 'jpg' || $extension == 'jpeg'))) {
+					if(($size[2]==IMAGETYPE_PNG && $extension == 'png') || ($size[2]==IMAGETYPE_WEBP && $extension == 'webp') || ($size[2]==IMAGETYPE_GIF && $extension == 'gif') || ($size[2]==IMAGETYPE_JPEG && ($extension == 'jpg' || $extension == 'jpeg'))) {
 						return array('status'=>'success', 'extension'=>'.'.$extension);
 					}
 					else return array('status'=>'error', 'msg'=>_gettext('A common cause for this is an incorrect extension when the file is actually of a different type.'));
@@ -3412,7 +3412,7 @@ class Manage {
 							$tpl_page .= 'removed';
 						} elseif ($line['file'] == '') {
 							$tpl_page .= 'none';
-						} elseif ($line['file_type'] == 'jpg' || $line['file_type'] == 'gif' || $line['file_type'] == 'png') {
+						} elseif ($line['file_type'] == 'jpg' || $line['file_type'] == 'gif' || $line['file_type'] == 'webp' || $line['file_type'] == 'png') {
 							$tpl_page .= '<a href="'. KU_BOARDSPATH . '/'. $linereport['board'] . '/src/'. $line['file'] . '.'. $line['file_type'] . '"><img src="'. KU_BOARDSPATH . '/'. $linereport['board'] . '/thumb/'. $line['file'] . 's.'. $line['file_type'] . '" border="0"></a>';
 						} else {
 							$tpl_page .= '<a href="'. KU_BOARDSPATH . '/'. $linereport['board'] . '/src/'. $line['file'] . '.'. $line['file_type'] . '">File</a>';
@@ -4059,7 +4059,7 @@ class Manage {
 		$reviewsql_array = array();
 
 		if ($imagesshown <= $_SESSION['imagesperpage']) {
-			$results = $tc_db->GetAll("SELECT HIGH_PRIORITY `" . KU_DBPREFIX . "boards`.`name` AS `boardname`, `" . KU_DBPREFIX . "posts`.`boardid` AS boardid, `" . KU_DBPREFIX . "posts`.`id` AS id, `" . KU_DBPREFIX . "posts`.`parentid` AS parentid, `" . KU_DBPREFIX . "posts`.`file` AS file, `" . KU_DBPREFIX . "posts`.`file_type` AS file_type, `" . KU_DBPREFIX . "posts`.`thumb_w` AS thumb_w, `" . KU_DBPREFIX . "posts`.`thumb_h` AS thumb_h FROM `" . KU_DBPREFIX . "posts`, `" . KU_DBPREFIX ."boards` WHERE (`file_type` = 'jpg' OR `file_type` = 'gif' OR `file_type` = 'png') AND `reviewed` = 0 AND `IS_DELETED` = 0 AND `" . KU_DBPREFIX . "boards`.`id` = `" . KU_DBPREFIX . "posts`.`boardid` ORDER BY `timestamp` DESC LIMIT " . intval($_SESSION['imagesperpage']));
+			$results = $tc_db->GetAll("SELECT HIGH_PRIORITY `" . KU_DBPREFIX . "boards`.`name` AS `boardname`, `" . KU_DBPREFIX . "posts`.`boardid` AS boardid, `" . KU_DBPREFIX . "posts`.`id` AS id, `" . KU_DBPREFIX . "posts`.`parentid` AS parentid, `" . KU_DBPREFIX . "posts`.`file` AS file, `" . KU_DBPREFIX . "posts`.`file_type` AS file_type, `" . KU_DBPREFIX . "posts`.`thumb_w` AS thumb_w, `" . KU_DBPREFIX . "posts`.`thumb_h` AS thumb_h FROM `" . KU_DBPREFIX . "posts`, `" . KU_DBPREFIX ."boards` WHERE (`file_type` = 'jpg' OR `file_type` = 'gif' OR `file_type` = 'webp' OR `file_type` = 'png') AND `reviewed` = 0 AND `IS_DELETED` = 0 AND `" . KU_DBPREFIX . "boards`.`id` = `" . KU_DBPREFIX . "posts`.`boardid` ORDER BY `timestamp` DESC LIMIT " . intval($_SESSION['imagesperpage']));
 			if (count($results) > 0) {
 				$reviewsql = "UPDATE `" . KU_DBPREFIX . "posts` SET `reviewed` = 1 WHERE ";
 				$tpl_page .= '<table border="1">'. "\n";
@@ -4302,7 +4302,7 @@ class Manage {
 				$file_md5list[] = $line['file_md5'];
 			}
 			$dir = './'. $lineboard['name'] . '/src';
-			$files = glob("$dir/{*.jpg, *.png, *.gif, *.swf}", GLOB_BRACE);
+			$files = glob("$dir/{*.jpg, *.png, *.gif, *.webp, *.swf}", GLOB_BRACE);
 			if (is_array($files)) {
 				foreach ($files as $file) {
 					if (in_array(md5_file(KU_BOARDSDIR . $lineboard['name'] . '/src/'. basename($file)), $file_md5list) == false) {

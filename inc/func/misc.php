@@ -8,6 +8,7 @@ function md5_image($file)
 	$img_tmp = false;
 	if      ($imageDim[2] == IMAGETYPE_JPEG) $img_tmp = imagecreatefromjpeg($file);
 	else if ($imageDim[2] == IMAGETYPE_PNG)  $img_tmp = imagecreatefrompng($file);
+	else if ($imageDim[2] == IMAGETYPE_WEBP) $img_tmp = imagecreatefromwebp($file);
 	else if ($imageDim[2] == IMAGETYPE_GIF)  $img_tmp = imagecreatefromgif($file);
 	if ($img_tmp !== false)
 	{
@@ -68,8 +69,13 @@ function mime_to_extension($mime_type)
 	(
 		'image/gif'  => '.gif',
 		'image/jpeg' => '.jpg',
+		'image/webp' => '.webp',
 		'image/png'  => '.png',
-		'video/webm' => '.webm'
+		'audio/mp3'  => '.mp3',
+		'audio/m4a'  => '.m4a',
+		'audio/ogg'  => '.ogg',
+		'video/webm' => '.webm',
+		'video/mp4'  => '.mp4'
 	);
 	if (array_key_exists($mime_type, $mime_types))
 	{

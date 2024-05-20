@@ -16,7 +16,7 @@
 	{/if}
 	<description><![CDATA[
 	{if $item.file neq ''}
-		{if $item.file_type eq 'jpg' || $item.file_type eq 'png' || $item.file_type eq 'gif'}
+		{if $item.file_type eq 'jpg' || $item.file_type eq 'png' || $item.file_type eq 'webp' || $item.file_type eq 'gif'}
 			<a href="{%KU_BOARDSPATH}/{$boardname}/src/{$item.file}.{$item.file_type}"><img src="{%KU_BOARDSPATH}/{$boardname}/thumb/{$item.file}s.{$item.file_type}" /></a><br /><br />
 		{else}
 			[{%KU_BOARDSPATH}/{$boardname}/src/{$item.file}.{$item.file_type}] <br /><br />

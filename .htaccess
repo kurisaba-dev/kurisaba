@@ -36,7 +36,7 @@ Header unset Vary
 <FilesMatch ".(js|css)$">
 Header set Cache-Control "max-age=2592000"
 </FilesMatch>
-<FilesMatch ".(flv|swf|ico|gif|jpg|jpeg|png|webm)$">
+<FilesMatch ".(flv|swf|ico|gif|jpg|jpeg|png|webp|m4a|mp4|mp3|webm)$">
 Header set Cache-Control "max-age=2592000"
 </FilesMatch>
 </IfModule>

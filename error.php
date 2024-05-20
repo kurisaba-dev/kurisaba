@@ -196,7 +196,7 @@ function curl_get($url, $ip_resolved) {
 	return $out;
 }
 
-if (preg_match("/^\/[a-z]+\/src\/[0-9]+\.(jpg|png)$/", $address, $matches))
+if (preg_match("/^\/[a-z]+\/src\/[0-9]+\.(jpg|png|gif|webp)$/", $address, $matches))
 {
 	$content = curl_get(KU_STORAGE_PREFIX . $address, KU_STORAGE_IP);
 	if ($content !== false) {

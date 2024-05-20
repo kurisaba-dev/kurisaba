@@ -105,13 +105,16 @@ CREATE TABLE IF NOT EXISTS `filetypes` (
 ) ENGINE=MyISAM AUTO_INCREMENT=9 DEFAULT CHARSET=utf8;
 
 INSERT INTO `filetypes` (`id`, `filetype`, `mime`, `image`, `image_w`, `image_h`, `force_thumb`) VALUES
-(1, 'jpg', '', '', 0, 0, 0),
-(2, 'gif', '', '', 0, 0, 0),
-(3, 'png', '', '', 0, 0, 0),
-(4, 'mp3', '', 'mp3.png', 36, 48, 1),
-(5, 'ogg', '', 'ogg.png', 36, 48, 1),
-(7, 'swf', 'application/x-shockwave-flash', 'flash.png', 36, 48, 1),
-(8, 'webm', 'video/webm', 'generic.png', 255, 255, 1);
+(1,  'jpg',  'image/jpeg', '', 0, 0, 0),
+(2,  'gif',  'image/gif', '', 0, 0, 0),
+(3,  'png',  'image/png', '', 0, 0, 0),
+(4,  'mp3',  'audio/mpeg', 'mp3.png', 36, 48, 1),
+(5,  'ogg',  'audio/ogg', 'ogg.png', 36, 48, 1),
+(7,  'swf',  'application/x-shockwave-flash', 'flash.png', 36, 48, 1),
+(8,  'webm', 'video/webm', 'generic.png', 255, 255, 1),
+(9,  'webp', 'image/webp', '', 0, 0, 0),
+(10, 'm4a',  'audio/m4a', 'generic.png', 36, 48, 1),
+(11, 'mp4',  'video/mp4', 'generic.png', 255, 255, 1);
 
 CREATE TABLE IF NOT EXISTS `kurisaba_ext_data` (
 `id` int(11) NOT NULL,

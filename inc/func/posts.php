@@ -106,6 +106,8 @@ function createThumbnail($name, $filename, $new_w, $new_h) {
 			$src_img=imagecreatefromjpeg($name);
 		} else if (preg_match("/png/", $system[0])) {
 			$src_img=imagecreatefrompng($name);
+		} else if (preg_match("/webp/", $system[0])) {
+			$src_img=imagecreatefromwebp($name);
 		} else if (preg_match("/gif/", $system[0])) {
 			$src_img=imagecreatefromgif($name);
 		} else {
@@ -123,6 +125,10 @@ function createThumbnail($name, $filename, $new_w, $new_h) {
 		else if ($imageinfo[2] == IMAGETYPE_GIF)
 		{
 			$src_img=imagecreatefromgif($name);
+		}
+		else if ($imageinfo[2] == IMAGETYPE_WEBP)
+		{
+			$src_img=imagecreatefromwebp($name);
 		}
 		else
 		{
@@ -160,6 +166,11 @@ echo 'unable to imagejpg.';
 		} else if ($imageinfo[2] == IMAGETYPE_GIF) {
 			if (!imagegif($dst_img, $filename)) {
 echo 'unable to imagegif.';
+				return 2;
+			}
+		} else if ($imageinfo[2] == IMAGETYPE_WEBP) {
+			if (!imagewebp($dst_img, $filename)) {
+echo 'unable to imagewebp.';
 				return 2;
 			}
 		}

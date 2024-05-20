@@ -77,7 +77,7 @@ if ($board_class->board['type'] != 1) {
 $pregen_replies_q = $tc_db->GetAll("SELECT * FROM `".KU_DBPREFIX."answers` WHERE `to_boardid` = '" . $board_class->board['id'] . "' AND `to_parentid` = ".$tc_db->qstr($_GET['threadid']));
 
 foreach ($posts as $key=>$post) {
-    if ($post['file_type'] == 'jpg' || $post['file_type'] == 'gif' || $post['file_type'] == 'png') {
+    if ($post['file_type'] == 'jpg' || $post['file_type'] == 'gif' || $post['file_type'] == 'webp' || $post['file_type'] == 'png') {
         $numimages++;
     }
 

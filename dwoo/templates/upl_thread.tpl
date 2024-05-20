@@ -10,12 +10,12 @@
 			
 			{if ($post.file neq '' || $post.file_type neq '' ) && (( $post.videobox eq '' && $post.file neq '') && $post.file neq 'removed')}
 				<span class="filesize">
-				{if $post.file_type eq 'mp3'}
+				{if $post.file_type eq 'mp3' || $post.file_type eq 'ogg' || $post.file_type eq 'm4a'}
 					{t}Audio{/t}
 				{else}
 					{t}File{/t}
 				{/if}
-				{if $post.file_type neq 'jpg' && $post.file_type neq 'gif' && $post.file_type neq 'png' && $post.videobox eq ''}
+				{if $post.file_type neq 'jpg' && $post.file_type neq 'gif' && $post.file_type neq 'webp' && $post.file_type neq 'png' && $post.videobox eq ''}
 					<a 
 					{if %KU_NEWWINDOW}
 						target="_blank" 
@@ -63,7 +63,7 @@
 				</span>
 				{if %KU_THUMBMSG}
 					<span class="thumbnailmsg"> 
-					{if $post.file_type neq 'jpg' && $post.file_type neq 'gif' && $post.file_type neq 'png' && $post.videobox eq ''}
+					{if $post.file_type neq 'jpg' && $post.file_type neq 'gif' && $post.file_type neq 'webp' && $post.file_type neq 'png' && $post.videobox eq ''}
 						{t}Extension icon displayed, click image to open file.{/t}
 					{else}
 						{t}Thumbnail displayed, click image for full size.{/t}
@@ -72,7 +72,7 @@
 				{/if}
 				<br />
 			{/if}
-			{if $post.videobox eq '' && $post.file neq '' && ( $post.file_type eq 'jpg' || $post.file_type eq 'gif' || $post.file_type eq 'png')}
+			{if $post.videobox eq '' && $post.file neq '' && ( $post.file_type eq 'jpg' || $post.file_type eq 'webp' || $post.file_type eq 'gif' || $post.file_type eq 'png')}
 				{if $post.file eq 'removed'}
 					<div class="nothumb">
 						{t}File<br />Removed{/t}
@@ -230,12 +230,12 @@
 						<span id="dnb-{$board.name}-{$post.id}-n"></span>
 						{if ($post.file neq '' || $post.file_type neq '' ) && (( $post.videobox eq '' && $post.file neq '') && $post.file neq 'removed')}
 							<br /><span class="filesize">
-							{if $post.file_type eq 'mp3'}
+							{if $post.file_type eq 'mp3' || $post.file_type eq 'ogg' || $post.file_type eq 'm4a'}
 								{t}Audio{/t}
 							{else}
 								{t}File{/t}
 							{/if}
-							{if $post.file_type neq 'jpg' && $post.file_type neq 'gif' && $post.file_type neq 'png' && $post.videobox eq ''}
+							{if $post.file_type neq 'jpg' && $post.file_type neq 'gif' && $post.file_type neq 'webp' && $post.file_type neq 'png' && $post.videobox eq ''}
 								<a 
 								{if %KU_NEWWINDOW}
 									target="_blank" 
@@ -283,7 +283,7 @@
 							</span>
 							{if %KU_THUMBMSG}
 								<span class="thumbnailmsg"> 
-								{if $post.file_type neq 'jpg' && $post.file_type neq 'gif' && $post.file_type neq 'png' && $post.videobox eq ''}
+								{if $post.file_type neq 'jpg' && $post.file_type neq 'gif' && $post.file_type neq 'webp' && $post.file_type neq 'png' && $post.videobox eq ''}
 									{t}Extension icon displayed, click image to open file.{/t}
 								{else}
 									{t}Thumbnail displayed, click image for full size.{/t}
@@ -292,7 +292,7 @@
 							{/if}
 
 						{/if}
-						{if $post.videobox eq '' && $post.file neq '' && ( $post.file_type eq 'jpg' || $post.file_type eq 'gif' || $post.file_type eq 'png')}
+						{if $post.videobox eq '' && $post.file neq '' && ( $post.file_type eq 'jpg' || $post.file_type eq 'gif' || $post.file_type eq 'png' || $post.file_type eq 'webp')}
 							<br />
 							{if $post.file eq 'removed'}
 								<div class="nothumb">
