@@ -527,7 +527,7 @@ class Upload {
 								{
 									/* Check if the MIMEs don't match up */
 									$finfo = finfo_open( FILEINFO_MIME_TYPE );
-									if (!$finfo || finfo_file($finfo, $this->file_location) != $filetype_required_mime)
+									if (!$finfo || !in_array(finfo_file($finfo, $this->file_location), explode(';', $filetype_required_mime)))
 									{
 										/* Delete the file we just uploaded and kill the script */
 										unlink($this->file_location);

@@ -2086,9 +2086,9 @@ class Manage {
 					<input type="text" name="filetype" />
 					<div class="desc">'. _gettext('The extension this will be applied to. <strong>Must be lowercase</strong>') .'</div><br />
 
-					<label for="mime">'. _gettext('MIME type') .':</label>
+					<label for="mime">'. _gettext('MIME type(s)') .':</label>
 					<input type="text" name="mime" />
-					<div class="desc">'. _gettext('The MIME type which must be present with an image uploaded in this type. Leave blank to disable.') .'</div><br />
+					<div class="desc">'. _gettext('The MIME type which must be present with an image uploaded in this type. Leave blank to disable. If many allowed, use semicolon to separate.') .'</div><br />
 
 					<label for="image">Image:</label>
 					<input type="text" name="image" value="generic.png" />
@@ -2128,9 +2128,9 @@ class Manage {
 							<input type="text" name="filetype" value="'. $line['filetype'] . '" />
 							<div class="desc">'. _gettext('The extension this will be applied to. <strong>Must be lowercase</strong>') .'</div><br />
 
-							<label for="mime">'. _gettext('MIME type') .':</label>
+							<label for="mime">'. _gettext('MIME type(s)') .':</label>
 							<input type="text" name="mime" value="'. $line['mime'] . '" />
-							<div class="desc">'. _gettext('The MIME type which must be present with an image uploaded in this type. Leave blank to disable.') .'</div><br />
+							<div class="desc">'. _gettext('The MIME type which must be present with an image uploaded in this type. Leave blank to disable. If many allowed, use semicolon to separate.') .'</div><br />
 
 							<label for="image">'. _gettext('Image') .':</label>
 							<input type="text" name="image" value="'. $line['image'] . '" />

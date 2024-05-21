@@ -1090,9 +1090,6 @@ msgstr "Mesaj prea mare Click %saici%s pentru a vedea textul complet."
 msgid "Message"
 msgstr "Mesaj"
 
-msgid "MIME type"
-msgstr "Tipul de fişier (MIME type)"
-
 msgid "Misc"
 msgstr "Altele"
 
@@ -1863,9 +1860,6 @@ msgstr "Scriptul adiţional nu a putut copia imaginea uploadată."
 
 msgid "The load balancer script was unable to create the thumbnail for that image."
 msgstr "Scriptul adiţional nu a putut redimensiona imaginea."
-
-msgid "The MIME type which must be present with an image uploaded in this type. Leave blank to disable."
-msgstr "MIME type-ul fişierului; trebuie să existe pentru a putea uploada fişierului. Poate fi lăsat gol."
 
 msgid "The name of the board."
 msgstr "Numele forumului."
