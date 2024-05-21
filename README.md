@@ -61,3 +61,5 @@ THREAD 12345 /vid/ Video Thread
 Основная лицензия проекта - GPLv2.
 
 Однако, поскольку как сама Kusaba X, так и 0chan-Kusaba в своём составе имеет много компонентов и там могут возникать проблемы с лицензиями, то для курисабы эта болезнь тоже справедлива.
+
+Иконки файлов (`inc/filetypes/*.png`) сделаны на основе [иконки](https://www.svgrepo.com/svg/480190/music-file-4) авторства Icooon Mono с лицензией public domain и шрифта [Arturito Slab](https://fonts-online.ru/fonts/arturito-slab) авторства Denis Ignatov с лицензией SIL OFL 1.1.

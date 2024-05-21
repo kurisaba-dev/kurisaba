@@ -113,7 +113,7 @@ INSERT INTO `filetypes` (`id`, `filetype`, `mime`, `image`, `image_w`, `image_h`
 (7,  'swf',  'application/x-shockwave-flash', 'flash.png', 36, 48, 1),
 (8,  'webm', 'video/webm', 'generic.png', 255, 255, 1),
 (9,  'webp', 'image/webp', '', 0, 0, 0),
-(10, 'm4a',  'audio/x-m4a', 'generic.png', 36, 48, 1),
+(10, 'm4a',  'audio/x-m4a', 'm4a.png', 36, 48, 1),
 (11, 'mp4',  'video/mp4', 'generic.png', 255, 255, 1);
 
 CREATE TABLE IF NOT EXISTS `kurisaba_ext_data` (
