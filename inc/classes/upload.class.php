@@ -339,7 +339,8 @@ class Upload {
 							$this->imgWidth = $svg->width;
 							$this->imgHeight = $svg->height;
 						} 
-						elseif($this->file_type == '.webm') {
+						elseif($this->file_type == '.webm' || $this->file_type == '.mp4' ) {
+							// I honestly have no idea what the hay is going on there. Probably a dirty hack, should remove sometimes I guess.
 							$webminfo = $pass;
 							$this->imgWidth = $webminfo['width'];
 							$this->imgHeight = $webminfo['height'];
@@ -365,7 +366,7 @@ class Upload {
 
 								$this->file_location = KU_BOARDSDIR . $board_class->board['name'] . '/' . $srcdir . '/' . $this->file_name . $this->file_type;
 
-								if($this->file_type != '.webm') {
+								if($this->file_type != '.webm' && $this->file_type != '.mp4' ) {
 									$this->file_thumb_location = KU_BOARDSDIR . $board_class->board['name'] . '/' . $thumbdir . '/' . $this->file_name . 's' . $this->file_type;
 									$this->file_thumb_cat_location = $this->file_thumb_location;
 
@@ -623,38 +624,5 @@ class Upload {
 		// Success or no embed.
 		return '';
 	}
-
-	function webmCheck($filepath) {
-		if(KU_FFMPEGPATH) putenv('PATH=' . getenv('PATH') . PATH_SEPARATOR . KU_FFMPEGPATH);
-		$finfo = shell_exec("ffmpeg -i ".$filepath." 2>&1");
-		preg_match('/Duration: (\d\d\:\d\d\:\d\d\.\d\d)/', $finfo, $duration);
-		preg_match('/(\d+)x(\d+)/', $finfo, $dimensions);
-		$hhmmss = explode(':', $duration[1]);
-		if(count($duration) == 2 && count($dimensions) == 3) return array(
-			'width' => $dimensions[1],
-			'height' => $dimensions[2],
-			'midtime' => gmdate("H:i:s", ($hhmmss[0]*3600 + $hhmmss[1]*60+ round($hhmmss[2]))/2)
-		);
-		else return false;
-	}
-
-	function webmThumb($filepath, $thumbpath, $filename, $midtime) {
-		if(KU_FFMPEGPATH) putenv('PATH=' . getenv('PATH') . PATH_SEPARATOR . KU_FFMPEGPATH);
-		$scale = "w=".KU_THUMBWIDTH.":h=".KU_THUMBHEIGHT;
-		$foar = ':force_original_aspect_ratio=decrease';
-		$rawdur = shell_exec("ffmpeg -i ".$filepath." 2>&1");
-		$common = ' -ss '.$midtime.' -vframes 1 -filter:v scale=';
-		$newfn = $thumbpath.$filename;
-		$result = shell_exec('ffmpeg -i '.$filepath.$common.$scale.$foar.' '.$newfn.'s.jpg 2>&1');
-		preg_match('/Output[\s\S]+?(\d+)x(\d+)[\s\S]+?(\d+)x(\d+)/m', $result, $ths);
-		if(count($ths) == 5) return array(
-			'thumbwidth' => $ths[1], 
-			'thumbheight' => $ths[2], 
-			'catthumbwidth' => $ths[3], 
-			'catthumbheight' => $ths[4]
-		);
-		else return false;
-	}
-
 }
 ?>

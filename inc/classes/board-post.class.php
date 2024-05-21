@@ -284,10 +284,10 @@ class Board {
 						{
 							$catalog_page .= '<img src="' . KU_BOARDSFOLDER . $this->board['name'] . '/thumb/' . $line['file'] . 's.' . $line['file_type'] . '" class="raw-thumb" alt="' . $line['id'] . '" border="0" /></a><br />';
 						}
-						else if ($line['file_type'] == 'webm')
+						else if ($line['file_type'] == 'webm' || $line['file_type'] == 'mp4')
 						{
 							$catalog_page .= '<video preload="metadata" controls="" class="raw-thumb" width="368">';
-							$catalog_page .= '<source src="' . KU_BOARDSFOLDER . $this->board['name'] . '/src/' . $line['file'] . '.' . $line['file_type'] . "\" type='video/webm; codecs=\"vp8.0, vorbis\"'>";
+							$catalog_page .= '<source src="' . KU_BOARDSFOLDER . $this->board['name'] . '/src/' . $line['file'] . '.' . $line['file_type'] . "\" type='video/" . $line['file_type'] . "'>";
 							$catalog_page .= '</video></a><br />';
 						}
 						else
