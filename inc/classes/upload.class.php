@@ -101,7 +101,7 @@ class Upload {
 							$video_id = $_POST['embed'];
 							$this->file_name = $video_id;
 
-							if ($video_id != '' && strpos($video_id, '@') == false && strpos($video_id, '&') == false) {
+							if ($video_id != '' && strpos($video_id, '@') == false && strpos($video_id, '?') == false) {
 
 								$embeds = $tc_db->GetAll("SELECT HIGH_PRIORITY * FROM `" . KU_DBPREFIX . "embeds`");
 								$worked = false;
