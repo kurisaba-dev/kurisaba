@@ -630,7 +630,7 @@ if($operation_post) // it's `noreturn`.
 				$post['password'] = $post_passwordmd5;
 				$post['timestamp'] = time() + KU_ADDTIME;
 				$post['bumped'] = time() + KU_ADDTIME;
-				$post['ip'] = md5_encrypt(KU_REMOTE_ADDR, KU_RANDOMSEED);
+				$post['ip'] = md5_encrypt(KU_SAVEIP ? KU_REMOTE_ADDR : '0.0.0.0', KU_RANDOMSEED);
 				$post['ipmd5'] = md5(KU_REMOTE_ADDR);
 				$post['posterauthority'] = $user_authority_display;
 				$post['stickied'] = $sticky;
