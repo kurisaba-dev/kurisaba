@@ -57,6 +57,14 @@
 										{if $post.id3.audio.sample_rate neq 0}
 											&nbsp;—&nbsp;
 										{/if}
+									{else}
+										{if $post.id3.comments_html.bitrate neq 0}
+											&nbsp;—&nbsp;
+											{round($post.id3.comments_html.bitrate / 1000)}&nbsp;kbps
+											{if $post.id3.audio.sample_rate neq 0}
+												&nbsp;—&nbsp;
+											{/if}
+										{/if}
 									{/if}
 									{if $post.id3.audio.sample_rate neq 0}
 										{$post.id3.audio.sample_rate / 1000} kHz
