@@ -90,7 +90,7 @@ CREATE TABLE IF NOT EXISTS `embeds` (
 ) ENGINE=MyISAM AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
 
 INSERT INTO `embeds` (`id`, `filetype`, `name`, `videourl`, `width`, `height`, `code`) VALUES
-(1, 'you', 'Youtube', 'http://www.youtube.com/watch?v=', 255, 255, '<div class="thumb youtube embed wrapper" style="margin: 0px 20px 0px 0px; background-image:url(https://i.ytimg.com/vi/EMBED_ID/0.jpg)" data-id="EMBED_ID" data-site="youtube" ONCLICK></div>'),
+(1, 'you', 'Youtube', 'http://www.youtube.com/watch?v=', 255, 255, '<div class="thumb youtube embed wrapper" style="margin: 0px 20px 0px 0px; background-image:url(https://i.ytimg.com/vi/EMBED_ID_SHORT/0.jpg)" data-id="EMBED_ID" data-site="youtube" ONCLICK></div>'),
 (2, 'vim', 'Vimeo', 'http://vimeo.com/', 200, 164, '<div class="thumb vimeo embed wrapper" style="margin: 0px;" data-id="EMBED_ID" data-site="vimeo" ONCLICK></div>'),
 (3, 'cob', 'Coub', 'http://coub.com/view/', 200, 164, '<div class="thumb coub embed wrapper" style="margin: 0px;" data-id="EMBED_ID" data-site="coub" ONCLICK></div>');
 

@@ -20,8 +20,8 @@ function embeddedVideoBox($post, $nospan = false) {
 			//$width = $line['width'];
 			//$height = $line['height'];
 			$onclick = ($post['id'] == '?????')? 'onclick="skip_close_preview = 2;"' : '';
-			$replace = array('SET_HEIGHT', 'SET_WIDTH', 'EMBED_ID', 'ONCLICK');
-			$trueval = array($line['height'], $line['width'], $post['file'], $onclick);
+			$replace = array('SET_HEIGHT', 'SET_WIDTH', 'EMBED_ID', 'EMBED_ID_SHORT' 'ONCLICK');
+			$trueval = array($line['height'], $line['width'], $post['file'], preg_replace('#&.*#','',$post['file']), $onclick);
 
 			$code = str_replace($replace, $trueval, $code);
 			$output .= $code;
