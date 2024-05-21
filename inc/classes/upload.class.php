@@ -454,13 +454,9 @@ class Upload {
 
 									$getID3 = new getID3;
 									$getID3->analyze($file['tmp_name']);
-									if (isset($getID3->info['id3v2']['APIC'][0]['data']) && isset($getID3->info['id3v2']['APIC'][0]['image_mime'])) {
-										$source_data = $getID3->info['id3v2']['APIC'][0]['data'];
-										$mime = $getID3->info['id3v2']['APIC'][0]['image_mime'];
-									}
-									elseif (isset($getID3->info['id3v2']['PIC'][0]['data']) && isset($getID3->info['id3v2']['PIC'][0]['image_mime'])) {
-										$source_data = $getID3->info['id3v2']['PIC'][0]['data'];
-										$mime = $getID3->info['id3v2']['PIC'][0]['image_mime'];
+									if (isset($getID3->info['comments']['picture'][0]['data']) && isset($getID3->info['comments']['picture'][0]['image_mime'])) {
+										$source_data = $getID3->info['comments']['picture'][0]['data'];
+										$mime = $getID3->info['comments']['picture'][0]['image_mime'];
 									}
 
 									if($source_data) {

@@ -498,7 +498,7 @@ class Board {
 		if (isset($this->board['filetypes']) && in_array($post['file_type'], $this->board['filetypes'])) {
 			$post['videobox'] = embeddedVideoBox($post);
 		}
-		if ($post['file_type'] == 'mp3') {
+		if ($post['file_type'] == 'mp3' || $post['file_type'] == 'ogg' || $post['file_type'] == 'mp4' || $post['file_type'] == 'webm' || $post['file_type'] == 'm4a') {
 			//Grab the ID3 info.
 			// include getID3() library
 
@@ -508,7 +508,7 @@ class Board {
 			$getID3 = new getID3;
 			$getID3->encoding_id3v1 = KU_ID3_ENCODING;
 
-			$post['id3'] = $getID3->analyze(KU_BOARDSDIR.$this->board['name'].'/' . $srcdir . '/'.$post['file'].'.mp3');
+			$post['id3'] = $getID3->analyze(KU_BOARDSDIR.$this->board['name'].'/' . $srcdir . '/' . $post['file'] . '.' . $post['file_type']);
 			getid3_lib::CopyTagsToComments($post['id3']);
 		}
 		if ($post['file_type']!='jpg'&&$post['file_type']!='gif'&&$post['file_type']!='webp'&&$post['file_type']!='png'&&$post['file_type']!=''&&!in_array($post['file_type'], $this->board['filetypes'])) {
