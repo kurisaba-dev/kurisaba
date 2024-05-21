@@ -50,25 +50,13 @@
 							&nbsp;—&nbsp;
 							(
 								{$post.file_size_formatted}
-								{if $post.id3.comments_html.bitrate neq 0 || $post.id3.audio.sample_rate neq 0}
-									{if $post.id3.audio.bitrate neq 0}
-										&nbsp;—&nbsp;
-										{round($post.id3.audio.bitrate / 1000)}&nbsp;kbps
-										{if $post.id3.audio.sample_rate neq 0}
-											&nbsp;—&nbsp;
-										{/if}
-									{else}
-										{if $post.id3.comments_html.bitrate neq 0}
-											&nbsp;—&nbsp;
-											{round($post.id3.comments_html.bitrate / 1000)}&nbsp;kbps
-											{if $post.id3.audio.sample_rate neq 0}
-												&nbsp;—&nbsp;
-											{/if}
-										{/if}
-									{/if}
-									{if $post.id3.audio.sample_rate neq 0}
-										{$post.id3.audio.sample_rate / 1000} kHz
-									{/if}
+								{if $post.id3.audio.bitrate neq 0}
+									&nbsp;—&nbsp;
+									{round($post.id3.audio.bitrate / 1000)}&nbsp;kbps
+								{/if}
+								{if $post.id3.audio.sample_rate neq 0}
+									&nbsp;—&nbsp;
+									{$post.id3.audio.sample_rate / 1000} kHz
 								{/if}
 								{if $post.image_w > 0 && $post.image_h > 0}
 									, {$post.image_w}x{$post.image_h}
