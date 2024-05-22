@@ -97,7 +97,7 @@ class Upload {
 					{
 						if ($_POST['embed'] != '')
 						{
-							$_POST['embed'] = strip_tags(substr($_POST['embed'], 0, 20));
+							$_POST['embed'] = strip_tags($_POST['embed']);
 							$video_id = $_POST['embed'];
 							$this->file_name = $video_id;
 
