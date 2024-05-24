@@ -56,7 +56,7 @@ foreach ($results as $key=>$post)
 	elseif ($post['parent_subject'] !== null)
 		if ($post['parent_subject'] != "")
 			$extname = $post['parent_subject'];
-	$post['externalreference'] = '[<a href="' . $post['file_path'] . '/res/' . $thread . '.html">'. $extname .'</a>]';
+	$post['externalreference'] = '[<a href="' . $post['file_path'] . '/res/' . $thread . '.html#' . $post['id'] . '">'. $extname .'</a>]';
 
 	$results[$key] = $post_board_class->BuildPost($post, false, false, false, true);
 }

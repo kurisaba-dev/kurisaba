@@ -308,7 +308,7 @@ if ($board_class->board['type'] == 1) {
 				$parent_subject = $tc_db->GetOne("SELECT `subject` FROM `" . KU_DBPREFIX . "posts` WHERE `boardid` = " . $board_class->board['id'] ." AND `IS_DELETED` = 0 AND `id` = " . $tc_db->qstr($post['parentid']));
 				if ($parent_subject != "") $extname = $parent_subject;
 			}
-			$post['externalreference'] = '[<a href="' . KU_WEBPATH . '/' . $board . '/res/' . $thread . '.html">'. $extname .'</a>]';
+			$post['externalreference'] = '[<a href="' . KU_WEBPATH . '/' . $board . '/res/' . $thread . '.html#' . $post['id'] . '">'. $extname .'</a>]';
 			$results[$key] = $board_class->BuildPost($post, false, false, false, true);
 		}
 		else
