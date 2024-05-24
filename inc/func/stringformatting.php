@@ -88,7 +88,7 @@ function formatReflink($post_board, $post_thread_start_id, $post_id, $locale = '
 
 	$reflink_noquote = '<a href="' . KU_BOARDSFOLDER . $post_board . '/res/' . $post_thread_start_id . '.html#' . $post_id . '" class="shl">';
 
-	$reflink_quote = '<a href="' . KU_BOARDSFOLDER . $post_board . '/res/' . $post_thread_start_id . '.html#i' . $post_id . '" onclick="return insert_postnum(\'' . $post_id . '\');">';
+	$reflink_quote = '<a href="' . KU_BOARDSFOLDER . $post_board . '/res/' . $post_thread_start_id . '.html#i' . $post_id . '" class="qr-num qrf" data-parent="' . $post_thread_start_id . '" data-postnum="' . $post_id . '">';
 
 	if ($locale == 'ja') {
 		$return .= $reflink_quote . $board . formatJapaneseNumbers($post_id) . '</a>' . $reflink_noquote . '番</a>';

@@ -82,7 +82,7 @@
 	{if $post.id != '?????'}
 		{if %KU_QUICKREPLY}
 			{strip}
-				<a href="#" data-parent="{if $post.parentid eq 0}{$post.id}{else}{$post.parentid}{/if}" data-forceexternalboard="{if $forceexternalboard}yes{else}no{/if}" data-boardname="{$board.name}" data-maxfilesize="{$board.maximagesize}" data-postnum="{$post.id}" class="qrl" title="{t}Quick Reply{/t}{if not $is_board_page}  в тред {if $post.parentid eq 0}{$post.id}{else}{$post.parentid}{/if}{/if}">
+				<a href="#" data-parent="{if $post.parentid eq 0}{$post.id}{else}{$post.parentid}{/if}" data-forceexternalboard="{if $forceexternalboard}yes{else}no{/if}" data-boardname="{$board.name}" data-maxfilesize="{$board.maximagesize}" data-postnum="{$post.id}" class="qr-btn qrl" title="{t}Quick Reply{/t}{if not $is_board_page}  в тред {if $post.parentid eq 0}{$post.id}{else}{$post.parentid}{/if}{/if}">
 					<img src="{$cwebpath}css/icons/blank.gif" border="0" class="quickreply spritebtn" alt="quickreply">
 				</a>
 				<a href="#" data-parent="{if $post.parentid eq 0}{$post.id}{else}{$post.parentid}{/if}" data-forceexternalboard="{if $forceexternalboard}yes{else}no{/if}" data-boardname="{$board.name}" data-maxfilesize="{$board.maximagesize}" data-postnum="{$post.id}" class="qed" style="margin-left: 4px;" title="Переотправить пост {$post.id}">
