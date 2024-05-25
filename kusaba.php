@@ -71,11 +71,14 @@ if (isset($_GET['info'])) {
 }
 ?>
 <body>
+	<table style="width: 100%; height: 100%; border-collapse: collapse;"><tr><td style="width: 15%; min-width: 240px; padding: 0px;">
 	<iframe src="<?php echo $menufile; ?>" name="menu" id="menu">
 		<a href="<?php echo KU_WEBPATH . '/' . $menufile; ?>"><?php echo KU_NAME; ?></a>
 	</iframe>
+	</td><td style="padding: 0px;">
 	<iframe src="/<?php echo KU_DEFAULTBOARD;?>/" name="main" id="main">
 		<a href="<?php echo KU_WEBPATH;?>/<?php echo KU_DEFAULTBOARD;?>/"><?php echo KU_NAME; ?><?php echo KU_DEFAULTBOARD;?></a>
 	</iframe>
+	</td></tr></table>
 </body>
 </html>

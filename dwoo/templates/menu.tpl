@@ -119,7 +119,7 @@ function iter_obj(object, callback) {
 //--></script>
 <base target="main" />
 </head>
-<body style="overflow: auto;">
+<body style="overflow: auto; padding: 8px; margin: 0px; width: unset;">
 <h1><a href="{%KU_WEBFOLDER}" target="_top" title="{t}Front Page{/t}">{%KU_NAME}</a></h1>
 <ul>
 {if $faq_enabled}
