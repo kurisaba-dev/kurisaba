@@ -62,7 +62,7 @@ if (isset($_GET['info'])) {
 	die();
 }
 ?>
-<body>
+<body style="overflow: hidden;">
 	<table style="width: 100%; height: 100%; border-collapse: collapse;"><tr><td style="width: 15%; min-width: 240px; padding: 0px;">
 	<iframe src="<?php echo $menufile; ?>" name="menu" id="menu">
 		<a href="<?php echo KU_WEBPATH . '/' . $menufile; ?>"><?php echo KU_NAME; ?></a>
