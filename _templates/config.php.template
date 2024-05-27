@@ -5,9 +5,9 @@ function from_human_readable($val)
     $ret = 0;
     switch (substr ($val, -1))
     {
-        case 'K': case 'k': $ret = (int)$val * 1024;
-        case 'M': case 'm': $ret = (int)$val * 1048576;
-        case 'G': case 'g': $ret = (int)$val * 1073741824;
+        case 'K': case 'k': $ret = (int)$val * 1024; break;
+        case 'M': case 'm': $ret = (int)$val * 1048576; break;
+        case 'G': case 'g': $ret = (int)$val * 1073741824; break;
         default: $ret = (int)$val;
     }
     return $ret;
