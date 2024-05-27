@@ -1,5 +1,18 @@
 <?php
 
+$mlv = ini_get("memory_limit");
+switch (substr ($size_str, -1))
+{
+    case 'K': case 'k': $ml = (int)$mlv * 1024; break;
+    case 'M': case 'm': $ml = (int)$mlv * 1048576; break;
+    case 'G': case 'g': $ml = (int)$mlv * 1073741824; break;
+    default: $ml = (int)$mlv;
+}
+if($ml < 134217728)
+{
+    ini_set("memory_limit", "128M");
+}
+
 mb_internal_encoding("UTF-8");
 // Sets error reporting to hide notices.
 error_reporting(E_ALL ^ E_NOTICE);
@@ -103,7 +116,7 @@ if (!$cache_loaded) {
 	// Пути. Скорее всего менять не потребуется.
 		$cf['KU_ROOTDIR']           = realpath(dirname(__FILE__))."/";      // Путь в файловой системе, где лежит движок борды, с завершающим '/'.
 		$cf['KU_WEBFOLDER']         = '/';                                  // Путь в URL до движка борды, с завершающим '/'. К примеру, для "http://www.yoursite.com/misc/kusaba/" это должно быть "/misc/kusaba/".
-		$cf['KU_PROTO']             = 'https://'                            // Протокол - http или https (с двумя завершающими слэшами).
+		$cf['KU_PROTO']             = 'https://';                           // Протокол - http или https (с двумя завершающими слэшами).
 		$cf['KU_TEMPLATEDIR']       = $cf['KU_ROOTDIR'] . 'dwoo/templates'; // Путь к шаблонам для dwoo
 		$cf['KU_CACHEDTEMPLATEDIR'] = $cf['KU_ROOTDIR'] . 'tmp/dwoo';       // Путь, куда dwoo кладёт скомпилированные шаблоны ('' отключает кэширование шаблонов).
 
