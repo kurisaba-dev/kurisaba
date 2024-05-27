@@ -2500,6 +2500,12 @@ class Manage {
 					<input type="text" name="maximagesize" value="'.$lineboard['maximagesize'].'" />
 					<div class="desc">'. _gettext('Maxmimum size of uploaded images, in <strong>bytes</strong>.') . ' '. _gettext('Default') .': <strong>1024000</strong></div><br />';
 
+					$imagesize = from_human_readable(ini_get("upload_max_filesize"));
+					if ($imagesize < $lineboard['maximagesize'])
+						$tpl_page .= '<div class="desc" style="color: red">'. _gettext("Value is greater than upload_max_filesize in php.ini: ") . $imagesize . '</div><br />';
+					else
+						$tpl_page .= '<div class="desc">'. _gettext("Should not be greater than upload_max_filesize in php.ini: ") . $imagesize . '</div><br />';
+
 					/* Maximum message length */
 					$tpl_page .= '<label for="messagelength">'. _gettext('Maximum message length') .':</label>
 					<input type="text" name="messagelength" value="'.$lineboard['messagelength'].'" />
