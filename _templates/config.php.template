@@ -211,7 +211,7 @@ if (!$cache_loaded) {
 		if ($cf['KU_APC']) {
 			apc_define_constants('config', $cf);
 		}
-		while (list($key, $value) = each($cf)) {
+		foreach ($cf as $key => $value) {
 			define($key, $value);
 		}
 		unset($cf);
@@ -278,12 +278,12 @@ function stripslashes_deep($value)
 } 
 
 // Thanks Z
-if (get_magic_quotes_gpc()) {
+if (version_compare(PHP_VERSION, '7.4.0', '<') && get_magic_quotes_gpc()) {
 	$_POST = array_map('stripslashes_deep', $_POST);
 	$_GET = array_map('stripslashes_deep', $_GET);
 	$_COOKIE = array_map('stripslashes_deep', $_COOKIE);
 }
-if (get_magic_quotes_runtime()) {
+if (version_compare(PHP_VERSION, '5.4.0', '<') && get_magic_quotes_runtime()) {
 	set_magic_quotes_runtime(0);
 }
 
