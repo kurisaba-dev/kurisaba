@@ -588,8 +588,8 @@ if($operation_post) // it's `noreturn`.
 			$post['subject'] = mb_substr($post_subject, 0, KU_MAXSUBJLENGTH);
 			$post['message'] = $post_message;
 			$post['message_source'] = $_POST['message'];
-			$post['pic_spoiler'] = $_POST['picspoiler'];
-			$post['pic_animated'] = $upload_class->animated;
+			$post['pic_spoiler'] = intval($_POST['picspoiler']);
+			$post['pic_animated'] = intval($upload_class->animated);
 
 			$post = hook_process('posting', $post);
 
@@ -702,6 +702,10 @@ if($operation_post) // it's `noreturn`.
 			$post['subject'] = preg_replace($patterns, $replaces, $post['subject']);
 
 			$post_id = $post_class->Insert($thread_replyto, $post['name'], $post['tripcode'], $post['email'], $post['subject'], addslashes($post['message']), $post['message_source'], $upload_class->file_name, $upload_class->original_file_name, $filetype_withoutdot, $upload_class->file_md5, $upload_class->image_md5, $upload_class->imgWidth, $upload_class->imgHeight, $upload_class->file_size, $upload_class->imgWidth_thumb, $upload_class->imgHeight_thumb, $post_passwordmd5, time() + KU_ADDTIME, time() + KU_ADDTIME, KU_SAVEIP ? KU_REMOTE_ADDR : '0.0.0.0', $user_authority_display, $sticky, $lock, $board_class->board['id'], $post['country'], $post['pic_spoiler'], $post['pic_animated']);
+			if (!$post_id)
+			{
+				kurisaba_exit('Не получилось добавить пост в базу.');
+			}
 			if ($post_id == -1)
 			{
 				// Don't leave orphan files

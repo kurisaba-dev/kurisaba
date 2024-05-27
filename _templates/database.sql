@@ -174,7 +174,7 @@ CREATE TABLE IF NOT EXISTS `posts` (
   `thumb_h` smallint(5) unsigned NOT NULL DEFAULT '0',
   `ip` varchar(75) COLLATE utf8mb4_unicode_ci NOT NULL,
   `ipmd5` char(32) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `tag` varchar(5) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `tag` varchar(5) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
   `timestamp` int(20) unsigned NOT NULL,
   `stickied` tinyint(1) NOT NULL DEFAULT '0',
   `locked` tinyint(1) NOT NULL DEFAULT '0',
