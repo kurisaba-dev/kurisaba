@@ -1,17 +1,18 @@
 <?php
 
-$mlv = ini_get("memory_limit");
-switch (substr ($mlv, -1))
+function from_human_readable($val)
 {
-    case 'K': case 'k': $ml = (int)$mlv * 1024; break;
-    case 'M': case 'm': $ml = (int)$mlv * 1048576; break;
-    case 'G': case 'g': $ml = (int)$mlv * 1073741824; break;
-    default: $ml = (int)$mlv;
+    $ret = 0;
+    switch (substr ($val, -1))
+    {
+        case 'K': case 'k': $ret = (int)$val * 1024;
+        case 'M': case 'm': $ret = (int)$val * 1048576;
+        case 'G': case 'g': $ret = (int)$val * 1073741824;
+        default: $ret = (int)$val;
+    }
+    return $ret;
 }
-if($ml < 134217728)
-{
-    ini_set("memory_limit", "128M");
-}
+if(from_human_readable(ini_get("memory_limit")) < 134217728) ini_set("memory_limit", "128M");
 
 mb_internal_encoding("UTF-8");
 // Sets error reporting to hide notices.
