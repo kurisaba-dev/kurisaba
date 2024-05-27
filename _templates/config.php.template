@@ -1,7 +1,7 @@
 <?php
 
 $mlv = ini_get("memory_limit");
-switch (substr ($size_str, -1))
+switch (substr ($mlv, -1))
 {
     case 'K': case 'k': $ml = (int)$mlv * 1024; break;
     case 'M': case 'm': $ml = (int)$mlv * 1048576; break;
