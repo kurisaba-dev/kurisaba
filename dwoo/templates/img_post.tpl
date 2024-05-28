@@ -143,8 +143,8 @@
 						</div>
 					{else}
 						{if $post.file_type eq 'webm' or $post.file_type eq 'mp4'}
-						<a href="fkdc" onclick="return false;" class="workaround">
-							<video id="thumblink{$post.id}" preload="metadata" controls="" width="480" class="thumb" {if $post.id == '?????'}onclick="skip_close_preview = 2;"{/if}>
+						<a href="{if $file_path}{$file_path}{else}{$post.file_path}{/if}/{if $istempfile}tmp{else}src{/if}/{$post.file}.{$post.file_type}" onclick="return false;" class="workaround">
+							<video id="thumblink{$post.id}" preload="metadata" controls="" width="480" style="max-height: 360px;" class="thumb" {if $post.id == '?????'}onclick="skip_close_preview = 2;"{/if}>
 									<source src="{if $file_path}{$file_path}{else}{$post.file_path}{/if}/{if $istempfile}tmp{else}src{/if}/{$post.file}.{$post.file_type}" type='video/{$post.file_type}'>
 							</video>
 						</a>
