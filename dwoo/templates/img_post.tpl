@@ -8,7 +8,7 @@
 				</td>
 			{/if}
 
-			<td {if $post.parentid eq 0}class="postnode op"{else}class="reply"{/if} id="reply{$post.id}">
+			<td {if $post.parentid eq 0}class="postnode op"{else}class="reply reply_parent{$post.parentid}"{/if} id="reply{$post.id}">
 				{if $post.parentid eq 0}<a name="s{$.foreach.thread.iteration}"></a>{/if}
 				{if $post.parentid neq 0}{include file="img_post_info.tpl"}{/if}
 				{if ($post.file neq '' || $post.file_type neq '' ) && (($post.videobox eq '' && $post.file neq '') && $post.file neq 'removed')}
