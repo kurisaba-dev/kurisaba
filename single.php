@@ -26,6 +26,7 @@ $noboardlist = false;
 $hide_extra = false;
 $replies = false;
 $board_class->InitializeDwoo();
+$board_class->dwoo_data->assign('isfeed', true);
 $board_class->dwoo_data->assign('issearch', true);
 $board_class->dwoo_data->assign('isread', true);
 $board_class->dwoo_data->assign('skipheader', true);
