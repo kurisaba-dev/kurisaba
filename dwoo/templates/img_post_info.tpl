@@ -1,4 +1,4 @@
-<a name="{$post.id}"></a>
+<a name="{$post.id}"></a><span class="span_parent_id">{$post.parentid}</span>
 <label>
 	<input class="stchkbox" type="checkbox" name="post[]" value="{$post.id}" />
 	<span></span>
