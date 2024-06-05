@@ -532,7 +532,7 @@ class Upload {
 									{
 										/* Delete the file we just uploaded and kill the script */
 										unlink($this->file_location);
-										return _gettext('Invalid MIME type for this filetype.') + ' Given: ' . $given_mime . ', required: ' . $filetype_required_mime;
+										return _gettext('Invalid MIME type for this filetype.') . ' Given: ' . $given_mime . ', required: ' . $filetype_required_mime;
 									}
 									if ($finfo) finfo_close($finfo);
 								}
