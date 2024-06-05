@@ -115,7 +115,7 @@ INSERT INTO `filetypes` (`id`, `filetype`, `mime`, `image`, `image_w`, `image_h`
 (9,  'webp', 'image/webp', '', 0, 0, 0),
 (10, 'm4a',  'audio/x-m4a;audio/x-hx-aac-adts', 'm4a.png', 36, 48, 1),
 (11, 'mp4',  'video/mp4', 'generic.png', 255, 255, 1),
-(12, 'm4v',  'video/m4v', 'generic.png', 255, 255, 1);
+(12, 'm4v',  'video/x-m4v', 'generic.png', 255, 255, 1);
 
 CREATE TABLE IF NOT EXISTS `kurisaba_ext_data` (
 `id` int(11) NOT NULL,
