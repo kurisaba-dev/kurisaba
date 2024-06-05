@@ -178,7 +178,7 @@ function scrolling(elem, direction) {
 		{if %KU_MAINPAGE ne 'kusaba.php'}
 			[<a href="{%KU_WEBPATH}/kusaba.php" target="_top">{t}Фрейм{/t}</a>]
 		{/if}
-		[<a href="{%KU_WEBPATH}/single.php">Однопоток</a>]
+		[<a href="{%KU_WEBPATH}/single.php" class="feedlink">Однопоток</a>]
 		{if $faq_enabled}
 			[<a href="{%KU_WEBPATH}/faq/">FAQ</a>]
 		{/if}

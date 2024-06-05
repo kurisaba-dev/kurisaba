@@ -143,7 +143,7 @@ function iter_obj(object, callback) {
 	<li id="removeframes"><a href="#" onclick="removeframes(); return false;" target="_self">[{t}Remove Frames{/t}]</a></li>
 {/if *}
 <li id="refreshnewposts"><a href="#" onclick="updatenewpostscount(); return false;" target="_self">Обновить</a></li>
-<li><a href="{%KU_BOARDSPATH}/single.php" class="boardlink">[ Однопоток постов ]</a></li>
+<li><a href="{%KU_BOARDSPATH}/single.php" class="boardlink feedlink">[ Однопоток постов ]</a></li>
 </ul>
 {if empty($boards)}
 	<ul>
