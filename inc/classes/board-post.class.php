@@ -284,7 +284,7 @@ class Board {
 						{
 							$catalog_page .= '<img src="' . KU_BOARDSFOLDER . $this->board['name'] . '/thumb/' . $line['file'] . 's.' . $line['file_type'] . '" class="raw-thumb" alt="' . $line['id'] . '" border="0" /></a><br />';
 						}
-						else if ($line['file_type'] == 'webm' || $line['file_type'] == 'mp4')
+						else if ($line['file_type'] == 'webm' || $line['file_type'] == 'mp4' || $line['file_type'] == 'm4v')
 						{
 							$catalog_page .= '<video preload="metadata" controls="" class="raw-thumb" width="368">';
 							$catalog_page .= '<source src="' . KU_BOARDSFOLDER . $this->board['name'] . '/src/' . $line['file'] . '.' . $line['file_type'] . "\" type='video/" . $line['file_type'] . "'>";
@@ -498,7 +498,7 @@ class Board {
 		if (isset($this->board['filetypes']) && in_array($post['file_type'], $this->board['filetypes'])) {
 			$post['videobox'] = embeddedVideoBox($post);
 		}
-		if ($post['file_type'] == 'mp3' || $post['file_type'] == 'ogg' || $post['file_type'] == 'mp4' || $post['file_type'] == 'webm' || $post['file_type'] == 'm4a') {
+		if ($post['file_type'] == 'mp3' || $post['file_type'] == 'ogg' || $post['file_type'] == 'mp4' || $post['file_type'] == 'm4v' || $post['file_type'] == 'webm' || $post['file_type'] == 'm4a') {
 			//Grab the ID3 info.
 			// include getID3() library
 

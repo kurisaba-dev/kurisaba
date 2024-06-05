@@ -40,7 +40,7 @@
 									{$post.file_original}.{$post.file_type}
 								{/if}
 							{else}
-								{if $post.file_type eq 'webm' or $post.file_type eq 'mp3' or $post.file_type eq 'ogg' or $post.file_type eq 'm4a' or $post.file_type eq 'mp4'}
+								{if $post.file_type eq 'webm' or $post.file_type eq 'mp3' or $post.file_type eq 'ogg' or $post.file_type eq 'm4a' or $post.file_type eq 'mp4' or $post.file_type eq 'm4v'}
 									{$post.file_original}.{$post.file_type}
 								{else}
 									{$post.file}.{$post.file_type}
@@ -142,7 +142,7 @@
 							{t}File<br />Removed{/t}
 						</div>
 					{else}
-						{if $post.file_type eq 'webm' or $post.file_type eq 'mp4'}
+						{if $post.file_type eq 'webm' or $post.file_type eq 'mp4' or $post.file_type eq 'm4v'}
 						<a href="{if $file_path}{$file_path}{else}{$post.file_path}{/if}/{if $istempfile}tmp{else}src{/if}/{$post.file}.{$post.file_type}" onclick="return false;" class="workaround">
 							<video id="thumblink{$post.id}" preload="metadata" controls="" width="480" style="max-height: 360px;" class="thumb" {if $post.id == '?????'}onclick="skip_close_preview = 2;"{/if}>
 									<source src="{if $file_path}{$file_path}{else}{$post.file_path}{/if}/{if $istempfile}tmp{else}src{/if}/{$post.file}.{$post.file_type}" type='video/{$post.file_type}'>

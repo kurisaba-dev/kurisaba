@@ -75,7 +75,8 @@ function mime_to_extension($mime_type)
 		'audio/x-m4a'  => '.m4a',
 		'audio/ogg'  => '.ogg',
 		'video/webm' => '.webm',
-		'video/mp4'  => '.mp4'
+		'video/mp4'  => '.mp4',
+		'video/m4v'  => '.m4v'
 	);
 	if (array_key_exists($mime_type, $mime_types))
 	{

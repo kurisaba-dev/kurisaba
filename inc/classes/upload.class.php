@@ -339,7 +339,7 @@ class Upload {
 							$this->imgWidth = $svg->width;
 							$this->imgHeight = $svg->height;
 						} 
-						elseif($this->file_type == '.webm' || $this->file_type == '.mp4' ) {
+						elseif($this->file_type == '.webm' || $this->file_type == '.mp4' || $this->file_type == '.m4v') {
 							// I honestly have no idea what the hay is going on there. Probably a dirty hack, should remove sometimes I guess.
 							$webminfo = $pass;
 							$this->imgWidth = $webminfo['width'];
@@ -366,7 +366,7 @@ class Upload {
 
 								$this->file_location = KU_BOARDSDIR . $board_class->board['name'] . '/' . $srcdir . '/' . $this->file_name . $this->file_type;
 
-								if($this->file_type != '.webm' && $this->file_type != '.mp4' ) {
+								if($this->file_type != '.webm' && $this->file_type != '.mp4' && $this->file_type != '.m4v') {
 									$this->file_thumb_location = KU_BOARDSDIR . $board_class->board['name'] . '/' . $thumbdir . '/' . $this->file_name . 's' . $this->file_type;
 									$this->file_thumb_cat_location = $this->file_thumb_location;
 
