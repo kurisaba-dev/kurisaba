@@ -68,6 +68,7 @@ CREATE TABLE IF NOT EXISTS `boards` (
   `enablecaptcha` tinyint(1) NOT NULL DEFAULT '1',
   `enablenofile` tinyint(1) NOT NULL DEFAULT '0',
   `enablecatalog` tinyint(1) NOT NULL DEFAULT '1',
+  `enablefeed` tinyint(1) NOT NULL DEFAULT '1',
   `balls` tinyint(1) NOT NULL DEFAULT '0',
   `dice` tinyint(1) NOT NULL DEFAULT '0',
   `useragent` tinyint(1) NOT NULL DEFAULT '0',
