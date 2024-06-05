@@ -531,7 +531,7 @@ class Upload {
 									{
 										/* Delete the file we just uploaded and kill the script */
 										unlink($this->file_location);
-										return _gettext('Invalid MIME type for this filetype.');
+										return _gettext('Invalid MIME type for this filetype.') + ' Given: ' . finfo_file($finfo, $this->file_location) . ', required: ' . $filetype_required_mime;
 									}
 									if ($finfo) finfo_close($finfo);
 								}
