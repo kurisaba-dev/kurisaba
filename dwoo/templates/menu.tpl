@@ -94,7 +94,7 @@ function showdirs() {
 function updatenewpostscount() {
 	if (!localStorage['lastvisits']) return;
     $.ajax({
-        url: '/api.php?id=0&method=get_new_posts_count&params={"timestamps":'+localStorage['lastvisits']+'}',
+        url: '/api.php?id=0&method=get_new_posts_count&params={"skipwrongboards":true,"timestamps":'+localStorage['lastvisits']+'}',
         success: function(data) {
             iter_obj(data.result, function(brd, val) {
             	if(val != 0 || $('#newposts_'+brd).text() !== '') {
@@ -104,7 +104,7 @@ function updatenewpostscount() {
             });
         },
         error: function() {
-            alert(_.oops);
+            alert(_.oops + ' Невозможно получить список новых постов!');
         }
     });
 }
