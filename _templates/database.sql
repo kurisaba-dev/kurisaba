@@ -72,7 +72,7 @@ CREATE TABLE IF NOT EXISTS `boards` (
   `balls` tinyint(1) NOT NULL DEFAULT '0',
   `dice` tinyint(1) NOT NULL DEFAULT '0',
   `useragent` tinyint(1) NOT NULL DEFAULT '0',
-  `hiddenthreads` text COLLATE utf8_unicode_ci NOT NULL
+  `hiddenthreads` text COLLATE utf8_unicode_ci NOT NULL DEFAULT ''
 ) ENGINE=MyISAM AUTO_INCREMENT=52 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 CREATE TABLE IF NOT EXISTS `board_filetypes` (
