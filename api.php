@@ -372,8 +372,14 @@ $api_function = Array
 			if(!is_numeric($timestamp)) json_exit(400, "get_new_posts_count(): Timestamp(s) are not numeric", $request_id);
 			
 			$board = $tc_db->GetOne('SELECT `name` FROM `' . KU_DBPREFIX . 'boards` WHERE `id` = ' . $boardid);
-			if(empty($board)) json_exit(400, "get_new_posts_count(): Board ID(s) are not valid", $request_id);
-			$result[$board] = $tc_db->GetOne('SELECT COUNT(1) FROM `posts` WHERE `boardid` = '.$boardid.' AND`timestamp` > '.$timestamp);
+			if(empty($board))
+			{
+				if(!$skipwrongboards) json_exit(400, "get_new_posts_count(): Board ID(s) are not valid", $request_id);
+			}
+			else
+			{
+				$result[$board] = $tc_db->GetOne('SELECT COUNT(1) FROM `posts` WHERE `boardid` = '.$boardid.' AND`timestamp` > '.$timestamp);
+			}
 		}
 		
 		return $result;
