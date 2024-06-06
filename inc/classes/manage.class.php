@@ -1030,15 +1030,28 @@ class Manage {
 						if ($_POST['firstpostid'] < 1) {
 							$_POST['firstpostid'] = 1;
 						}
-						$tc_db->Execute("INSERT INTO `" . KU_DBPREFIX . "boards` ( `name` , `desc` , `createdon`, `start`, `image`, `includeheader` ) VALUES ( " . $tc_db->qstr($dir) . " , " . $tc_db->qstr($desc) . " , '" . (time() + KU_ADDTIME) . "', " . $_POST['firstpostid'] . ", '', '' )");
-						$boardid = $tc_db->Insert_Id();
-						$filetypes = $tc_db->GetAll("SELECT " . KU_DBPREFIX . "filetypes.id FROM " . KU_DBPREFIX . "filetypes WHERE " . KU_DBPREFIX . "filetypes.filetype = 'JPG' OR " . KU_DBPREFIX . "filetypes.filetype = 'GIF' OR " . KU_DBPREFIX . "filetypes.filetype = 'PNG';");
-						foreach ($filetypes AS $filetype) {
-							$tc_db->Execute("INSERT INTO `" . KU_DBPREFIX . "board_filetypes` ( `boardid` , `typeid` ) VALUES ( " . $boardid . " , " . $filetype['id'] . " );");
+						$ok = $tc_db->Execute("INSERT INTO `" . KU_DBPREFIX . "boards` ( `name` , `desc` , `createdon`, `start`, `image`, `includeheader` ) VALUES ( " . $tc_db->qstr($dir) . " , " . $tc_db->qstr($desc) . " , '" . (time() + KU_ADDTIME) . "', " . $_POST['firstpostid'] . ", '', '' )");
+						if($ok)
+						{
+							$boardid = $tc_db->Insert_Id();
+							$filetypes = $tc_db->GetAll("SELECT " . KU_DBPREFIX . "filetypes.id FROM " . KU_DBPREFIX . "filetypes WHERE " . KU_DBPREFIX . "filetypes.filetype = 'JPG' OR " . KU_DBPREFIX . "filetypes.filetype = 'GIF' OR " . KU_DBPREFIX . "filetypes.filetype = 'PNG';");
+							foreach ($filetypes AS $filetype) {
+								$tc_db->Execute("INSERT INTO `" . KU_DBPREFIX . "board_filetypes` ( `boardid` , `typeid` ) VALUES ( " . $boardid . " , " . $filetype['id'] . " );");
+							}
+							$output .= _gettext('Board successfully added.') . '<br /><br /><a href="'. KU_BOARDSPATH . '/'. $dir . '/">/'. $dir . '/</a>!<br />';
+							$output .= '<form action="?action=boardopts" method="post"><input type="hidden" name="board" value="'. $dir . '" /><input type="submit" style="border: 1px solid; background: none; text-align: center;" value="'. _gettext('Click to edit board options') .'" /><br /><hr /></form>';
+							management_addlogentry(_gettext('Added board') . ': /'. $dir . '/', 3);
+						} else {
+							$output .= '<br />'. _gettext('Unable to add board to database: ') . $tc_db->ErrorMsg();
+							@unlink(KU_BOARDSDIR . $dir . '/src/.htaccess');
+							@unlink(KU_BOARDSDIR . $dir . '/.htaccess');
+							@rmdir(KU_BOARDSDIR . $dir . '/tmp/thumb');
+							@rmdir(KU_BOARDSDIR . $dir . '/tmp');
+							@rmdir(KU_BOARDSDIR . $dir . '/thumb');
+							@rmdir(KU_BOARDSDIR . $dir . '/src');
+							@rmdir(KU_BOARDSDIR . $dir . '/res');
+							@rmdir(KU_BOARDSDIR . $dir);
 						}
-						$output .= _gettext('Board successfully added.') . '<br /><br /><a href="'. KU_BOARDSPATH . '/'. $dir . '/">/'. $dir . '/</a>!<br />';
-						$output .= '<form action="?action=boardopts" method="post"><input type="hidden" name="board" value="'. $dir . '" /><input type="submit" style="border: 1px solid; background: none; text-align: center;" value="'. _gettext('Click to edit board options') .'" /><br /><hr /></form>';
-						management_addlogentry(_gettext('Added board') . ': /'. $dir . '/', 3);
 					} else {
 						$output .= '<br />'. _gettext('Unable to create directories.');
 					}
