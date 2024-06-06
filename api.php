@@ -350,15 +350,21 @@ $api_function = Array
 	'get_new_posts_count' => function($request, $request_id)
 	{
 		// For specified boards, get count of new posts which are newer than specifed timestamp for this board.
-		// Request: Object { "timestamps":Object { integer:unixtime, ... } }.
+		// Request: Object { "skipwrongboards":optional bool, "timestamps":Object { integer:unixtime, ... } }.
 		// Response: Object { string:integer, ... }, where key is board name.
+		// "skipwrongboards": if true, don't fail if wrong board id encountered.
 		// "timestamps" object uses board id as a key.
 
 		global $tc_db;
 		
 		if(!isset($request['timestamps'])) json_exit(400, "get_new_posts_count(): Required field missing", $request_id);
 		if(!is_array($request['timestamps'])) json_exit(400, "get_new_posts_count(): Timestamp list is not array", $request_id);
-		
+
+		if (!isset($request['skipwrongboards'])) $skipwrongboards = false;
+		elseif ($request['skipwrongboards'] === true) $skipwrongboards = true;
+		elseif ($request['skipwrongboards'] === false) $skipwrongboards = false;
+		else json_exit(400, "get_new_posts_count(): Incorrect skipwrongboards value", $request_id);
+
 		$result = array();
 		foreach ($request['timestamps'] as $boardid => $timestamp)
 		{
