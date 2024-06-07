@@ -35,6 +35,26 @@ form {
 	margin-bottom: 8px;
 }
 
+.hiddenbythreadid {
+	display: none;
+}
+
+.hiddenbypostid {
+	display: none;
+}
+
+.hiddenbyparentid {
+	display: none;
+}
+
+.hiddenbyauthor {
+	display: none;
+}
+
+.hiddenbyword {
+	display: none;
+}
+
 .smilies_span {
 	display: none;
 }
