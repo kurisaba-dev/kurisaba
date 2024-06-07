@@ -26,7 +26,7 @@
 						{t}Thread{/t}
 						<a href="{%KU_BOARDSFOLDER}{$board.name}/res/{$post.id}.html">{$post.id}</a>
 						{t}hidden.{/t}
-						<a href="#" onclick="javascript:togglethread('{$post.id}');return false;" title="{t}Раскрыть тред{/t}">
+						<a href="#" onclick="javascript:togglethread('{$board.name}','{$post.id}');return false;" title="{t}Раскрыть тред{/t}">
 							<img src="{$cwebpath}css/icons/blank.gif" border="0" class="unhidethread spritebtn" alt="{t}Раскрыть тред{/t}" />
 						</a>
 					</span>
