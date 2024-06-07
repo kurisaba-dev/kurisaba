@@ -29,6 +29,14 @@
 		{/if}
 
 		{if not $isread}
+			<span id="unhidethread{$post.id}{$board.name}" style="display: none;">
+				{t}Thread{/t}
+				<a href="{%KU_BOARDSFOLDER}{$board.name}/res/{$post.id}.html">{$post.id}</a>
+				{t}hidden.{/t}
+				<a href="#" onclick="javascript:togglethread('{$board.name}','{$post.id}');return false;" title="{t}Раскрыть тред{/t}">
+					<img src="{$cwebpath}css/icons/blank.gif" border="0" class="unhidethread spritebtn" alt="{t}Раскрыть тред{/t}" />
+				</a>
+			</span>
 			<div id="thread{$post.id}{$board.name}" class="replies">
 		{/if}
 		
