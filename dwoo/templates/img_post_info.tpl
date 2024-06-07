@@ -66,7 +66,7 @@
 		</a>
 	{else}
 		<span id="hide{$post.id}">
-			<a href="#" onclick="javascript:{if $isfeed}togglethread{else}hidethread_num{/if}('{$board.name}','{$post.id}');return false;" title="Скрыть тред">
+			<a href="#" onclick="javascript:{if !$isfeed}togglethread{else}hidethread_num{/if}('{$board.name}','{$post.id}');return false;" title="Скрыть тред">
 				<img src="{$boardpath}css/icons/blank.gif" border="0" class="hidethread spritebtn" alt="Скрыть тред" />
 			</a>
 		</span>
