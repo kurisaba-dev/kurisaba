@@ -29,15 +29,15 @@
 		{/if}
 
 		{if not $isread}
-			<span id="unhidethread{$post.id}{$board.name}" style="display: none;">
+			<span id="unhidethread{$posts[0].id}{$board.name}" style="display: none;">
 				{t}Thread{/t}
-				<a href="{%KU_BOARDSFOLDER}{$board.name}/res/{$post.id}.html">{$post.id}</a>
+				<a href="{%KU_BOARDSFOLDER}{$board.name}/res/{$posts[0].id}.html">{$posts[0].id}</a>
 				{t}hidden.{/t}
-				<a href="#" onclick="javascript:togglethread('{$board.name}','{$post.id}');return false;" title="{t}Раскрыть тред{/t}">
+				<a href="#" onclick="javascript:togglethread('{$board.name}','{$posts[0].id}');return false;" title="{t}Раскрыть тред{/t}">
 					<img src="{$cwebpath}css/icons/blank.gif" border="0" class="unhidethread spritebtn" alt="{t}Раскрыть тред{/t}" />
 				</a>
 			</span>
-			<div id="thread{$post.id}{$board.name}" class="replies">
+			<div id="thread{$posts[0].id}{$board.name}" class="replies">
 		{/if}
 		
 				{foreach key=postkey item=post from=$posts name=postsloop}
