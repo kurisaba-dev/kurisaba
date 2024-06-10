@@ -196,7 +196,7 @@ if (!$cache_loaded) {
 		$cf['KU_HOST'] = isset($_SERVER['HTTP_HOST'])? preg_replace("/[^A-Za-z0-9.:]/", '', $_SERVER['HTTP_HOST'] ) : $cf['KU_BASE_HOST']; // escape string
 		$cf['KU_DOMAIN'] = '.' . $cf['KU_HOST']; // Used in cookies for the domain parameter.  Should be a period and then the top level domain, which will allow the cookies to be set for all subdomains.
 		$cf['KU_WEBPATH'] = $cf['KU_PROTO'] . $cf['KU_HOST'];
-		$cf['KU_REMOTE_ADDR'] = $_SERVER['REMOTE_ADDR'];
+		$cf['KU_REMOTE_ADDR'] = (array_key_exists("HTTP_CF_CONNECTING_IP", $_SERVER)) ? $_SERVER["HTTP_CF_CONNECTING_IP"] : $_SERVER['REMOTE_ADDR'];
 
 	// Board subdomain/alternate directory (optional, change to enable)
 		// DO NOT CHANGE THESE IF YOU DO NOT KNOW WHAT YOU ARE DOING!!
