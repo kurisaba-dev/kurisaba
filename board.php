@@ -275,7 +275,7 @@ if($operation_post) // it's `noreturn`.
 			
 			if ($posting_class->HowManyThreadsToday() >= KU_MAXTHREADSADAY)
 			{
-				kurisaba_exit('Похоже, борду флудят - слишком много новых тредов. Создание тредов временно отключено.', 'По всем вопросам — к Ханако-сан или Хомуре-нян.', $post_message);
+				kurisaba_exit('Похоже, борду флудят - слишком много новых тредов. Создание тредов временно отключено.', 'По всем вопросам — к админам.', $post_message);
 			}
 		}
 	}
