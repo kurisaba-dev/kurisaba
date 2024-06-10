@@ -33,10 +33,10 @@ Header unset Last-Modified
 Header unset ETag
 Header unset Vary
 </Files>
-<FilesMatch ".(js|css)$">
+<FilesMatch "\.(js|css)$">
 Header set Cache-Control "max-age=2592000"
 </FilesMatch>
-<FilesMatch ".(flv|swf|ico|gif|jpg|jpeg|png|webp|m4a|mp4|mp3|webm)$">
+<FilesMatch "\.(flv|swf|ico|gif|jpg|jpeg|png|webp|m4a|mp4|mp3|webm)$">
 Header set Cache-Control "max-age=2592000"
 </FilesMatch>
 </IfModule>
@@ -64,6 +64,14 @@ Order allow,deny
 Deny from all
 Satisfy all
 </Files>
+
+#Во время вайпа расскоменчивается (1.2.3.4 заменить на IP вайпера, предварительно забанив его в админке)
+#<IfModule mod_rewrite.c>
+#RewriteEngine On
+#RewriteCond %{REMOTE_ADDR} 1.2.3.4               # Если без клауды
+#RewriteCond %{HTTP:CF-Connecting-IP} 1.2.3.4     # Если с клаудой
+#RewriteRule !^(banned.php|images/youarebanned.jpg|favicon.ico|css/banned.css)$ /banned.php [L]
+#</IfModule>
 
 # Warning: Contents below this line may be erased, please place all .htaccess rules above this line
 ## !KU_BANS:

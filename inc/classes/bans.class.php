@@ -148,7 +148,7 @@ class Bans {
 		return $dwoo->get(KU_TEMPLATEDIR .($javascript_stub ? '/js_banned.tpl' : '/banned.tpl'), $dwoo_data);
 	}
 
-	function UpdateHtaccess() {
+	function UpdateHtaccess() { if(KU_SAVEIP) {
 		global $tc_db;
 
 		$htaccess_contents = file_get_contents(KU_BOARDSDIR.'.htaccess');
@@ -173,7 +173,7 @@ class Bans {
 		}
 		$htaccess_contents_new = $htaccess_contents_preserve.$htaccess_contents_bans_start.$htaccess_contents_bans_iplist.$htaccess_contents_bans_end;
 		file_put_contents(KU_BOARDSDIR.'.htaccess', $htaccess_contents_new);
-	}
+	}}
 }
 
 ?>
