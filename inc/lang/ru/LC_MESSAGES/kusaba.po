@@ -916,6 +916,9 @@ msgstr "Запрос выполнен"
 msgid "Quick Reply"
 msgstr "Быстрый ответ"
 
+msgid "Captcha timeout, try again."
+msgstr "Капча протухла, попробуй снова."
+
 msgid "Ran cleanup"
 msgstr "Запустить очистку"
 

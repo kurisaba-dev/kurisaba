@@ -133,6 +133,12 @@ class Posting {
 		if ($board_class->board['enablecaptcha'] == 1) {
 			$submit_time = time() + KU_ADDTIME;
 			
+			// Check if captcha is not stale yet
+			if($_SESSION['captchatime'] + KU_CAPTCHATIME < $submit_time)
+			{
+				return _gettext('Captcha timeout, try again.');
+			}
+			
 			// Check if they entered the correct code. If not... 
 			if ($_SESSION['security_code'.$_POST['captchaid']] != mb_strtoupper($_POST['captcha']) || empty($_SESSION['security_code'.$_POST['captchaid']]))
 			{
