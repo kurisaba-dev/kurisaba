@@ -122,13 +122,14 @@ if (!$cache_loaded) {
 		$cf['KU_CACHEDTEMPLATEDIR'] = $cf['KU_ROOTDIR'] . 'tmp/dwoo';       // Путь, куда dwoo кладёт скомпилированные шаблоны ('' отключает кэширование шаблонов).
 
 	// Стили досок. Для каждого стиля обычной или upload-доски в каталоге css/styles должны быть файлы <имя_стиля>.css и menu_<имя_стиля>.css.
-		$cf['KU_STYLES']            = 'myata:cdark:claire:claire.advance:cchaos:summer:winter:autumn:photon:modern:dark:tomorrow:urupchan:futaba:burichan:kusabax:gurochan:gentoochan:tuvik:suigintou'; // Список стилей, маленькими буквами, разделяется двоеточием.
+		$cf['KU_STYLES']            = 'aobasu:myata:cdark:claire:claire.advance:cchaos:summer:winter:autumn:photon:modern:dark:tomorrow:urupchan:futaba:burichan:kusabax:gurochan:gentoochan:tuvik:suigintou'; // Список стилей, маленькими буквами, разделяется двоеточием.
 		$cf['KU_MENUSTYLES']        = $cf['KU_STYLES']; // Стили для меню.
 		$cf['KU_MENUTYPE']          = 'normal';         // Тип меню. 'normal' - с использованием стилей, 'plain' - без них.
 		$cf['KU_DEFAULTSTYLE']      = 'photon';         // Дефолтный стиль для досок, на которых он не задан. Маленькими буквами.
 		$cf['KU_DEFAULTMENUSTYLE']  = 'photon';         // Дефолтный стиль для меню. Маленькими буквами.
 		$stylecolors                = array             // Цвета капчи для разных стилей (RGB).
 		(
+			'Aobasu'		=> array(85,85,85),
 			'Cdark'			=> array(255,255,255),
 			'Claire'		=> array(255, 255, 255),
 			'Claire.advance'=> array(255, 255, 255),
