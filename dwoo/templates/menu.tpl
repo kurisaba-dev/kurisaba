@@ -15,7 +15,7 @@
 {/if}
 
 <script type="text/javascript">
-	var style_cookie = "kustyle";
+	var style_cookie = "kustyle2";
 	var ku_boardspath = '{%KU_BOARDSPATH}';
 	var ku_defaultboard = '{%KU_DEFAULTBOARD}';
 </script>

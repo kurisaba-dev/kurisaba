@@ -14,7 +14,7 @@ elseif($_COOKIE['captchalang'] == 'num') {
 else $captcha = generate_code($ltrs);
 session_start(['cookie_samesite' => 'Strict']);
 function img_code($code) {
-	$scolor=style_to_captcha_color(isset($_COOKIE['kustyle']) ? $_COOKIE['kustyle'] : '');
+	$scolor=style_to_captcha_color(isset($_COOKIE['kustyle2']) ? $_COOKIE['kustyle2'] : '');
 	$linenum = 5; 
 	$img_arr = array("1.png");
 	$font_arr = array();

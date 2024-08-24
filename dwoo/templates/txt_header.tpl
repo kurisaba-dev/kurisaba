@@ -16,7 +16,7 @@
 <script type="text/javascript"><!--
 		var ku_boardspath = '{%KU_BOARDSPATH}';
 		var ku_cgipath = '{%KU_CGIPATH}';
-		var style_cookie_txt = "kustyle_txt";
+		var style_cookie_txt = "kustyle_txt2";
 {if $replythread > 0}
 		var ispage = false;
 {else}

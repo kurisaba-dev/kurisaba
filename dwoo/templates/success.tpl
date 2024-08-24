@@ -17,7 +17,7 @@
 		var ku_cgipath = '{%KU_CGIPATH}';
 		var ku_defaultboard = '{%KU_DEFAULTBOARD}';
 		var ku_maxfilesize = 0;
-		var style_cookie = "kustyle";
+		var style_cookie = "kustyle2";
 		var locale = '{$locale}';
 {if $replythread > 0}
 		var ispage = false;

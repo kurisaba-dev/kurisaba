@@ -125,8 +125,8 @@ if (!$cache_loaded) {
 		$cf['KU_STYLES']            = 'aobasu:myata:cdark:claire:claire.advance:cchaos:summer:winter:autumn:photon:modern:dark:tomorrow:urupchan:futaba:burichan:kusabax:gurochan:gentoochan:tuvik:suigintou'; // Список стилей, маленькими буквами, разделяется двоеточием.
 		$cf['KU_MENUSTYLES']        = $cf['KU_STYLES']; // Стили для меню.
 		$cf['KU_MENUTYPE']          = 'normal';         // Тип меню. 'normal' - с использованием стилей, 'plain' - без них.
-		$cf['KU_DEFAULTSTYLE']      = 'photon';         // Дефолтный стиль для досок, на которых он не задан. Маленькими буквами.
-		$cf['KU_DEFAULTMENUSTYLE']  = 'photon';         // Дефолтный стиль для меню. Маленькими буквами.
+		$cf['KU_DEFAULTSTYLE']      = 'aobasu';         // Дефолтный стиль для досок, на которых он не задан. Маленькими буквами.
+		$cf['KU_DEFAULTMENUSTYLE']  = 'aobasu';         // Дефолтный стиль для меню. Маленькими буквами.
 		$stylecolors                = array             // Цвета капчи для разных стилей (RGB).
 		(
 			'Aobasu'		=> array(85,85,85),
@@ -152,8 +152,8 @@ if (!$cache_loaded) {
 		$cf['KU_MENUSTYLESWITCHER'] = true;              // Показывать переключалку стилей в меню.
 		$cf['KU_STYLESWITCHER']     = true;              // Показывать переключалку стилей на upload-досках.
 		$cf['KU_DROPSWITCHER']	    = true;              // Показывать переключалку стилей на upload-досках в виде выпадающего списка, а не обычно.
-		$cf['KU_TXTSTYLES']         = 'futatxt:buritxt'; // Стили текстовых досок. Для каждого стиля в каталоге css должен быть файл txt_<имя_стиля>.css.
-		$cf['KU_DEFAULTTXTSTYLE']   = 'futatxt';         // Дефолтный стиль для текстовых досок. Маленькими буквами.
+		$cf['KU_TXTSTYLES']         = '';                // Стили текстовых досок. Для каждого стиля в каталоге css должен быть файл txt_<имя_стиля>.css.
+		$cf['KU_DEFAULTTXTSTYLE']   = '';                // Дефолтный стиль для текстовых досок. Маленькими буквами.
 		$cf['KU_TXTSTYLESWITCHER']  = true;              // Показывать переключалку стилей на текстовых досках.
 	
 	// Изображения

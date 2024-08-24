@@ -9,7 +9,7 @@
 		var ku_cgipath = '{%KU_CGIPATH}';
 		var ku_defaultboard = '{%KU_DEFAULTBOARD}';
 		var ku_maxfilesize = {$maxfilesize};
-		var style_cookie = "kustyle";
+		var style_cookie = "kustyle2";
 		var locale = '{$locale}';
 		var search_phrases = Array('{$search_phrases}');
 {if $replythread != 0}
