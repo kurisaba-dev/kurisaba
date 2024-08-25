@@ -1,411 +1,418 @@
 html {
-    text-size-adjust: 100%;
-    -moz-text-size-adjust: 100%;
-    -webkit-text-size-adjust: 100%;
-    -ms-text-size-adjust: 100%;
+	text-size-adjust: 100%;
+	-moz-text-size-adjust: 100%;
+	-webkit-text-size-adjust: 100%;
+	-ms-text-size-adjust: 100%;
+}
+
+.overlay-menu {
+	background:#FFEEFF;
 }
 
 html, body {
-    background: #f0ffe0;
-    color: #013220;
+	background: #f0ffe0;
+	color: #013220;
 }
 
 a {
-    color: #006400;
+	color: #006400;
 }
 
 a:hover {
-    color: #228B22;
+	color: #228B22;
 }
 
 .reflink a:hover {
-    font-weight: bold;
+	font-weight: bold;
 }
 
 .adminbar {
-    background: inherit;
+	background: inherit;
 }
 
 .logo {
-    font-size: 2em;
-    color: #006400;
+	font-size: 2em;
+	color: #006400;
 }
 
 .replymode, .catalogmode {
-    background: #4CAF50;
-    text-align: center;
-    padding: 2px;
-    color: #FFFFFF;
-    width: 100%;
+	background: #4CAF50;
+	text-align: center;
+	padding: 2px;
+	color: #FFFFFF;
+	width: 100%;
 }
 
 .postarea {
-    border-top: 1px solid #4CAF50 !important;
-    border-bottom: 1px solid #4CAF50 !important;
+	border-top: 1px solid #4CAF50 !important;
+	border-bottom: 1px solid #4CAF50 !important;
 }
 
 .postblock {
-    background: #8FBC8F;
-    color: #013220;
-    font-weight: 800;
+	background: #8FBC8F;
+	color: #013220;
+	font-weight: 800;
 }
 
 .footer {
-    color: #2E8B57;
+	color: #2E8B57;
 }
 
 .passvalid {
-    background: #3CB371;
-    text-align: center;
-    width: 100%;
-    color: #ffffff;
+	background: #3CB371;
+	text-align: center;
+	width: 100%;
+	color: #ffffff;
 }
 
 .dellist {
-    font-weight: bold;
+	font-weight: bold;
 }
 
 .delbuttons {
-    text-align: center;
-    padding-bottom: 4px;
+	text-align: center;
+	padding-bottom: 4px;
 }
 
 .managehead {
-    background: #2E8B57;
-    color: #FFFFFF;
+	background: #2E8B57;
+	color: #FFFFFF;
 }
 
 .postlists {
-    color: #006400;
+	color: #006400;
 }
 
 .row1 {
-    background: #E8F5E9;
-    color: #013220;
+	background: #E8F5E9;
+	color: #013220;
 }
 
 .row2 {
-    background: #C8E6C9;
-    color: #013220;
+	background: #C8E6C9;
+	color: #013220;
 }
 
 .unkfunc {
-    background: inherit;
-    color: #2E8B57;
+	background: inherit;
+	color: #2E8B57;
 }
 
 .filetitle {
-    color: #006400;
+	background:inherit;
+	font-size:1.2em;
+	color:#006400;
+	font-weight:800;
 }
 
 .postername {
-    color: #006400;
-    font-weight: bold;
+	color: #006400;
+  	font-weight: bold;
 }
 
 .postertrip {
-    color: #228B22;
+	color: #228B22;
 }
 
 .oldpost {
-    color: #006400;
-    font-weight: 800;
+	color: #006400;
+	font-weight: 800;
 }
 
 .omittedposts {
-    color: #2E8B57;
+	color: #2E8B57;
 }
 
 .reply {
-    background: none repeat scroll 0% 0% #E8F5E9;
-    color: #013220;
-    border: 1px solid #A5D6A7;
+	background: none repeat scroll 0% 0% #E8F5E9;
+	color: #013220;
+	border: 1px solid #A5D6A7;
 }
 
 .replyhl {
-    background: #C8E6C9;
-    color: #013220;
+	background: #C8E6C9;
+	color: #013220;
 }
 
 .replytitle {
-    font-size: 1.5em;
-    color: #006400;
-    font-weight: 800;
+	font-size: 1.5em;
+	color: #006400;
+	font-weight: 800;
 }
 
 .thumbnailmsg {
-    font-size: small;
-    color: #006400;
+	font-size: small;
+	color: #006400;
 }
 
 .abbrev {
-    color: #2E8B57;
+	color: #2E8B57;
 }
 
 .highlight {
-    background: #C8E6C9;
-    color: #006400;
-    border: 2px dashed #4CAF50;
+	background: #C8E6C9;
+	color: #006400;
+	border: 2px dashed #4CAF50;
 }
 
 #watchedthreads {
-    background: #E8F5E9 !important;
+	background: #E8F5E9 !important;
 }
 
 .reflinkpreview {
-    background: #E8F5E9 !important;
-    background-color: #E8F5E9 !important;
+	background: #E8F5E9 !important;
+	background-color: #E8F5E9 !important;
 }
 
 .userdelete table tr td {
-    border: 1px solid #A5D6A7;
+	border: 1px solid #A5D6A7;
 }
 
 button {
-    border: 1px solid #A5D6A7;
-    background-color: #E8F5E9;
+	border: 1px solid #A5D6A7;
+	background-color: #E8F5E9;
 }
 
 input[type=text], input[type=password], textarea {
-    border: 1px solid #4CAF50;
+	border: 1px solid #4CAF50;
 }
 
 input[type=submit] {
-    border: 1px solid #4CAF50;
-    outline: none;
-    background: #A5D6A7;
-    margin: 0px;
-    margin-right: 2px;
-    padding: 2px 4px 3px 4px;
+	border: 1px solid #4CAF50;
+	outline: none;
+	background: #A5D6A7;
+	margin: 0px;
+	margin-right: 2px;
+	padding: 2px 4px 3px 4px;
 }
 
 input[type=submit]:hover {
-    border: 1px solid #4CAF50;
-    outline: none;
-    background: #81C784;
-    margin: 0px;
-    margin-right: 2px;
-    padding: 2px 4px 3px 4px;
+	border: 1px solid #4CAF50;
+	outline: none;
+	background: #81C784;
+	margin: 0px;
+	margin-right: 2px;
+	padding: 2px 4px 3px 4px;
 }
 
 hr {
-    border-style: solid none none none;
-    border-width: 1px;
-    border-color: #4CAF50;
+	border-style: solid none none none;
+	border-width: 1px;
+	border-color: #4CAF50;
 }
 
 .topmenu {
-    border-bottom: 1px solid #A5D6A7;
-    background: #f0ffe0;
+	border-bottom: 1px solid #A5D6A7;
+	background: #f0ffe0;
 }
 
 .catalogsubject {
-    color: #006400;
+	color: #006400;
 }
 
 .navbar {
-    color: #2E8B57;
+	color: #2E8B57;
 }
 
 .catalogmsg {
-    color: #013220;
+	color: #013220;
 }
 
 .catalogposts {
-    color: #2E8B57;
+	color: #2E8B57;
 }
 
 .cataloglist {
-    border-bottom: 1px solid #4CAF50 !important;
+	border-bottom: 1px solid #4CAF50 !important;
 }
 
 .pgstbl table, .pgstbl tr {
-    border: 1px solid #A5D6A7 !important;
+	border: 1px solid #A5D6A7 !important;
 }
 
 .thrdcntnr {
-    border-bottom: 1px solid #4CAF50 !important;
+	border-bottom: 1px solid #4CAF50 !important;
 }
 
 input[type=text]:focus, input[type=password]:focus, textarea:focus {
-    border: 1px solid #2E8B57;
+	border: 1px solid #2E8B57;
 }
 
 .unhidethread {
-    border-bottom: 1px solid #4CAF50 !important;
-    color: #2E8B57;
+	border-bottom: 1px solid #4CAF50 !important;
+	color: #2E8B57;
 }
 
 .post-badge {
-    fill: white;
-    background: #4CAF50;
+	fill: white;
+	background: #4CAF50;
 }
 
 .nav-btn,
 .btn-small,
 .post-btn {
-    fill: #4CAF50;
+	fill: #4CAF50;
 }
 
 .nav-btn:hover,
 .post-btn:hover,
 .btn-small:hover {
-    fill: #2E8B57;
+	fill: #2E8B57;
 }
 
 .quick-reply-form .post-btn {
-    fill: white;
+	fill: white;
 }
 
 .quick-reply-form .post-btn:hover {
-    fill: #E8F5E9;
+	fill: #E8F5E9;
 }
 
 .quick-reply-form .post-badge {
-    fill: #4CAF50;
-    background: white;
+	fill: #4CAF50;
+	background: white;
 }
 
 .quick-reply-form .post-badge:hover {
-    fill: white;
+	fill: white;
 }
 
 .quick-reply-form.form-detached {
-    border: 1px #4CAF50 dashed;
+	border: 1px #4CAF50 dashed;
 }
 
 .quick-reply-form.form-detached .post-badge {
-    fill: #E8F5E9;
+	fill: #E8F5E9;
 }
 
 .quick-reply-form.form-detached .post-badge:hover {
-    fill: #4CAF50;
-    background: white;
+	fill: #4CAF50;
+	background: white;
 }
 
 #posttypeindicator {
-    color: #2E8B57;
+	color: #2E8B57;
 }
 
 .desktop-navbar-counter {
-    background: #4CAF50;
-    color: #fff;
+	background: #4CAF50;
+  	color: #fff;
 }
 
 @media only screen and (max-width: 480px) {
-    .logo {
-	color: #006400;
-    }
+	.logo {
+		color: #006400;
+	}
 
-    .reply {
-	border-style: solid;
-	border-color: #A5D6A7;
-    }
+	.reply {
+		border-style: solid;
+		border-color: #A5D6A7;
+	}
 
-    textarea, input[type=text], input[type=password] {
-	border-style: solid;
-	border-color: #4CAF50;
-    }
+	textarea, input[type=text], input[type=password] {
+		border-style: solid;
+		border-color: #4CAF50;
+	}
 
-    input[type=submit] {
-	border-color: #4CAF50;
-	background: #A5D6A7;
-	border-width: 1px;
-	border-style: solid;
-    }
+	input[type=submit] {
+		border-color: #4CAF50;
+		background: #A5D6A7;
+		border-width: 1px;
+		border-style: solid;
+	}
 
-    input[type=submit]:hover {
-	border-color: #4CAF50;
-	background: #81C784;
-    }
+	input[type=submit]:hover {
+		border-color: #4CAF50;
+		background: #81C784;
+	}
 
-    .mobile-navbar-counter {
-	color: #4CAF50;
-    }
+	.mobile-navbar-counter {
+		color: #4CAF50;
+	}
 }
 
 body.site-wrapper {
-    background: #f0ffe0;
-    color: #013220;
+	background: #f0ffe0;
+	color: #013220;
 }
 
 .site-wrapper h2 {
-    margin-top: 1em;
-    background: #4CAF50;
+	margin-top: 1em;
+	background: #4CAF50;
 }
 
 .site-wrapper h2 a {
-    color: #E8F5E9;
+	color: #E8F5E9;
 }
 
 .site-wrapper h1 {
-    color: #006400;
+	color: #006400;
 }
 
 .site-wrapper h3 {
-    color: #013220;
+	color: #013220;
 }
 
-.site-wrapper .content, .site-wrapper .content a, 
+.site-wrapper .content, .site-wrapper .content a,
 .site-wrapper div.telega, .site-wrapper div.telega a {
-    font-size: medium;
+	font-size: medium;
 }
 
 .site-wrapper .permalink a {
-    color: #006400;
+	color: #006400;
 }
 
 .site-wrapper a {
-    color: #006400;
+	color: #006400;
 }
 
 .site-wrapper hr {
-    border-style: solid none none none;
-    border-width: 1px;
-    border-color: #4CAF50;
+	border-style: solid none none none;
+	border-width: 1px;
+	border-color: #4CAF50;
 }
 
 .sitemenu-wrapper a {
-    color: #006400;
+	color: #006400;
 }
 
 .sitemenu-wrapper h1, .sitemenu-wrapper h2 {
-    background: #8FBC8F;
-    text-align: left;
+	background: #8FBC8F;
+	text-align: left;
 }
 
 .sitemenu-wrapper h2 {
-    font-size: 100%;
-    margin-top: 1em;
+	font-size: 100%;
+	margin-top: 1em;
 }
 
 .sitemenu-wrapper .plus {
-    background: #A5D6A7;
-    color: #013220;
-    border: 1px solid #81C784;
+	background: #A5D6A7;
+	color: #013220;
+	border: 1px solid #81C784;
 }
 
 .sitemenu-wrapper .plus:hover {
-    background: #81C784;
-    border: 1px solid #4CAF50;
+	background: #81C784;
+	border: 1px solid #4CAF50;
 }
 
 .sitemenu-wrapper ul {
-    padding-left: 0px;
+	padding-left: 0px;
 }
 
 .sitemenu-wrapper li {
-    margin: 0px;
+	margin: 0px;
 }
 
 .sitemenu-wrapper li:hover {
-    background: #E8F5E9;
+	background: #E8F5E9;
 }
 
 .sitemenu-wrapper .icon {
-    border: none;
-    float: left;
-    margin: 2px 20px;
+	border: none;
+	float: left;
+	margin: 2px 20px;
 }
 
 ::selection {
