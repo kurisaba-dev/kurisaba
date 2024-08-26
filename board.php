@@ -222,6 +222,17 @@ if($operation_delete) // currently `noreturn`.
 						}
 					}
 				} else {
+					if ($board_class->board['opmoderation'] == 1)
+					{
+						$oppassword = $tc_db->GetOne("SELECT `password` FROM `" . KU_DBPREFIX . "posts` WHERE `boardid` = " . $board_class->board['id'] . " AND `id` = " . $post_class->post['parentid'] . " LIMIT 1");
+						if (md5($_POST['postpassword']) == $oppassword) {
+							if ($post_class->Delete(isset($_POST['savepicture']))) {
+								$success = _gettext('Post successfully deleted.');
+							} else {
+								kurisaba_exit(_gettext('There was an error in trying to delete your post'),'','','/error.tpl',$board_class->board['name']);
+							}
+						}
+					}
 					kurisaba_exit(_gettext('Incorrect password.'),'','','/error.tpl',$board_class->board['name']);
 				}
 			} else {
