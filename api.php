@@ -40,9 +40,10 @@ function determine_msgfield($request)
 
 function determine_replyformat($request)
 {
-	if (!isset($request['replyformat']))     return false;
-	if ($request['replyformat'] == 'array')  return true;
-	if ($request['replyformat'] == 'object') return false;
+	if (!isset($request['replyformat']))     return "object";
+	if ($request['replyformat'] == 'array')  return "array";
+	if ($request['replyformat'] == 'object') return "object";
+	if ($request['replyformat'] == 'postid') return "postid";
 	json_exit(400, "Incorrect replyformat value", $request['id']);
 }
 
@@ -119,7 +120,7 @@ function gen_posts($skipreflinks, $msgsource, $replyformat, $boardid, $dbdata, $
 		}
 		else
 		{
-			if ($replyformat) // Array
+			if ($replyformat == "array")
 			{
 				array_push($result, Array
 				(
@@ -144,7 +145,11 @@ function gen_posts($skipreflinks, $msgsource, $replyformat, $boardid, $dbdata, $
 					"reflinks" => ($skipreflinks ? null : $reflinks)
 				));
 			}
-			else // Object
+			elseif ($replyformat == "postid")
+			{
+				array_push($result, $dbentry['id']);
+			}
+			else // ($replyformat == "object")
 			{
 				$result[$dbentry['id']] = Array
 				(
@@ -216,12 +221,12 @@ $api_function = Array
 	'get_thread' => function($request, $request_id)
 	{
 		// Get every post in a thread.
-		// Request: Object { "board":string, "thread_id":integer, "skipreflinks":optional bool, "msgsource":optional "source"|"parsed", "replyformat":optional "object"|"array" }.
-		// Response: Object { integer:<POST>, ... }, where key is post id, or Array of [ <POST> ] if "replyformat"=="array".
+		// Request: Object { "board":string, "thread_id":integer, "skipreflinks":optional bool, "msgsource":optional "source"|"parsed", "replyformat":optional "object"|"array"|"postid" }.
+		// Response: Object { integer:<POST>, ... }, where key is post id, or Array of [ <POST> ] if "replyformat"=="array", or Array of [ integer ] if "replyformat"=="postid".
 		// Posts do include OP.
 		// "skipreflinks" parameter results in not including "reflinks" item in resulting <POST>s. Default is to include.
 		// "msgsource" parameter results in getting HTML or unparsed message text ('message'/'message_source' DB fields) Default is HTML.
-		// "replyformat" parameter selects data format in response: array of object. Default is object.
+		// "replyformat" parameter selects data format in response: array of post ids, array of <POST> objects, or object. Default is object.
 		
 		global $tc_db;
 
@@ -241,8 +246,8 @@ $api_function = Array
 	'get_updates_to_thread' => function($request, $request_id)
 	{
 		// Get every post in a thread after chosen timestamp.
-		// Request: Object { "board":string, "thread_id":integer, "timestamp":unixtime, "skipreflinks":optional bool, "msgsource":optional "source"|"parsed", "replyformat":optional "object"|"array" }.
-		// Response: Object { integer:<POST>, ... }, where key is post id, or Array of [ <POST> ] if "replyformat"=="array".
+		// Request: Object { "board":string, "thread_id":integer, "timestamp":unixtime, "skipreflinks":optional bool, "msgsource":optional "source"|"parsed", "replyformat":optional "object"|"array"|"postid" }.
+		// Response: Object { integer:<POST>, ... }, where key is post id, or Array of [ <POST> ] if "replyformat"=="array", or Array of [ integer ] if "replyformat"=="postid".
 		// Posts include only those with timestamp > "timestamp" from request.
 		// "skipreflinks", "msgsource", "replyformat": see get_thread().
 		// Returns 404 Not Found if thread exist but no new posts, and 410 Gone if thread was deleted.
@@ -293,8 +298,8 @@ $api_function = Array
 	'get_posts_by_id' => function($request, $request_id)
 	{
 		// Get specified posts from a board.
-		// Request: Object { "board":string, "ids":Array of [ integer ], "skipreflinks":optional bool, "msgsource":optional "source"|"parsed", "replyformat":optional "object"|"array" }.
-		// Response: Object { integer:<POST>, ... }, where key is post id, or Array of [ <POST> ] if "replyformat"=="array".
+		// Request: Object { "board":string, "ids":Array of [ integer ], "skipreflinks":optional bool, "msgsource":optional "source"|"parsed", "replyformat":optional "object"|"array"|"postid" }.
+		// Response: Object { integer:<POST>, ... }, where key is post id, or Array of [ <POST> ] if "replyformat"=="array", or Array of [ integer ] if "replyformat"=="postid".
 		// "skipreflinks", "msgsource", "replyformat": see get_thread().
 
 		global $tc_db;
