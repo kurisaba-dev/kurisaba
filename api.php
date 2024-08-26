@@ -101,6 +101,7 @@ function gen_posts($skipreflinks, $msgsource, $replyformat, $boardid, $dbdata, $
 					"tripcode" => $dbentry['tripcode'],
 					"email"    => $dbentry['email'],
 					"datetime" => $dbentry['timestamp'],
+					"timezone" => date_default_timezone_get(),
 					"filename" => $dbentry['file'],
 					"filetype" => $dbentry['file_type'],
 					"filesize" => $dbentry['file_size'],
@@ -129,6 +130,7 @@ function gen_posts($skipreflinks, $msgsource, $replyformat, $boardid, $dbdata, $
 					"tripcode" => $dbentry['tripcode'],
 					"email"    => $dbentry['email'],
 					"datetime" => $dbentry['timestamp'],
+					"timezone" => date_default_timezone_get(),
 					"filename" => $dbentry['file'],
 					"filetype" => $dbentry['file_type'],
 					"filesize" => $dbentry['file_size'],
@@ -153,6 +155,7 @@ function gen_posts($skipreflinks, $msgsource, $replyformat, $boardid, $dbdata, $
 					"tripcode" => $dbentry['tripcode'],
 					"email"    => $dbentry['email'],
 					"datetime" => $dbentry['timestamp'],
+					"timezone" => date_default_timezone_get(),
 					"filename" => $dbentry['file'],
 					"filetype" => $dbentry['file_type'],
 					"filesize" => $dbentry['file_size'],
@@ -183,7 +186,7 @@ $api_function = Array
 	// Special objects:
 	// <BOARD>: {"name":string, "captchaenabled":bool}.
 	// <POST>:  {"id":integer, "thread":integer, "subject":string, "name":string, "tripcode":string, "email":string,
-	//          "datetime":unixtime, "filename":string, "filetype":string, "filesize":integer, "pic_w":integer, "pic_h":integer,
+	//          "datetime":unixtime, "timezone":string, "filename":string, "filetype":string, "filesize":integer, "pic_w":integer, "pic_h":integer,
 	//          "thumb_w":integer, "thumb_h":integer, "animated":bool, "spoiler":bool, "text":string,
 	//          "reflinks":Array of {"board":string, "id":integer}}.
 
