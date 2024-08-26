@@ -231,9 +231,12 @@ if($operation_delete) // currently `noreturn`.
 							} else {
 								kurisaba_exit(_gettext('There was an error in trying to delete your post'),'','','/error.tpl',$board_class->board['name']);
 							}
+						} else {
+							kurisaba_exit(_gettext('Incorrect password.'),'','','/error.tpl',$board_class->board['name']);
 						}
+					} else {
+						kurisaba_exit(_gettext('Incorrect password.'),'','','/error.tpl',$board_class->board['name']);
 					}
-					kurisaba_exit(_gettext('Incorrect password.'),'','','/error.tpl',$board_class->board['name']);
 				}
 			} else {
 				kurisaba_exit('Пустой пароль.','','','/error.tpl',$board_class->board['name']);
