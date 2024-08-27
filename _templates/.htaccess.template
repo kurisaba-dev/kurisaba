@@ -13,6 +13,7 @@ FileETag None
 
 ErrorDocument 403 /error.php?p=403
 ErrorDocument 404 /error.php?p=404
+ErrorDocument 451 /error.php?p=451
 
 # Anti-pekacefaling
 <Limit GET POST>
