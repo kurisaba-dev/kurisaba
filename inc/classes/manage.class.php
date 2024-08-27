@@ -1026,7 +1026,15 @@ class Manage {
 				if (count($results) == 0) {
 					if (mkdir(KU_BOARDSDIR . $dir, 0777) && mkdir(KU_BOARDSDIR . $dir . '/res', 0777) && mkdir(KU_BOARDSDIR . $dir . '/src', 0777) && mkdir(KU_BOARDSDIR . $dir . '/thumb', 0777) && mkdir(KU_BOARDSDIR . $dir . '/tmp', 0777) && mkdir(KU_BOARDSDIR . $dir . '/tmp/thumb', 0777)) {
 						file_put_contents(KU_BOARDSDIR . $dir . '/.htaccess', 'DirectoryIndex '. 'board.html' . '');
-						file_put_contents(KU_BOARDSDIR . $dir . '/src/.htaccess', 'AddType text/plain .ASM .C .CPP .CSS .JAVA .JS .LSP .PHP .PL .PY .RAR .SCM .TXT'. "\n" . 'SetHandler default-handler');
+						if(KU_OFFLOAD)
+						{
+							file_put_contents(KU_BOARDSDIR . $dir . '/src/.htaccess', "AddType text/plain .ASM .C .CPP .CSS .JAVA .JS .LSP .PHP .PL .PY .RAR .SCM .TXT\nSetHandler default-handler\nDeny from all\n");
+							file_put_contents(KU_BOARDSDIR . $dir . '/thumb/.htaccess', "Deny from all\n");
+						}
+						else
+						{
+							file_put_contents(KU_BOARDSDIR . $dir . '/src/.htaccess', "AddType text/plain .ASM .C .CPP .CSS .JAVA .JS .LSP .PHP .PL .PY .RAR .SCM .TXT\nSetHandler default-handler\n");
+						}
 						if ($_POST['firstpostid'] < 1) {
 							$_POST['firstpostid'] = 1;
 						}
@@ -1044,6 +1052,7 @@ class Manage {
 						} else {
 							$output .= '<br />'. _gettext('Unable to add board to database: ') . $tc_db->ErrorMsg();
 							@unlink(KU_BOARDSDIR . $dir . '/src/.htaccess');
+							@unlink(KU_BOARDSDIR . $dir . '/thumb/.htaccess');
 							@unlink(KU_BOARDSDIR . $dir . '/.htaccess');
 							@rmdir(KU_BOARDSDIR . $dir . '/tmp/thumb');
 							@rmdir(KU_BOARDSDIR . $dir . '/tmp');
@@ -1091,7 +1100,15 @@ class Manage {
 					$moderating[] = $dir;
 					$tc_db->Execute("UPDATE `" . KU_DBPREFIX . "staff` SET `boards` = " . $tc_db->qstr(implode('|',$moderating)) . " WHERE `username` = '" . $_SESSION['manageusername'] . "'");
 					file_put_contents(KU_BOARDSDIR . $dir . '/.htaccess', 'DirectoryIndex '. 'board.html' . '');
-					file_put_contents(KU_BOARDSDIR . $dir . '/src/.htaccess', 'AddType text/plain .ASM .C .CPP .CSS .JAVA .JS .LSP .PHP .PL .PY .RAR .SCM .TXT'. "\n" . 'SetHandler default-handler');
+					if(KU_OFFLOAD)
+					{
+						file_put_contents(KU_BOARDSDIR . $dir . '/src/.htaccess', "AddType text/plain .ASM .C .CPP .CSS .JAVA .JS .LSP .PHP .PL .PY .RAR .SCM .TXT\nSetHandler default-handler\nDeny from all\n");
+						file_put_contents(KU_BOARDSDIR . $dir . '/thumb/.htaccess', "Deny from all\n");
+					}
+					else
+					{
+						file_put_contents(KU_BOARDSDIR . $dir . '/src/.htaccess', "AddType text/plain .ASM .C .CPP .CSS .JAVA .JS .LSP .PHP .PL .PY .RAR .SCM .TXT\nSetHandler default-handler\n");
+					}
 					$_POST['firstpostid'] = 1;
 					$sect20 = $tc_db->GetOne('SELECT `id` FROM `'. KU_DBPREFIX .'sections` WHERE `abbreviation`="20"');
 					$tc_db->Execute("INSERT INTO `" . KU_DBPREFIX . "boards` ( `name` , `desc` , `createdon`, `start`, `image`, `includeheader`,`section` ) VALUES ( " . $tc_db->qstr($dir) . " , " . $tc_db->qstr($desc) . " , '" . (time() + KU_ADDTIME) . "', " . $_POST['firstpostid'] . ", '', '', ".$sect20." )");
