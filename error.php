@@ -205,15 +205,15 @@ elseif(KU_OFFLOAD)
 	$filetypes = $tc_db->GetAll("SELECT `filetype`, `mime` FROM `" . KU_DBPREFIX . "filetypes`");
 	foreach ($filetypes as $filetype)
 	{
-		if (geoblocked($address, $filetype['filetype']))
-		{
-			http_response_code(451);
-			header('Content-type: image/jpeg');
-			echo file_get_contents(KU_ROOTDIR . 'images/451.jpg');
-			exit();
-		}
 		if (preg_match("/^\/[a-z]+\/(src|thumb)\/[0-9]+[a-z]?\." . $filetype['filetype'] . "$/", $address, $matches))
 		{
+			if (geoblocked($address, $filetype['filetype']))
+			{
+				http_response_code(451);
+				header('Content-type: image/jpeg');
+				echo file_get_contents(KU_ROOTDIR . 'images/451.jpg');
+				exit();
+			}
 			$content = file_get_contents(KU_ROOTDIR . $address);
 			if ($content !== false)
 			{
