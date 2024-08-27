@@ -182,12 +182,12 @@ else if (preg_match("/^\/([a-z]+)\/res\/([0-9]+)\-100\.html$/", $address, $match
 // Offload engine
 if(KU_OFFLOAD)
 {
-	$filetypes = $tc_db->GetOne("SELECT `filetype`, `mime` FROM `" . KU_DBPREFIX . "filetypes`");
+	$filetypes = $tc_db->GetAll("SELECT `filetype`, `mime` FROM `" . KU_DBPREFIX . "filetypes`");
 	foreach ($filetypes as $filetype)
 	{
 		if (preg_match("/^\/[a-z]+\/(src|thumb)\/[0-9]+\." . $filetype['filetype'] . "$/", $address, $matches))
 		{
-			$content = file_get_contents(str_replace($address, KU_WEBPATH, KU_ROOTDIR));
+			$content = file_get_contents(KU_ROOTDIR . $address);
 			if ($content !== false)
 			{
 				http_response_code(200); header("Status: 200 OK");
@@ -199,7 +199,7 @@ if(KU_OFFLOAD)
 			{
 				http_response_code($errorcode);
 				header('Content-type: image/jpeg');
-				echo file_get_contents(KU_ROOTDIR . '/images/404.jpg');
+				echo file_get_contents(KU_ROOTDIR . 'images/404.jpg');
 				exit();
 			}
 		}
