@@ -2050,3 +2050,5 @@ msgstr "Сбросить лимит тредов"
 msgid "Verbose statistics"
 msgstr "Подневная статистика по бордам /sg/ и /vg/"
 
+msgid "This material is unavailable in your country."
+msgstr "451: Забанено <s>кровавой гэбнёй</s> Организацией!"
