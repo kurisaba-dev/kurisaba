@@ -28,7 +28,8 @@ function CreateBoard($board)
 			if (in_array(client_country(), explode(',', strtoupper(str_replace(' ', '', $country_restrict)))))
 			{
 				http_response_code(451);
-				die('This material is unavailable in your country.');
+				$error = _gettext('This material is unavailable in your country.');
+				return false;
 			}
 		}
 		return $board_class;
