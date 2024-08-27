@@ -71,8 +71,9 @@ if(preg_match("/^\/([a-z]+)\/board\.html$/", $address, $matches))
 		exit();
 	}
 }
+
 // Board Page 0 or special thread
-if(preg_match("/^\/([A-Z0-9a-z\/]+?)\/$/", $address, $matches) || preg_match("/^\/([A-Z0-9a-z\/]+?)$/", $address, $matches))
+elseif(preg_match("/^\/([A-Z0-9a-z\/]+?)\/$/", $address, $matches) || preg_match("/^\/([A-Z0-9a-z\/]+?)$/", $address, $matches))
 {
 	$board_class = CreateBoard($matches[1]);
 	if ($board_class)
@@ -110,7 +111,7 @@ if(preg_match("/^\/([A-Z0-9a-z\/]+?)\/$/", $address, $matches) || preg_match("/^
 }
 
 // Board Catalog
-else if (preg_match("/^\/([a-z]+)\/catalog\.html$/", $address, $matches))
+elseif (preg_match("/^\/([a-z]+)\/catalog\.html$/", $address, $matches))
 {
 	$board_class = CreateBoard($matches[1]);
 	if ($board_class)
@@ -123,7 +124,7 @@ else if (preg_match("/^\/([a-z]+)\/catalog\.html$/", $address, $matches))
 }
 
 // Board Page 1-...
-else if (preg_match("/^\/([a-z]+)\/([0-9]+)\.html$/", $address, $matches))
+elseif (preg_match("/^\/([a-z]+)\/([0-9]+)\.html$/", $address, $matches))
 {
 	$board_class = CreateBoard($matches[1]);
 	if ($board_class)
@@ -145,7 +146,7 @@ else if (preg_match("/^\/([a-z]+)\/([0-9]+)\.html$/", $address, $matches))
 }
 
 // Thread
-else if (preg_match("/^\/([a-z]+)\/res\/([0-9]+)\.html$/", $address, $matches))
+elseif (preg_match("/^\/([a-z]+)\/res\/([0-9]+)\.html$/", $address, $matches))
 {
 	$board_class = CreateBoard($matches[1]);
 	if ($board_class)
@@ -163,7 +164,7 @@ else if (preg_match("/^\/([a-z]+)\/res\/([0-9]+)\.html$/", $address, $matches))
 }
 
 // Thread +50
-else if (preg_match("/^\/([a-z]+)\/res\/([0-9]+)\+50\.html$/", $address, $matches))
+elseif (preg_match("/^\/([a-z]+)\/res\/([0-9]+)\+50\.html$/", $address, $matches))
 {
 	$board_class = CreateBoard($matches[1]);
 	if ($board_class)
@@ -181,7 +182,7 @@ else if (preg_match("/^\/([a-z]+)\/res\/([0-9]+)\+50\.html$/", $address, $matche
 }
 
 // Thread -100
-else if (preg_match("/^\/([a-z]+)\/res\/([0-9]+)\-100\.html$/", $address, $matches))
+elseif (preg_match("/^\/([a-z]+)\/res\/([0-9]+)\-100\.html$/", $address, $matches))
 {
 	$board_class = CreateBoard($matches[1]);
 	if ($board_class)
@@ -199,7 +200,7 @@ else if (preg_match("/^\/([a-z]+)\/res\/([0-9]+)\-100\.html$/", $address, $match
 }
 
 // Offload engine
-if(KU_OFFLOAD)
+elseif(KU_OFFLOAD)
 {
 	$filetypes = $tc_db->GetAll("SELECT `filetype`, `mime` FROM `" . KU_DBPREFIX . "filetypes`");
 	foreach ($filetypes as $filetype)
