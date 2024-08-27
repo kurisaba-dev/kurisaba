@@ -185,7 +185,7 @@ if(KU_OFFLOAD)
 	$filetypes = $tc_db->GetAll("SELECT `filetype`, `mime` FROM `" . KU_DBPREFIX . "filetypes`");
 	foreach ($filetypes as $filetype)
 	{
-		if (preg_match("/^\/[a-z]+\/(src|thumb)\/[0-9]+\." . $filetype['filetype'] . "$/", $address, $matches))
+		if (preg_match("/^\/[a-z]+\/(src|thumb)\/[0-9]+[a-z]?\." . $filetype['filetype'] . "$/", $address, $matches))
 		{
 			$content = file_get_contents(KU_ROOTDIR . $address);
 			if ($content !== false)
