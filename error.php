@@ -178,52 +178,33 @@ else if (preg_match("/^\/([a-z]+)\/res\/([0-9]+)\-100\.html$/", $address, $match
 		}
 	}
 }
-// ku_storage
 
-/** pass $ip_resolved as null use DNS */
-function curl_get($url, $ip_resolved) {
-	$ch = curl_init($url);
-
-	if ($ip_resolved != null) {
-		$host = explode ("/", $url , 5);
-		$host = $host[2];
-		$port = strstr($host, ":");
-		if ($port === false)
-			$port = ":443";
-		curl_setopt($ch, CURLOPT_RESOLVE, array($host . $port . ":" . $ip_resolved, $host . ":80:" . $ip_resolved));
-	}
-	curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 4);
-	curl_setopt($ch, CURLOPT_TIMEOUT, 25);
-	curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-	$out = curl_exec($ch);
-
-	if(curl_errno($ch))
-		return false;
-
-	$httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-	if ($httpCode != 200)
-		return false;
-
-	return $out;
-}
-
-if (preg_match("/^\/[a-z]+\/src\/[0-9]+\.(jpg|png|gif|webp)$/", $address, $matches))
+// Offload engine
+if(KU_OFFLOAD)
 {
-	$content = curl_get(KU_STORAGE_PREFIX . $address, KU_STORAGE_IP);
-	if ($content !== false) {
-		http_response_code(200); header("Status: 200 OK");
-		header('Content-type: image/jpeg');
-		echo $content;
-		exit();
+	$filetypes = $tc_db->GetOne("SELECT `filetype`, `mime` FROM `" . KU_DBPREFIX . "filetypes`");
+	foreach ($filetypes as $filetype)
+	{
+		if (preg_match("/^\/[a-z]+\/(src|thumb)\/[0-9]+\." . $filetype['filetype'] . "$/", $address, $matches))
+		{
+			$content = file_get_contents(str_replace($address, KU_WEBPATH, KU_ROOTDIR));
+			if ($content !== false)
+			{
+				http_response_code(200); header("Status: 200 OK");
+				header('Content-type: ' . $filetype['mime']);
+				echo $content;
+				exit();
+			}
+			else
+			{
+				http_response_code($errorcode);
+				header('Content-type: image/jpeg');
+				echo file_get_contents(KU_ROOTDIR . '/images/404.jpg');
+				exit();
+			}
+		}
 	}
 }
-
-/*$content = curl_get('http://kustorage.local/48677204b6aeaa29d84166ace10c3e68.jpg', "127.0.0.1");
-if ($content !== false) {
-	header('Content-type: image/jpeg');
-	echo $content;
-	exit(0);
-}*/
 
 // Another error
 if ($error == '')
