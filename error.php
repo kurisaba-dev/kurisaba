@@ -18,7 +18,7 @@ function request_log($text)
 
 function CreateBoard($board)
 {
-	global $tc_db;
+	global $tc_db, $error, $errorcode;
 	if ($tc_db->GetOne("SELECT COUNT(*) FROM `".KU_DBPREFIX."boards` WHERE `name` = ".$tc_db->qstr($board)) > 0)
 	{
 		$board_class = new Board($board);
@@ -34,6 +34,7 @@ function CreateBoard($board)
 		}
 		return $board_class;
 	}
+	http_response_code(404); $errorcode = 404;
 	$error = '404: Такой борды не существует.';
 	return false;
 }
