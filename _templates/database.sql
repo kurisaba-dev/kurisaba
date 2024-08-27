@@ -74,6 +74,7 @@ CREATE TABLE IF NOT EXISTS `boards` (
   `dice` tinyint(1) NOT NULL DEFAULT '0',
   `useragent` tinyint(1) NOT NULL DEFAULT '0',
   `hiddenthreads` text COLLATE utf8_unicode_ci NOT NULL DEFAULT ''
+  `country_restrict` text COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
 ) ENGINE=MyISAM AUTO_INCREMENT=52 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 CREATE TABLE IF NOT EXISTS `board_filetypes` (
@@ -186,6 +187,7 @@ CREATE TABLE IF NOT EXISTS `posts` (
   `IS_DELETED` tinyint(1) NOT NULL DEFAULT '0',
   `bumped` int(20) unsigned NOT NULL DEFAULT '0',
   `country` varchar(10) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'xx',
+  `country_restrict` text COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
   `pic_spoiler` tinyint(1) NOT NULL DEFAULT '0',
   `pic_animated` tinyint(1) NOT NULL DEFAULT '0'
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;

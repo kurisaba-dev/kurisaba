@@ -22,6 +22,15 @@ function CreateBoard($board)
 	if ($tc_db->GetOne("SELECT COUNT(*) FROM `".KU_DBPREFIX."boards` WHERE `name` = ".$tc_db->qstr($board)) > 0)
 	{
 		$board_class = new Board($board);
+		$country_restrict = $board_class->board['country_restrict'];
+		if($country_restrict != '')
+		{
+			if (in_array(client_country(), explode(',', strtoupper(str_replace(' ', '', $country_restrict)))))
+			{
+				http_response_code(451);
+				die('This material is unavailable in your country.');
+			}
+		}
 		return $board_class;
 	}
 	$error = '404: Такой борды не существует.';

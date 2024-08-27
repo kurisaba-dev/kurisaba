@@ -44,6 +44,16 @@ if ($results == 0) {
 	die('Invalid board.');
 }
 $board_class = new Board($board);
+$country_restrict = $board_class->board['country_restrict'];
+if($country_restrict != '')
+{
+	if (in_array(client_country(), explode(',', strtoupper(str_replace(' ', '', $country_restrict)))))
+	{
+		http_response_code(451);
+		die('This material is unavailable in your country.');
+	}
+}
+
 if ($board_class->board['type'] == 1 && !$issearch) {
 	$replies = $tc_db->GetOne("SELECT COUNT(*) FROM `" . KU_DBPREFIX . "posts` WHERE `boardid` = " . $board_class->board['id'] ." AND `parentid` = " . $tc_db->qstr($thread) . "");
 } else {

@@ -46,6 +46,14 @@ if (count($results) == 0) { exitWithErrorPage('Постов в базе нет!'
 $i = 0;
 foreach ($results as $key=>$post)
 {
+	$country_restrict = $boards[$post['boardid']]->board['country_restrict'];
+	if($country_restrict != '')
+	{
+		if (in_array(client_country(), explode(',', strtoupper(str_replace(' ', '', $country_restrict)))))
+		{
+			continue;
+		}
+	}
 	$post['n'] = ++$i;
 	$post_board_class = $boards[$post['boardid']];
 	$post['filetypes'] = $post_board_class->board['filetypes'];
