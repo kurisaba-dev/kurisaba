@@ -96,7 +96,7 @@ function array_insert(&$array, $position, $insert_array) {
 
 
 function cleanBoardName($board) {
-	return trim(str_replace('/', '', str_replace('|', '', str_replace(' ', '', $board))));
+	return preg_replace('/[^a-z]/', '', strtolower($board));
 }
 
 /**

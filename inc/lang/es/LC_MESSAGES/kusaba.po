@@ -741,9 +741,6 @@ msgstr "En línea ahora"
 msgid "Only moderators of the board and admins can make new posts/replies"
 msgstr "Sólo los moderadores del board y los administradores pueden agregar nuevos posts/respuestas"
 
-msgid "Only put in the letter(s) of the board directory, no slashes!"
-msgstr "Escribe sólo la(s) letra(s) del directorio del board, sin diagonales."
-
 msgid "Open images in new window"
 msgstr "Abrir imágenes en una nueva ventana."
 

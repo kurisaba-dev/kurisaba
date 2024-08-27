@@ -41,11 +41,11 @@ function CreateBoard($board)
 	return false;
 }
 
-function geoblocked($address)
+function geoblocked($address, $filetype)
 {
 	global $tc_db;
-	preg_match("/^\/([a-z]+)\/(src|thumb)\/([0-9]+)[a-z]?\.([A-Za-z0-9]+)$/", $address, $matches); // Extension must consist of latin letters or numbers!
-	$records = $tc_db->GetAll("SELECT `".KU_DBPREFIX."posts`.`country_restrict_file`, `".KU_DBPREFIX."boards`.`id`, `".KU_DBPREFIX."boards`.`name`, `".KU_DBPREFIX."posts`.`IS_DELETED`, `".KU_DBPREFIX."posts`.`boardid`, `".KU_DBPREFIX."posts`.`file`, `".KU_DBPREFIX."posts`.`file_type` FROM `".KU_DBPREFIX."posts` JOIN `".KU_DBPREFIX."boards` ON `".KU_DBPREFIX."boards`.`id` = `".KU_DBPREFIX."posts`.`boardid` WHERE NOT `".KU_DBPREFIX."posts`.`IS_DELETED` AND `".KU_DBPREFIX."boards`.`name` = ".$tc_db->qstr($matches[1])." AND `".KU_DBPREFIX."posts`.`file` = ".$tc_db->qstr($matches[3])." AND `".KU_DBPREFIX."posts`.`file_type` = ".$tc_db->qstr($matches[4]));
+	preg_match("/^\/([a-z]+)\/(src|thumb)\/([0-9]+)[a-z]?\.".$filetype."$/", $address, $matches);
+	$records = $tc_db->GetAll("SELECT `".KU_DBPREFIX."posts`.`country_restrict_file`, `".KU_DBPREFIX."boards`.`id`, `".KU_DBPREFIX."boards`.`name`, `".KU_DBPREFIX."posts`.`IS_DELETED`, `".KU_DBPREFIX."posts`.`boardid`, `".KU_DBPREFIX."posts`.`file`, `".KU_DBPREFIX."posts`.`file_type` FROM `".KU_DBPREFIX."posts` JOIN `".KU_DBPREFIX."boards` ON `".KU_DBPREFIX."boards`.`id` = `".KU_DBPREFIX."posts`.`boardid` WHERE NOT `".KU_DBPREFIX."posts`.`IS_DELETED` AND `".KU_DBPREFIX."boards`.`name` = ".$tc_db->qstr($matches[1])." AND `".KU_DBPREFIX."posts`.`file` = ".$tc_db->qstr($matches[3])." AND `".KU_DBPREFIX."posts`.`file_type` = ".$tc_db->qstr($filetype));
 	if(count($records) < 1) return true; // Block pics from deleted or missing posts
 	foreach($records as $record)
 	{
@@ -205,7 +205,7 @@ elseif(KU_OFFLOAD)
 	$filetypes = $tc_db->GetAll("SELECT `filetype`, `mime` FROM `" . KU_DBPREFIX . "filetypes`");
 	foreach ($filetypes as $filetype)
 	{
-		if (geoblocked($address))
+		if (geoblocked($address, $filetype['filetype']))
 		{
 			http_response_code(451);
 			header('Content-type: image/jpeg');

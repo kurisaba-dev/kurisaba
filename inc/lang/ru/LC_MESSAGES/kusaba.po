@@ -808,8 +808,8 @@ msgstr "Недостаточно прав, чтобы банить здесь."
 msgid "Only moderators of the board and admins can make new posts/replies"
 msgstr "Только модераторы/администраторы могут оставлять здесь сообщения."
 
-msgid "Only put in the letter(s) of the board directory, no slashes!"
-msgstr "Ставить только буквы, без слешей!"
+msgid "Only put in the lowercase letter(s) of the board directory. All other characters will be removed (and uppercase letters will be made lowercase)."
+msgstr "Только строчные буквы, все остальные символы будут удалены (а заглавные буквы - сделаны строчными)."
 
 msgid "Open images in new window"
 msgstr "Открыть изображение в новом окне"

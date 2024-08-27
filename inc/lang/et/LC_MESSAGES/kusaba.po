@@ -738,9 +738,6 @@ msgstr "Vana parool"
 msgid "Only moderators of the board and admins can make new posts/replies"
 msgstr "Ainult selle tahvli moderaatorid ja administraatorid saavad siia teha uusi postitusi/vastuseid"
 
-msgid "Only put in the letter(s) of the board directory, no slashes!"
-msgstr "Sisesta ainult tahvli kausta täht/tähed, ilma kaldkriipsudeta!"
-
 msgid "Open images in new window"
 msgstr "Ava pildid uues aknas"
 

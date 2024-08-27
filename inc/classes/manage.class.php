@@ -936,7 +936,7 @@ class Manage {
 		<input type="hidden" name="add" id="add" value="add" />
 		<label for="directory">'. _gettext('Directory') . ':</label>
 		<input type="text" name="directory" id="directory" />
-		<div class="desc">'. _gettext('The directory of the board.') . ' <strong>'. _gettext('Only put in the letter(s) of the board directory, no slashes!') . '</strong></div><br />
+		<div class="desc">'. _gettext('The directory of the board.') . ' <strong>'. _gettext('Only put in the lowercase letter(s) of the board directory. All other characters will be removed (and uppercase letters will be made lowercase).') . '</strong></div><br />
 
 		<label for="desc">'. _gettext('Description') . ':</label>
 		<input type="text" name="desc" id="desc" />
@@ -987,7 +987,7 @@ class Manage {
 		<input type="hidden" name="add" id="add" value="add" />
 		<label for="directory">'. _gettext('Directory') . ': /_</label>
 		<input type="text" name="directory" id="directory" />
-		<div class="desc">'. _gettext('The directory of the board.') . ' <strong>'. _gettext('Only put in the letter(s) of the board directory, no slashes!') . '</strong></div><br />
+		<div class="desc">'. _gettext('The directory of the board.') . ' <strong>'. _gettext('Only put in the lowercase letter(s) of the board directory. All other characters will be removed (and uppercase letters will be made lowercase).') . '</strong></div><br />
 
 		<label for="desc">'. _gettext('Description') . ':</label>
 		<input type="text" name="desc" id="desc" />
