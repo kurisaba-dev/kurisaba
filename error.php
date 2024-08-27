@@ -42,7 +42,7 @@ function CreateBoard($board)
 function geoblocked($address)
 {
 	global $tc_db;
-	preg_match("/^\/([A-Za-z0-9]+)\/(res|thumb)\/([0-9]+)[a-z]?\.([A-Za-z0-9]+)$/", $address, $matches);
+	preg_match("/^\/([A-Za-z0-9]+)\/(src|thumb)\/([0-9]+)[a-z]?\.([A-Za-z0-9]+)$/", $address, $matches);
 	$records = $tc_db->GetAll("SELECT `".KU_DBPREFIX."posts`.`country_restrict_file`, `".KU_DBPREFIX."boards`.`id`, `".KU_DBPREFIX."boards`.`name`, `".KU_DBPREFIX."posts`.`IS_DELETED`, `".KU_DBPREFIX."posts`.`boardid`, `".KU_DBPREFIX."posts`.`file`, `".KU_DBPREFIX."posts`.`file_type` FROM `".KU_DBPREFIX."posts` JOIN `".KU_DBPREFIX."boards` ON `".KU_DBPREFIX."boards`.`id` = `".KU_DBPREFIX."posts`.`boardid` WHERE NOT `".KU_DBPREFIX."posts`.`IS_DELETED` AND `".KU_DBPREFIX."boards`.`name` = ".$tc_db->qstr($matches[1])." AND `".KU_DBPREFIX."posts`.`file` = ".$tc_db->qstr($matches[3])." AND `".KU_DBPREFIX."posts`.`file_type` = ".$tc_db->qstr($matches[4]));
 	if(count($records) < 1) return true; // Block pics from deleted or missing posts
 	foreach($records as $record)
