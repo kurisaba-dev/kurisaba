@@ -39,6 +39,26 @@ function CreateBoard($board)
 	return false;
 }
 
+function geoblocked($address)
+{
+	global $tc_db;
+	preg_match("/^\/([A-Za-z0-9]+)\/(res|thumb)\/([0-9]+)[a-z]?\.([A-Za-z0-9]+)$/", $address, $matches);
+	$board = $matches[1];
+	$file = $matches[3];
+	$ext = $matches[4];
+	$records = $tc_db->GetAll("SELECT `".KU_DBPREFIX."posts`.`country_restrict_file`, `".KU_DBPREFIX."boards`.`id`, `".KU_DBPREFIX."boards`.`name`, `".KU_DBPREFIX."posts`.`IS_DELETED`, `".KU_DBPREFIX."posts`.`boardid`, `".KU_DBPREFIX.
+	if(count($records) < 1) return true; // Block pics from deleted or missing posts
+	foreach($records as $record)
+	{
+		$country_restrict = $record['country_restrict_file'];
+		if($country_restrict != '')
+		{
+			if (in_array(client_country(), explode(',', strtoupper(str_replace(' ', '', $country_restrict))))) return true;
+		}
+	}
+	return false;
+}
+
 $address = explode('?',$_SERVER['REQUEST_URI'])[0]; // Remove request parameters sinse we're mimicking "static" html
 // Board Page 0
 if(preg_match("/^\/([a-z]+)\/board\.html$/", $address, $matches))
@@ -185,6 +205,13 @@ if(KU_OFFLOAD)
 	$filetypes = $tc_db->GetAll("SELECT `filetype`, `mime` FROM `" . KU_DBPREFIX . "filetypes`");
 	foreach ($filetypes as $filetype)
 	{
+		if (geoblocked($address))
+		{
+			http_response_code(451);
+			header('Content-type: image/jpeg');
+			echo file_get_contents(KU_ROOTDIR . 'images/451.jpg');
+			exit();
+		}
 		if (preg_match("/^\/[a-z]+\/(src|thumb)\/[0-9]+[a-z]?\." . $filetype['filetype'] . "$/", $address, $matches))
 		{
 			$content = file_get_contents(KU_ROOTDIR . $address);
