@@ -5,6 +5,8 @@ require 'config.php';
 
 require KU_ROOTDIR . 'inc/functions.php';
 require KU_ROOTDIR . 'inc/classes/board-post.class.php';
+require KU_ROOTDIR . 'inc/classes/manage.class.php';
+session_start(['cookie_samesite' => 'Strict']);
 
 $executiontime_start = microtime_float();
 
@@ -49,7 +51,7 @@ foreach ($results as $key=>$post)
 	$country_restrict = $boards[$post['boardid']]->board['country_restrict'];
 	if($country_restrict != '')
 	{
-		if (in_array(client_country(), explode(',', strtoupper(str_replace(' ', '', $country_restrict)))))
+		if (!((new Manage())->CurrentUserIsAdministrator()) && in_array(client_country(), explode(',', strtoupper(str_replace(' ', '', $country_restrict)))))
 		{
 			continue;
 		}
