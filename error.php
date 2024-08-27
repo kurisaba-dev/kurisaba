@@ -27,7 +27,7 @@ function CreateBoard($board)
 		{
 			if (in_array(client_country(), explode(',', strtoupper(str_replace(' ', '', $country_restrict)))))
 			{
-				http_response_code(451);
+				http_response_code(451); $errorcode = 451;
 				$error = _gettext('This material is unavailable in your country.');
 				return false;
 			}
@@ -236,6 +236,11 @@ if ($error == '')
 	{
 		request_log("Получил 403 при обращении к ".$_SERVER['REQUEST_URI']);
 		$error = '403: Ты не пройдёшь!';
+	}
+	else if ($errorcode == 451)
+	{
+		request_log("Получил 451 при обращении к ".$_SERVER['REQUEST_URI']);
+		$error = '451: Забанено <s>кровавой гэбнёй</s> Организацией!';
 	}
 	else
 	{
