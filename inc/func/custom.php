@@ -45,6 +45,13 @@ function geoloc($MyIP){
 		}
 	}
 
+function client_country()
+{
+	if(isset($_SERVER["HTTP_CF_IPCOUNTRY"])) return $_SERVER["HTTP_CF_IPCOUNTRY"];
+	if(isset($_SERVER["HTTP_CF_CONNECTING_IP"])) return geoloc($_SERVER["HTTP_CF_CONNECTING_IP"])["country"];
+	return geoloc($_SERVER["REMOTE_ADDR"])["country"];
+}
+
  function image_create_alpha ($width, $height)
 {
   // Create a normal image and apply required settings
