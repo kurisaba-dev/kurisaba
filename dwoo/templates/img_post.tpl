@@ -9,6 +9,7 @@
 			{/if}
 
 			<td {if $post.parentid eq 0}class="postnode op reply_board_{$board.name}"{else}class="reply reply_parent{$post.parentid} reply_board_{$board.name}"{/if} id="reply{$post.id}">
+			{if $post.geobanned}<font color="#FF0000"><b>{t}This post isn't available in your country.{/t}</b></font>{else}
 				{if $post.parentid eq 0}<a name="s{$.foreach.thread.iteration}"></a>{/if}
 				{if $post.parentid neq 0}{include file="img_post_info.tpl"}{/if}
 				{if ($post.file neq '' || $post.file_type neq '' ) && (($post.videobox eq '' && $post.file neq '') && $post.file neq 'removed')}
@@ -204,7 +205,7 @@
 						{t}omitted{/t}. {t}Last 50 shown{/t}.
 					</div>
 				{/if}			
-			</td>
+			{/if}</td>
 		</tr>
 	</tbody>
 </table>

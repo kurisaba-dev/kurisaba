@@ -55,6 +55,9 @@ function gen_posts($skipreflinks, $msgsource, $replyformat, $boardid, $dbdata, $
 	
 	foreach ($dbdata as $dbentry)
 	{
+		// API is anonymous, so we shouldn't check for admin. Also we skip geoblocked posts instead of putting a stub instead of a post message.
+		if($dbentry['country_restrict'] != '' && in_array(client_country(), explode(',', strtoupper(str_replace(' ', '', $dbentry['country_restrict']))))) continue;
+
 		if (!$skipreflinks)
 		{
 			$reflinks = Array();
