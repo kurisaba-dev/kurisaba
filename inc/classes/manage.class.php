@@ -3463,6 +3463,37 @@ class Manage {
 		}
 	}
 
+	/* Modification of country-based blocking */
+	function geoblock() {
+		global $tc_db, $tpl_page;
+
+		$this->AdministratorsOnly();
+		if (!isset($_GET['field']) || !isset($_GET['board']) || !isset($_GET['post']) || !isset($_GET['data']))
+		{
+			exitWithErrorPage(_gettext('Malformed geoblock request.'));
+		}
+		if ($_GET['field'] != "country_restrict" && $_GET['field'] != "country_restrict_file" )
+		{
+			exitWithErrorPage(_gettext('Wrong geoblock field.'));
+		}
+		$boardid = $tc_db->GetOne("SELECT HIGH_PRIORITY `id` FROM `" . KU_DBPREFIX . "boards` WHERE `name` = " . $tc_db->qstr($_GET['board']));
+		if (!$boardid)
+		{
+			exitWithErrorPage(_gettext('Incorrect board.'));
+		}
+		$results = $tc_db->GetAll("SELECT * FROM `" . KU_DBPREFIX . "posts` WHERE `boardid` = " . $boardid . " AND `id` = " . $tc_db->qstr($_GET['post']));
+		if(!is_array($results) || count($results) != 1)
+		{
+			exitWithErrorPage(_gettext('No such post.'));
+		}
+		$tc_db->Execute("UPDATE `" . KU_DBPREFIX . "posts` SET `" . $_GET['field'] . "` = " . $tc_db->qstr($_GET['data']) . " WHERE `boardid` = " . $boardid . " AND `id` = " . $tc_db->qstr($_GET['post']));
+		if ($results[0]['parentid'] == 0)
+		{
+			$tc_db->Execute("UPDATE `" . KU_DBPREFIX . "posts` SET `" . $_GET['field'] . "` = " . $tc_db->qstr($_GET['data']) . " WHERE `boardid` = " . $boardid . " AND `parentid` = " . $tc_db->qstr($_GET['post']));
+		}
+		$tpl_page .= '<h2>'. _gettext('Geo Block') . '</h2><br />'. _gettext('Settings updated successfully.');
+	}
+
 	/* Addition, modification, deletion, and viewing of bans */
 	function bans() {
 		global $tc_db, $tpl_page, $bans_class;
