@@ -324,7 +324,7 @@ pre {
 
 .spritebtn {
 	background-color: #7f7f7f;
-	background-image: url('icons/white.gif');
+	background-image: url('icons/white.gif?v=1');
 	border-radius: 3px;
 	vertical-align: middle;
 	-webkit-transition: background-color 0.3s, border-color 0.3s;
