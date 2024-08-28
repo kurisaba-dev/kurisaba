@@ -115,6 +115,8 @@ function gen_posts($skipreflinks, $msgsource, $replyformat, $boardid, $dbdata, $
 					"thumb_h"  => $dbentry['thumb_h'],
 					"animated" => $dbentry['pic_animated'],
 					"spoiler"  => $dbentry['pic_spoiler'],
+					"cr_post"  => $dbentry['country_restrict'],
+					"cr_file"  => $dbentry['country_restrict_file'],
 					"text"     => ($msgsource ? (($dbentry['message_source'] == '') ? $dbentry['message'] : $dbentry['message_source']) : $dbentry['message']),
 					"reflinks" => ($skipreflinks ? null : $reflinks)
 				),
@@ -144,6 +146,8 @@ function gen_posts($skipreflinks, $msgsource, $replyformat, $boardid, $dbdata, $
 					"thumb_h"  => $dbentry['thumb_h'],
 					"animated" => $dbentry['pic_animated'],
 					"spoiler"  => $dbentry['pic_spoiler'],
+					"cr_post"  => $dbentry['country_restrict'],
+					"cr_file"  => $dbentry['country_restrict_file'],
 					"text"     => ($msgsource ? (($dbentry['message_source'] == '') ? $dbentry['message'] : $dbentry['message_source']) : $dbentry['message']),
 					"reflinks" => ($skipreflinks ? null : $reflinks)
 				));
@@ -173,6 +177,8 @@ function gen_posts($skipreflinks, $msgsource, $replyformat, $boardid, $dbdata, $
 					"thumb_h"  => $dbentry['thumb_h'],
 					"animated" => $dbentry['pic_animated'],
 					"spoiler"  => $dbentry['pic_spoiler'],
+					"cr_post"  => $dbentry['country_restrict'],
+					"cr_file"  => $dbentry['country_restrict_file'],
 					"text"     => ($msgsource ? (($dbentry['message_source'] == '') ? $dbentry['message'] : $dbentry['message_source']) : $dbentry['message']),
 					"reflinks" => ($skipreflinks ? null : $reflinks)
 				);
