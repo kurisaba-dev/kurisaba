@@ -9,6 +9,7 @@
 curl -s "https://kurisaba.lan/api.php" --data '{"version":"1.1","method":"get_posts_by_id","id":"1","params":{"board":"sg", "ids":[206]}}' */
 
 require 'config.php';
+require KU_ROOTDIR . 'inc/functions.php';
 session_start(['cookie_samesite' => 'Strict']);
 
 function get_boardid_by_name($request_id, $boardname)
@@ -55,7 +56,7 @@ function gen_posts($skipreflinks, $msgsource, $replyformat, $boardid, $dbdata, $
 	foreach ($dbdata as $dbentry)
 	{
 		// I we're not an admin, we skip geoblocked posts instead of putting a stub instead of a post message.
-		if($dbentry['country_restrict'] != '' && getUserMode != 1 && in_array(client_country(), explode(',', strtoupper(str_replace(' ', '', $dbentry['country_restrict']))))) continue;
+		if($dbentry['country_restrict'] != '' && getUserMode() != 1 && in_array(client_country(), explode(',', strtoupper(str_replace(' ', '', $dbentry['country_restrict']))))) continue;
 
 		if (!$skipreflinks)
 		{
