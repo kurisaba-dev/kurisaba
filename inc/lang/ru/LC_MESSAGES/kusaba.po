@@ -2052,3 +2052,6 @@ msgstr "Подневная статистика по бордам /sg/ и /vg/"
 
 msgid "This material is unavailable in your country."
 msgstr "451: Забанено <s>кровавой гэбнёй</s> Организацией!"
+
+msgid "This post isn't available in your country."
+msgstr "Этот пост недоступен в твоей стране."
