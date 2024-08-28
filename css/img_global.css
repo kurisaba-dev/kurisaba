@@ -310,6 +310,10 @@ pre {
 	background-position: -16px -64px;
 }
 
+.geoblock {
+	background-position: -48px -64px;
+}
+
 .downscroll {
 	background-position: -32px -64px;
 }
