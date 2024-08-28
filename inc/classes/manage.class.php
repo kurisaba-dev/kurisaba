@@ -211,74 +211,35 @@ class Manage {
 	}
 
 	/* See if the user logged in is an admin */
-	function CurrentUserIsAdministrator() {
+	function CurrentUserIsAdministrator()
+	{
 		global $tc_db, $tpl_page;
-
-		if ($_SESSION['manageusername'] == '' || $_SESSION['managepassword'] == '' || $_SESSION['token'] == '') {
-			$_SESSION['manageusername'] = '';
-			$_SESSION['managepassword'] = '';
-      		$_SESSION['token'] = '';
-			return false;
-		}
-
-		$results = $tc_db->GetAll("SELECT HIGH_PRIORITY `type` FROM `" . KU_DBPREFIX . "staff` WHERE `username` = '" . $_SESSION['manageusername'] . "' AND `password` = '" . $_SESSION['managepassword'] . "' LIMIT 1");
-		foreach ($results as $line) {
-			if ($line['type'] == 1) {
-				return true;
-			} else {
-				return false;
-			}
-		}
-
+		$usermode = getUserMode();
+		if ($usermode == 1) return true;
+		if ($usermode >= 0) return false;
 		/* If the function reaches this point, something is fishy. Kill their session */
 		session_destroy();
 		exitWithErrorPage(_gettext('Invalid session, please log in again.'));
 	}
 
 	/* See if the user logged in is a moderator */
-	function CurrentUserIsModerator() {
+	function CurrentUserIsModerator()
+	{
 		global $tc_db, $tpl_page;
-
-		if ($_SESSION['manageusername'] == '' || $_SESSION['managepassword'] == '' || $_SESSION['token'] == '') {
-			$_SESSION['manageusername'] = '';
-			$_SESSION['managepassword'] = '';
-      		$_SESSION['token'] = '';
-			return false;
-		}
-
-		$results = $tc_db->GetAll("SELECT HIGH_PRIORITY `type` FROM `" . KU_DBPREFIX . "staff` WHERE `username` = '" . $_SESSION['manageusername'] . "' AND `password` = '" . $_SESSION['managepassword'] . "' LIMIT 1");
-		foreach ($results as $line) {
-			if ($line['type'] == 2) {
-				return true;
-			} else {
-				return false;
-			}
-		}
-
+		$usermode = getUserMode();
+		if ($usermode == 2) return true;
+		if ($usermode >= 0) return false;
 		/* If the function reaches this point, something is fishy. Kill their session */
 		session_destroy();
 		exitWithErrorPage(_gettext('Invalid session, please log in again.'));
 	}
 
-	function CurrentUserIsBoardOwner() {
+	function CurrentUserIsBoardOwner()
+	{
 		global $tc_db, $tpl_page;
-
-		if ($_SESSION['manageusername'] == '' || $_SESSION['managepassword'] == '' || $_SESSION['token'] == '') {
-			$_SESSION['manageusername'] = '';
-			$_SESSION['managepassword'] = '';
-      		$_SESSION['token'] = '';
-			return false;
-		}
-
-		$results = $tc_db->GetAll("SELECT HIGH_PRIORITY `type` FROM `" . KU_DBPREFIX . "staff` WHERE `username` = '" . $_SESSION['manageusername'] . "' AND `password` = '" . $_SESSION['managepassword'] . "' LIMIT 1");
-		foreach ($results as $line) {
-			if ($line['type'] == 3) {
-				return true;
-			} else {
-				return false;
-			}
-		}
-
+		$usermode = getUserMode();
+		if ($usermode == 3) return true;
+		if ($usermode >= 0) return false;
 		/* If the function reaches this point, something is fishy. Kill their session */
 		session_destroy();
 		exitWithErrorPage(_gettext('Invalid session, please log in again.'));

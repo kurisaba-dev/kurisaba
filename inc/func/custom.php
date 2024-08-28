@@ -52,6 +52,22 @@ function client_country()
 	return geoloc($_SERVER["REMOTE_ADDR"])["country"];
 }
 
+function getUserMode() // Returns 0 = user, 1 = admin, 2 = mod, 3 = board_owner, 9 = claire_user, -1 = missing user
+{
+	global $tc_db;
+	if ($_SESSION['manageusername'] == '' || $_SESSION['managepassword'] == '' || $_SESSION['token'] == '')
+	{
+		$_SESSION['manageusername'] = '';
+		$_SESSION['managepassword'] = '';
+		$_SESSION['token'] = '';
+		return 0;
+	}
+
+	$results = $tc_db->GetAll("SELECT HIGH_PRIORITY `type` FROM `" . KU_DBPREFIX . "staff` WHERE `username` = '" . $_SESSION['manageusername'] . "' AND `password` = '" . $_SESSION['managepassword'] . "' LIMIT 1");
+	if (count($results) < 1) return -1;
+	return $results[0]['type'];
+}
+
  function image_create_alpha ($width, $height)
 {
   // Create a normal image and apply required settings

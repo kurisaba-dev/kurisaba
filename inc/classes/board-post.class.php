@@ -470,9 +470,8 @@ class Board {
 
 		if(!$temporary && $post['country_restrict'] != '')
 		{
-			require KU_ROOTDIR . 'inc/classes/manage.class.php';
 			session_start(['cookie_samesite' => 'Strict']);
-			if (!((new Manage())->CurrentUserIsAdministrator()) && in_array(client_country(), explode(',', strtoupper(str_replace(' ', '', $post['country_restrict'])))))
+			if ((getUserMode() != 1) && in_array(client_country(), explode(',', strtoupper(str_replace(' ', '', $post['country_restrict'])))))
 			{
 				$post['geobanned'] = true;
 				$post['message'] = '';

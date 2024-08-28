@@ -2,7 +2,6 @@
 header('Content-type: text/html; charset=utf-8');
 
 require 'config.php';
-require KU_ROOTDIR . 'inc/classes/manage.class.php';
 session_start(['cookie_samesite' => 'Strict']);
 
 if (isset($_GET['v']))
@@ -50,7 +49,7 @@ $board_class = new Board($board);
 $country_restrict = $board_class->board['country_restrict'];
 if($country_restrict != '')
 {
-	if (!((new Manage())->CurrentUserIsAdministrator()) && in_array(client_country(), explode(',', strtoupper(str_replace(' ', '', $country_restrict)))))
+	if ((getUserMode() != 1) && in_array(client_country(), explode(',', strtoupper(str_replace(' ', '', $country_restrict)))))
 	{
 		http_response_code(451);
 		die('This material is unavailable in your country.');
