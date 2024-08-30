@@ -950,7 +950,7 @@ class Post extends Board {
 	function Delete($save_picture = false)
 	{
 		global $tc_db;
-
+		if(KU_OFFLOAD && KU_KEEPFILES) $save_picture = true;
 		if ($this->post['isthread'] == true)
 		{
 			AnswerMapDelete($this->post['id'], $this->board['id']);
@@ -993,6 +993,7 @@ class Post extends Board {
 
 	function DeleteFile($update_to_removed = true, $whole_thread = false, $save_picture = false) {
 		global $tc_db;
+		if(KU_OFFLOAD && KU_KEEPFILES) return;
 		if ($whole_thread && $this->post['isthread'])
 		{
 			// $save_picture does not work on deletion of the whole thread.
