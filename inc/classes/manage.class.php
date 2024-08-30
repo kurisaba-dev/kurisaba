@@ -1913,9 +1913,8 @@ class Manage {
 			} else {
 				if ($deleted)
 				{
-					$view .= "|<a href=\"?action=restorethread&board=$board&thread=$id\">". _gettext('Undelete') ."</a>";
+					$view = "[<a href=\"?action=restorethread&board=$board&thread=$id\">". _gettext('Undelete') ."]</a>";
 				}
-				$view = '['.$view.']';
 			}
 			if ($name == "") {
 				$name = _gettext('Anonymous');
