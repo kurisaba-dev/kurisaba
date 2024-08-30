@@ -3473,7 +3473,7 @@ class Manage {
 			http_response_code(400);
 			exitWithErrorPage(_gettext('Malformed geoblock request.'));
 		}
-		if ($_GET['field'] != "country_restrict" && $_GET['field'] != "country_restrict_file" )
+		if ($_GET['field'] != "country_restrict" && $_GET['field'] != "country_restrict_file")
 		{
 			http_response_code(400);
 			exitWithErrorPage(_gettext('Wrong geoblock field.'));
@@ -3484,7 +3484,7 @@ class Manage {
 			http_response_code(404);
 			exitWithErrorPage(_gettext('Incorrect board.'));
 		}
-		$results = $tc_db->GetAll("SELECT * FROM `" . KU_DBPREFIX . "posts` WHERE `boardid` = " . $boardid . " AND `id` = " . $tc_db->qstr($_GET['post']));
+		$results = $tc_db->GetAll("SELECT `parentid` FROM `" . KU_DBPREFIX . "posts` WHERE `boardid` = " . $boardid . " AND `id` = " . $tc_db->qstr($_GET['post']));
 		if(!is_array($results) || count($results) != 1)
 		{
 			http_response_code(404);
@@ -3493,7 +3493,16 @@ class Manage {
 		$tc_db->Execute("UPDATE `" . KU_DBPREFIX . "posts` SET `" . $_GET['field'] . "` = " . $tc_db->qstr($_GET['data']) . " WHERE `boardid` = " . $boardid . " AND `id` = " . $tc_db->qstr($_GET['post']));
 		if ($results[0]['parentid'] == 0)
 		{
-			$tc_db->Execute("UPDATE `" . KU_DBPREFIX . "posts` SET `" . $_GET['field'] . "` = " . $tc_db->qstr($_GET['data']) . " WHERE `boardid` = " . $boardid . " AND `parentid` = " . $tc_db->qstr($_GET['post']));
+			if (!isset($_GET['propagate']))
+			{
+				http_response_code(400);
+				exitWithErrorPage(_gettext('Missing geoblock propagate field.'));
+			}
+			if ($_GET['propagate'])
+			{
+				$tc_db->Execute("UPDATE `" . KU_DBPREFIX . "posts` SET `" . $_GET['field'] . "` = " . $tc_db->qstr($_GET['data']) . " WHERE `boardid` = " . $boardid . " AND `parentid` = " . $tc_db->qstr($_GET['post']));
+			}
+			$tc_db->Execute("UPDATE `" . KU_DBPREFIX . "posts` SET `" . (($_GET['field'] == "country_restrict_file") ? "crf_propagate" : "cr_propagate") . "` = " . $tc_db->qstr($_GET['propagate']) . " WHERE `boardid` = " . $boardid . " AND `id` = " . $tc_db->qstr($_GET['post']));
 		}
 		$tpl_page .= '<h2>'. _gettext('Geo Block') . '</h2><br />'. _gettext('Settings updated successfully.');
 	}

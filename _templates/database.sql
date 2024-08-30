@@ -189,6 +189,8 @@ CREATE TABLE IF NOT EXISTS `posts` (
   `country` varchar(10) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'xx',
   `country_restrict` text COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
   `country_restrict_file` text COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
+  `cr_propagate` tinyint(1) NOT NULL DEFAULT '0',
+  `crf_propagate` tinyint(1) NOT NULL DEFAULT '0',
   `pic_spoiler` tinyint(1) NOT NULL DEFAULT '0',
   `pic_animated` tinyint(1) NOT NULL DEFAULT '0'
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
