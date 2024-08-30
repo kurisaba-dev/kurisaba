@@ -261,7 +261,7 @@ if($operation_post) // it's `noreturn`.
 	if (!$preview) $tc_db->Execute("START TRANSACTION");
 	
 	$_POST['modpassword'] = $_POST['captcha'];
-	list($user_authority, $flags) = $posting_class->GetUserAuthority();
+	$user_authority = getUserMode();
 	
 	if (!$preview) // Don't check captcha on preview
 	{
@@ -755,7 +755,7 @@ if($operation_post) // it's `noreturn`.
 				} else {
 					$modpost_message .= $post_id;
 				}
-				$modpost_message .= '.html#' . $post_id . '">' . $post_id . '</a> in /'.$_POST['board'].'/ with flags: ' . $flags . '.';
+				$modpost_message .= '.html#' . $post_id . '">' . $post_id . '</a> in /'.$_POST['board'].'/.';
 				management_addlogentry($modpost_message, 1, md5_decrypt($_POST['modpassword'], KU_RANDOMSEED));
 			}
 

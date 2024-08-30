@@ -313,39 +313,6 @@ class Posting {
 		return array($post_name, $post_email, $post_subject);
 	}
 
-	function GetUserAuthority() {
-		global $tc_db, $board_class;
-
-		$user_authority = 0;
-		$flags = '';
-
-		if (isset($_POST['modpassword'])) {
-
-			$results = $tc_db->GetAll("SELECT `type`, `boards` FROM `" . KU_DBPREFIX . "staff` WHERE `username` = '" . md5_decrypt($_POST['modpassword'], KU_RANDOMSEED) . "' LIMIT 1");
-
-			if (count($results) > 0) {
-				if ($results[0][0] == 1) {
-					$user_authority = 1; // admin
-				} elseif ($results[0][0] == 2 && in_array($board_class->board['name'], explode('|', $results[0][1]))) {
-					$user_authority = 2; // mod
-				} elseif ($results[0][0] == 2 && $results[0][1] == 'allboards') {
-					$user_authority = 2;
-				} elseif ($results[0][0] == 9) {
-					$user_authority = 9; // VIP
-				}
-				if ($user_authority < 3) { /* set posting flags for mods and admins */
-					if (isset($_POST['displaystaffstatus'])) $flags .= 'D';
-					if (isset($_POST['lockonpost'])) $flags .= 'L';
-					if (isset($_POST['stickyonpost'])) $flags .= 'S';
-					if (isset($_POST['rawhtml'])) $flags .= 'RH';
-					if (isset($_POST['usestaffname'])) $flags .= 'N';
-				}
-			}
-		}
-
-		return array($user_authority, $flags);
-	}
-
 	function CheckBadUnicode($post_name, $post_email, $post_subject, $post_message) {
 		/* Check for bad characters which can cause the page to deform (right-to-left markers, etc) */
 		$bad_ords = array(8235, 8238);
