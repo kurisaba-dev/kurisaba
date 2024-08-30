@@ -1093,7 +1093,7 @@ class Post extends Board {
 		."`locked`,"
 		."`country`,"
 		."`pic_spoiler`,"
-		."`pic_animated`"
+		."`pic_animated`,"
 		."`country_restrict`,"
 		."`country_restrict_file`"
 		.") VALUES ("
