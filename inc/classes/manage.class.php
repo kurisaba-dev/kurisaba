@@ -3473,7 +3473,7 @@ class Manage {
 			http_response_code(400);
 			exitWithErrorPage(_gettext('Malformed geoblock request.'));
 		}
-		if ($_GET['field'] != "country_restrict" && $_GET['field'] != "country_restrict_file")
+		if ($_GET['field'] != "both" && $_GET['field'] != "country_restrict" && $_GET['field'] != "country_restrict_file")
 		{
 			http_response_code(400);
 			exitWithErrorPage(_gettext('Wrong geoblock field.'));
@@ -3490,7 +3490,18 @@ class Manage {
 			http_response_code(404);
 			exitWithErrorPage(_gettext('No such post.'));
 		}
-		$tc_db->Execute("UPDATE `" . KU_DBPREFIX . "posts` SET `" . $_GET['field'] . "` = " . $tc_db->qstr($_GET['data']) . " WHERE `boardid` = " . $boardid . " AND `id` = " . $tc_db->qstr($_GET['post']));
+		if($_GET['field'] == "country_restrict")
+		{
+			$tc_db->Execute("UPDATE `" . KU_DBPREFIX . "posts` SET `country_restrict` = " . $tc_db->qstr($_GET['data']) . " WHERE `boardid` = " . $boardid . " AND `id` = " . $tc_db->qstr($_GET['post']));
+		}
+		elseif($_GET['field'] != "country_restrict_file")
+		{
+			$tc_db->Execute("UPDATE `" . KU_DBPREFIX . "posts` SET `country_restrict_file` = " . $tc_db->qstr($_GET['data']) . " WHERE `boardid` = " . $boardid . " AND `id` = " . $tc_db->qstr($_GET['post']));
+		}
+		else
+		{
+			$tc_db->Execute("UPDATE `" . KU_DBPREFIX . "posts` SET `country_restrict` = " . $tc_db->qstr($_GET['data']) . ", `country_restrict_file` = " . $tc_db->qstr($_GET['data']) . " WHERE `boardid` = " . $boardid . " AND `id` = " . $tc_db->qstr($_GET['post']));
+		}
 		if ($results[0]['parentid'] == 0)
 		{
 			if (!isset($_GET['propagate']))
@@ -3500,9 +3511,31 @@ class Manage {
 			}
 			if ($_GET['propagate'])
 			{
-				$tc_db->Execute("UPDATE `" . KU_DBPREFIX . "posts` SET `" . $_GET['field'] . "` = " . $tc_db->qstr($_GET['data']) . " WHERE `boardid` = " . $boardid . " AND `parentid` = " . $tc_db->qstr($_GET['post']));
+				if($_GET['field'] == "country_restrict")
+				{
+					$tc_db->Execute("UPDATE `" . KU_DBPREFIX . "posts` SET `country_restrict` = " . $tc_db->qstr($_GET['data']) . " WHERE `boardid` = " . $boardid . " AND `parentid` = " . $tc_db->qstr($_GET['post']));
+				}
+				elseif($_GET['field'] != "country_restrict_file")
+				{
+					$tc_db->Execute("UPDATE `" . KU_DBPREFIX . "posts` SET `country_restrict_file` = " . $tc_db->qstr($_GET['data']) . " WHERE `boardid` = " . $boardid . " AND `parentid` = " . $tc_db->qstr($_GET['post']));
+				}
+				else
+				{
+					$tc_db->Execute("UPDATE `" . KU_DBPREFIX . "posts` SET `country_restrict` = " . $tc_db->qstr($_GET['data']) . ", `country_restrict_file` = " . $tc_db->qstr($_GET['data']) . " WHERE `boardid` = " . $boardid . " AND `parentid` = " . $tc_db->qstr($_GET['post']));
+				}
 			}
-			$tc_db->Execute("UPDATE `" . KU_DBPREFIX . "posts` SET `" . (($_GET['field'] == "country_restrict_file") ? "crf_propagate" : "cr_propagate") . "` = " . $tc_db->qstr($_GET['propagate']) . " WHERE `boardid` = " . $boardid . " AND `id` = " . $tc_db->qstr($_GET['post']));
+			if($_GET['field'] == "country_restrict")
+			{
+				$tc_db->Execute("UPDATE `" . KU_DBPREFIX . "posts` SET `cr_propagate` = " . $tc_db->qstr($_GET['propagate']) . " WHERE `boardid` = " . $boardid . " AND `id` = " . $tc_db->qstr($_GET['post']));
+			}
+			elseif($_GET['field'] != "country_restrict_file")
+			{
+				$tc_db->Execute("UPDATE `" . KU_DBPREFIX . "posts` SET `crf_propagate` = " . $tc_db->qstr($_GET['propagate']) . " WHERE `boardid` = " . $boardid . " AND `id` = " . $tc_db->qstr($_GET['post']));
+			}
+			else
+			{
+				$tc_db->Execute("UPDATE `" . KU_DBPREFIX . "posts` SET `cr_propagate` = " . $tc_db->qstr($_GET['propagate']) . ", `crf_propagate` = " . $tc_db->qstr($_GET['propagate']) . " WHERE `boardid` = " . $boardid . " AND `id` = " . $tc_db->qstr($_GET['post']));
+			}
 		}
 		$tpl_page .= '<h2>'. _gettext('Geo Block') . '</h2><br />'. _gettext('Settings updated successfully.');
 	}
