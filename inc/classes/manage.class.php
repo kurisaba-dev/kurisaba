@@ -1967,7 +1967,7 @@ class Manage {
 			<tr>";
 
 
-			if ($filename != "" && !$deleted) {
+			if ($filename != "" && (!$deleted || (KU_KEEPFILES && KU_OFFLOAD))) {
 				$tpl_page .= "
 					<td style=\"vertical-align: top; width: 300px;\"><center><a href=\"". KU_WEBPATH ."/$board/src/$filename.$filetype\" target=\"_new\"><img src=\"". KU_WEBPATH ."/$board/thumb/{$filename}s.$filetype\" height=\"$thumb_h\" width=\"$thumb_w\" border=\"0\"></a></center></td>";
 			}
