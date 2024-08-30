@@ -1812,7 +1812,7 @@ class Manage {
 
 	function restorethread() {
 		global $tc_db, $tpl_page;
-		$tpl_page .= '<h2>Восстановить тред</h2>';
+		$tpl_page .= '<h2>Восстановить пост/тред</h2>';
 		$board = isset($_GET['board']) ? $_GET['board'] : '';
 		$thread = isset($_GET['thread']) ? $_GET['thread'] : '';
 
@@ -1829,16 +1829,10 @@ class Manage {
 			$line = $lines[0];
 			$timestamp = $line['deleted_timestamp'];
 			$deleted_at = date(r, $timestamp);
-			$deleted_timestamp_limit = $timestamp - 30;
-			$restore_to = date(r, $deleted_timestamp_limit);
-
-			$tpl_page .= '<p>Тред ' . $board . '/' . $thread . ' удалён ' . $deleted_at . '(' . $timestamp . '); будут восстановлены все посты на ' . $restore_to . ' (' . $deleted_timestamp_limit . ').</p>';
-
-			$tc_db->Execute("UPDATE `" . KU_DBPREFIX . "posts` SET `IS_DELETED` = 0, `deleted_timestamp` = 0 WHERE (`id` = " . $tc_db->qstr($thread) . " OR `parentid` = " . $tc_db->qstr($thread) . ") AND `boardid` = " . $tc_db->qstr($boardid) . " AND `deleted_timestamp` > " . $deleted_timestamp_limit);
-
-			$tpl_page .= '<p>Тред ' . $board . '/' . $thread . ' восстановлен на момент за 30 секунд до удаления.</p>';
-
-			management_addlogentry('Восстановлен тред' . ' #<a href="?action=viewthread&thread='. $thread . '&board='. $board . '#'. $thread . '">'. $thread . '</a> - /'. $board . '/', 7);
+			$tpl_page .= '<p>Тред/пост ' . $board . '/' . $thread . ' удалён ' . $deleted_at . '(' . $timestamp . ').</p>';
+			$tc_db->Execute("UPDATE `" . KU_DBPREFIX . "posts` SET `IS_DELETED` = 0, `deleted_timestamp` = 0 WHERE (`id` = " . $tc_db->qstr($thread) . " OR `parentid` = " . $tc_db->qstr($thread) . ") AND `boardid` = " . $tc_db->qstr($boardid));
+			$tpl_page .= '<p>Тред/пост ' . $board . '/' . $thread . ' восстановлен.</p>';
+			management_addlogentry('Восстановлен тред/пост /'. $board . '/'. $thread, 7);
 		}
 	}
 
@@ -1917,7 +1911,11 @@ class Manage {
 				}
 				$view = '['.$view.']';
 			} else {
-				$view = "";
+				if ($deleted)
+				{
+					$view .= "|<a href=\"?action=restorethread&board=$board&thread=$id\">". _gettext('Undelete') ."</a>";
+				}
+				$view = '['.$view.']';
 			}
 			if ($name == "") {
 				$name = _gettext('Anonymous');
