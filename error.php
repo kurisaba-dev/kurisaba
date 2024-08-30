@@ -206,7 +206,7 @@ elseif(KU_OFFLOAD)
 	{
 		if (preg_match("/^\/[a-z]+\/(src|thumb)\/[0-9]+[a-z]?\." . $filetype['filetype'] . "$/", $address, $matches))
 		{
-			if (geoblocked($address, $filetype['filetype']))
+			if (geoblocked($address, $filetype['filetype']) && getUserMode() != 1)
 			{
 				http_response_code(451);
 				header('Content-type: image/jpeg');
