@@ -3494,7 +3494,7 @@ class Manage {
 		{
 			$tc_db->Execute("UPDATE `" . KU_DBPREFIX . "posts` SET `country_restrict` = " . $tc_db->qstr($_GET['data']) . " WHERE `boardid` = " . $boardid . " AND `id` = " . $tc_db->qstr($_GET['post']));
 		}
-		elseif($_GET['field'] != "country_restrict_file")
+		elseif($_GET['field'] == "country_restrict_file")
 		{
 			$tc_db->Execute("UPDATE `" . KU_DBPREFIX . "posts` SET `country_restrict_file` = " . $tc_db->qstr($_GET['data']) . " WHERE `boardid` = " . $boardid . " AND `id` = " . $tc_db->qstr($_GET['post']));
 		}
@@ -3515,7 +3515,7 @@ class Manage {
 				{
 					$tc_db->Execute("UPDATE `" . KU_DBPREFIX . "posts` SET `country_restrict` = " . $tc_db->qstr($_GET['data']) . " WHERE `boardid` = " . $boardid . " AND `parentid` = " . $tc_db->qstr($_GET['post']));
 				}
-				elseif($_GET['field'] != "country_restrict_file")
+				elseif($_GET['field'] == "country_restrict_file")
 				{
 					$tc_db->Execute("UPDATE `" . KU_DBPREFIX . "posts` SET `country_restrict_file` = " . $tc_db->qstr($_GET['data']) . " WHERE `boardid` = " . $boardid . " AND `parentid` = " . $tc_db->qstr($_GET['post']));
 				}
@@ -3528,7 +3528,7 @@ class Manage {
 			{
 				$tc_db->Execute("UPDATE `" . KU_DBPREFIX . "posts` SET `cr_propagate` = " . $tc_db->qstr($_GET['propagate']) . " WHERE `boardid` = " . $boardid . " AND `id` = " . $tc_db->qstr($_GET['post']));
 			}
-			elseif($_GET['field'] != "country_restrict_file")
+			elseif($_GET['field'] == "country_restrict_file")
 			{
 				$tc_db->Execute("UPDATE `" . KU_DBPREFIX . "posts` SET `crf_propagate` = " . $tc_db->qstr($_GET['propagate']) . " WHERE `boardid` = " . $boardid . " AND `id` = " . $tc_db->qstr($_GET['post']));
 			}
