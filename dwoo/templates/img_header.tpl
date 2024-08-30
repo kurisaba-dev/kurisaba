@@ -10,6 +10,7 @@
 		var ku_defaultboard = '{%KU_DEFAULTBOARD}';
 		var ku_maxfilesize = {$maxfilesize};
 		var ku_cssver = {%KU_CSSVER};
+		var ku_offload = {%KU_OFFLOAD};
 		var style_cookie = "kustyle2";
 		var locale = '{$locale}';
 		var search_phrases = Array('{$search_phrases}');
