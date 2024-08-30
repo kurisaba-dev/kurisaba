@@ -715,7 +715,25 @@ if($operation_post) // it's `noreturn`.
 			);
 			$post['subject'] = preg_replace($patterns, $replaces, $post['subject']);
 
-			$post_id = $post_class->Insert($thread_replyto, $post['name'], $post['tripcode'], $post['email'], $post['subject'], addslashes($post['message']), $post['message_source'], $upload_class->file_name, $upload_class->original_file_name, $filetype_withoutdot, $upload_class->file_md5, $upload_class->image_md5, $upload_class->imgWidth, $upload_class->imgHeight, $upload_class->file_size, $upload_class->imgWidth_thumb, $upload_class->imgHeight_thumb, $post_passwordmd5, time() + KU_ADDTIME, time() + KU_ADDTIME, KU_SAVEIP ? KU_REMOTE_ADDR : '0.0.0.0', $user_authority_display, $sticky, $lock, $board_class->board['id'], $post['country'], $post['pic_spoiler'], $post['pic_animated']);
+			$post['country_restrict'] = '';
+			$post['country_restrict_file'] = '';
+			if($thread_replyto != 0)
+			{
+				$geoblocking = $tc_db->GetAll("SELECT `country_restrict`, `country_restrict_file`, `cr_propagate`, `crf_propagate` FROM `" . KU_DBPREFIX . "posts` WHERE `boardid` = " . $board_class->board['id'] . " AND `id` = " . $thread_replyto . " LIMIT 1");
+				if($geoblocking[0]['cr_propagate']) $post['country_restrict'] = $geoblocking[0]['country_restrict'];
+				if($geoblocking[0]['crf_propagate']) $post['country_restrict_file'] = $geoblocking[0]['country_restrict_file'];
+				if($user_authority != 1 && $geoblocking[0]['cr_propagate'] && in_array(client_country(), explode(',', strtoupper(str_replace(' ', '', $geoblocking[0]['country_restrict'])))))
+				{
+					kurisaba_exit("You can't post here from your country.");
+				}
+			}
+
+			$post_id = $post_class->Insert($thread_replyto, $post['name'], $post['tripcode'], $post['email'], $post['subject'],
+			                               addslashes($post['message']), $post['message_source'], $upload_class->file_name, $upload_class->original_file_name,
+			                               $filetype_withoutdot, $upload_class->file_md5, $upload_class->image_md5, $upload_class->imgWidth, $upload_class->imgHeight,
+			                               $upload_class->file_size, $upload_class->imgWidth_thumb, $upload_class->imgHeight_thumb, $post_passwordmd5,
+			                               time() + KU_ADDTIME, time() + KU_ADDTIME, KU_SAVEIP ? KU_REMOTE_ADDR : '0.0.0.0', $user_authority_display, $sticky, $lock,
+			                               $board_class->board['id'], $post['country'], $post['pic_spoiler'], $post['pic_animated'], $post['country_restrict'], $post['country_restrict_file']);
 			if (!$post_id)
 			{
 				kurisaba_exit('Не получилось добавить пост в базу.');
