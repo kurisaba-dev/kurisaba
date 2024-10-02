@@ -201,19 +201,13 @@ class Manage {
 		}
 	}
 
-	function BoardOwnersOnly() {
+	function BoardOwnersOnly() { // This is now equal to administrators
 		global $tc_db, $tpl_page;
 
-		if ($this->CurrentUserIsAdministrator()) {
-			return true;
-		} else {
-			$results = $tc_db->GetAll("SELECT HIGH_PRIORITY `type` FROM `" . KU_DBPREFIX . "staff` WHERE `username` = '" . $_SESSION['manageusername'] . "' AND `password` = '" . $_SESSION['managepassword'] . "' LIMIT 1");
-			foreach ($results as $line) {
-				if ($line['type'] != 3) {
-					exitWithErrorPage(_gettext('That page is for custom board owners only.'));
-				}
-			}
+		if (!$this->CurrentUserIsAdministrator()) {
+			exitWithErrorPage('That page is for admins only.');
 		}
+		return true;
 	}
 
 	/* See if the user logged in is an admin */
@@ -240,11 +234,11 @@ class Manage {
 		exitWithErrorPage(_gettext('Invalid session, please log in again.'));
 	}
 
-	function CurrentUserIsBoardOwner()
+	function CurrentUserIsBoardOwner() // This is now equal to administrator
 	{
 		global $tc_db, $tpl_page;
 		$usermode = getUserMode();
-		if ($usermode == 3) return true;
+		if ($usermode == 1) return true;
 		if ($usermode >= 0) return false;
 		/* If the function reaches this point, something is fishy. Kill their session */
 		session_destroy();
@@ -578,17 +572,14 @@ class Manage {
 					$tc_db->Execute("INSERT HIGH_PRIORITY INTO `" .KU_DBPREFIX. "staff` ( `username` , `password` , `salt` , `type` , `addedon` ) VALUES (" .$tc_db->qstr($_POST['username']). " , '" .md5($_POST['password'] . $salt). "' , '" .$salt. "' , '" .$_POST['type']. "' , '" .(time() + KU_ADDTIME). "' )");
 					$log = _gettext('Added'). ' ';
 					switch ($_POST['type']) {
-						case 9:
-							$log .= _gettext('claire_user');
-							break;
 						case 1:
 							$log .= _gettext('Administrator');
 							break;
 						case 2:
 							$log .= _gettext('Moderator');
 							break;
-						case 3:
-							$log .= _gettext('Board Owner');
+						case 4:
+							$log .= _gettext('User allowed to post without captcha');
 							break;
 					}
 					$log .= ' '. $_POST['username'];
@@ -643,10 +634,8 @@ class Manage {
 						$logentry .= _gettext('Administrator');
 					} elseif ($_POST['type'] == '2') {
 						$logentry .= _gettext('Moderator');
-					} elseif ($_POST['type'] == '9') {
-						$logentry .= _gettext('claire_user');
-					} elseif ($_POST['type'] == '3') {
-						$logentry .= _gettext('Board Owner');
+					} elseif ($_POST['type'] == '4') {
+						$logentry .= _gettext('User allowed to post without captcha');
 					} else {
 						exitWithErrorPage('Something went wrong.');
 					}
@@ -676,8 +665,7 @@ class Manage {
 							<select id="type" name="type">';
 				$tpl_page .= ($type==1) ? '<option value="1" selected="selected">' ._gettext('Administrator'). '</option>' : '<option value="1">' ._gettext('Administrator'). '</option>';
 				$tpl_page .= ($type==2) ? '<option value="2" selected="selected">' ._gettext('Moderator'). '</option>' : '<option value="2">' ._gettext('Moderator'). '</option>';
-				$tpl_page .= ($type==0) ? '<option value="9" selected="selected">' ._gettext('claire_user'). '</option>' : '<option value="0">' ._gettext('Janitor'). '</option>';
-				$tpl_page .= ($type==3) ? '<option value="3" selected="selected">' ._gettext('Board Owner'). '</option>' : '<option value="3">' ._gettext('Board Owner'). '</option>';
+				$tpl_page .= ($type==4) ? '<option value="4" selected="selected">' ._gettext('User allowed to post without captcha'). '</option>' : '<option value="4">' ._gettext('User allowed to post without captcha'). '</option>';
 				$tpl_page .= '</select><br /><br />';
 
 				$tpl_page .= _gettext('Moderates') . '<br />
@@ -707,8 +695,7 @@ class Manage {
 					<select id="type" name="type">
 						<option value="1">' ._gettext('Administrator'). '</option>
 						<option value="2">' ._gettext('Moderator'). '</option>
-						<option value="9">' ._gettext('claire_user'). '</option>
-						<option value="3">' ._gettext('Board Owner'). '</option>
+						<option value="4">' ._gettext('User allowed to post without captcha'). '</option>
 					</select><br />
 
 					<input type="submit" value="' ._gettext('Add staff member'). '" />
@@ -725,11 +712,8 @@ class Manage {
 				$stafftype = 'Moderator';
 				$numtype = 2;
 			} elseif ($i == 4) {
-				$stafftype = 'claire_user';
-				$numtype = 9;
-			} elseif ($i == 3) {
-				$stafftype = 'Board Owner';
-				$numtype = 3;
+				$stafftype = 'User allowed to post without captcha';
+				$numtype = 4;
 			}
 			$tpl_page .= '<tr><td align="center" colspan="5"><font size="+1"><strong>'. _gettext($stafftype) . '</strong></font></td></tr>'. "\n";
 			$results = $tc_db->GetAll("SELECT HIGH_PRIORITY * FROM `" . KU_DBPREFIX . "staff` WHERE `type` = '" .$numtype. "' ORDER BY `username` ASC");

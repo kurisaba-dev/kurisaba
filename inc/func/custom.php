@@ -52,7 +52,7 @@ function client_country()
 	return geoloc($_SERVER["REMOTE_ADDR"])["country"];
 }
 
-function getUserMode() // Returns 0 = user, 1 = admin, 2 = mod, 3 = board_owner, 9 = claire_user, -1 = missing user
+function getUserMode() // Returns 0 = user, 1 = admin, 2 = mod, 4 = skipcaptcha, -1 = missing user; obsolete: 3 = board_owner, 9 = claire_user
 {
 	global $tc_db;
 	if ($_SESSION['manageusername'] == '' || $_SESSION['managepassword'] == '' || $_SESSION['token'] == '')

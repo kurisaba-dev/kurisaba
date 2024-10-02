@@ -265,7 +265,7 @@ if($operation_post) // it's `noreturn`.
 	
 	if (!$preview) // Don't check captcha on preview
 	{
-		if ($user_authority == 0)
+		if ($user_authority != 1 && $user_authority != 4) // Skipping captcha checks for admins and skipcaptcha type users only
 		{
 			$captcha_msg = $posting_class->CheckCaptcha($_POST['message']);
 	
