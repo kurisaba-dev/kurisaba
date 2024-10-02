@@ -44,10 +44,6 @@
 		<span class="admin">
 			&#35;&#35;&nbsp;{t}Admin{/t}&nbsp;&#35;&#35;
 		</span>
-	{elseif $post.posterauthority eq 4}
-		<span class="mod">
-			&#35;&#35;&nbsp;{t}Super Mod{/t}&nbsp;&#35;&#35;
-		</span>
 	{elseif $post.posterauthority eq 2}
 		<span class="mod">
 			&#35;&#35;&nbsp;{t}Mod{/t}&nbsp;&#35;&#35;
