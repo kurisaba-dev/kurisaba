@@ -703,8 +703,7 @@ class Manage {
 					<hr /><br />';
 
 		$tpl_page .= '<table border="1" width="100%"><tr><th>'. _gettext('Username') . '</th><th>'. _gettext('Added on') . '</th><th>'. _gettext('Last active') . '</th><th>'. _gettext('Moderating boards') . '</th><th>&nbsp;</th></tr>'. "\n";
-		$i = 1;
-		while($i <= 4) {
+		foreach(array(1, 2, 4) as $i) {
 			if ($i == 1) {
 				$stafftype = 'Administrator';
 				$numtype = 1;
