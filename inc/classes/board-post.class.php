@@ -549,12 +549,13 @@ class Board {
 		if ($_COOKIE["nodolls"] === "1")
 			$post['nodolls'] = 1;
 
-		if ($post['id'] != '?????' && $post['parentid'] == 0)
+		if($post['id'] != '?????' && $post['parentid'] == 0)
 		{
 			$tags = array();
 			$tags_q = $tc_db->GetAll("SELECT `tags` FROM `".KU_DBPREFIX."posts` WHERE `parentid` = " . $post['id']);
 			foreach($tags_q as $tags_f)
 			{
+				if($tags_f['tags'] == '') continue;
 				$tag_f = explode(",", $tags_f['tags']);
 				foreach($tag_f as $tag)
 				{
