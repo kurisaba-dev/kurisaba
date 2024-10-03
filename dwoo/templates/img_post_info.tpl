@@ -103,6 +103,9 @@
 		<img style="border: 0;" src="{$boardpath}css/images/sticky.gif" alt="{t}Stickied{/t}" />
 	{/if}
 </span>
+{if $post.tags}
+	<span class="mod">#: {$post.tags}</span>
+{/if}
 {if $post.parentid eq 0}
 	<span id="dnb-{$board.name}-{$post.id}-y"></span>
 	{strip}
