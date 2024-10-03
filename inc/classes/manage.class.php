@@ -3469,7 +3469,7 @@ class Manage {
 			$results = $tc_db->GetAll("SELECT HIGH_PRIORITY * FROM `" . KU_DBPREFIX . "posts` WHERE `boardid` = " . $board_id . " AND `IS_DELETED` = '0' AND `id` = " . $tc_db->qstr($_GET['post']) . "");
 			if (count($results) > 0)
 			{
-				$newtags = strtolower(join(', ', array_filter(array_map('trim', explode(',', $_GET['data'])))));
+				$newtags = mb_strtolower(join(', ', array_filter(array_map('trim', explode(',', $_GET['data'])))));
 				$tc_db->Execute("UPDATE `" . KU_DBPREFIX . "posts` SET `tags` = " . $tc_db->qstr($newtags) . " WHERE `boardid` = " . $board_id . " AND `id` = " . $tc_db->qstr($_GET['post']) . "");
 				management_addlogentry(_gettext('Updated tags for post') . ' #'. intval($_GET['post']) . ' - /'. intval($_GET['board']) . '/', 5);
 			}
