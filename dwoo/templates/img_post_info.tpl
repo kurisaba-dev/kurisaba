@@ -104,7 +104,7 @@
 	{/if}
 </span>
 {if $post.tags}
-	<span class="mod">#: {$post.tags}</span>
+	<span class="mod tags-list-{$board.name}-{$post.id}">#: {$post.tags}</span>
 {/if}
 {if $post.parentid eq 0}
 	<span id="dnb-{$board.name}-{$post.id}-y"></span>
