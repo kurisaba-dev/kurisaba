@@ -3446,6 +3446,46 @@ class Manage {
 		}
 	}
 
+	function settags()
+	{
+		global $tc_db, $tpl_page, $board_class;
+
+		if (!isset($_GET['board']) || !isset($_GET['post']) || !isset($_GET['data']))
+		{
+			http_response_code(400);
+			exitWithErrorPage(_gettext('Malformed settags request.'));
+		}
+
+		$results = $tc_db->GetAll("SELECT HIGH_PRIORITY `id` FROM `" . KU_DBPREFIX . "boards` WHERE `name` = " . $tc_db->qstr($_GET['board']) . "");
+		if (count($results) > 0)
+		{
+			if (!$this->CurrentUserIsModeratorOfBoard($_GET['board'], $_SESSION['manageusername']))
+			{
+				http_response_code(401);
+				exitWithErrorPage(_gettext('You are not a moderator of this board.'));
+			}
+			$board_id = $results[0]['id'];
+
+			$results = $tc_db->GetAll("SELECT HIGH_PRIORITY * FROM `" . KU_DBPREFIX . "posts` WHERE `boardid` = " . $board_id . " AND `IS_DELETED` = '0' AND `id` = " . $tc_db->qstr($_GET['post']) . "");
+			if (count($results) > 0)
+			{
+				$newtags = strtolower(join(', ', array_filter(array_map('trim', explode(',', $_GET['data'])))));
+				$tc_db->Execute("UPDATE `" . KU_DBPREFIX . "posts` SET `tags` = " . $tc_db->qstr($newtags) . " WHERE `boardid` = " . $board_id . " AND `id` = " . $tc_db->qstr($_GET['post']) . "");
+				management_addlogentry(_gettext('Updated tags for post') . ' #'. intval($_GET['post']) . ' - /'. intval($_GET['board']) . '/', 5);
+			}
+			else
+			{
+				http_response_code(404);
+				exitWithErrorPage(_gettext('No such post.'));
+			}
+		}
+		else
+		{
+			http_response_code(404);
+			exitWithErrorPage(_gettext('Incorrect board.'));
+		}
+	}
+
 	/* Modification of country-based blocking */
 	function geoblock() {
 		global $tc_db, $tpl_page;
