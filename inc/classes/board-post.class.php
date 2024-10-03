@@ -560,7 +560,7 @@ class Board {
 				foreach($tag_f as $tag)
 				{
 					$tag = trim($tag);
-					if(in_array($tag, array_keys[$tags]))
+					if(in_array($tag, array_keys($tags)))
 					{
 						++$tags[$tag];
 					}
