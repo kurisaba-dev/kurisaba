@@ -552,7 +552,7 @@ class Board {
 		if($post['id'] != '?????' && $post['parentid'] == 0)
 		{
 			$tags = array();
-			$tags_q = $tc_db->GetAll("SELECT `tags` FROM `".KU_DBPREFIX."posts` WHERE `parentid` = " . $post['id']);
+			$tags_q = $tc_db->GetAll("SELECT `tags` FROM `".KU_DBPREFIX."posts` WHERE `IS_DELETED` = 0 AND `parentid` = " . $post['id']);
 			foreach($tags_q as $tags_f)
 			{
 				if($tags_f['tags'] == '') continue;
