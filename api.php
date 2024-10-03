@@ -115,7 +115,7 @@ function gen_posts($skipreflinks, $msgsource, $replyformat, $boardid, $dbdata, $
 					"thumb_h"  => $dbentry['thumb_h'],
 					"animated" => $dbentry['pic_animated'],
 					"spoiler"  => $dbentry['pic_spoiler'],
-					"tags"     => $dbentry['tags'],
+					"tags"     => (($dbentry['parentid'] == 0)? generate_tags($boardid, $dbentry['id']) : $dbentry['tags']),
 					"cr_post"  => $dbentry['country_restrict'],
 					"cr_file"  => $dbentry['country_restrict_file'],
 					"cr_prop"  => $dbentry['cr_propagate'],
@@ -149,7 +149,7 @@ function gen_posts($skipreflinks, $msgsource, $replyformat, $boardid, $dbdata, $
 					"thumb_h"  => $dbentry['thumb_h'],
 					"animated" => $dbentry['pic_animated'],
 					"spoiler"  => $dbentry['pic_spoiler'],
-					"tags"     => $dbentry['tags'],
+					"tags"     => (($dbentry['parentid'] == 0)? generate_tags($boardid, $dbentry['id']) : $dbentry['tags']),
 					"cr_post"  => $dbentry['country_restrict'],
 					"cr_file"  => $dbentry['country_restrict_file'],
 					"cr_prop"  => $dbentry['cr_propagate'],
@@ -183,7 +183,7 @@ function gen_posts($skipreflinks, $msgsource, $replyformat, $boardid, $dbdata, $
 					"thumb_h"  => $dbentry['thumb_h'],
 					"animated" => $dbentry['pic_animated'],
 					"spoiler"  => $dbentry['pic_spoiler'],
-					"tags"     => $dbentry['tags'],
+					"tags"     => (($dbentry['parentid'] == 0)? generate_tags($boardid, $dbentry['id']) : $dbentry['tags']),
 					"cr_post"  => $dbentry['country_restrict'],
 					"cr_file"  => $dbentry['country_restrict_file'],
 					"cr_prop"  => $dbentry['cr_propagate'],
@@ -210,7 +210,7 @@ $api_function = Array
 	// <BOARD>: {"name":string, "captchaenabled":bool}.
 	// <POST>:  {"id":integer, "thread":integer, "subject":string, "name":string, "tripcode":string, "email":string,
 	//          "datetime":unixtime, "timezone":string, "filename":string, "filetype":string, "filesize":integer, "pic_w":integer, "pic_h":integer,
-	//          "thumb_w":integer, "thumb_h":integer, "animated":bool, "spoiler":bool, "cr_post":string, "cr_file":string,
+	//          "thumb_w":integer, "thumb_h":integer, "animated":bool, "spoiler":bool, "tags":string, "cr_post":string, "cr_file":string,
 	//          "cr_prop":bool, "crf_prop":bool, "text":string, "reflinks":Array of {"board":string, "id":integer}}.
 
 	'get_boards' => function($request, $request_id)

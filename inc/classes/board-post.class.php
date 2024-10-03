@@ -551,31 +551,7 @@ class Board {
 
 		if($post['id'] != '?????' && $post['parentid'] == 0)
 		{
-			$tags = array();
-			$tags_q = $tc_db->GetAll("SELECT `tags` FROM `".KU_DBPREFIX."posts` WHERE `IS_DELETED` = 0 AND `parentid` = " . $post['id']);
-			foreach($tags_q as $tags_f)
-			{
-				if($tags_f['tags'] == '') continue;
-				$tag_f = explode(",", $tags_f['tags']);
-				foreach($tag_f as $tag)
-				{
-					$tag = trim($tag);
-					if(in_array($tag, array_keys($tags)))
-					{
-						++$tags[$tag];
-					}
-					else
-					{
-						$tags[$tag] = 1;
-					}
-				}
-			}
-			$tags_n = array();
-			foreach(array_keys($tags) as $tag)
-			{
-				array_push($tags_n, $tag . "(" . $tags[$tag] . ")");
-			}
-			$post['tags'] = join(", ", $tags_n);
+			$post['tags'] = generate_tags($this->board['id'], $post['id']);
 		}
 
 		if($post['pic_spoiler']&&($post['file_type']=='jpg'||$post['file_type']=='gif'||$post['file_type']=='webp'||$post['file_type']=='png'))

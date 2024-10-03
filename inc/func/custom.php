@@ -52,6 +52,36 @@ function client_country()
 	return geoloc($_SERVER["REMOTE_ADDR"])["country"];
 }
 
+function generate_tags($boardid, $postid)
+{
+	global $tc_db;
+	$tags = array();
+	$tags_q = $tc_db->GetAll("SELECT `tags` FROM `".KU_DBPREFIX."posts` WHERE `IS_DELETED` = 0 AND `boardid` = " . $boardid . " AND `parentid` = " . $postid);
+	foreach($tags_q as $tags_f)
+	{
+		if($tags_f['tags'] == '') continue;
+		$tag_f = explode(",", $tags_f['tags']);
+		foreach($tag_f as $tag)
+		{
+			$tag = trim($tag);
+			if(in_array($tag, array_keys($tags)))
+			{
+				++$tags[$tag];
+			}
+			else
+			{
+				$tags[$tag] = 1;
+			}
+		}
+	}
+	$tags_n = array();
+	foreach(array_keys($tags) as $tag)
+	{
+		array_push($tags_n, $tag . "(" . $tags[$tag] . ")");
+	}
+	return join(", ", $tags_n);
+}
+
 function getUserMode() // Returns 0 = user, 1 = admin, 2 = mod, 4 = skipcaptcha, -1 = missing user; obsolete: 3 = board_owner, 9 = claire_user
 {
 	global $tc_db;
