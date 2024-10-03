@@ -199,6 +199,7 @@ function manage_page($action = 'welcome') {
 	if (is_callable(array($manage_class, $action))) {
 		$manage_class->$action();
 	} else {
+		http_response_code(501);
 		$tpl_page .= sprintf(_gettext('%s not implemented.'), $action);
 	}
 
