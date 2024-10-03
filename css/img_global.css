@@ -314,6 +314,10 @@ pre {
 	background-position: -48px -64px;
 }
 
+.edittags {
+	background-position: -64px 0px;
+}
+
 .downscroll {
 	background-position: -32px -64px;
 }
