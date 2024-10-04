@@ -171,7 +171,7 @@ function scrolling(elem, direction) {
 			<a href="{%KU_CGIPATH}/{$board.name}/">/{$board.name}/</a> - <strong>{$board.desc}</strong>
 			&nbsp;[<a href="/{$board.name}/catalog.html">Каталог</a>]
 		{else}
-			<strong>Однопоток постов</strong>
+			<strong>Однопоток постов</strong><span class="isfeed" style="display: none;"></span>
 		{/if}
 
 		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;

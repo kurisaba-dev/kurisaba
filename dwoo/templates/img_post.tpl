@@ -185,10 +185,12 @@
 						<script>
 							if (typeof newupd_replymap !== 'undefined')
 							{"{"}
+								{if not $isfeed}
 								newupd_replymap[{$post.id}]=new Array();
 								{foreach key=replykey item=reply from=$post.repliesmap}
 									newupd_replymap[{$post.id}].push({"{"}'id':{$reply.id},'boardname':'{$reply.boardname}','parentid':{$reply.parentid}{"}"});
 								{/foreach}
+								{/if}
 							{"}"}
 						</script>
 					</div>		
