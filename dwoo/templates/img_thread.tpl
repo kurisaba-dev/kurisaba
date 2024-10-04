@@ -64,7 +64,7 @@
 			</div>
 		{/if}
 
-{if $isfeed or (not $isexpand and not $isread and not $iscatalog)}
+{if $isfeed || (not $isexpand and not $isread and not $iscatalog)}
 		<table class="userdelete" width="100%" style="float:none; margin-top: 5px;">
 			<tbody>
 				<tr>

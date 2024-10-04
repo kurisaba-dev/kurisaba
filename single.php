@@ -30,7 +30,6 @@ $board_class->InitializeDwoo();
 $board_class->dwoo_data->assign('isfeed', true);
 $board_class->dwoo_data->assign('issearch', true);
 $board_class->dwoo_data->assign('isread', true);
-$board_class->dwoo_data->assign('isfeed', true);
 $board_class->dwoo_data->assign('skipheader', true);
 $embeds = $tc_db->GetAll("SELECT * FROM `" . KU_DBPREFIX . "embeds`");
 $board_class->dwoo_data->assign('embeds', $embeds);
