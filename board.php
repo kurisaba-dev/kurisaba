@@ -732,7 +732,7 @@ if($operation_post) // it's `noreturn`.
 			                               addslashes($post['message']), $post['message_source'], $upload_class->file_name, $upload_class->original_file_name,
 			                               $filetype_withoutdot, $upload_class->file_md5, $upload_class->image_md5, $upload_class->imgWidth, $upload_class->imgHeight,
 			                               $upload_class->file_size, $upload_class->imgWidth_thumb, $upload_class->imgHeight_thumb, $post_passwordmd5,
-			                               time() + KU_ADDTIME, time() + KU_ADDTIME, KU_SAVEIP ? KU_REMOTE_ADDR : '0.0.0.0', $user_authority_display, $sticky, $lock,
+			                               time() + KU_ADDTIME, time() + KU_ADDTIME, KU_SAVEIP ? KU_REMOTE_ADDR : '0.0.0.0', md5(KU_REMOTE_ADDR), $user_authority_display, $sticky, $lock,
 			                               $board_class->board['id'], $post['country'], $post['pic_spoiler'], $post['pic_animated'], $post['country_restrict'], $post['country_restrict_file']);
 			if (!$post_id)
 			{

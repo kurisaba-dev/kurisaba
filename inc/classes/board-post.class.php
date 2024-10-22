@@ -1063,7 +1063,7 @@ class Post extends Board {
 		}
 	}
 
-	function Insert($parentid, $name, $tripcode, $email, $subject, $message, $message_source, $filename, $file_original, $filetype, $file_md5, $image_md5, $image_w, $image_h, $filesize, $thumb_w, $thumb_h, $password, $timestamp, $bumped, $ip, $posterauthority, $stickied, $locked, $boardid, $country, $pic_spoiler, $pic_animated, $country_restrict, $country_restrict_file)
+	function Insert($parentid, $name, $tripcode, $email, $subject, $message, $message_source, $filename, $file_original, $filetype, $file_md5, $image_md5, $image_w, $image_h, $filesize, $thumb_w, $thumb_h, $password, $timestamp, $bumped, $ip, $ipmd5, $posterauthority, $stickied, $locked, $boardid, $country, $pic_spoiler, $pic_animated, $country_restrict, $country_restrict_file)
 	{
 		// Why do we need to transfer $boardid while we have $this->board['id']?
 		global $tc_db;
@@ -1130,7 +1130,7 @@ class Post extends Board {
 		.$tc_db->qstr($timestamp).","
 		.$tc_db->qstr($bumped).","
 		.$tc_db->qstr(md5_encrypt($ip, KU_RANDOMSEED)).","
-		."'".md5($ip)."',"
+		.$tc_db->qstr($ipmd5).","
 		.$tc_db->qstr($posterauthority).","
 		.$tc_db->qstr($stickied).","
 		.$tc_db->qstr($locked).","
