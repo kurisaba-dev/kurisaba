@@ -3576,7 +3576,7 @@ class Manage {
 				foreach ( $_POST['post'] as $post ) {
 					$results = $tc_db->GetAll("SELECT HIGH_PRIORITY * FROM `" . KU_DBPREFIX . "posts` WHERE `boardid` = '" . $ban_board_id . "' AND `id` = " . intval($post) . "");
 					if (count($results) > 0) {
-						$multiban[] = md5_decrypt($results[0]['ip'], KU_RANDOMSEED);
+						$multiban[] = ((md5_decrypt($results[0]['ip'], KU_RANDOMSEED) == '0.0.0.0') ? $results[0]['ipmd5'] : md5_decrypt($results[0]['ip'], KU_RANDOMSEED));
 						$ban_hash = $results[0]['banimage_md5'];
 					    if ($ban_hash == '') $ban_hash = $results[0]['file_md5'];
 						$multiban_hash[] = $ban_hash;
@@ -3596,7 +3596,7 @@ class Manage {
 						$ban_hash = $results[0]['banimage_md5'];
 						if ($ban_hash == '') $ban_hash = $results[0]['file_md5'];
 					}
-					$ban_ip = md5_decrypt($results[0]['ip'], KU_RANDOMSEED);
+					$ban_ip = ((md5_decrypt($results[0]['ip'], KU_RANDOMSEED) == '0.0.0.0') ? $results[0]['ipmd5'] : md5_decrypt($results[0]['ip'], KU_RANDOMSEED));
 					$ban_parentid = $results[0]['parentid'];
 				} else {
 					$tpl_page.= _gettext('A post with that ID does not exist.') . '<hr />';
@@ -3764,7 +3764,7 @@ class Manage {
 		} elseif (isset($_GET['delban']) && $_GET['delban'] > 0) {
 			$results = $tc_db->GetAll("SELECT HIGH_PRIORITY * FROM `" . KU_DBPREFIX . "banlist` WHERE `id` = " . $tc_db->qstr($_GET['delban']) . "");
 			if (count($results) > 0) {
-				$unban_ip = (isValidMd5($results[0]['ip']) ? $results[0]['ip'] : md5_decrypt($results[0]['ip'], KU_RANDOMSEED));
+				$unban_ip = ((md5_decrypt($results[0]['ip'], KU_RANDOMSEED) == '0.0.0.0') ? $results[0]['ipmd5'] : md5_decrypt($results[0]['ip'], KU_RANDOMSEED));
 				$tc_db->Execute("DELETE FROM `" . KU_DBPREFIX . "banlist` WHERE `id` = " . $tc_db->qstr($_GET['delban']) . "");
 				$bans_class->UpdateHtaccess();
 				$tpl_page .= _gettext('Ban successfully removed.');
@@ -3917,7 +3917,8 @@ class Manage {
 				$tpl_page .= ($i == 1) ? _gettext('IP Range') : _gettext('IP Address');
 				$tpl_page .= '</th><th>'. _gettext('Boards') . '</th><th>'. _gettext('Reason') . '</th><th>'. _gettext('Staff Note') . '</th><th>'. _gettext('Date added') . '</th><th>'. _gettext('Expires/Expired') . '</th><th>'. _gettext('Added By') . '</th><th>&nbsp;</th></tr>';
 				foreach ($results as $line) {
-					$tpl_page .= '<tr><td><a href="?action=bans&ip='. md5_decrypt($line['ip'], KU_RANDOMSEED) . '">'. md5_decrypt($line['ip'], KU_RANDOMSEED) . '</a></td><td>';
+					$ipval = ((md5_decrypt($line['ip'], KU_RANDOMSEED) == '0.0.0.0') ? $line['ipmd5'] : md5_decrypt($line['ip'], KU_RANDOMSEED));
+					$tpl_page .= '<tr><td><a href="?action=bans&ip='. $ipval . '">'. $ipval . '</a></td><td>';
 					if ($line['globalban'] == 1) {
 						$tpl_page .= '<strong>'. _gettext('All boards') . '</strong>';
 					} elseif (!empty($line['boards'])) {
@@ -3965,7 +3966,7 @@ class Manage {
 				$results = $tc_db->GetAll("SELECT HIGH_PRIORITY * FROM `" . KU_DBPREFIX . "banlist` WHERE `id` = " . $tc_db->qstr($_GET['accept']) . "");
 				if (count($results) > 0) {
 					foreach ($results as $line) {
-						$unban_ip = md5_decrypt($line['ip'], KU_RANDOMSEED);
+						$unban_ip = ((md5_decrypt($line['ip'], KU_RANDOMSEED) == '0.0.0.0') ? $line['ipmd5'] : md5_decrypt($line['ip'], KU_RANDOMSEED));
 					}
 					$tc_db->Execute("UPDATE `" . KU_DBPREFIX . "banlist` SET `expired` = 1, `appealat` = -4 WHERE `id` = " . $tc_db->qstr($_GET['accept']) . "");
 					$bans_class->UpdateHtaccess();
@@ -3981,7 +3982,7 @@ class Manage {
 				$results = $tc_db->GetAll("SELECT HIGH_PRIORITY * FROM `" . KU_DBPREFIX . "banlist` WHERE `id` = " . $tc_db->qstr($_GET['deny']) . "");
 				if (count($results) > 0) {
 					foreach ($results as $line) {
-						$unban_ip = md5_decrypt($line['ip'], KU_RANDOMSEED);
+						$unban_ip = ((md5_decrypt($line['ip'], KU_RANDOMSEED) == '0.0.0.0') ? $line['ipmd5'] : md5_decrypt($line['ip'], KU_RANDOMSEED));
 					}
 					$tc_db->Execute("UPDATE `" . KU_DBPREFIX . "banlist` SET `appealat` = -2 WHERE `id` = " . $tc_db->qstr($_GET['deny']) . "");
 					$bans_class->UpdateHtaccess();
@@ -4017,7 +4018,8 @@ class Manage {
 				$tpl_page .= '</th><th>Boards</th><th>Reason</th><th>Staff Note</th><th>Date Added</th><th>Expires</th><th>Added By</th><th>Appeal Message</th><th>Deny</th><th>Accept</th></tr>';
 				foreach ($results as $line) {
 					$tpl_page .= '<tr>';
-					$tpl_page .= '<td><a href="?action=bans&ip='. md5_decrypt($line['ip'], KU_RANDOMSEED) . '">'. md5_decrypt($line['ip'], KU_RANDOMSEED) . '</a></td><td>';
+					$ipval = ((md5_decrypt($line['ip'], KU_RANDOMSEED) == '0.0.0.0') ? $line['ipmd5'] : md5_decrypt($line['ip'], KU_RANDOMSEED));
+					$tpl_page .= '<td><a href="?action=bans&ip='. $ipval . '">'. $ipval . '</a></td><td>';
 					if ($line['globalban'] == '1') {
 						$tpl_page .= '<strong>'. _gettext('All boards') . '</strong>';
 					} else {
