@@ -109,6 +109,17 @@ class Bans {
 	function BanUser($ip, $modname, $globalban, $duration, $boards, $reason, $staffnote, $appealat=0, $type=0, $allowread=1, $proxyban=false) {
 		global $tc_db;
 		
+		if(isValidMd5($ip))
+		{
+			$encrypted_ip = md5_encrypt("0.0.0.0", KU_RANDOMSEED);
+			$hashed_ip = $ip;
+		}
+		else
+		{
+			$encrypted_ip = md5_encrypt($ip, KU_RANDOMSEED);
+			$hashed_ip = md5($ip);
+		}
+
 		if ($proxyban) {
 			$check = $tc_db->GetOne("SELECT COUNT(*) FROM `".KU_DBPREFIX."banlist` WHERE `type` = '".$type."' AND `ipmd5` = '".md5($ip)."'");
 			if ($check[0] > 0) {
@@ -127,7 +138,7 @@ class Bans {
 			$ban_until = '0';
 		}
 
-		$tc_db->Execute("INSERT INTO `".KU_DBPREFIX."banlist` ( `ip` , `ipmd5` , `type` , `allowread` , `globalban` , `boards` , `by` , `at` , `until` , `reason`, `staffnote`, `appealat` ) VALUES ( ".$tc_db->qstr(md5_encrypt($ip, KU_RANDOMSEED))." , ".$tc_db->qstr(md5($ip))." , ".intval($type)." , ".intval($allowread)." , ".intval($globalban)." , ".$tc_db->qstr($boards)." , ".$tc_db->qstr($modname)." , ".(time() + KU_ADDTIME)." , ".intval($ban_until)." , ".$tc_db->qstr($reason)." , ".$tc_db->qstr($staffnote).", ".intval($appealat)." ) ");
+		$tc_db->Execute("INSERT INTO `".KU_DBPREFIX."banlist` ( `ip` , `ipmd5` , `type` , `allowread` , `globalban` , `boards` , `by` , `at` , `until` , `reason`, `staffnote`, `appealat` ) VALUES ( ".$tc_db->qstr($encrypted_ip)." , ".$tc_db->qstr($hashed_ip)." , ".intval($type)." , ".intval($allowread)." , ".intval($globalban)." , ".$tc_db->qstr($boards)." , ".$tc_db->qstr($modname)." , ".(time() + KU_ADDTIME)." , ".intval($ban_until)." , ".$tc_db->qstr($reason)." , ".$tc_db->qstr($staffnote).", ".intval($appealat)." ) ");
 
 		if (!$proxyban && $type == 1) {
 			$this->UpdateHtaccess();
