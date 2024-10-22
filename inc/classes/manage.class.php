@@ -3683,8 +3683,12 @@ class Manage {
 				foreach ($ban_ips as $ban_ip) {
 					$ban_msg = '';
 					$whitelist = $tc_db->GetAll("SELECT `ipmd5` FROM `" . KU_DBPREFIX . "banlist` WHERE `type` = 2");
-					if (in_array(md5($ban_ip), $whitelist)) {
+					if (in_array(md5($ban_ip), $whitelist) || in_array($ban_ip, $whitelist)) {
 						exitWithErrorPage(_gettext('That IP is on the whitelist'));
+					}
+					if (!KU_SAVEIP && !isValidMd5($ban_ip))
+					{
+						$ban_ip = md5($ban_ip);
 					}
 					if ($bans_class->BanUser($ban_ip, $_SESSION['manageusername'], $ban_globalban, $ban_duration, $ban_boards, $ban_reason, $ban_note, $ban_appealat, $ban_type, $ban_allowread)) {
 						$regenerated = array();
@@ -3760,7 +3764,7 @@ class Manage {
 		} elseif (isset($_GET['delban']) && $_GET['delban'] > 0) {
 			$results = $tc_db->GetAll("SELECT HIGH_PRIORITY * FROM `" . KU_DBPREFIX . "banlist` WHERE `id` = " . $tc_db->qstr($_GET['delban']) . "");
 			if (count($results) > 0) {
-				$unban_ip = md5_decrypt($results[0]['ip'], KU_RANDOMSEED);
+				$unban_ip = (isValidMd5($results[0]['ip']) ? $results[0]['ip'] : md5_decrypt($results[0]['ip'], KU_RANDOMSEED));
 				$tc_db->Execute("DELETE FROM `" . KU_DBPREFIX . "banlist` WHERE `id` = " . $tc_db->qstr($_GET['delban']) . "");
 				$bans_class->UpdateHtaccess();
 				$tpl_page .= _gettext('Ban successfully removed.');
@@ -3797,7 +3801,7 @@ class Manage {
 
 		$tpl_page .= '<fieldset>
 		<legend>'. _gettext('IP address and ban type') . '</legend>
-		<label for="ip">'. _gettext('IP') . ':</label>';
+		<label for="ip">'. _gettext('IP/Hash') . ':</label>';
 		if (!$multiban) {
 			$tpl_page .= '<input type="text" name="ip" id="ip" value="'. $ban_ip . '" />
 			<br /><label for="deleteposts">'. _gettext('Delete all posts by this IP') . ':</label>
@@ -3816,8 +3820,8 @@ class Manage {
 			<div class="desc">'. _gettext('Whether or not the user(s) affected by this ban will be allowed to read the boards.') . '<br /><strong>'. _gettext('Warning') . ':</strong> '. _gettext('Selecting "No" will prevent any reading of any page on the level of the boards on the server. It will also act as a global ban.') . '</div><br />
 
 			<label for="type">'. _gettext('Type') . ':</label>
-			<select name="type" id="type"><option value="0">'. _gettext('Single IP') . '</option><option value="1">'. _gettext('IP Range') . '</option><option value="2">'. _gettext('Whitelist') . '</option></select>
-			<div class="desc">'. _gettext('The type of ban. A single IP can be banned by providing the full address. A whitelist ban prevents that IP from being banned. An IP range can be banned by providing the IP range you would like to ban, in this format: 123.123.12') . '</div><br />';
+			<select name="type" id="type"><option value="0">'. _gettext('Single IP/Hash') . '</option><option value="1">'. _gettext('IP Range') . '</option><option value="2">'. _gettext('Whitelist') . '</option></select>
+			<div class="desc">'. _gettext('The type of ban. A single IP can be banned by providing the full address or IP\'s MD5 hash. A whitelist ban prevents that IP from being banned. An IP range can be banned by providing the IP range you would like to ban, in this format: 123.123.12') . '</div><br />';
 		}
 
 		if ($isquickban && KU_BANMSG != '') {

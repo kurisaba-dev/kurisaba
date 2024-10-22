@@ -203,7 +203,7 @@ class Posting {
 				$banhash2 = md5_image($_FILES['imagefile']['tmp_name']);
 				$results = $tc_db->GetAll("SELECT `bantime` , `description` FROM `" . KU_DBPREFIX . "bannedhashes` WHERE `md5` = " . $tc_db->qstr($banhash1) . " OR `md5` = " . $tc_db->qstr($banhash2) . " LIMIT 1");
 				if (count($results) > 0) {
-						$bans_class->BanUser(KU_REMOTE_ADDR, 'SERVER', '1', $results[0]['bantime'], '', 'Posting a banned file.<br />' . $results[0]['description'], 0, 0, 1);
+						$bans_class->BanUser((KU_SAVEIP ? KU_REMOTE_ADDR : md5(KU_REMOTE_ADDR)), 'SERVER', '1', $results[0]['bantime'], '', 'Posting a banned file.<br />' . $results[0]['description'], 0, 0, 1);
 						$bans_class->BanCheck(KU_REMOTE_ADDR, $board_class->board['name']);
 						return true;
 				}
@@ -225,7 +225,7 @@ class Posting {
 		$results = $tc_db->GetAll("SELECT `bantime` , `description` FROM `" . KU_DBPREFIX . "bannedhashes` WHERE `md5` = " . $tc_db->qstr($banhash1) . " OR `md5` = " . $tc_db->qstr($banhash2) . " LIMIT 1");
 		if (count($results) > 0)
 		{
-			$bans_class->BanUser(KU_REMOTE_ADDR, 'SERVER', '1', $results[0]['bantime'], '', 'Posting a banned file.<br />' . $results[0]['description'], 0, 0, 1);
+			$bans_class->BanUser((KU_SAVEIP ? KU_REMOTE_ADDR : md5(KU_REMOTE_ADDR)), 'SERVER', '1', $results[0]['bantime'], '', 'Posting a banned file.<br />' . $results[0]['description'], 0, 0, 1);
 			$bans_class->BanCheck(KU_REMOTE_ADDR, $board_class->board['name'], false, isset($_POST['through_js']));
 			@unlink($file_location);
 			return true;
@@ -383,7 +383,7 @@ class Posting {
 		foreach ($badlinks as $badlink) {
 			if (stripos($_POST['message'], $badlink) !== false) {
 				/* They included a blacklisted link in their post. Ban them for an hour */
-				$bans_class->BanUser(KU_REMOTE_ADDR, 'board.php', 1, 3600, '', _gettext('Posting a blacklisted link.') . ' (' . $badlink . ')', $_POST['message']);
+				$bans_class->BanUser((KU_SAVEIP ? KU_REMOTE_ADDR : md5(KU_REMOTE_ADDR)), 'board.php', 1, 3600, '', _gettext('Posting a blacklisted link.') . ' (' . $badlink . ')', $_POST['message']);
 				exitWithErrorPage(sprintf(_gettext('Blacklisted link ( %s ) detected.'), $badlink));
 			}
 		}
@@ -415,7 +415,7 @@ class Posting {
 		foreach ($badlinks as $badlink) {
 			if (stripos($msg, mb_strtolower(str_replace($cyr, $lat, $badlink))) !== false) {
 				/* They included a blacklisted link in their post. Ban them for an hour */
-				$bans_class->BanUser(KU_REMOTE_ADDR, 'board.php', 0, 3600, $board, _gettext('Posting a blacklisted link.') . ' (' . $badlink . ')', $_POST['message']);
+				$bans_class->BanUser((KU_SAVEIP ? KU_REMOTE_ADDR : md5(KU_REMOTE_ADDR)), 'board.php', 0, 3600, $board, _gettext('Posting a blacklisted link.') . ' (' . $badlink . ')', $_POST['message']);
 				return 2; // Blacklisted link
 			}
 		}
