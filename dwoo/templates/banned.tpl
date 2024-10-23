@@ -15,9 +15,17 @@
 			{t}Additionally{/t},
 		{/if}
 		{if $ban.expired eq 1}
-			{t}You were banned from posting on{/t}
+			{if $ban.allowread eq 1}
+				{t}You were banned from posting on{/t}
+			{else}
+				{t}You were banned from visiting{/t}
+			{/if}
 		{else}
-			{t}You have been banned from posting on{/t}
+			{if $ban.allowread eq 1}
+				{t}You have been banned from posting on{/t}
+			{else}
+				{t}You have been banned from visiting{/t}
+			{/if}
 		{/if} 
 		<strong>{if $ban.globalban eq 1}{t}All boards{/t}{else}/{implode('/</strong>, <strong>/', explode('|', $ban.boards))}/{/if}</strong> {t}for the following reason{/t}:<br /><br />
 		<strong>{$ban.reason}</strong><br /><br />
