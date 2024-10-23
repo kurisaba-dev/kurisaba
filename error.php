@@ -7,6 +7,9 @@ require KU_ROOTDIR . 'inc/classes/board-post.class.php';
 session_start(['cookie_samesite' => 'Strict']);
 modules_load_all();
 
+require KU_ROOTDIR . 'inc/classes/bans.class.php';
+$bans_class = new Bans();
+
 function request_log($text)
 {
 	/*global $tc_db;
@@ -77,6 +80,10 @@ elseif(preg_match("/^\/([A-Z0-9a-z\/]+?)\/$/", $address, $matches) || preg_match
 	$board_class = CreateBoard($matches[1]);
 	if ($board_class)
 	{
+		if($bans_class->BanCheckSilent(KU_REMOTE_ADDR, $matches[1], true))
+		{
+			do_redirect(KU_BOARDSPATH . '/banned.php');
+		}
 		http_response_code(200); header("Status: 200 OK");
 		request_log("Открыл борду ".$matches[1]." через ссылку со слэшем");
 		$board_class->RegenerateAndPrintPage(0);
@@ -104,6 +111,10 @@ elseif(preg_match("/^\/([A-Z0-9a-z\/]+?)\/$/", $address, $matches) || preg_match
 		}
 		if($redirect_to != '')
 		{
+			if($bans_class->BanCheckSilent(KU_REMOTE_ADDR, $current_board, true))
+			{
+				do_redirect(KU_BOARDSPATH . '/banned.php');
+			}
 			header('Location: ' . KU_WEBPATH . $redirect_to); die();
 		}
 	}
@@ -115,8 +126,12 @@ elseif (preg_match("/^\/([a-z]+)\/catalog\.html$/", $address, $matches))
 	$board_class = CreateBoard($matches[1]);
 	if ($board_class)
 	{
+		if($bans_class->BanCheckSilent(KU_REMOTE_ADDR, $matches[1], true))
+		{
+			do_redirect(KU_BOARDSPATH . '/banned.php');
+		}
 		http_response_code(200); header("Status: 200 OK");
-			request_log("Открыл каталог борды ".$matches[1]);
+		request_log("Открыл каталог борды ".$matches[1]);
 		$board_class->RegenerateAndPrintCatalog();
 		exit();
 	}
@@ -128,6 +143,10 @@ elseif (preg_match("/^\/([a-z]+)\/([0-9]+)\.html$/", $address, $matches))
 	$board_class = CreateBoard($matches[1]);
 	if ($board_class)
 	{
+		if($bans_class->BanCheckSilent(KU_REMOTE_ADDR, $matches[1], true))
+		{
+			do_redirect(KU_BOARDSPATH . '/banned.php');
+		}
 		$postsperpage = KU_THREADS;
 		if     ($board_class->board['type'] == 1) { $postsperpage = KU_THREADSTXT; }
 		elseif ($board_class->board['type'] == 3) { $postsperpage = 30; }
@@ -150,6 +169,10 @@ elseif (preg_match("/^\/([a-z]+)\/res\/([0-9]+)\.html$/", $address, $matches))
 	$board_class = CreateBoard($matches[1]);
 	if ($board_class)
 	{
+		if($bans_class->BanCheckSilent(KU_REMOTE_ADDR, $matches[1], true))
+		{
+			do_redirect(KU_BOARDSPATH . '/banned.php');
+		}
 		$thread_exist = $tc_db->GetOne("SELECT COUNT(*) FROM `" . KU_DBPREFIX . "posts` WHERE `boardid` = " . $board_class->board['id'] . " AND `parentid` = 0 AND `IS_DELETED` = 0 AND `id` = " . $matches[2]);
 
 		if($thread_exist > 0)
@@ -168,6 +191,10 @@ elseif (preg_match("/^\/([a-z]+)\/res\/([0-9]+)\+50\.html$/", $address, $matches
 	$board_class = CreateBoard($matches[1]);
 	if ($board_class)
 	{
+		if($bans_class->BanCheckSilent(KU_REMOTE_ADDR, $matches[1], true))
+		{
+			do_redirect(KU_BOARDSPATH . '/banned.php');
+		}
 		$thread_exist = $tc_db->GetOne("SELECT COUNT(*) FROM `" . KU_DBPREFIX . "posts` WHERE `boardid` = " . $board_class->board['id'] . " AND `IS_DELETED` = 0 AND `parentid` = " . $matches[2]);
 
 		if($thread_exist > 50) /* OP + 50 replies */
@@ -186,6 +213,10 @@ elseif (preg_match("/^\/([a-z]+)\/res\/([0-9]+)\-100\.html$/", $address, $matche
 	$board_class = CreateBoard($matches[1]);
 	if ($board_class)
 	{
+		if($bans_class->BanCheckSilent(KU_REMOTE_ADDR, $matches[1], true))
+		{
+			do_redirect(KU_BOARDSPATH . '/banned.php');
+		}
 		$thread_exist = $tc_db->GetOne("SELECT COUNT(*) FROM `" . KU_DBPREFIX . "posts` WHERE `boardid` = " . $board_class->board['id'] . " AND `IS_DELETED` = 0 AND `parentid` = " . $matches[2]);
 
 		if($thread_exist >= 100) /* OP + 99 replies */
@@ -201,6 +232,7 @@ elseif (preg_match("/^\/([a-z]+)\/res\/([0-9]+)\-100\.html$/", $address, $matche
 // Offload engine
 elseif(KU_OFFLOAD)
 {
+	// Unfortunately, all attachments will be left visible to banned users, since we don't know which boards are affected.
 	$filetypes = $tc_db->GetAll("SELECT `filetype`, `mime` FROM `" . KU_DBPREFIX . "filetypes`");
 	foreach ($filetypes as $filetype)
 	{

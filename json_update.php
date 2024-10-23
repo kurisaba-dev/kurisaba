@@ -18,6 +18,13 @@ else
 require KU_ROOTDIR . 'inc/functions.php';
 require KU_ROOTDIR . 'inc/classes/board-post.class.php';
 
+require KU_ROOTDIR . 'inc/classes/bans.class.php';
+$bans_class = new Bans();
+if($bans_class->BanCheckSilent(KU_REMOTE_ADDR, $board, true))
+{
+    die(json_encode(array('state'=>'этот IP забанен на выбранной доске')));
+}
+
 $results = $tc_db->GetOne("SELECT COUNT(*) FROM `".KU_DBPREFIX."boards` WHERE `name` = ".$tc_db->qstr($board)." LIMIT 1");
 if ($results == 0) {
 	die(json_encode(array('state'=>'неверное имя борды')));

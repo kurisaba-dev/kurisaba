@@ -7,6 +7,14 @@ require KU_ROOTDIR . 'inc/functions.php';
 require KU_ROOTDIR . 'inc/classes/board-post.class.php';
 session_start(['cookie_samesite' => 'Strict']);
 
+// Users that banned at at least one board, can't read the feed.
+require KU_ROOTDIR . 'inc/classes/bans.class.php';
+$bans_class = new Bans();
+if($bans_class->BanCheckSilent(KU_REMOTE_ADDR, '', true))
+{
+    do_redirect(KU_BOARDSPATH . '/banned.php');
+}
+
 $executiontime_start = microtime_float();
 
 // Do our work only for image-type boards

@@ -69,7 +69,7 @@ class Bans {
 		}
 	}
 
-	function BanCheckSilent($ip, $board = '') {
+	function BanCheckSilent($ip, $board = '', $checkread = false) {
 		global $tc_db;
 
 		if (!isset($_COOKIE['tc_previousip'])) {
@@ -77,7 +77,7 @@ class Bans {
 		}
 
 		$bans = Array();
-		$results = $tc_db->GetAll("SELECT * FROM `".KU_DBPREFIX."banlist` WHERE ((`type` = '0' AND ( `ipmd5` = '" . md5($ip) . "' OR `ipmd5` = '". md5($_COOKIE['tc_previousip']) . "' )) OR `type` = '1') AND (`expired` = 0)" );
+		$results = $tc_db->GetAll("SELECT * FROM `".KU_DBPREFIX."banlist` WHERE " . ($checkread ? "`allowread` = '0' AND ": "") . "((`type` = '0' AND ( `ipmd5` = '" . md5($ip) . "' OR `ipmd5` = '". md5($_COOKIE['tc_previousip']) . "' )) OR `type` = '1') AND (`expired` = 0)" );
 		if (count($results) > 0) {
 			foreach($results AS $line) {
 				if(($line['type'] == 1 && strpos($ip, md5_decrypt($line['ip'], KU_RANDOMSEED)) === 0) || $line['type'] == 0) {

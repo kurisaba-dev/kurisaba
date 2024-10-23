@@ -38,6 +38,14 @@ if ($board_name != '') {
 } else {
     die('<font color="red">Invalid board.</font>');
 }
+
+require KU_ROOTDIR . 'inc/classes/bans.class.php';
+$bans_class = new Bans();
+if($bans_class->BanCheckSilent(KU_REMOTE_ADDR, $board_class->board, true))
+{
+    do_redirect(KU_BOARDSPATH . '/banned.php');
+}
+
 $board_class->InitializeDwoo();
 $board_class->dwoo_data->assign('isexpand', true);
 $board_class->dwoo_data->assign('board', $board_class->board);

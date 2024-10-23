@@ -123,7 +123,7 @@ if (isset($_POST['board'])) {
 // 3.3. Check for an IP ban (and remove if expired).
 if (isset($_POST['through_js']))
 {
-	if($bans_class->BanCheckSilent(KU_REMOTE_ADDR))
+	if($bans_class->BanCheckSilent(KU_REMOTE_ADDR, $board_class->board['name']))
 	{
 		die("YOU ARE BANNED FOR SOME POST");
 	}
