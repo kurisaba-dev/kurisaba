@@ -1148,7 +1148,7 @@ class Post extends Board {
 		$id = $tc_db->Insert_Id();
 		if(!$id || KU_DBTYPE == 'sqlite') {
 			// Non-mysql installs don't return the insert ID after insertion, we need to manually get it.
-			$id = $tc_db->GetOne("SELECT `id` FROM `".KU_DBPREFIX."posts` WHERE `boardid` = ".$tc_db->qstr($boardid)." AND timestamp = ".$tc_db->qstr($timestamp)." AND `ipmd5` = '".md5($ip)."' LIMIT 1");
+			$id = $tc_db->GetOne("SELECT `id` FROM `".KU_DBPREFIX."posts` WHERE `boardid` = ".$tc_db->qstr($boardid)." AND timestamp = ".$tc_db->qstr($timestamp)." AND `ipmd5` = " . $tc_db->qstr($ipmd5) . " LIMIT 1");
 		}
 
 		if ($id == 1 && $this->board['start'] > 1) {
