@@ -519,8 +519,15 @@ class Board {
 			$getID3 = new getID3;
 			$getID3->encoding_id3v1 = KU_ID3_ENCODING;
 
-			$post['id3'] = $getID3->analyze(KU_BOARDSDIR.$this->board['name'].'/' . $srcdir . '/' . $post['file'] . '.' . $post['file_type']);
-			getid3_lib::CopyTagsToComments($post['id3']);
+			try
+			{
+				$post['id3'] = $getID3->analyze(KU_BOARDSDIR.$this->board['name'].'/' . $srcdir . '/' . $post['file'] . '.' . $post['file_type']);
+				getid3_lib::CopyTagsToComments($post['id3']);
+			}
+			catch (\Throwable $e)
+			{
+				// We just leave $post['id3'] empty in a case of corrupt tags
+			}
 		}
 		if ($post['file_type']!='jpg'&&$post['file_type']!='gif'&&$post['file_type']!='webp'&&$post['file_type']!='png'&&$post['file_type']!=''&&!in_array($post['file_type'], $this->board['filetypes'])) {
 			if(!isset($filetype_info[$post['file_type']])) $filetype_info[$post['file_type']] = getfiletypeinfo($post['file_type']);
