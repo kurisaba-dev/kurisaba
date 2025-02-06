@@ -238,10 +238,13 @@ elseif(KU_OFFLOAD)
 	{
 		if (preg_match("/^\/[a-z]+\/(src|thumb)\/[0-9]+[a-z]?\." . $filetype['filetype'] . "$/", $address, $matches))
 		{
+			header_remove("Last-Modified");
+			header_remove("Cache-Control");
+			header_remove("Pragma");
 			if (geoblocked($address, $filetype['filetype']) && getUserMode() != 1)
 			{
 				http_response_code(451);
-				header('Expires: ' . date(DATE_RFC7231, time() + 604800));
+				header('Expires: ' . date(DATE_RFC7231, time() + KU_OFFLOADCACHEDAYS * 86400));
 				header('Content-type: image/jpeg');
 				echo file_get_contents(KU_ROOTDIR . 'images/451.jpg');
 				exit();
@@ -250,7 +253,7 @@ elseif(KU_OFFLOAD)
 			if ($content !== false)
 			{
 				http_response_code(200); header("Status: 200 OK");
-				header('Expires: ' . date(DATE_RFC7231, time() + 604800));
+				header('Expires: ' . date(DATE_RFC7231, time() + KU_OFFLOADCACHEDAYS * 86400));
 				header('Content-type: ' . $filetype['mime']);
 				echo $content;
 				exit();
@@ -258,7 +261,7 @@ elseif(KU_OFFLOAD)
 			else
 			{
 				http_response_code($errorcode);
-				header('Expires: ' . date(DATE_RFC7231, time() + 604800));
+				header('Expires: ' . date(DATE_RFC7231, time() + KU_OFFLOADCACHEDAYS * 86400));
 				header('Content-type: image/jpeg');
 				echo file_get_contents(KU_ROOTDIR . 'images/404.jpg');
 				exit();
