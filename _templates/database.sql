@@ -304,3 +304,6 @@ MODIFY `id` smallint(5) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=27;
 
 ALTER TABLE `wordfilter`
 MODIFY `id` smallint(5) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=2;
+
+INSERT INTO `staff` (`username`, `password`, `salt`, `type`, `addedon`)
+             VALUES ('admin', '21232f297a57a5a743894a0e4a801fc3', '', 1, UNIX_TIMESTAMP(NOW()));
