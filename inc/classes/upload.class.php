@@ -236,11 +236,24 @@ class Upload {
 									return 'Уже загружено много файлов. Подожди несколько минут.';
 								}
 								
-								// Download the file (maximum length = limit + 1 byte to determine that we over that limit, if so)
-								$data = file_get_contents_remote($_POST['embedlink'], false, NULL, -1, $board_class->board['maximagesize'] + 1);
-								if ($data === false)
+								// Check file size
+								$data = file_get_contents_remote($_POST['embedlink'], true);
+								if ($data[0] === false)
 								{
-									return 'Невозможно скачать файл.';
+									return 'Невозможно определить размер файла: ' . $data[1];
+								}
+								else
+								{
+								    if($data[1] > $board_class->board['maximagesize'])
+								    {
+								        return 'Файл слишком большой, выберите файл менее ' . $data[1] . ' байт.';
+								    }
+								}
+								// Download the file
+								$data = file_get_contents_remote($_POST['embedlink'], false);
+								if ($data[0] === false)
+								{
+									return 'Невозможно скачать файл: ' . $data[1];
 								}
 
 								$file = array();
@@ -248,7 +261,7 @@ class Upload {
 								// Create filename.
 								$file['name'] = basename(explode('?',$_POST['embedlink'],2)[0]);
 								$file['tmp_name'] = $dir3 . '/' . $file['name'];
-								$file['size'] = file_put_contents($file['tmp_name'], $data);
+								$file['size'] = file_put_contents($file['tmp_name'], $data[1]);
 								if ($file['size'] === false)
 								{
 									return 'Невозможно сохранить файл.';

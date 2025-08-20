@@ -22,8 +22,9 @@ function md5_image($file)
 	return $image_md5;
 }
 
-function file_get_contents_remote($url)
+function file_get_contents_remote($url, $checksize)
 {
+    $success = false;
 	$ch = curl_init($url);
 	if(($err = curl_error($ch)) != '') return 'curl_init(): '. $err;
 	curl_setopt($ch, CURLOPT_HEADER, false);
@@ -46,10 +47,59 @@ function file_get_contents_remote($url)
 	} else if ((KU_CURL_PROXY != "none")) {
 		return "curl: insufficient KU_CURL_PROXY";
 	}
+    // Set up timeouts (see issue #101)
+    curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 10);
+    curl_setopt($ch, CURLOPT_TIMEOUT, 30);
+    if($checksize)
+    {
+        curl_setopt($ch, CURLOPT_HEADER, 1);
+    }
 	$ret = curl_exec($ch);
 	if(($err = curl_error($ch)) != '') return 'curl_exec(): '. $err;
 	curl_close($ch);
-	return $ret;
+    if($checksize)
+    {
+        // See https://stackoverflow.com/questions/2602612/remote-file-size-without-downloading-file
+        if($ret)
+        {
+            $content_length = "unknown";
+            $status = "unknown";
+            if(preg_match("/^HTTP\/1\.[01] (\d\d\d)/", $data, $matches))
+            {
+                $status = (int)$matches[1];
+                if(preg_match( "/Content-Length: (\d+)/", $data, $matches ))
+                {
+                    $content_length = (int)$matches[1];
+                    if($status == 200 || ($status > 300 && $status <= 308))
+                    {
+                        $success = true;
+                        $ret = $content_length;
+                    }
+                    else
+                    {
+                        $ret = 'curl_exec(): Request failed with status code ' . $status . ' when checking file size';
+                    }
+                }
+                else
+                {
+                    $ret = 'curl_exec(): Unable to determine content length when checking file size';
+                }
+            }
+            else
+            {
+                $ret = 'curl_exec(): Unable to determine status code when checking file size';
+            }
+        }
+        else
+        {
+            $ret = 'curl_exec(): Empty response when checking file size';
+        }
+    }
+    else
+    {
+        $success = true;
+    }
+	return [$success, $ret];
 }
 
 function changeLocale($newlocale) {
