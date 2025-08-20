@@ -56,6 +56,7 @@ function file_get_contents_remote($url, $checksize)
     }
 	$ret = curl_exec($ch);
 	if(($err = curl_error($ch)) != '') return 'curl_exec(): '. $err;
+	$status = curl_getinfo($ch, CURLINFO_HTTP_CODE);
 	curl_close($ch);
     if($checksize)
     {
@@ -63,22 +64,12 @@ function file_get_contents_remote($url, $checksize)
         if($ret)
         {
             $content_length = "unknown";
-            $status = "unknown";
-            if(preg_match("/^HTTP\/1\.[01] (\d\d\d)/", $data, $matches))
+            if($status == 200 || ($status > 300 && $status <= 308))
             {
-                $status = (int)$matches[1];
                 if(preg_match( "/Content-Length: (\d+)/", $data, $matches ))
                 {
-                    $content_length = (int)$matches[1];
-                    if($status == 200 || ($status > 300 && $status <= 308))
-                    {
-                        $success = true;
-                        $ret = $content_length;
-                    }
-                    else
-                    {
-                        $ret = 'curl_exec(): Request failed with status code ' . $status . ' when checking file size';
-                    }
+                    $success = true;
+                    $ret = (int)$matches[1];
                 }
                 else
                 {
@@ -87,7 +78,7 @@ function file_get_contents_remote($url, $checksize)
             }
             else
             {
-                $ret = 'curl_exec(): Unable to determine status code when checking file size';
+                $ret = 'curl_exec(): Request failed with status code ' . $status . ' when checking file size';
             }
         }
         else
