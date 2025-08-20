@@ -263,18 +263,19 @@ if($operation_post) // it's `noreturn`.
 	$_POST['modpassword'] = $_POST['captcha'];
 	$user_authority = getUserMode();
 	
-	if (!$preview) // Don't check captcha on preview
+    // We should check captcha for preview (see issue #101)
+	if ($user_authority != 1 && $user_authority != 4) // Skipping captcha checks for admins and skipcaptcha type users only
 	{
-		if ($user_authority != 1 && $user_authority != 4) // Skipping captcha checks for admins and skipcaptcha type users only
-		{
-			$captcha_msg = $posting_class->CheckCaptcha($_POST['message']);
+		$captcha_msg = $posting_class->CheckCaptcha($_POST['message']);
 	
-			if ($captcha_msg != '')
-			{
-				kurisaba_exit($captcha_msg,'',$post_message);
-			}
+		if ($captcha_msg != '')
+		{
+			kurisaba_exit($captcha_msg,'',$post_message);
 		}
+	}
 		
+	if (!$preview) // Don't apply posting time limits to a preview
+	{
 		if($posting_class->CheckReplyTime($_POST['message']))
 		{
 			kurisaba_exit(_gettext('Please wait a moment before posting again.'), _gettext('You are currently posting faster than the configured minimum post delay allows.'),$post_message);
