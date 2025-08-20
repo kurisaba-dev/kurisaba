@@ -246,7 +246,7 @@ class Upload {
 								{
 								    if($data[1] > $board_class->board['maximagesize'])
 								    {
-								        return 'Файл слишком большой, выберите файл менее ' . $data[1] . ' байт.';
+								        return 'Файл слишком большой (' . $data[1] . ' байт), выберите файл менее ' . $board_class->board['maximagesize'] . ' байт.';
 								    }
 								}
 								// Download the file
