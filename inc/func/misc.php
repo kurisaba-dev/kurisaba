@@ -66,7 +66,7 @@ function file_get_contents_remote($url, $checksize)
             $content_length = "unknown";
             if($status == 200 || ($status > 300 && $status <= 308))
             {
-                if(preg_match("/Content-Length: (\d+)/i", $data, $matches))
+                if(preg_match("/Content-Length: (\d+)/i", $ret, $matches))
                 {
                     $success = true;
                     $ret = (int)$matches[1];
