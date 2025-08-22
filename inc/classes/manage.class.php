@@ -88,6 +88,10 @@ class Manage {
 	function CheckLogin() {
 		global $tc_db, $action;
 
+        if(strlen($_POST['username']) > 1000 || strlen($_POST['password']) > 1000)
+        {
+            exitWithErrorPage(_gettext('Too long username/password.'));
+        }
 		$tc_db->Execute("DELETE FROM `" . KU_DBPREFIX . "loginattempts` WHERE `timestamp` < '" . (time() + KU_ADDTIME - 1200) . "'");
 		$results = $tc_db->GetAll("SELECT HIGH_PRIORITY `ip` FROM `" . KU_DBPREFIX . "loginattempts` WHERE `ip` = '" . KU_REMOTE_ADDR . "' LIMIT 6");
 		if (count($results) > 5) {
