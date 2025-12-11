@@ -1815,7 +1815,7 @@ class Manage {
 		{
 			$line = $lines[0];
 			$timestamp = $line['deleted_timestamp'];
-			$deleted_at = date(r, $timestamp);
+			$deleted_at = date('r', $timestamp);
 			$tpl_page .= '<p>Тред/пост ' . $board . '/' . $thread . ' удалён ' . $deleted_at . '(' . $timestamp . ').</p>';
 			$tc_db->Execute("UPDATE `" . KU_DBPREFIX . "posts` SET `IS_DELETED` = 0, `deleted_timestamp` = 0 WHERE (`id` = " . $tc_db->qstr($thread) . " OR `parentid` = " . $tc_db->qstr($thread) . ") AND `boardid` = " . $tc_db->qstr($boardid));
 			$tpl_page .= '<p>Тред/пост ' . $board . '/' . $thread . ' восстановлен.</p>';
@@ -1885,7 +1885,7 @@ class Manage {
 			$message = $line['message'];
 			$name = $line['name'];
 			$tripcode = $line['tripcode'];
-			$timestamp = date(r, $line['timestamp']);
+			$timestamp = date('r', $line['timestamp']);
 			$subject = $line['subject'];
 			$posterauthority = $line['posterauthority'];
 			$deleted = isset($line['IS_DELETED']) ? $line['IS_DELETED'] : $line['is_deleted'];
