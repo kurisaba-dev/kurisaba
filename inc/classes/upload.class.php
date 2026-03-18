@@ -247,7 +247,7 @@ class Upload {
 								
 								// Create filename.
 								$file['name'] = basename(explode('?',$_POST['embedlink'],2)[0]);
-								$file['tmp_name'] = $dir3 . '/' . $file['name'];
+								$file['tmp_name'] = uniqid($dir3 . '/' . $file['name']);
 								$file['size'] = file_put_contents($file['tmp_name'], $data[1]);
 								if ($file['size'] === false)
 								{
