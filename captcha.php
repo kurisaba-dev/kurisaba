@@ -4,7 +4,7 @@ define ( 'DOCUMENT_ROOT', dirname ( __FILE__ ) );
 include("inc/func/nrand.php");
 $ltrs = rand(5, 7);
 if(!isset($_COOKIE['captchalang'])) $_COOKIE['captchalang'] = 'ru';
-if($_COOKIE['captchalang'] == 'en') $captcha = english_word(3);
+if($_COOKIE['captchalang'] == 'en') $captcha = english_word($ltrs);
 elseif($_COOKIE['captchalang'] == 'num') {
 	//$ltrs = rand(4, 7);
 	for ($i=0; $i < $ltrs; $i++) { 
