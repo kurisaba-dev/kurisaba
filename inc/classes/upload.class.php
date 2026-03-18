@@ -62,7 +62,7 @@ class Upload {
 		{
 			$files1 = scandir($dir1);
 			foreach($files1 as $key => $value) $files1[$key] = $dir1 . '/' . $value;
-		}		
+		}
 		if (is_dir($dir2))
 		{
 			$files2 = scandir($dir2);
@@ -78,6 +78,9 @@ class Upload {
 		{
 			if ((time() - filemtime($file) > KU_TEMPFILESCLEAN) && is_file($file)) unlink($file);
 		}
+
+		// Test if there's too many uploads in progress
+		if (count(array_map('file_exists', $files)) > KU_LOADLIMIT) return _gettext('Too many uploads in process, try again later');
 
 		// Try to embed something!
 		if (!$is_oekaki)
