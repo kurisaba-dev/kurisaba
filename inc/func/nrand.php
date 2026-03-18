@@ -215,18 +215,18 @@ function english_word( $length = 6 ) {
         // consonant sounds
         $cons = array(
                 // single consonants. Beware of Q, it's often awkward in words
-                '1','2','3',
+                'b', 'c', 'd', 'f', 'g', 'h', 'j', 'k', 'l', 'm', 'n', 'p', 'q', 'r', 's', 't', 'v', 'w', 'x', 'z'
         );
        
         // consonant combinations that cannot start a word
         $cons_cant_start = array(
-                '',
+                ''
         );
        
         // wovels
         $vows = array(
                 // single vowels
-                '1','2','3',
+                'a', 'e', 'i', 'o', 'u', 'y'
         );
        
         // start by vowel or consonant ?
