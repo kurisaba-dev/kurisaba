@@ -217,25 +217,7 @@ class Upload {
 							}
 							else
 							{
-								$dir3 = KU_BOARDSDIR . 'tmp/xhrupload';
-
-								// At first, delete old files.
-								if (is_dir($dir3))
-								{
-									$files3 = scandir($dir3);
-									foreach($files3 as $key => $value) $files3[$key] = $dir3 . '/' . $value;
-								}
-								else
-								{
-									mkdir($dir3);
-									$files3 = [];
-								}
-								foreach($files3 as $file)
-								{
-									if ((time() - filemtime($file) > KU_TEMPFILESCLEAN) && is_file($file)) unlink($file);
-								}
-
-								// At second, count remaining files.
+								// Count remaining files.
 								if (count(scandir($dir3)) >= KU_XHRLOADLIMIT)
 								{
 									return 'Уже загружено много файлов. Подожди несколько минут.';
