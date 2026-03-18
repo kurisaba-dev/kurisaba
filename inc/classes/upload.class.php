@@ -225,6 +225,11 @@ class Upload {
 									$files3 = scandir($dir3);
 									foreach($files3 as $key => $value) $files3[$key] = $dir3 . '/' . $value;
 								}
+								else
+								{
+									mkdir($dir3);
+									$files3 = [];
+								}
 								foreach($files3 as $file)
 								{
 									if ((time() - filemtime($file) > KU_TEMPFILESCLEAN) && is_file($file)) unlink($file);
