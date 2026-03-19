@@ -40,7 +40,7 @@ class Upload {
 
 	function HandleUpload($post_message, $temporary = false)
 	{
-		global $tc_db, $board_class, $is_oekaki, $oekaki;
+		global $tc_db, $board_class, $posting_class, $is_oekaki, $oekaki;
 		$thumb_result = 0;
 
 		if ($temporary)
