@@ -3846,11 +3846,11 @@ class Manage {
 		$tpl_page .= $this->MakeBoardListCheckboxes('bannedfrom', $this->BoardList($_SESSION['manageusername'])) .
 		'</fieldset>';
 
-		if ($ban_hash != "" || isset($_GET['hashban'])) {
+		if ($ban_hash != "" || isset($_GET['ishashban'])) {
 			$tpl_page .= '<fieldset>
 			<legend>'. _gettext('Ban file') . '</legend>
 			<label for="hash">'. _gettext('File/image hash') . ':</label>
-			<input type="text" name="hash" value="'. $ban_hash . '" />
+			<input type="text" name="hash" value="'. $ban_hash . '" /><br /><br />
 
 			<label for="banhashtime">'. _gettext('Ban file hash duration (in seconds)') . ':</label>
 			<input type="text" name="banhashtime" id="banhashtime" value="0" />
