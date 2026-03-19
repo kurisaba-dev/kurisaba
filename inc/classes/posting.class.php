@@ -191,35 +191,14 @@ class Posting {
 		}
 	}
 
-	// deprecated
-	function CheckBannedHash() {
-		global $tc_db, $board_class, $bans_class;
-
-		/* Banned file hash check */
-		if (isset($_FILES['imagefile'])) {
-			if ($_FILES['imagefile']['name'] != '')
-			{
-				$banhash1 = md5_file($_FILES['imagefile']['tmp_name']);
-				$banhash2 = md5_image($_FILES['imagefile']['tmp_name']);
-				$results = $tc_db->GetAll("SELECT `bantime` , `description` FROM `" . KU_DBPREFIX . "bannedhashes` WHERE `md5` = " . $tc_db->qstr($banhash1) . " OR `md5` = " . $tc_db->qstr($banhash2) . " LIMIT 1");
-				if (count($results) > 0) {
-						$bans_class->BanUser((KU_SAVEIP ? KU_REMOTE_ADDR : md5(KU_REMOTE_ADDR)), 'SERVER', '1', $results[0]['bantime'], '', 'Posting a banned file.<br />' . $results[0]['description'], 0, 0, 1);
-						$bans_class->BanCheck(KU_REMOTE_ADDR, $board_class->board['name']);
-						return true;
-				}
-			}
-		}
-		return false;
-	}
-
-	function CheckBannedHashNew($file_location = '') {
+	function CheckBannedHashNew($file_location = '', $only_file = false) {
 		global $tc_db, $board_class, $bans_class;
 
 		if ($file_location == '') return false;
 		if (!is_file($file_location)) return false;
 
 		$banhash1 = md5_file($file_location);
-		$banhash2 = md5_image($file_location);
+		$banhash2 = $only_file ? 'this string will always return false compared to valid md5' : md5_image($file_location);
 		
 		/* Banned file hash check */
 		$results = $tc_db->GetAll("SELECT `bantime` , `description` FROM `" . KU_DBPREFIX . "bannedhashes` WHERE `md5` = " . $tc_db->qstr($banhash1) . " OR `md5` = " . $tc_db->qstr($banhash2) . " LIMIT 1");

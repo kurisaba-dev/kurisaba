@@ -265,6 +265,10 @@ class Upload {
 
 					if ($imagefile_name != '')
 					{
+						if($posting_class->CheckBannedHashNew($file['tmp_name'], true))
+						{
+							return _gettext('The uploaded file is banned.');
+						}
 						if ($file['size'] > $board_class->board['maximagesize'])
 						{
 							return sprintf(_gettext('Please make sure your file is smaller than %dB'), $board_class->board['maximagesize']);
