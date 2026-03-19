@@ -3621,6 +3621,24 @@ class Manage {
 			$instantban = true;
 		}
 		$tpl_page .= '<h2>'. _gettext('Bans') . '</h2><br />';
+
+		$bannedhashes = 0;
+		if (isset($_POST['banhashtime']) && $_POST['banhashtime'] !== '' && ($_POST['hash'] !== '' || isset($_POST['multibanhashes'])) && $_POST['banhashtime'] >= 0) {
+			if (isset($_POST['multibanhashes']))
+				$banhashes = unserialize($_POST['multibanhashes']);
+			else
+				$banhashes = Array($_POST['hash']);
+			foreach ($banhashes as $banhash){
+				$results = $tc_db->GetOne("SELECT HIGH_PRIORITY COUNT(*) FROM `".KU_DBPREFIX."bannedhashes` WHERE `md5` = ".$tc_db->qstr($banhash)." LIMIT 1");
+				if ($results == 0) {
+					$bannedhashes++;
+					$tc_db->Execute("INSERT INTO `".KU_DBPREFIX."bannedhashes` ( `md5` , `bantime` , `description` ) VALUES ( ".$tc_db->qstr($banhash)." , ".$tc_db->qstr($_POST['banhashtime'])." , ".$tc_db->qstr($_POST['banhashdesc'])." )");
+					management_addlogentry('Banned md5 hash '. $banhash . ' with a description of '. $_POST['banhashdesc'], 8);
+				}
+			}
+			if ($bannedhashes > 0) $tpl_page .= _gettext('File/image hash ban successfully placed.')."<br /><hr>";
+		}
+
 		if (((isset($_POST['ip']) || isset($_POST['multiban'])) && isset($_POST['seconds']) && (!empty($_POST['ip']) || (empty($_POST['ip']) && !empty($_POST['multiban'])))) || $instantban) {
 			if ($_POST['seconds'] >= 0 || $instantban) {
 				$banning_boards = array();
@@ -3741,19 +3759,6 @@ class Manage {
 					die("success");
 				}
 
-				if (isset($_POST['banhashtime']) && $_POST['banhashtime'] !== '' && ($_POST['hash'] !== '' || isset($_POST['multibanhashes'])) && $_POST['banhashtime'] >= 0) {
-					if (isset($_POST['multibanhashes']))
-						$banhashes = unserialize($_POST['multibanhashes']);
-					else
-						$banhashes = Array($_POST['hash']);
-					foreach ($banhashes as $banhash){
-						$results = $tc_db->GetOne("SELECT HIGH_PRIORITY COUNT(*) FROM `".KU_DBPREFIX."bannedhashes` WHERE `md5` = ".$tc_db->qstr($banhash)." LIMIT 1");
-						if ($results == 0) {
-							$tc_db->Execute("INSERT INTO `".KU_DBPREFIX."bannedhashes` ( `md5` , `bantime` , `description` ) VALUES ( ".$tc_db->qstr($banhash)." , ".$tc_db->qstr($_POST['banhashtime'])." , ".$tc_db->qstr($_POST['banhashdesc'])." )");
-							management_addlogentry('Banned md5 hash '. $banhash . ' with a description of '. $_POST['banhashdesc'], 8);
-						}
-					}
-				}
 				if (!empty($_POST['quickbanboard']) && !empty($_POST['quickbanthreadid'])) {
 					$tpl_page .= '<br /><br /><meta http-equiv="refresh" content="1;url='. KU_BOARDSPATH . '/'. $_POST['quickbanboard'] . '/';
 					if ($_POST['quickbanthreadid'] != '0') $tpl_page .= 'res/'. $_POST['quickbanthreadid'] . '.html';
@@ -3762,7 +3767,7 @@ class Manage {
 					$tpl_page .= '">'. _gettext('Redirecting') . '</a>...';
 				}
 			} else {
-				$tpl_page .= _gettext('Please enter a positive amount of seconds, or zero for a permanent ban.');
+				if ($bannedhashes == 0) $tpl_page .= _gettext('Please enter a positive amount of seconds, or zero for a permanent ban.');
 			}
 			$tpl_page .= '<hr />';
 		} elseif (isset($_GET['delban']) && $_GET['delban'] > 0) {
