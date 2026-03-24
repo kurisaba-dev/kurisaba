@@ -3,7 +3,7 @@ require 'config.php';
 define ( 'DOCUMENT_ROOT', dirname ( __FILE__ ) );
 include("inc/func/nrand.php");
 $ltrs = rand(5, 7);
-if(!isset($_COOKIE['captchalang']) || !in_array($_COOKIE['captchalang'], KU_CAPTCHAENABLED.split(','))) $_COOKIE['captchalang'] = KU_CAPTCHAENABLED.split(',')[0];
+if(!isset($_COOKIE['captchalang']) || !in_array($_COOKIE['captchalang'], explode(',', KU_CAPTCHAENABLED))) $_COOKIE['captchalang'] = explode(',', KU_CAPTCHAENABLED)[0];
 if($_COOKIE['captchalang'] == 'en') $captcha = english_word($ltrs);
 elseif($_COOKIE['captchalang'] == 'num') {
 	//$ltrs = rand(4, 7);
