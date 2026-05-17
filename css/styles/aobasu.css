@@ -98,6 +98,11 @@ a:hover {
 	color: #2E8B57;
 }
 
+.unkfunc2 {
+	background:inherit;
+	color:#18a952;
+}
+
 .filetitle {
 	background:inherit;
 	font-size:1.2em;
@@ -151,7 +156,7 @@ a:hover {
 
 .highlight {
 	background: #C8E6C9;
-	color: #006400;
+	color: #004900;
 	border: 2px dashed #4CAF50;
 }
 
@@ -421,4 +426,9 @@ background: #4CAF50;
 
 ::-moz-selection {
 background: #4CAF50;
+}
+
+.spoiler {
+color: gray;
+background-color: gray;
 }
