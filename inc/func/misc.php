@@ -22,75 +22,281 @@ function md5_image($file)
 	return $image_md5;
 }
 
+function ku_is_public_ip($ip)
+{
+	return filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE) !== false;
+}
+
+function ku_remote_url_ips($host)
+{
+	if (!is_string($host) || $host === '') {
+		return false;
+	}
+
+	$host = trim($host, "[] \t\n\r\0\x0B");
+	if (filter_var($host, FILTER_VALIDATE_IP)) {
+		return array($host);
+	}
+
+	if (!preg_match('/^[A-Za-z0-9.-]+$/', $host)) {
+		return false;
+	}
+
+	$ips = array();
+	$records = @dns_get_record($host, DNS_A + DNS_AAAA);
+	if (is_array($records)) {
+		foreach ($records as $record) {
+			if (isset($record['ip'])) {
+				$ips[] = $record['ip'];
+			}
+			if (isset($record['ipv6'])) {
+				$ips[] = $record['ipv6'];
+			}
+		}
+	}
+
+	if (empty($ips)) {
+		$ipv4 = @gethostbynamel($host);
+		if (is_array($ipv4)) {
+			$ips = array_merge($ips, $ipv4);
+		}
+	}
+
+	$ips = array_values(array_unique($ips));
+	return empty($ips) ? false : $ips;
+}
+
+function ku_validate_remote_url($url)
+{
+	if (!is_string($url) || strlen($url) > 2048) {
+		return array(false, 'Invalid URL');
+	}
+
+	$parts = parse_url($url);
+	if ($parts === false || empty($parts['scheme']) || empty($parts['host'])) {
+		return array(false, 'Invalid URL');
+	}
+
+	$scheme = strtolower($parts['scheme']);
+	if ($scheme !== 'http' && $scheme !== 'https') {
+		return array(false, 'Only http and https URLs are allowed');
+	}
+
+	if (isset($parts['user']) || isset($parts['pass'])) {
+		return array(false, 'URLs with credentials are not allowed');
+	}
+
+	$ips = ku_remote_url_ips($parts['host']);
+	if ($ips === false) {
+		return array(false, 'Unable to resolve host');
+	}
+
+	foreach ($ips as $ip) {
+		if (!ku_is_public_ip($ip)) {
+			return array(false, 'Remote URL resolves to a private or reserved address');
+		}
+	}
+
+	return array(true, '');
+}
+
+function ku_build_redirect_url($base_url, $location)
+{
+	if (!is_string($location) || $location === '') {
+		return false;
+	}
+
+	if (parse_url($location, PHP_URL_SCHEME) !== null) {
+		return $location;
+	}
+
+	$base = parse_url($base_url);
+	if ($base === false || empty($base['scheme']) || empty($base['host'])) {
+		return false;
+	}
+
+	$authority = $base['scheme'] . '://' . $base['host'];
+	if (isset($base['port'])) {
+		$authority .= ':' . $base['port'];
+	}
+
+	if (substr($location, 0, 2) === '//') {
+		return $base['scheme'] . ':' . $location;
+	}
+
+	if (substr($location, 0, 1) === '/') {
+		return $authority . $location;
+	}
+
+	$path = isset($base['path']) ? $base['path'] : '/';
+	$dir = preg_replace('#/[^/]*$#', '/', $path);
+	return $authority . $dir . $location;
+}
+
+function ku_curl_apply_common_options($ch)
+{
+	curl_setopt($ch, CURLOPT_HEADER, true);
+	curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+	curl_setopt($ch, CURLOPT_FOLLOWLOCATION, false);
+	curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 10);
+	curl_setopt($ch, CURLOPT_TIMEOUT, 30);
+	curl_setopt($ch, CURLOPT_USERAGENT, 'Kurisaba remote upload');
+
+	$protocols = 0;
+	if (defined('CURLPROTO_HTTP')) {
+		$protocols |= CURLPROTO_HTTP;
+	}
+	if (defined('CURLPROTO_HTTPS')) {
+		$protocols |= CURLPROTO_HTTPS;
+	}
+	if ($protocols !== 0) {
+		curl_setopt($ch, CURLOPT_PROTOCOLS, $protocols);
+		if (defined('CURLOPT_REDIR_PROTOCOLS')) {
+			curl_setopt($ch, CURLOPT_REDIR_PROTOCOLS, $protocols);
+		}
+	}
+}
+
 function file_get_contents_remote($url, $checksize)
 {
-    $success = false;
-	$ch = curl_init($url);
-	if(($err = curl_error($ch)) != '') return 'curl_init(): '. $err;
-	curl_setopt($ch, CURLOPT_HEADER, false);
-	if(($err = curl_error($ch)) != '') return 'curl_setopt(CURLOPT_HEADER): '. $err;
-	curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-	if(($err = curl_error($ch)) != '') return 'curl_setopt(CURLOPT_RETURNTRANSFER): '. $err;
-	curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
-	curl_setopt($ch, CURLOPT_MAXREDIRS, 4);
-	if (KU_CURL_PROXY == "interface") {
-		curl_setopt($ch, CURLOPT_INTERFACE, /*"venet0:0"*/ /*"tunb"*/ KU_CURL_INTERFACE );
-		if(($err = curl_error($ch)) != '') return 'curl_setopt(CURLOPT_INTERFACE): '. $err;
-	} else if (KU_CURL_PROXY == "vpnbook") {
-		curl_setopt($ch, CURLOPT_COOKIEJAR, "");
-		if(($err = curl_error($ch)) != '') return 'curl_setopt(CURLOPT_COOKIEJAR): '. $err;
-		curl_setopt($ch, CURLOPT_URL, "https://frproxy.vpnbook.com/includes/process.php?action=update");
-		if(($err = curl_error($ch)) != '') return 'curl_setopt(CURLOPT_URL): '. $err;
-		curl_setopt($ch, CURLOPT_POST, 1);
-		curl_setopt($ch, CURLOPT_POSTFIELDS, array('u' => $url, 'webproxylocation' => 'random'));
-		if(($err = curl_error($ch)) != '') return 'curl_setopt(CURLOPT_POSTFIELDS): '. $err;
-	} else if ((KU_CURL_PROXY != "none")) {
-		return "curl: insufficient KU_CURL_PROXY";
+	$redirects = 0;
+	$current_url = $url;
+
+	while ($redirects <= 4) {
+		$url_check = ku_validate_remote_url($current_url);
+		if ($url_check[0] === false) {
+			return array(false, $url_check[1]);
+		}
+
+		$ch = curl_init($current_url);
+		if (($err = curl_error($ch)) != '') {
+			return array(false, 'curl_init(): ' . $err);
+		}
+		ku_curl_apply_common_options($ch);
+
+		if ($checksize) {
+			curl_setopt($ch, CURLOPT_NOBODY, true);
+		}
+
+		if (KU_CURL_PROXY == "interface") {
+			curl_setopt($ch, CURLOPT_INTERFACE, KU_CURL_INTERFACE);
+			if (($err = curl_error($ch)) != '') {
+				return array(false, 'curl_setopt(CURLOPT_INTERFACE): ' . $err);
+			}
+		} else if (KU_CURL_PROXY == "vpnbook") {
+			curl_setopt($ch, CURLOPT_COOKIEJAR, "");
+			if (($err = curl_error($ch)) != '') {
+				return array(false, 'curl_setopt(CURLOPT_COOKIEJAR): ' . $err);
+			}
+			curl_setopt($ch, CURLOPT_URL, "https://frproxy.vpnbook.com/includes/process.php?action=update");
+			if (($err = curl_error($ch)) != '') {
+				return array(false, 'curl_setopt(CURLOPT_URL): ' . $err);
+			}
+			curl_setopt($ch, CURLOPT_POST, 1);
+			curl_setopt($ch, CURLOPT_POSTFIELDS, array('u' => $current_url, 'webproxylocation' => 'random'));
+			if (($err = curl_error($ch)) != '') {
+				return array(false, 'curl_setopt(CURLOPT_POSTFIELDS): ' . $err);
+			}
+		} else if (KU_CURL_PROXY != "none") {
+			return array(false, "curl: insufficient KU_CURL_PROXY");
+		}
+
+		$ret = curl_exec($ch);
+		if (($err = curl_error($ch)) != '') {
+			curl_close($ch);
+			return array(false, 'curl_exec(): ' . $err);
+		}
+
+		$status = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+		$header_size = curl_getinfo($ch, CURLINFO_HEADER_SIZE);
+		curl_close($ch);
+
+		$headers = substr($ret, 0, $header_size);
+		$body = substr($ret, $header_size);
+
+		if ($status >= 300 && $status <= 308) {
+			if (!preg_match('/^Location:\s*(.+)$/im', $headers, $matches)) {
+				return array(false, 'Redirect response without Location header');
+			}
+			$next_url = ku_build_redirect_url($current_url, trim($matches[1]));
+			if ($next_url === false) {
+				return array(false, 'Invalid redirect URL');
+			}
+			$current_url = $next_url;
+			$redirects++;
+			continue;
+		}
+
+		if ($status < 200 || $status >= 300) {
+			return array(false, 'Request failed with status code ' . $status);
+		}
+
+		if ($checksize) {
+			if (preg_match('/^Content-Length:\s*(\d+)$/im', $headers, $matches)) {
+				return array(true, (int) $matches[1]);
+			}
+			return array(false, 'Unable to determine content length when checking file size');
+		}
+
+		return array(true, $body);
 	}
-    // Set up timeouts (see issue #101)
-    curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 10);
-    curl_setopt($ch, CURLOPT_TIMEOUT, 30);
-    if($checksize)
-    {
-        curl_setopt($ch, CURLOPT_HEADER, 1);
-    }
-	$ret = curl_exec($ch);
-	if(($err = curl_error($ch)) != '') return 'curl_exec(): '. $err;
-	$status = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-	curl_close($ch);
-    if($checksize)
-    {
-        // See https://stackoverflow.com/questions/2602612/remote-file-size-without-downloading-file
-        if($ret)
-        {
-            $content_length = "unknown";
-            if($status == 200 || ($status > 300 && $status <= 308))
-            {
-                if(preg_match("/Content-Length: (\d+)/i", $ret, $matches))
-                {
-                    $success = true;
-                    $ret = (int)$matches[1];
-                }
-                else
-                {
-                    $ret = 'curl_exec(): Unable to determine content length when checking file size';
-                }
-            }
-            else
-            {
-                $ret = 'curl_exec(): Request failed with status code ' . $status . ' when checking file size';
-            }
-        }
-        else
-        {
-            $ret = 'curl_exec(): Empty response when checking file size';
-        }
-    }
-    else
-    {
-        $success = true;
-    }
-	return [$success, $ret];
+
+	return array(false, 'Too many redirects');
+}
+
+function ku_normalize_base_dir($dir)
+{
+	$real = realpath($dir);
+	if ($real === false) {
+		return false;
+	}
+	return rtrim(str_replace('\\', '/', $real), '/') . '/';
+}
+
+function ku_path_in_dir($path, $dir)
+{
+	$base = ku_normalize_base_dir($dir);
+	$real = realpath($path);
+	if ($base === false || $real === false) {
+		return false;
+	}
+	$real = str_replace('\\', '/', $real);
+	return strpos($real, $base) === 0;
+}
+
+function ku_safe_attachment_filename($filename)
+{
+	return is_string($filename)
+		&& $filename !== ''
+		&& basename($filename) === $filename
+		&& strpos($filename, '..') === false
+		&& preg_match('/^[A-Za-z0-9._-]+$/', $filename);
+}
+
+function ku_safe_unserialize_array($payload)
+{
+	if (!is_string($payload) || $payload === '') {
+		return array();
+	}
+
+	if (PHP_VERSION_ID >= 70000) {
+		$data = @unserialize($payload, array('allowed_classes' => false));
+	} else {
+		$data = @unserialize($payload);
+	}
+
+	return is_array($data) ? $data : array();
+}
+
+function ku_random_token($bytes = 32)
+{
+	if (function_exists('random_bytes')) {
+		return bin2hex(random_bytes($bytes));
+	}
+	if (function_exists('openssl_random_pseudo_bytes')) {
+		return bin2hex(openssl_random_pseudo_bytes($bytes));
+	}
+	return md5(uniqid(mt_rand(), true));
 }
 
 function changeLocale($newlocale) {
@@ -264,7 +470,7 @@ function management_addlogentry($entry, $category = 0, $forceusername = '') {
 	$username = ($forceusername == '') ? $_SESSION['manageusername'] : $forceusername;
 
 	if ($entry != '') {
-		$tc_db->Execute("INSERT INTO `" . KU_DBPREFIX . "modlog` ( `entry` , `user` , `category` , `timestamp` ) VALUES ( " . $tc_db->qstr($entry) . " , '" . $username . "' , " . $tc_db->qstr($category) . " , '" . (time() + KU_ADDTIME) . "' )");
+		$tc_db->Execute("INSERT INTO `" . KU_DBPREFIX . "modlog` ( `entry` , `user` , `category` , `timestamp` ) VALUES ( " . $tc_db->qstr($entry) . " , " . $tc_db->qstr($username) . " , " . $tc_db->qstr($category) . " , '" . (time() + KU_ADDTIME) . "' )");
 	}
 }
 

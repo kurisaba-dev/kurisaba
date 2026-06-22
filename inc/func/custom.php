@@ -93,7 +93,7 @@ function getUserMode() // Returns 0 = user, 1 = admin, 2 = mod, 4 = skipcaptcha,
 		return 0;
 	}
 
-	$results = $tc_db->GetAll("SELECT HIGH_PRIORITY `type` FROM `" . KU_DBPREFIX . "staff` WHERE `username` = '" . $_SESSION['manageusername'] . "' AND `password` = '" . $_SESSION['managepassword'] . "' LIMIT 1");
+	$results = $tc_db->GetAll("SELECT HIGH_PRIORITY `type` FROM `" . KU_DBPREFIX . "staff` WHERE `username` = " . $tc_db->qstr($_SESSION['manageusername']) . " AND `password` = " . $tc_db->qstr($_SESSION['managepassword']) . " LIMIT 1");
 	if (count($results) < 1) return -1;
 	return $results[0]['type'];
 }

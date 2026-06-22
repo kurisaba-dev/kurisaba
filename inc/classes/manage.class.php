@@ -105,9 +105,10 @@ class Manage {
 						$tc_db->Execute("UPDATE `" .KU_DBPREFIX. "staff` SET salt = '" .$salt. "' WHERE username = " .$tc_db->qstr($_POST['username']));
 						$newpass = md5($_POST['password'] . $salt);
 						$tc_db->Execute("UPDATE `" .KU_DBPREFIX. "staff` SET password = '" .$newpass. "' WHERE username = " .$tc_db->qstr($_POST['username']));
+						session_regenerate_id(true);
 						$_SESSION['manageusername'] = $_POST['username'];
 						$_SESSION['managepassword'] = $newpass;
-            			$_SESSION['token'] = md5($_SESSION['manageusername'] . $_SESSION['managepassword'] . rand(0,100));
+							$_SESSION['token'] = ku_random_token();
 						$this->SetModerationCookies();
 						$tc_db->Execute("DELETE FROM `" . KU_DBPREFIX . "loginattempts` WHERE `ip` < '" . KU_REMOTE_ADDR . "'");
 						$action = 'posting_rates';
@@ -119,9 +120,10 @@ class Manage {
 					}
 				} else {
 					if (md5($_POST['password'] . $results[0]['salt']) == $results[0]['password']) {
+						session_regenerate_id(true);
 						$_SESSION['manageusername'] = $_POST['username'];
 						$_SESSION['managepassword'] = md5($_POST['password'] . $results[0]['salt']);
-            $_SESSION['token'] = md5($_SESSION['manageusername'] . $_SESSION['managepassword'] . rand(0,100));
+							$_SESSION['token'] = ku_random_token();
 						$this->SetModerationCookies();
 						$action = 'posting_rates';
 						management_addlogentry(_gettext('Logged in'), 1);
@@ -159,7 +161,7 @@ class Manage {
 	}
 
   function CheckToken($posttoken) {
-    if ($posttoken != $_SESSION['token']) {
+    if (!isset($_SESSION['token']) || !is_string($posttoken) || !hash_equals($_SESSION['token'], $posttoken)) {
       // Something is strange
       session_destroy();
       exitWithErrorPage(_gettext('Invalid Token'));
@@ -196,7 +198,7 @@ class Manage {
 		if ($this->CurrentUserIsAdministrator()) {
 			return true;
 		} else {
-			$results = $tc_db->GetAll("SELECT HIGH_PRIORITY `type` FROM `" . KU_DBPREFIX . "staff` WHERE `username` = '" . $_SESSION['manageusername'] . "' AND `password` = '" . $_SESSION['managepassword'] . "' LIMIT 1");
+			$results = $tc_db->GetAll("SELECT HIGH_PRIORITY `type` FROM `" . KU_DBPREFIX . "staff` WHERE `username` = " . $tc_db->qstr($_SESSION['manageusername']) . " AND `password` = " . $tc_db->qstr($_SESSION['managepassword']) . " LIMIT 1");
 			foreach ($results as $line) {
 				if ($line['type'] != 2 && $line['type'] != 3) {
 					exitWithErrorPage(_gettext('That page is for moderators and administrators only.'));
@@ -253,7 +255,7 @@ class Manage {
 	function CurrentUserIsModeratorOfBoard($board, $username) {
 		global $tc_db, $tpl_page;
 
-		$results = $tc_db->GetAll("SELECT HIGH_PRIORITY `type`, `boards` FROM `" . KU_DBPREFIX . "staff` WHERE `username` = '" . $username . "' LIMIT 1");
+		$results = $tc_db->GetAll("SELECT HIGH_PRIORITY `type`, `boards` FROM `" . KU_DBPREFIX . "staff` WHERE `username` = " . $tc_db->qstr($username) . " LIMIT 1");
 		if (count($results) > 0) {
 			foreach ($results as $line) {
 				if ($line['boards'] == 'allboards') {
@@ -1042,7 +1044,7 @@ class Manage {
 		if ($dir != '' && $desc != '') {
 			$results = $tc_db->GetAll("SELECT HIGH_PRIORITY * FROM `" . KU_DBPREFIX . "boards` WHERE `name` = " . $tc_db->qstr($dir) . "");
 			if (count($results) == 0) {
-				$moderating = array_filter(explode('|', $tc_db->GetOne("SELECT HIGH_PRIORITY `boards` FROM `" . KU_DBPREFIX . "staff` WHERE `username` = '" . $_SESSION['manageusername'] . "'")));
+				$moderating = array_filter(explode('|', $tc_db->GetOne("SELECT HIGH_PRIORITY `boards` FROM `" . KU_DBPREFIX . "staff` WHERE `username` = " . $tc_db->qstr($_SESSION['manageusername']) . "")));
 				$existingboards = $tc_db->GetAll("SELECT HIGH_PRIORITY `name` from `" . KU_DBPREFIX . "boards`");
 				foreach($existingboards as &$exb) {
 					$xba[] = $exb['name'];
@@ -1052,7 +1054,7 @@ class Manage {
 				if (mkdir(KU_BOARDSDIR . $dir, 0777) && mkdir(KU_BOARDSDIR . $dir . '/res', 0777) && mkdir(KU_BOARDSDIR . $dir . '/src', 0777) && mkdir(KU_BOARDSDIR . $dir . '/thumb', 0777) && mkdir(KU_BOARDSDIR . $dir . '/tmp', 0777) && mkdir(KU_BOARDSDIR . $dir . '/tmp/thumb', 0777)) {
 					/* Add mod rights */
 					$moderating[] = $dir;
-					$tc_db->Execute("UPDATE `" . KU_DBPREFIX . "staff` SET `boards` = " . $tc_db->qstr(implode('|',$moderating)) . " WHERE `username` = '" . $_SESSION['manageusername'] . "'");
+					$tc_db->Execute("UPDATE `" . KU_DBPREFIX . "staff` SET `boards` = " . $tc_db->qstr(implode('|',$moderating)) . " WHERE `username` = " . $tc_db->qstr($_SESSION['manageusername']) . "");
 					file_put_contents(KU_BOARDSDIR . $dir . '/.htaccess', 'DirectoryIndex '. 'board.html' . '');
 					if(KU_OFFLOAD)
 					{
@@ -3625,7 +3627,7 @@ class Manage {
 		$bannedhashes = 0;
 		if (isset($_POST['banhashtime']) && $_POST['banhashtime'] !== '' && ($_POST['hash'] !== '' || isset($_POST['multibanhashes'])) && $_POST['banhashtime'] >= 0) {
 			if (isset($_POST['multibanhashes']))
-				$banhashes = unserialize($_POST['multibanhashes']);
+				$banhashes = ku_safe_unserialize_array($_POST['multibanhashes']);
 			else
 				$banhashes = Array($_POST['hash']);
 			foreach ($banhashes as $banhash){
@@ -3698,7 +3700,7 @@ class Manage {
 					if ($ban_appealat > 0) $ban_appealat += (time() + KU_ADDTIME);
 				}
 				if (isset($_POST['multiban']))
-					$ban_ips = unserialize($_POST['multiban']);
+					$ban_ips = ku_safe_unserialize_array($_POST['multiban']);
 				else
 					$ban_ips = Array($ban_ip);
 				$i = 0;
@@ -3719,7 +3721,7 @@ class Manage {
 							if (isset($ban_post_id))
 								$postids = Array($ban_post_id);
 							else
-								$postids = unserialize($_POST['quickmultibanpostid']);
+								$postids = ku_safe_unserialize_array($_POST['quickmultibanpostid']);
 							$results = $tc_db->GetAll("SELECT HIGH_PRIORITY `parentid`, `message` FROM `".KU_DBPREFIX."posts` WHERE `boardid` = " . $tc_db->qstr($ban_board_id) . " AND `id` = ".$tc_db->qstr($postids[$i])." LIMIT 1");
 
 							foreach($results AS $line) {
@@ -4113,7 +4115,7 @@ class Manage {
 
 				$i = 0;
 				if (isset($_POST['multiban']))
-					$ips = unserialize($_POST['multiban']);
+					$ips = ku_safe_unserialize_array($_POST['multiban']);
 				else
 					$ips = Array($_POST['ip']);
 				foreach  ($ips as $ip) {
@@ -4182,7 +4184,7 @@ class Manage {
 			if ($_POST['clear'] != '') {
 				$clear_decrypted = md5_decrypt($_POST['clear'], KU_RANDOMSEED);
 				if ($clear_decrypted != '') {
-					$clear_unserialized = unserialize($clear_decrypted);
+					$clear_unserialized = ku_safe_unserialize_array($clear_decrypted);
 
 					foreach ($clear_unserialized as $clear_sql) {
 						$tc_db->Execute($clear_sql);
@@ -4246,7 +4248,7 @@ class Manage {
 			if ($_POST['clear'] != '') {
 				$clear_decrypted = md5_decrypt($_POST['clear'], KU_RANDOMSEED);
 				if ($clear_decrypted != '') {
-					$clear_unserialized = unserialize($clear_decrypted);
+					$clear_unserialized = ku_safe_unserialize_array($clear_decrypted);
 
 					foreach ($clear_unserialized as $clear_sql) {
 						$tc_db->Execute($clear_sql);
@@ -4340,7 +4342,7 @@ class Manage {
 		global $tc_db, $tpl_page;
 
 		$staff_boardsmoderated = array();
-		$results = $tc_db->GetAll("SELECT HIGH_PRIORITY `boards` FROM `" . KU_DBPREFIX . "staff` WHERE `username` = '" . $username . "' LIMIT 1");
+		$results = $tc_db->GetAll("SELECT HIGH_PRIORITY `boards` FROM `" . KU_DBPREFIX . "staff` WHERE `username` = " . $tc_db->qstr($username) . " LIMIT 1");
 		if ($this->CurrentUserIsAdministrator() || $results[0][0] == 'allboards') {
 			$resultsboard = $tc_db->GetAll("SELECT HIGH_PRIORITY `id`, `name` FROM `" . KU_DBPREFIX . "boards` ORDER BY `name` ASC");
 			foreach ($resultsboard as $lineboard) {
