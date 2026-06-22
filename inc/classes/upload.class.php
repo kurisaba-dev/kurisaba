@@ -58,6 +58,9 @@ class Upload {
 		$dir1 = KU_BOARDSDIR . $board_class->board['name'] . '/tmp';
 		$dir2 = KU_BOARDSDIR . $board_class->board['name'] . '/tmp/thumb';
 		$dir3 = KU_BOARDSDIR . 'tmp/xhrupload';
+		$files1 = array();
+		$files2 = array();
+		$files3 = array();
 		if (is_dir($dir1))
 		{
 			$files1 = scandir($dir1);
@@ -182,15 +185,21 @@ class Upload {
 					{
 						if ($_POST['drop_file_name'] != '')
 						{
-							if(!file_exists($_POST['drop_file_name']))
+							$drop_file_name = $_POST['drop_file_name'];
+							if(!file_exists($drop_file_name))
 							{
 								return 'Время хранения файла вышло. Перезалей его ещё раз.';
 							}
+							if(!ku_path_in_dir($drop_file_name, $dir3))
+							{
+								return 'Недопустимый путь временного файла.';
+							}
+							$drop_file_name = realpath($drop_file_name);
 							$file = array();
-							$file['size'] = filesize($_POST['drop_file_name']);
+							$file['size'] = filesize($drop_file_name);
 							$file['error'] = UPLOAD_ERR_OK;
-							$file['name'] = basename($_POST['drop_file_name']);
-							$file['tmp_name'] = $_POST['drop_file_name'];
+							$file['name'] = basename($drop_file_name);
+							$file['tmp_name'] = $drop_file_name;
 							$imagefile_name = $file['name'];
 						}
 					}
@@ -202,18 +211,29 @@ class Upload {
 							{
 								$file = array();
 								$file['name'] = substr($_POST['embedlink'], 2);
+								if(!ku_safe_attachment_filename($file['name']))
+								{
+									return 'Недопустимое имя файла.';
+								}
 								if($temporary)
 								{
-									$file['tmp_name'] = KU_BOARDSDIR . $board_class->board['name'] . '/src/' . $file['name'];
+									$reuse_base_dir = KU_BOARDSDIR . $board_class->board['name'] . '/src';
+									$file['tmp_name'] = $reuse_base_dir . '/' . $file['name'];
 								}
 								else
 								{
-									$file['tmp_name'] = KU_BOARDSDIR . $board_class->board['name'] . '/tmp/saved' . $file['name'];
-									if(!file_exists($file['tmp_name']))
-									{
-										return 'Время хранения файла вышло. Перезалей его ещё раз.';
-									}
+									$reuse_base_dir = KU_BOARDSDIR . $board_class->board['name'] . '/tmp';
+									$file['tmp_name'] = $reuse_base_dir . '/saved' . $file['name'];
 								}
+								if(!file_exists($file['tmp_name']))
+								{
+									return 'Время хранения файла вышло. Перезалей его ещё раз.';
+								}
+								if(!ku_path_in_dir($file['tmp_name'], $reuse_base_dir))
+								{
+									return 'Недопустимый путь файла.';
+								}
+								$file['tmp_name'] = realpath($file['tmp_name']);
 								$file['size'] = filesize($file['tmp_name']);
 								$file['error'] = UPLOAD_ERR_OK;
 								$imagefile_name = $file['name'];
