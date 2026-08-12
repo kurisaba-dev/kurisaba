@@ -75,7 +75,9 @@ if (!$manage_class->ValidateSession(true)) {
 	if ($manage_class->CurrentUserIsAdministrator()) {
 		$tpl_links .= section_html(_gettext('Site Administration'), 'siteadministration') .
 		'<ul>' . "\n";
-		$tpl_links .= '<li><a style="color:red" href="manage_page.php?action=templates">' . _gettext('Edit templates') . '</a></li>
+		$tpl_links .= '
+		<li><a style="color:green" href="manage_page.php?action=updateengine">' . _gettext('Update engine') . '</a></li>
+		<li><a style="color:red" href="manage_page.php?action=templates">' . _gettext('Edit templates') . '</a></li>
 		<li><a style="color:red" href="manage_page.php?action=specialthreads">' . _gettext('Special threads') . '</a></li>
 		<li><a href="manage_page.php?action=spaceused">' . _gettext('Disk space used') . '</a></li>
 		<li><a style="color:blue" href="manage_page.php?action=staff">' . _gettext('Staff') . '</a></li>

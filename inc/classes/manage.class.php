@@ -1661,6 +1661,20 @@ class Manage {
 		}
 	}
 
+	/* Search for posts by IP */
+	function updateengine() {
+		global $tc_db, $tpl_page;
+		$this->AdministratorsOnly();
+
+		$tpl_page .= '<h2>'. _gettext('Update engine') .'</h2><br />'. "\n";
+
+		$command = 'git -C ' . escapeshellarg(KU_ROOTDIR) . ' pull --ff-only origin master 2>&1';
+		exec($command, $output, $exit_code);
+		$tpl_page .= _gettext('Exit code: ') . $exit_code . '<br />';
+		$tpl_page .= '<textarea cols="80" rows="25">'. join("\n", $output) . '</textarea>';
+	}
+
+
 	/* Search for text in posts */
 	function search() {
 		global $tc_db, $tpl_page;
