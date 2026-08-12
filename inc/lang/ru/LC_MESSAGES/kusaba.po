@@ -2055,3 +2055,9 @@ msgstr "451: Забанено <s>кровавой гэбнёй</s> Органи�
 
 msgid "This post isn't available in your country."
 msgstr "Этот пост недоступен в твоей стране."
+
+msgid "Update engine"
+msgstr "Обновить движок"
+
+msgid "Exit code: "
+msgstr "Код возврата: "
