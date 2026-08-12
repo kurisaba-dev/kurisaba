@@ -19,6 +19,18 @@ A nullchan-kusabaX based imageboard engine with some modern features
     error_page 404 = /error.php?p=404;
     error_page 451 = /error.php?p=451;
 ```
+- Если сервер - nginx, и предполагается использовать offload-движок (в том числе и для геоблокировок), закрыть доступ к путям, содержащим каталоги `/thumb/` и `/src/`:
+```
+    location ~ /thumb/ {
+        deny all;
+        return 403;
+    }
+
+    location ~ /src/ {
+        deny all;
+        return 403;
+    }
+```
 - Возможно, потребуется прописать директивы типа `client_max_body_size` для nginx или аналогичную для apache.
 - Создать базу данных с любым названием (если ещё не создана).
 - Импортировать файл `database.sql` из каталога `_templates` в эту базу.
