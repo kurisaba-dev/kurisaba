@@ -25,7 +25,11 @@ function img_code($code)
     $linenum = 5;
     $img_arr = array("1.png");
     $font_arr = array();
-    $font_arr[0]["fname"] = "OpenSans-Light.ttf";
+    if ($_COOKIE['captchalang'] == 'jp') {
+        $font_arr[0]["fname"] = "NotoSansJP-VariableFont_wght.ttf";
+    } else {
+        $font_arr[0]["fname"] = "OpenSans-Light.ttf";
+    }
     $font_arr[0]["size"] = 18;
     $n = rand(0, sizeof($font_arr) - 1);
     $img_fn = $img_arr[rand(0, sizeof($img_arr) - 1)];
