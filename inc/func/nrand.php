@@ -259,7 +259,7 @@ function english_word($length = 6)
 
 function katakana($romanized = false)
 {
-    if (romanized) {
+    if (!$romanized) {
         return array(
             'ア','イ','ウ','エ','オ','カ','キ','ク','ケ','コ','サ','シ','ス','セ','ソ',
             'タ','チ','ツ','テ','ト','ナ','ニ','ネ','ヌ','ノ','ハ','ヒ','フ','ヘ','ホ',

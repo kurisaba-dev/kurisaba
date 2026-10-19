@@ -34,6 +34,7 @@
 session_start(['cookie_samesite' => 'Strict']);
 require 'config.php';
 require KU_ROOTDIR . 'inc/functions.php';
+require KU_ROOTDIR . 'inc/func/nrand.php';
 require KU_ROOTDIR . 'inc/classes/board-post.class.php';
 require KU_ROOTDIR . 'inc/classes/bans.class.php';
 require KU_ROOTDIR . 'inc/classes/posting.class.php';
