@@ -21,7 +21,8 @@ function img_code($code) {
 		$font_arr[0]["size"] = 18;
 	$n = rand(0,sizeof($font_arr)-1);
 	$img_fn = $img_arr[rand(0, sizeof($img_arr)-1)];
-	$im=imagecreatefrompng(dirname(__FILE__)."/images/captcha_back.png");
+	$img_width = 10 + 20 * mb_strlen($code);
+	$im=imagecreate($img_width, 30);
 			$color = imagecolorallocate($im, 100, 100, 100);				
 	$x = -15;
 	mb_internal_encoding("UTF-8");
@@ -39,7 +40,7 @@ function img_code($code) {
 	}
 	for ($i=0; $i<$linenum; $i++) 
 	{
-		imageline($im, rand(0, 20), rand(0, 70), rand(120, 150), rand(0, 70), $color);
+		imageline($im, rand(0, 20), rand(0, 30), rand($img_width - 30, $img_width), rand(0, 30), $color);
 	}
 	$im=opsmaz($im,$scolor);
 
