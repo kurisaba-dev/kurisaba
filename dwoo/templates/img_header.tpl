@@ -24,7 +24,7 @@
 {if $captchalang == 'mt'}
   <script>
     var mtcaptchaConfig = {
-      "sitekey": {$captchaid}
+      "sitekey": "{$captchaid}"
     };
     (function () {
       var mt_service = document.createElement('script');
