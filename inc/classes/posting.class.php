@@ -201,37 +201,6 @@ class Posting
         return '';
     }
 
-    public function CheckRecaptcha()	//just backup
-    {
-        global $board_class;
-
-        /* If the board has captcha's enabled... */
-        if ($board_class->board['enablecaptcha'] == 1) {
-            if ($board_class->board['type'] == 1 && $_POST['replythread']) {
-                /* Check if they entered the correct code. If not... */
-                if ($_SESSION['security_code'] != strtolower($_POST['captcha']) || empty($_SESSION['security_code'])) {
-                    /* Kill the script, stopping the posting process */
-                    exitWithErrorPage(_gettext('Incorrect captcha entered.'));
-                }
-            } else {
-                require_once(KU_ROOTDIR.'recaptchalib.php');
-                $privatekey = "6LdVg8YSAAAAALayugP2r148EEQAogHPfQOSYow-";
-
-                // was there a reCAPTCHA response?
-                $resp = recaptcha_check_answer(
-                    $privatekey,
-                    KU_REMOTE_ADDR,
-                    $_POST["recaptcha_challenge_field"],
-                    $_POST["recaptcha_response_field"]
-                );
-                if (!$resp->is_valid) {
-                    // Show error and give user opportunity to try again.
-                    exitWithErrorPage(_gettext('Incorrect captcha entered.'));
-                }
-            }
-        }
-    }
-
     public function CheckBannedHashNew($file_location = '', $only_file = false)
     {
         global $tc_db, $board_class, $bans_class;
