@@ -1,4 +1,5 @@
 <?php
+
 /**
  * block.t.php - Smarty gettext block plugin
  *
@@ -37,22 +38,22 @@
  */
 function smarty_gettext_strarg($str)
 {
-	$tr = array();
-	$p = 0;
+    $tr = array();
+    $p = 0;
 
-	for ($i=1; $i < func_num_args(); $i++) {
-		$arg = func_get_arg($i);
+    for ($i = 1; $i < func_num_args(); $i++) {
+        $arg = func_get_arg($i);
 
-		if (is_array($arg)) {
-			foreach ($arg as $aarg) {
-				$tr['%'.++$p] = $aarg;
-			}
-		} else {
-			$tr['%'.++$p] = $arg;
-		}
-	}
+        if (is_array($arg)) {
+            foreach ($arg as $aarg) {
+                $tr['%'.++$p] = $aarg;
+            }
+        } else {
+            $tr['%'.++$p] = $arg;
+        }
+    }
 
-	return strtr($str, $tr);
+    return strtr($str, $tr);
 }
 
 /**
@@ -72,66 +73,64 @@ function smarty_gettext_strarg($str)
  */
 function smarty_block_t($params, $text, &$smarty)
 {
-	$text = stripslashes($text);
-	$params['escape'] = 'off';
-	$lower = false;
-	// set escape mode
-	if (isset($params['escape'])) {
-		$escape = $params['escape'];
-		unset($params['escape']);
-	}
+    $text = stripslashes($text);
+    $params['escape'] = 'off';
+    $lower = false;
+    // set escape mode
+    if (isset($params['escape'])) {
+        $escape = $params['escape'];
+        unset($params['escape']);
+    }
 
-	// set lowercase
-	if (isset($params['lower'])) {
-		$lower = true;
-		unset($params['lower']);
-	}
+    // set lowercase
+    if (isset($params['lower'])) {
+        $lower = true;
+        unset($params['lower']);
+    }
 
-	// set plural version
-	if (isset($params['plural'])) {
-		$plural = $params['plural'];
-		unset($params['plural']);
+    // set plural version
+    if (isset($params['plural'])) {
+        $plural = $params['plural'];
+        unset($params['plural']);
 
-		// set count
-		if (isset($params['count'])) {
-			$count = $params['count'];
-			unset($params['count']);
-		}
-	}
+        // set count
+        if (isset($params['count'])) {
+            $count = $params['count'];
+            unset($params['count']);
+        }
+    }
 
-	// use plural if required parameters are set
-	if (isset($count) && isset($plural)) {
-		$text = ngettext($text, $plural, $count);
-	} else { // use normal
-		$text = _gettext($text);
-	}
+    // use plural if required parameters are set
+    if (isset($count) && isset($plural)) {
+        $text = ngettext($text, $plural, $count);
+    } else { // use normal
+        $text = _gettext($text);
+    }
 
-	// run strarg if there are parameters
-	if (count($params)) {
-		$text = smarty_gettext_strarg($text, $params);
-	}
-	if ($lower === true) {
-		$text = strtolower($text);
-	}
-	if (isset($escape)) {
-		switch ($escape) {
-			case 'javascript':
-			case 'js':
-				// javascript escape
-				$text = str_replace('\'', '\\\'', stripslashes($text));
-				break;
-			case 'url':
-				// url escape
-				$text = urlencode($text);
-				break;
-			case 'html':
-				//html escape
-				$text = nl2br(htmlspecialchars($text));
-				break;
-		}
-	}
+    // run strarg if there are parameters
+    if (count($params)) {
+        $text = smarty_gettext_strarg($text, $params);
+    }
+    if ($lower === true) {
+        $text = strtolower($text);
+    }
+    if (isset($escape)) {
+        switch ($escape) {
+            case 'javascript':
+            case 'js':
+                // javascript escape
+                $text = str_replace('\'', '\\\'', stripslashes($text));
+                break;
+            case 'url':
+                // url escape
+                $text = urlencode($text);
+                break;
+            case 'html':
+                //html escape
+                $text = nl2br(htmlspecialchars($text));
+                break;
+        }
+    }
 
-	return $text;
+    return $text;
 }
-
-?>

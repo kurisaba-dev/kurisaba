@@ -19,5 +19,5 @@
  */
 function Dwoo_Plugin_assign_compile(Dwoo_Compiler $compiler, $value, $var)
 {
-	return '$this->assignInScope('.$value.', '.$var.')';
+    return '$this->assignInScope('.$value.', '.$var.')';
 }

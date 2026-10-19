@@ -17,7 +17,7 @@
  * @date	2008-10-23
  * @package	Dwoo
  */
-function Dwoo_Plugin_spacify_compile(Dwoo_Compiler $compiler, $value, $space_char=' ')
+function Dwoo_Plugin_spacify_compile(Dwoo_Compiler $compiler, $value, $space_char = ' ')
 {
-	return 'implode('.$space_char.', str_split('.$value.', 1))';
+    return 'implode('.$space_char.', str_split('.$value.', 1))';
 }

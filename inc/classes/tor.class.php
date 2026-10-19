@@ -3,19 +3,19 @@
 /**
  * PHP5 class for interfacing with the Tor network
  * by Josh Sandlin <josh@thenullbyte.org>
- * 
+ *
  * Licensed: MIT/X11
- * 
- * NOTE: The proxy host is configurable by the user, 
+ *
+ * NOTE: The proxy host is configurable by the user,
  * so therefore one i not limited to only the Tor
  * network. The default setting however is to run
  * all data through the Tor/Privoxy network.
- * 
+ *
  */
- 
- /* 
+
+/*
 NOTES on Irongeek's TorOrNot script:
-Consider this code to be GPLed, but I'd love for you to email me at Irongeek (at) irongeek.com with any changes you make. 
+Consider this code to be GPLed, but I'd love for you to email me at Irongeek (at) irongeek.com with any changes you make.
 More information about using php and images can be found at http://us3.php.net/manual/en/ref.image.php
 More information on detecting Tor exit nodes with TorDNSEL see https://www.torproject.org/tordnsel/
 
@@ -78,7 +78,7 @@ class Tor
                 'OS 10.5'
         );
         //randomly generate UserAgent
-        $this->userAgent = $agentBrowser[rand(0,7)].'/'.rand(1,8).'.'.rand(0,9).' (' .$agentOS[rand(0,11)].' '.rand(1,7).'.'.rand(0,9).'; en-US;)';
+        $this->userAgent = $agentBrowser[rand(0, 7)].'/'.rand(1, 8).'.'.rand(0, 9).' (' .$agentOS[rand(0, 11)].' '.rand(1, 7).'.'.rand(0, 9).'; en-US;)';
     }
 
     private function setTimeout($timeout)
@@ -110,7 +110,7 @@ class Tor
         $this->returnData = curl_exec($action);
         curl_close($action);
     }
-    
+
     private function setPayload()
     {
         $this->payload = $this->url . $this->vector;
@@ -122,16 +122,15 @@ class Tor
         $this->setUrl($url);
         $this->setVector($vector);
         $this->setUserAgent();
-            
+
         //set payload
         $this->setPayload();
-            
+
         //if a timeout is set in the args, use it
-        if(isset($timeout))
-        {
+        if (isset($timeout)) {
             $this->setTimeout($timeout);
         }
-            
+
         //run cURL action against url
         $this->setCurl();
     }
@@ -147,20 +146,20 @@ class Tor
                 'return' => $this->returnData
         );
     }
-	
-	// should detect if the remote user is using TOR or not
-	public function IsTorExitPoint(){
-		if (gethostbyname($this->ReverseIPOctets(KU_REMOTE_ADDR).".".$_SERVER['SERVER_PORT'].".".$this->ReverseIPOctets($_SERVER['SERVER_ADDR']).".ip-port.exitlist.torproject.org")=="127.0.0.2") {
-			return true;
-		} 
-		else {
-			return false;
-		}
-	}
-	
-	private function ReverseIPOctets($inputip){
-		$ipoc = explode(".",$inputip);
-		return $ipoc[3].".".$ipoc[2].".".$ipoc[1].".".$ipoc[0];
-	}
+
+    // should detect if the remote user is using TOR or not
+    public function IsTorExitPoint()
+    {
+        if (gethostbyname($this->ReverseIPOctets(KU_REMOTE_ADDR).".".$_SERVER['SERVER_PORT'].".".$this->ReverseIPOctets($_SERVER['SERVER_ADDR']).".ip-port.exitlist.torproject.org") == "127.0.0.2") {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    private function ReverseIPOctets($inputip)
+    {
+        $ipoc = explode(".", $inputip);
+        return $ipoc[3].".".$ipoc[2].".".$ipoc[1].".".$ipoc[0];
+    }
 }
-?>

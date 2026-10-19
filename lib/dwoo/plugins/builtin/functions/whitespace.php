@@ -27,7 +27,7 @@
  * @date	2008-10-23
  * @package	Dwoo
  */
-function Dwoo_Plugin_whitespace_compile(Dwoo_Compiler $compiler, $value, $with=' ')
+function Dwoo_Plugin_whitespace_compile(Dwoo_Compiler $compiler, $value, $with = ' ')
 {
-	return "preg_replace('#\s+#'.(strcasecmp(\$this->charset, 'utf-8')===0?'u':''), $with, $value)";
+    return "preg_replace('#\s+#'.(strcasecmp(\$this->charset, 'utf-8')===0?'u':''), $with, $value)";
 }

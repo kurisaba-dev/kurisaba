@@ -40,37 +40,37 @@
  */
 class Dwoo_Plugin_with extends Dwoo_Block_Plugin implements Dwoo_ICompilable_Block, Dwoo_IElseable
 {
-	protected static $cnt=0;
+    protected static $cnt = 0;
 
-	public function init($var)
-	{
-	}
+    public function init($var)
+    {
+    }
 
-	public static function preProcessing(Dwoo_Compiler $compiler, array $params, $prepend, $append, $type)
-	{
-		return '';
-	}
+    public static function preProcessing(Dwoo_Compiler $compiler, array $params, $prepend, $append, $type)
+    {
+        return '';
+    }
 
-	public static function postProcessing(Dwoo_Compiler $compiler, array $params, $prepend, $append, $content)
-	{
-		$rparams = $compiler->getRealParams($params);
-		$cparams = $compiler->getCompiledParams($params);
+    public static function postProcessing(Dwoo_Compiler $compiler, array $params, $prepend, $append, $content)
+    {
+        $rparams = $compiler->getRealParams($params);
+        $cparams = $compiler->getCompiledParams($params);
 
-		$compiler->setScope($rparams['var']);
+        $compiler->setScope($rparams['var']);
 
 
-		$pre = Dwoo_Compiler::PHP_OPEN. 'if ('.$cparams['var'].')'."\n{\n".
-			'$_with'.(self::$cnt).' = $this->setScope("'.$rparams['var'].'");'.
-			"\n/* -- start with output */\n".Dwoo_Compiler::PHP_CLOSE;
+        $pre = Dwoo_Compiler::PHP_OPEN. 'if ('.$cparams['var'].')'."\n{\n".
+            '$_with'.(self::$cnt).' = $this->setScope("'.$rparams['var'].'");'.
+            "\n/* -- start with output */\n".Dwoo_Compiler::PHP_CLOSE;
 
-		$post = Dwoo_Compiler::PHP_OPEN. "\n/* -- end with output */\n".
-			'$this->setScope($_with'.(self::$cnt++).', true);'.
-			"\n}\n".Dwoo_Compiler::PHP_CLOSE;
+        $post = Dwoo_Compiler::PHP_OPEN. "\n/* -- end with output */\n".
+            '$this->setScope($_with'.(self::$cnt++).', true);'.
+            "\n}\n".Dwoo_Compiler::PHP_CLOSE;
 
-		if (isset($params['hasElse'])) {
-			$post .= $params['hasElse'];
-		}
+        if (isset($params['hasElse'])) {
+            $post .= $params['hasElse'];
+        }
 
-		return $pre . $content . $post;
-	}
+        return $pre . $content . $post;
+    }
 }

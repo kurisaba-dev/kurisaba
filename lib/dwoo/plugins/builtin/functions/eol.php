@@ -16,5 +16,5 @@
  */
 function Dwoo_Plugin_eol_compile(Dwoo_Compiler $compiler)
 {
-	return 'PHP_EOL';
+    return 'PHP_EOL';
 }

@@ -17,11 +17,11 @@
  * @date	2008-10-23
  * @package	Dwoo
  */
-function Dwoo_Plugin_strip_tags_compile(Dwoo_Compiler $compiler, $value, $addspace=true)
+function Dwoo_Plugin_strip_tags_compile(Dwoo_Compiler $compiler, $value, $addspace = true)
 {
-	if ($addspace==='true') {
-		return "preg_replace('#<[^>]*>#', ' ', $value)";
-	} else {
-		return "strip_tags($value)";
-	}
+    if ($addspace === 'true') {
+        return "preg_replace('#<[^>]*>#', ' ', $value)";
+    } else {
+        return "strip_tags($value)";
+    }
 }

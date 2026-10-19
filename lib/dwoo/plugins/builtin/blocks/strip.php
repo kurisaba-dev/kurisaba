@@ -20,31 +20,32 @@
  */
 class Dwoo_Plugin_strip extends Dwoo_Block_Plugin implements Dwoo_ICompilable_Block
 {
-	public function init($mode = "default")
-	{
-	}
+    public function init($mode = "default")
+    {
+    }
 
-	public static function preProcessing(Dwoo_Compiler $compiler, array $params, $prepend, $append, $type)
-	{
-		return '';
-	}
+    public static function preProcessing(Dwoo_Compiler $compiler, array $params, $prepend, $append, $type)
+    {
+        return '';
+    }
 
-	public static function postProcessing(Dwoo_Compiler $compiler, array $params, $prepend, $append, $content)
-	{
-		$params = $compiler->getCompiledParams($params);
+    public static function postProcessing(Dwoo_Compiler $compiler, array $params, $prepend, $append, $content)
+    {
+        $params = $compiler->getCompiledParams($params);
 
-		$mode = trim($params['mode'], '"\'');
-		switch ($mode) {
-			case 'js':
-			case 'javascript':
-				$content = preg_replace('#(?<!:)//\s[^\r\n]*|/\*.*?\*/#','', $content);
+        $mode = trim($params['mode'], '"\'');
+        switch ($mode) {
+            case 'js':
+            case 'javascript':
+                $content = preg_replace('#(?<!:)//\s[^\r\n]*|/\*.*?\*/#', '', $content);
 
-			case 'default':
-			default:
-		}
+                // no break
+            case 'default':
+            default:
+        }
 
-		$content = preg_replace(array("/\n/","/\r/",'/(<\?(?:php)?|<%)\s*/'), array('','','$1 '), preg_replace('#^\s*(.+?)\s*$#m', '$1', $content));
+        $content = preg_replace(array("/\n/","/\r/",'/(<\?(?:php)?|<%)\s*/'), array('','','$1 '), preg_replace('#^\s*(.+?)\s*$#m', '$1', $content));
 
-		return $content;
-	}
+        return $content;
+    }
 }

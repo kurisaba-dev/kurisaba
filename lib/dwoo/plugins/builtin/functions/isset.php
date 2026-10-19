@@ -18,5 +18,5 @@
  */
 function Dwoo_Plugin_isset_compile(Dwoo_Compiler $compiler, $var)
 {
-	return '('.$var.' !== null)';
+    return '('.$var.' !== null)';
 }

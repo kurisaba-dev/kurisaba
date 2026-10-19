@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of Kusaba.
  *
@@ -20,8 +21,6 @@
  */
 
 // Include the main Dwoo class
-include KU_ROOTDIR.'lib/dwoo/Dwoo.compiled.php'; 
+include KU_ROOTDIR.'lib/dwoo/Dwoo.compiled.php';
 $dwoo = new Dwoo();
 $dwoo_data = new Dwoo_Data();
-
-?>

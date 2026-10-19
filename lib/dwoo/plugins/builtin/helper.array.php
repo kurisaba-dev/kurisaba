@@ -23,16 +23,16 @@
  * @date	2008-10-23
  * @package	Dwoo
  */
-function Dwoo_Plugin_array_compile(Dwoo_Compiler $compiler, array $rest=array())
+function Dwoo_Plugin_array_compile(Dwoo_Compiler $compiler, array $rest = array())
 {
-	$out = array();
-	foreach ($rest as $k=>$v) {
-		if (is_numeric($k)) {
-			$out[] = $k.'=>'.$v;
-		} else {
-			$out[] = '"'.$k.'"=>'.$v;
-		}
-	}
+    $out = array();
+    foreach ($rest as $k => $v) {
+        if (is_numeric($k)) {
+            $out[] = $k.'=>'.$v;
+        } else {
+            $out[] = '"'.$k.'"=>'.$v;
+        }
+    }
 
-	return 'array('.implode(', ', $out).')';
+    return 'array('.implode(', ', $out).')';
 }

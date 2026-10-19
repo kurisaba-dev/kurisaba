@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of kusaba.
  *
@@ -25,7 +26,9 @@
 
 require 'config.php';
 /* No need to waste effort if expansion is disabled */
-if (!KU_EXPAND) die();
+if (!KU_EXPAND) {
+    die();
+}
 require KU_ROOTDIR . 'inc/functions.php';
 require KU_ROOTDIR . 'inc/classes/board-post.class.php';
 
@@ -41,8 +44,7 @@ if ($board_name != '') {
 
 require KU_ROOTDIR . 'inc/classes/bans.class.php';
 $bans_class = new Bans();
-if($bans_class->BanCheckSilent(KU_REMOTE_ADDR, $board_class->board, true))
-{
+if ($bans_class->BanCheckSilent(KU_REMOTE_ADDR, $board_class->board, true)) {
     do_redirect(KU_BOARDSPATH . '/banned.php');
 }
 
@@ -60,15 +62,17 @@ if (isset($_GET['preview'])) {
 
     die('Error');
 }
-if( isset($_GET['after']) && (int)$_GET['after']!=0 ) {
+if (isset($_GET['after']) && (int)$_GET['after'] != 0) {
     $refreshq = ' AND `id` > '  . $tc_db->qstr((int)$_GET['after']);
     $getnewposts = true;
 } else {
-    $refreshq ='';
+    $refreshq = '';
     $getnewposts = false;
 }
 $posts = $tc_db->GetAll('SELECT * FROM `'.KU_DBPREFIX.'posts` WHERE `boardid` = ' . $board_class->board['id'] . ' AND `IS_DELETED` = 0 AND `parentid` = '.$tc_db->qstr($_GET['threadid']) . $refreshq .  ' ORDER BY `id` ASC');
-if( count($posts)==0 ) die();
+if (count($posts) == 0) {
+    die();
+}
 
 global $expandjavascript;
 $output = '';
@@ -84,14 +88,14 @@ if ($board_class->board['type'] != 1) {
 
 $pregen_replies_q = $tc_db->GetAll("SELECT * FROM `".KU_DBPREFIX."answers` WHERE `to_boardid` = '" . $board_class->board['id'] . "' AND `to_parentid` = ".$tc_db->qstr($_GET['threadid']));
 
-foreach ($posts as $key=>$post) {
+foreach ($posts as $key => $post) {
     if ($post['file_type'] == 'jpg' || $post['file_type'] == 'gif' || $post['file_type'] == 'webp' || $post['file_type'] == 'png') {
         $numimages++;
     }
 
-	$post['n'] = $key + 2; // First reply has # 2
+    $post['n'] = $key + 2; // First reply has # 2
     $posts[$key] = $board_class->BuildPost($post, false, $pregen_replies_q);
-    
+
     $newlastid = $post['id'];
 }
 $board_class->dwoo_data->assign('numimages', $numimages);
@@ -119,5 +123,3 @@ if ($expandjavascript != '') {
 }
 
 echo $output;
-
-?>

@@ -18,5 +18,5 @@
  */
 function Dwoo_Plugin_count_sentences_compile(Dwoo_Compiler $compiler, $value)
 {
-	return "preg_match_all('#[\w\pL]\.(?![\w\pL])#u', $value, \$tmp)";
+    return "preg_match_all('#[\w\pL]\.(?![\w\pL])#u', $value, \$tmp)";
 }

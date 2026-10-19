@@ -19,7 +19,7 @@
  * @date	2008-10-23
  * @package	Dwoo
  */
-function Dwoo_Plugin_wordwrap_compile(Dwoo_Compiler $compiler, $value, $length=80, $break="\n", $cut=false)
+function Dwoo_Plugin_wordwrap_compile(Dwoo_Compiler $compiler, $value, $length = 80, $break = "\n", $cut = false)
 {
-	return 'wordwrap('.$value.','.$length.','.$break.','.$cut.')';
+    return 'wordwrap('.$value.','.$length.','.$break.','.$cut.')';
 }

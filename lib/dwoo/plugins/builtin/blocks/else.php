@@ -29,35 +29,35 @@
  */
 class Dwoo_Plugin_else extends Dwoo_Block_Plugin implements Dwoo_ICompilable_Block
 {
-	public function init()
-	{
-	}
+    public function init()
+    {
+    }
 
-	public static function preProcessing(Dwoo_Compiler $compiler, array $params, $prepend, $append, $type)
-	{
-		$preContent = '';
-		while (true) {
-			$preContent .= $compiler->removeTopBlock();
-			$block =& $compiler->getCurrentBlock();
-			$interfaces = class_implements($block['class'], false);
-			if (in_array('Dwoo_IElseable', $interfaces) !== false) {
-				break;
-			}
-		}
+    public static function preProcessing(Dwoo_Compiler $compiler, array $params, $prepend, $append, $type)
+    {
+        $preContent = '';
+        while (true) {
+            $preContent .= $compiler->removeTopBlock();
+            $block = & $compiler->getCurrentBlock();
+            $interfaces = class_implements($block['class'], false);
+            if (in_array('Dwoo_IElseable', $interfaces) !== false) {
+                break;
+            }
+        }
 
-		$params['initialized'] = true;
-		$compiler->injectBlock($type, $params);
-		return $preContent;
-	}
+        $params['initialized'] = true;
+        $compiler->injectBlock($type, $params);
+        return $preContent;
+    }
 
-	public static function postProcessing(Dwoo_Compiler $compiler, array $params, $prepend, $append, $content)
-	{
-		if (!isset($params['initialized'])) {
-			return '';
-		}
+    public static function postProcessing(Dwoo_Compiler $compiler, array $params, $prepend, $append, $content)
+    {
+        if (!isset($params['initialized'])) {
+            return '';
+        }
 
-		$block =& $compiler->getCurrentBlock();
-		$block['params']['hasElse'] = Dwoo_Compiler::PHP_OPEN."else {\n".Dwoo_Compiler::PHP_CLOSE . $content . Dwoo_Compiler::PHP_OPEN."\n}".Dwoo_Compiler::PHP_CLOSE;
-		return '';
-	}
+        $block = & $compiler->getCurrentBlock();
+        $block['params']['hasElse'] = Dwoo_Compiler::PHP_OPEN."else {\n".Dwoo_Compiler::PHP_CLOSE . $content . Dwoo_Compiler::PHP_OPEN."\n}".Dwoo_Compiler::PHP_CLOSE;
+        return '';
+    }
 }

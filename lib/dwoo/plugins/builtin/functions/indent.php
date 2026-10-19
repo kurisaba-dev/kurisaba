@@ -18,7 +18,7 @@
  * @date	2008-10-23
  * @package	Dwoo
  */
-function Dwoo_Plugin_indent_compile(Dwoo_Compiler $compiler, $value, $by=4, $char=' ')
+function Dwoo_Plugin_indent_compile(Dwoo_Compiler $compiler, $value, $by = 4, $char = ' ')
 {
-	return "preg_replace('#^#m', '".str_repeat(substr($char, 1, -1), trim($by, '"\''))."', $value)";
+    return "preg_replace('#^#m', '".str_repeat(substr($char, 1, -1), trim($by, '"\''))."', $value)";
 }

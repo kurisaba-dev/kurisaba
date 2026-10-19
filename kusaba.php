@@ -1,9 +1,9 @@
 <?php
 if (file_exists("install.php")) {
-	die('You are seeing this message because either you haven\'t ran the install file yet, and can do so <a href="install.php">here</a>, or already have, and <strong>must delete it</strong>.');
+    die('You are seeing this message because either you haven\'t ran the install file yet, and can do so <a href="install.php">here</a>, or already have, and <strong>must delete it</strong>.');
 }
 if (!isset($_GET['info'])) {
-	$preconfig_db_unnecessary = true;
+    $preconfig_db_unnecessary = true;
 }
 require 'config.php';
 $menufile = 'menu.php';
@@ -37,29 +37,29 @@ $menufile = 'menu.php';
 </head>
 <?php
 if (isset($_GET['info'])) {
-	require KU_ROOTDIR . 'inc/functions.php';
-	echo '<body>';
-	echo '<h1>General info:</h1><ul>';
-	echo '<li>Version: Kurisaba ' . KU_VERSION . '</li>';
-	$bans = $tc_db->GetOne("SELECT COUNT(*) FROM `".KU_DBPREFIX."banlist` WHERE `expired` = 0 AND `until` > " . (time() + KU_ADDTIME));
-	echo '<li>Active bans: ' . $bans . '</li>';
-	$wordfilters = $tc_db->GetOne("SELECT COUNT(*) FROM `".KU_DBPREFIX."wordfilter`");
-	echo '<li>Wordfilters: ' . $wordfilters . '</li>';
-	echo '<li>Modules loaded: ';
-	$modules = modules_list();
-	if (count($modules) > 0) {
-		$moduleslist = '';
-		foreach ($modules as $module) {
-			$moduleslist .= $module . ', ';
-		}
-		echo substr($moduleslist, 0, -2);
-	} else {
-		echo 'none';
-	}
-	echo '</li>';
-	echo '</ul>';
-	echo '</body></html>';
-	die();
+    require KU_ROOTDIR . 'inc/functions.php';
+    echo '<body>';
+    echo '<h1>General info:</h1><ul>';
+    echo '<li>Version: Kurisaba ' . KU_VERSION . '</li>';
+    $bans = $tc_db->GetOne("SELECT COUNT(*) FROM `".KU_DBPREFIX."banlist` WHERE `expired` = 0 AND `until` > " . (time() + KU_ADDTIME));
+    echo '<li>Active bans: ' . $bans . '</li>';
+    $wordfilters = $tc_db->GetOne("SELECT COUNT(*) FROM `".KU_DBPREFIX."wordfilter`");
+    echo '<li>Wordfilters: ' . $wordfilters . '</li>';
+    echo '<li>Modules loaded: ';
+    $modules = modules_list();
+    if (count($modules) > 0) {
+        $moduleslist = '';
+        foreach ($modules as $module) {
+            $moduleslist .= $module . ', ';
+        }
+        echo substr($moduleslist, 0, -2);
+    } else {
+        echo 'none';
+    }
+    echo '</li>';
+    echo '</ul>';
+    echo '</body></html>';
+    die();
 }
 ?>
 <body style="overflow: hidden;">

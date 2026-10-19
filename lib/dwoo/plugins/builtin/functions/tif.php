@@ -20,48 +20,48 @@
  */
 function Dwoo_Plugin_tif_compile(Dwoo_Compiler $compiler, array $rest)
 {
-	// load if plugin
-	if (!class_exists('Dwoo_Plugin_if', false)) {
-		try {
-			$compiler->getDwoo()->getLoader()->loadPlugin('if');
-		} catch (Exception $e) {
-			throw new Dwoo_Compilation_Exception($compiler, 'Tif: the if plugin is required to use Tif');
-		}
-	}
+    // load if plugin
+    if (!class_exists('Dwoo_Plugin_if', false)) {
+        try {
+            $compiler->getDwoo()->getLoader()->loadPlugin('if');
+        } catch (Exception $e) {
+            throw new Dwoo_Compilation_Exception($compiler, 'Tif: the if plugin is required to use Tif');
+        }
+    }
 
-	// fetch false result and remove the ":" if it was present
-	$falseResult = array_pop($rest);
+    // fetch false result and remove the ":" if it was present
+    $falseResult = array_pop($rest);
 
-	if (trim(end($rest), '"\'') === ':') {
-		// remove the ':' if present
-		array_pop($rest);
-	} elseif (trim(end($rest), '"\'') === '?' || count($rest) === 1) {
-		// there was in fact no false result provided, so we move it to be the true result instead
-		$trueResult = $falseResult;
-		$falseResult = "''";
-	}
+    if (trim(end($rest), '"\'') === ':') {
+        // remove the ':' if present
+        array_pop($rest);
+    } elseif (trim(end($rest), '"\'') === '?' || count($rest) === 1) {
+        // there was in fact no false result provided, so we move it to be the true result instead
+        $trueResult = $falseResult;
+        $falseResult = "''";
+    }
 
-	// fetch true result if needed
-	if (!isset($trueResult)) {
-		$trueResult = array_pop($rest);
-		// no true result provided so we use the expression arg
-		if ($trueResult === '?') {
-			$trueResult = true;
-		}
-	}
+    // fetch true result if needed
+    if (!isset($trueResult)) {
+        $trueResult = array_pop($rest);
+        // no true result provided so we use the expression arg
+        if ($trueResult === '?') {
+            $trueResult = true;
+        }
+    }
 
-	// remove the '?' if present
-	if (trim(end($rest), '"\'') === '?') {
-		array_pop($rest);
-	}
+    // remove the '?' if present
+    if (trim(end($rest), '"\'') === '?') {
+        array_pop($rest);
+    }
 
-	// check params were correctly provided
-	if (empty($rest) || empty($trueResult) || empty($falseResult)) {
-		throw new Dwoo_Compilation_Exception($compiler, 'Tif: you must provide three parameters serving as <expression> ? <true value> : <false value>');
-	}
+    // check params were correctly provided
+    if (empty($rest) || empty($trueResult) || empty($falseResult)) {
+        throw new Dwoo_Compilation_Exception($compiler, 'Tif: you must provide three parameters serving as <expression> ? <true value> : <false value>');
+    }
 
-	// parse condition
-	$condition = Dwoo_Plugin_if::replaceKeywords($rest, $compiler);
+    // parse condition
+    $condition = Dwoo_Plugin_if::replaceKeywords($rest, $compiler);
 
-	return '(('.implode(' ', $condition).') ? '.($trueResult===true ? implode(' ', $condition) : $trueResult).' : '.$falseResult.')';
+    return '(('.implode(' ', $condition).') ? '.($trueResult === true ? implode(' ', $condition) : $trueResult).' : '.$falseResult.')';
 }

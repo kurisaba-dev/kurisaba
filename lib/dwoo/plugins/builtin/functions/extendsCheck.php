@@ -16,11 +16,11 @@
  */
 function Dwoo_Plugin_extendsCheck_compile(Dwoo_Compiler $compiler, $file, $uid)
 {
-	preg_match('#^["\']([a-z]{2,}):(.*?)["\']$#i', $file, $m);
-	$resource = $m[1];
-	$identifier = $m[2];
+    preg_match('#^["\']([a-z]{2,}):(.*?)["\']$#i', $file, $m);
+    $resource = $m[1];
+    $identifier = $m[2];
 
-	return '// checking for modification in '.$resource.':'.$identifier.'
+    return '// checking for modification in '.$resource.':'.$identifier.'
 try {
 	$tpl = $this->templateFactory("'.$resource.'", "'.$identifier.'");
 } catch (Dwoo_Exception $e) {

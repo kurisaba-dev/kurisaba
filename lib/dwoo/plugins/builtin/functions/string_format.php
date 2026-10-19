@@ -19,5 +19,5 @@
  */
 function Dwoo_Plugin_string_format_compile(Dwoo_Compiler $compiler, $value, $format)
 {
-	return 'sprintf('.$format.','.$value.')';
+    return 'sprintf('.$format.','.$value.')';
 }

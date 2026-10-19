@@ -17,18 +17,18 @@
  * @date	2008-10-23
  * @package	Dwoo
  */
-function Dwoo_Plugin_reverse(Dwoo $dwoo, $value, $preserve_keys=false)
+function Dwoo_Plugin_reverse(Dwoo $dwoo, $value, $preserve_keys = false)
 {
-	if (is_array($value)) {
-		return array_reverse($value, $preserve_keys);
-	} elseif(($charset=$dwoo->getCharset()) === 'iso-8859-1') {
-		return strrev((string) $value);
-	} else {
-		$strlen = mb_strlen($value);
-		$out = '';
-		while ($strlen--) {
-			$out .= mb_substr($value, $strlen, 1, $charset);
-		}
-		return $out;
-	}
+    if (is_array($value)) {
+        return array_reverse($value, $preserve_keys);
+    } elseif (($charset = $dwoo->getCharset()) === 'iso-8859-1') {
+        return strrev((string) $value);
+    } else {
+        $strlen = mb_strlen($value);
+        $out = '';
+        while ($strlen--) {
+            $out .= mb_substr($value, $strlen, 1, $charset);
+        }
+        return $out;
+    }
 }

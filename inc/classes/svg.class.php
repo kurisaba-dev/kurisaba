@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of kusaba.
  *
@@ -18,33 +19,33 @@
  * SVG parsing class
  * +------------------------------------------------------------------------------+
  */
-class Svg {
-	var $width = 0;
-	var $height = 0;
-	var $id = '';
-	var $version = '';
-	var $namespaces;
-	var $docname = '';
-	var $docbase = '';
-	var $sodipodiversion = '';
-	var $inkscapeversion = '';
-	var $output_extension = '';
+class Svg
+{
+    public $width = 0;
+    public $height = 0;
+    public $id = '';
+    public $version = '';
+    public $namespaces;
+    public $docname = '';
+    public $docbase = '';
+    public $sodipodiversion = '';
+    public $inkscapeversion = '';
+    public $output_extension = '';
 
-	function __construct($svg){
-		$xml = new SimpleXMLElement($svg,1,1);
-		$this->width = (string) $xml['width'];
-		$this->height = (string) $xml['height'];
-		$this->id = (string) $xml['id'];
-		$this->version = (string) $xml['version'];
-		$this->namespaces = $xml->getNamespaces();
-		$sodipodi = $xml->attributes($this->namespaces['sodipodi']);
-		$this->docname = (string) $sodipodi['docname'];
-		$this->docbase = (string) $sodipodi['docbase'];
-		$this->sodipodiversion = (string) $sodipodi['version'];
-		$inkscape = $xml->attributes($this->namespaces['inkscape']);
-		$this->inkscapeversion = (string) $inkscape['version'];
-		$this->output_extension = (string) $inkscape['ouput_extension'];
-	}
+    public function __construct($svg)
+    {
+        $xml = new SimpleXMLElement($svg, 1, 1);
+        $this->width = (string) $xml['width'];
+        $this->height = (string) $xml['height'];
+        $this->id = (string) $xml['id'];
+        $this->version = (string) $xml['version'];
+        $this->namespaces = $xml->getNamespaces();
+        $sodipodi = $xml->attributes($this->namespaces['sodipodi']);
+        $this->docname = (string) $sodipodi['docname'];
+        $this->docbase = (string) $sodipodi['docbase'];
+        $this->sodipodiversion = (string) $sodipodi['version'];
+        $inkscape = $xml->attributes($this->namespaces['inkscape']);
+        $this->inkscapeversion = (string) $inkscape['version'];
+        $this->output_extension = (string) $inkscape['ouput_extension'];
+    }
 }
-
-?>

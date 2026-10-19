@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of kusaba.
  *
@@ -28,12 +29,11 @@ require 'config.php';
 require KU_ROOTDIR . 'inc/functions.php';
 require KU_ROOTDIR . 'inc/classes/menu.class.php';
 
-$menu_class = new Menu;
+$menu_class = new Menu();
 if (isset($_COOKIE['tcshowdirs'])) {
-	if ($_COOKIE['tcshowdirs'] == 'yes') {
-		die($menu_class->PrintMenu('dirs'));
-	}
+    if ($_COOKIE['tcshowdirs'] == 'yes') {
+        die($menu_class->PrintMenu('dirs'));
+    }
 }
 
 die($menu_class->PrintMenu('nodirs'));
-?>

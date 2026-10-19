@@ -17,7 +17,7 @@
  * @date	2008-10-23
  * @package	Dwoo
  */
-function Dwoo_Plugin_default_compile(Dwoo_Compiler $compiler, $value, $default='')
+function Dwoo_Plugin_default_compile(Dwoo_Compiler $compiler, $value, $default = '')
 {
-	return '(($tmp = '.$value.')===null||$tmp===\'\' ? '.$default.' : $tmp)';
+    return '(($tmp = '.$value.')===null||$tmp===\'\' ? '.$default.' : $tmp)';
 }

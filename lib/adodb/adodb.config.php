@@ -1,4 +1,5 @@
 <?php
+
 /**
  * ADOdb Lite Configuration File
  */
@@ -49,4 +50,3 @@ $dbtype = 'mysqli';
 */
 
 $modules = 'pear:extend';
-?>

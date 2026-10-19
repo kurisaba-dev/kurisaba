@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of kusaba.
  *
@@ -34,22 +35,20 @@ require KU_ROOTDIR . 'inc/classes/bans.class.php';
 $bans_class = new Bans();
 
 if (isset($_POST['appealmessage']) && KU_APPEAL != '') {
-	$results = $tc_db->GetAll("SELECT * FROM `".KU_DBPREFIX."banlist` WHERE `type` = '0' AND `ipmd5` = '" . md5(KU_REMOTE_ADDR) . "' AND `id` = " . $tc_db->qstr($_POST['banid']) . "LIMIT 1");
-	if (count($results)>0) {
-		foreach($results AS $line) {
-			if ($line['appealat'] > 0 && $line['appealat'] < (time() + KU_ADDTIME)) {
-				$tc_db->Execute("UPDATE `".KU_DBPREFIX."banlist` SET `appealat` = '-1' , appeal = ".$tc_db->qstr($_POST['appealmessage'])." WHERE `id` = '" . $line['id'] . "'");
+    $results = $tc_db->GetAll("SELECT * FROM `".KU_DBPREFIX."banlist` WHERE `type` = '0' AND `ipmd5` = '" . md5(KU_REMOTE_ADDR) . "' AND `id` = " . $tc_db->qstr($_POST['banid']) . "LIMIT 1");
+    if (count($results) > 0) {
+        foreach ($results as $line) {
+            if ($line['appealat'] > 0 && $line['appealat'] < (time() + KU_ADDTIME)) {
+                $tc_db->Execute("UPDATE `".KU_DBPREFIX."banlist` SET `appealat` = '-1' , appeal = ".$tc_db->qstr($_POST['appealmessage'])." WHERE `id` = '" . $line['id'] . "'");
 
-				echo 'Your appeal has been sent and is pending review.';
-			} else {
-				echo 'You may not appeal that ban at this time.';
-			}
+                echo 'Your appeal has been sent and is pending review.';
+            } else {
+                echo 'You may not appeal that ban at this time.';
+            }
 
-			die();
-		}
-	}
+            die();
+        }
+    }
 }
 
 $bans_class->BanCheck(KU_REMOTE_ADDR, '', true);
-
-?>
