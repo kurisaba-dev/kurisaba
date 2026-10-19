@@ -22,12 +22,13 @@ session_start(['cookie_samesite' => 'Strict']);
 function img_code($code)
 {
     $scolor = style_to_captcha_color(isset($_COOKIE['kustyle2']) ? $_COOKIE['kustyle2'] : '');
-    $linenum = 5;
     $img_arr = array("1.png");
     $font_arr = array();
     if ($_COOKIE['captchalang'] == 'jp') {
+        $linenum = 1;
         $font_arr[0]["fname"] = "NotoSansJP-VariableFont_wght.ttf";
     } else {
+        $linenum = 5;
         $font_arr[0]["fname"] = "OpenSans-Light.ttf";
     }
     $font_arr[0]["size"] = 18;
