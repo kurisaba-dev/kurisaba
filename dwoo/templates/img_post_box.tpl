@@ -186,6 +186,11 @@
 			{/if}
 
 			<tr>
+			{if $captchalang == 'mt'}
+				<td class="postblock" colspan=2>
+					<div class="mtcaptcha"></div>
+				</td>
+			{else}
 				<td class="postblock">
 					<span class="captcha_status"></span>
 					<div class="captchawrap">
@@ -198,6 +203,7 @@
 						<input type="hidden" class="captchaid" name="captchaid" value="{$captchaid}">
 					</nobr>
 				</td>
+			{/if}
 			</tr>
 
 			<input type="hidden" name="displaystaffstatus" value="true">

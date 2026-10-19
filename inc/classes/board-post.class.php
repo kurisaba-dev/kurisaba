@@ -829,7 +829,9 @@ class Board {
 			$this->dwoo_data->assign('oekposts', $oekposts);
 		}
 		
-		$this->dwoo_data->assign('captchaid', rand() / getrandmax());
+		$captchalang = $_COOKIE['captchalang'];
+		$this->dwoo_data->assign('captchalang', $captchalang);
+		$this->dwoo_data->assign('captchaid', $captchalang == 'mt' ? KU_MTCAPTCHA_PUBKEY : rand() / getrandmax());
 		$this->dwoo_data->assign('smile_images', $this->ProduceSmileImages());
 		
 		if(($this->board['type'] == 1 && $replythread == 0) || $this->board['type'] != 1) {
