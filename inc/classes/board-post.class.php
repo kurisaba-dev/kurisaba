@@ -737,6 +737,9 @@ class Board {
 		$this->dwoo_data->assign('search_phrases',implode("','",$phrases));
 		$this->dwoo_data->assign('search_phrase',$phrases[array_rand($phrases)]);
 
+		$captchalang = $_COOKIE['captchalang'];
+		$this->dwoo_data->assign('captchalang', $captchalang);
+
 		if ($this->board['type'] != 1) {
 			$header = $this->dwoo->get(KU_TEMPLATEDIR . '/' . $this->board['text_readable'] . '_header.tpl', $this->dwoo_data);
 		} else {
