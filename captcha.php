@@ -13,6 +13,8 @@ if ($_COOKIE['captchalang'] == 'en') {
     for ($i = 0; $i < $ltrs; $i++) {
         $captcha .= rand(0, 9);
     }
+} elseif ($_COOKIE['captchalang'] == 'jp') {
+    $captcha = japanese_word($ltrs);
 } else {
     $captcha = generate_code($ltrs);
 }

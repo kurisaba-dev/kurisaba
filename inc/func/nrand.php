@@ -256,3 +256,36 @@ function english_word($length = 6)
 
     return strtoupper($word);
 }
+
+function katakana($romanized = false)
+{
+    if (romanized) {
+        return array(
+            'ア','イ','ウ','エ','オ','カ','キ','ク','ケ','コ','サ','シ','ス','セ','ソ',
+            'タ','チ','ツ','テ','ト','ナ','ニ','ネ','ヌ','ノ','ハ','ヒ','フ','ヘ','ホ',
+            'マ','ミ','ム','メ','モ','ヤ','ユ','ヨ','ラ','リ','ル','レ','ロ','ワ','ン'
+        );
+    } else {
+        return array(
+            'a','i','u','e','o','ka','ki','ku','ke','ko','sa','shi','su','se','so',
+            'ta','chi','tsu','te','to','na','ni','ne','nu','no','ha','hi','fu','he','ho',
+            'ma','mi','mu','me','mo','ya','yu','yo','ra','ri','ru','re','ro','wa','n'
+        );
+    }
+}
+
+function japanese_word($length = 3)
+{
+    $word = '';
+
+    while (strlen($word) < $length) {
+        $word .= $katakana()[mt_rand(0, count($katakana) - 1)];
+    }
+
+    return $word;
+}
+
+function romanize($text)
+{
+    return str_replace(katakana(), katakana($romanized = true), $text);
+}

@@ -101,7 +101,7 @@ if (!$cache_loaded) {
     $cf['KU_NOMESSAGEREPLY']    = '';   // Если пользователь отвечает в тред постом без текста, то этот пост будет содержать этот текст.
 
     // Ограничения
-    $cf['KU_CAPTCHAENABLED']   = 'en,ru,num,mt'; // Типы включённой капчи через запятую: en = латинская, ru = кириллическая, num = цифровая, mt = MTCaptcha.
+    $cf['KU_CAPTCHAENABLED']   = 'en,ru,jp,num,mt'; // Типы включённой капчи через запятую: en = латинская, ru = кириллическая, jp = канакапча, num = цифровая, mt = MTCaptcha.
     $cf['KU_CAPTCHATIME']      = 30;     // Время протухания капчи в секундах.
     $cf['KU_CAPTCHAMINLENGTH'] = 5;      // Минимальная длина капчи
     $cf['KU_CAPTCHAMAXLENGTH'] = 7;      // Максимальная длина капчи

@@ -174,7 +174,7 @@ class Posting
             }
 
             // Check if they entered the correct code. If not...
-            if ($_SESSION['security_code'.$_POST['captchaid']] != mb_strtoupper($_POST['captcha']) || empty($_SESSION['security_code'.$_POST['captchaid']])) {
+            if (romanize($_SESSION['security_code'.$_POST['captchaid']]) != romanize(mb_strtoupper($_POST['captcha'])) || empty($_SESSION['security_code'.$_POST['captchaid']])) {
                 // Give user another chance: compare with old-style security code. It's so if he use dollscript.
                 if ($_SESSION['security_code'] != mb_strtoupper($_POST['captcha']) || empty($_SESSION['security_code'])) {
                     // Delete used captchas
@@ -202,7 +202,8 @@ class Posting
     }
 
     public function CheckRecaptcha()	//just backup
-    {global $board_class;
+    {
+        global $board_class;
 
         /* If the board has captcha's enabled... */
         if ($board_class->board['enablecaptcha'] == 1) {
