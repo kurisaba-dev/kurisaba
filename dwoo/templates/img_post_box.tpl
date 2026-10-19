@@ -187,8 +187,9 @@
 
 			<tr>
 			{if $captchalang == 'mt'}
-				<td class="postblock" colspan=2>
-					<div class="mtcaptcha"></div>
+				<td class="postblock" colspan=2 align="center">
+					<div class="mtcaptcha" style="display:inline-block;"></div>
+					<div><a href="#" onclick="mtcaptcha.resetUI();">Обновить</a></div>
 				</td>
 			{else}
 				<td class="postblock">
