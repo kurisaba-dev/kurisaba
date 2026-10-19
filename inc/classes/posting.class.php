@@ -131,6 +131,20 @@ class Posting {
 		mb_internal_encoding("UTF-8");
 		/* If the board has captcha's enabled... */
 		if ($board_class->board['enablecaptcha'] == 1) {
+			if(isset($_POST['mtcaptcha-verifiedtoken']))
+			{
+				$mtcaptcha_url = "https://service.mtcaptcha.com/mtcv1/api/checktoken?privatekey=" . KU_MTCAPTCHA_PRVKEY . "&token=" . $_POST['mtcaptcha-verifiedtoken'];
+				$resp = file_get_contents($mtcaptcha_url);
+				if($resp === false) return _gettext('MTCaptcha service is unavailable, try again or choose different captcha type.');
+				$resp_data = json_decode($resp);
+				if(json_last_error() != JSON_ERROR_NONE) return _gettext('MTCaptcha returned non-JSON data: ' . json_last_error_msg());
+				if (!property_exists($resp_data, "success")) return _gettext('MTCaptcha does not return "success" entry');
+				if ($resp_data->success == true) return '';
+				if ($resp_data->success !== false) return _gettext('MTCaptcha "success" entry is not true or false.');
+				if (!property_exists($resp_data, "fail_codes")) return _gettext('Incorrect captcha entered, but MTCaptcha does not return "fail_codes" entry');
+				return _gettext('Incorrect captcha entered.') . _gettext(' Reason: ') . implode(", ", $resp_data->fail_codes);
+			}
+
 			$submit_time = time() + KU_ADDTIME;
 			
 			// Check if captcha is not stale yet
