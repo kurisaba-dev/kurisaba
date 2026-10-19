@@ -739,6 +739,7 @@ class Board {
 
 		$captchalang = $_COOKIE['captchalang'];
 		$this->dwoo_data->assign('captchalang', $captchalang);
+		$this->dwoo_data->assign('captchaid', KU_MTCAPTCHA_PUBKEY);
 
 		if ($this->board['type'] != 1) {
 			$header = $this->dwoo->get(KU_TEMPLATEDIR . '/' . $this->board['text_readable'] . '_header.tpl', $this->dwoo_data);
