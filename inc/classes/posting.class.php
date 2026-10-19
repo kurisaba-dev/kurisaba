@@ -174,9 +174,9 @@ class Posting
             }
 
             // Check if they entered the correct code. If not...
-            if (romanize($_SESSION['security_code'.$_POST['captchaid']]) != romanize(mb_strtoupper($_POST['captcha'])) || empty($_SESSION['security_code'.$_POST['captchaid']])) {
+            if (mb_strtoupper(romanize($_SESSION['security_code'.$_POST['captchaid']])) != mb_strtoupper(romanize($_POST['captcha'])) || empty($_SESSION['security_code'.$_POST['captchaid']])) {
                 // Give user another chance: compare with old-style security code. It's so if he use dollscript.
-                if ($_SESSION['security_code'] != mb_strtoupper($_POST['captcha']) || empty($_SESSION['security_code'])) {
+                if (mb_strtoupper(romanize($_SESSION['security_code'])) != mb_strtoupper(romanize($_POST['captcha'])) || empty($_SESSION['security_code'])) {
                     // Delete used captchas
                     if (isset($_SESSION['security_code'.$_POST['captchaid']])) {
                         unset($_SESSION['security_code'.$_POST['captchaid']]);
