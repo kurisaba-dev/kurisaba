@@ -279,7 +279,7 @@ function japanese_word($length = 3)
     $word = '';
 
     while (strlen($word) < $length) {
-        $word .= $katakana()[mt_rand(0, count($katakana) - 1)];
+        $word .= katakana()[mt_rand(0, count(katakana()) - 1)];
     }
 
     return $word;
