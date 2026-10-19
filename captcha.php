@@ -22,7 +22,7 @@ function img_code($code) {
 	$n = rand(0,sizeof($font_arr)-1);
 	$img_fn = $img_arr[rand(0, sizeof($img_arr)-1)];
 	$img_width = 10 + 20 * mb_strlen($code);
-	$im=imagecreate($img_width, 30);
+	$im=imagecreatetruecolor($img_width, 30);
 			$color = imagecolorallocate($im, 100, 100, 100);				
 	$x = -15;
 	mb_internal_encoding("UTF-8");
