@@ -195,7 +195,7 @@
 				<td class="postblock">
 					<span class="captcha_status"></span>
 					<div class="captchawrap">
-						<img src="/captcha.php?act=postbox&captchaid={$captchaid}" class="captchaimage content-background" onclick="javascript:refreshCaptcha();" valign="middle" border="0" alt="Captcha image">
+						<img src="/captcha.php?act=postbox&captchaid={$captchaid}" class="captchaimage content-background" onclick="javascript:refreshCaptcha(); return false;" valign="middle" border="0" alt="Captcha image">
 					</div>
 				</td>
 				<td>
