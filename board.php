@@ -712,7 +712,7 @@ if ($operation_post) { // it's `noreturn`.
                 $upload_class->imgHeight_thumb,
                 $post_passwordmd5,
                 time() + KU_ADDTIME,
-                time() + KU_ADDTIME,
+                ($thread_replyto != '0' && strtolower($_POST['em']) != 'sage' && unistr_to_ords($_POST['em']) != array(19979, 12370)) ? 0 : time() + KU_ADDTIME,
                 KU_SAVEIP ? KU_REMOTE_ADDR : '0.0.0.0',
                 md5(KU_REMOTE_ADDR),
                 $user_authority_display,

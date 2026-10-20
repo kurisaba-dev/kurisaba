@@ -962,12 +962,12 @@ class Post extends Board
             $tc_db->Execute("UPDATE `".KU_DBPREFIX."posts` SET `IS_DELETED` = 1 , `deleted_timestamp` = '" . (time() + KU_ADDTIME) . "' WHERE `boardid` = '" . $this->board['id'] . "' AND `id` = ".$tc_db->qstr($this->post['id']));
 
             // Unbump thread after deletion
-            $results = $tc_db->GetAll("SELECT * FROM `" . KU_DBPREFIX . "posts` WHERE `boardid` = " . $this->board['id'] . " AND `parentid` = " . $tc_db->qstr($this->post['parentid']) . " AND `IS_DELETED` = 0 ORDER BY `stickied` DESC, `bumped` DESC LIMIT 1");
-            if (count($results) == 0) {
-                $results = $tc_db->GetAll("SELECT * FROM `" . KU_DBPREFIX . "posts` WHERE `boardid` = " . $this->board['id'] . " AND `id` = " . $tc_db->qstr($this->post['parentid']) . " AND `IS_DELETED` = 0 ORDER BY `stickied` DESC, `bumped` DESC LIMIT 1");
+            $results = $tc_db->GetAll("SELECT * FROM `" . KU_DBPREFIX . "posts` WHERE `boardid` = " . $this->board['id'] . " AND `parentid` = " . $tc_db->qstr($this->post['parentid']) . " AND `IS_DELETED` = 0 AND NOT `bumped` = 0 ORDER BY `stickied` DESC, `bumped` DESC LIMIT 1");
+            if (count($results) != 0) {
+                $results = $tc_db->GetAll("SELECT * FROM `" . KU_DBPREFIX . "posts` WHERE `boardid` = " . $this->board['id'] . " AND `id` = " . $tc_db->qstr($this->post['parentid']));
             }
             foreach ($results as $line) {
-                $tc_db->Execute("UPDATE `".KU_DBPREFIX."posts` SET `bumped` = '" . $line['timestamp'] . "' WHERE `boardid` = '" . $this->board['id'] . "' AND `id` = ". $tc_db->qstr($this->post['parentid']));
+                $tc_db->Execute("UPDATE `".KU_DBPREFIX."posts` SET `bumped` = '" . $line['bumped'] . "' WHERE `boardid` = '" . $this->board['id'] . "' AND `id` = ". $tc_db->qstr($this->post['parentid']));
             }
 
             clearPostCache($this->post['id'], $this->board['name']);
