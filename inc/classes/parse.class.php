@@ -524,6 +524,7 @@ class Parse
         $message = trim($message);
         $message = htmlspecialchars($message, ENT_QUOTES);
         $message = $this->BBCode($message);
+        $message = preg_replace("/ *\\[hr\\]/i", "<br /><hr />\n", $message);
         $message = $this->ClickableQuote($message, $board, $boardtype, $parentid, $boardid, $ispage);
         $message = $this->ColoredQuote($message, $boardtype);
         if (KU_MAKELINKS) {
@@ -533,7 +534,6 @@ class Parse
         $message = preg_replace('#^- #m', '— ', $message);
         $message = preg_replace("/ *\n/i", '<br />', $message);
         $message = preg_replace('#(<br(?: \/)?>\s*){3,}#i', '<br /><br />', $message);
-        $message = preg_replace("/ *\\[hr\\]/i", '<br /><hr />', $message);
 
         // Hide the "smileys wall"
         do {
