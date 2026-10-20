@@ -764,9 +764,21 @@ if ($operation_post) { // it's `noreturn`.
         // If the user replied to a thread, and they weren't sage-ing it...
         if ($thread_replyto != '0' && strtolower($_POST['em']) != 'sage' && unistr_to_ords($_POST['em']) != array(19979, 12370)) {
             // And if the number of replies already in the thread are less than the maximum thread replies before perma-sage...
-            if ($thread_replies <= $board_class->board['maxreplies']) {
+            if ($thread_replies < $board_class->board['maxreplies'] - 1) {
                 // Bump the thread
                 $tc_db->Execute("UPDATE `" . KU_DBPREFIX . "posts` SET `bumped` = '" . (time() + KU_ADDTIME) . "' WHERE `boardid` = " . $board_class->board['id'] . " AND `id` = '" . $thread_replyto . "'");
+            }
+            else
+            {
+                // Auto-sage the post. No posts posted once after bump limit, can't re-bump thread on delete, even if some previous posts were deleted defore and made this thread not exceed bump limit again.
+                // E.g.:
+                // Posting post 500 w/o sage, it bumps thread
+                // Posting post 501 w/o sage, it doesn't bump thread because of bump limit
+                // Posting post 502 w/o sage, it doesn't bump thread because of bump limit
+                // Deleting posts 498 and 499, so 500 becomes 498, 501 becomes 499, and 502 becomes 500
+                // Deleting post 500 (that was 502), last post 499 (501) DOES NOT re-bump thread to its timestamp, because it was once posted after bump limit, despite it is now out of bump limit
+                // Deleting post 499 (that was 501), last post 498 (500) does re-bump thread to its timestamp, because it was posted when thread has not hit bump limit
+                $tc_db->Execute("UPDATE `" . KU_DBPREFIX . "posts` SET `bumped` = '0' WHERE `boardid` = " . $board_class->board['id'] . " AND `id` = '" . $post_id . "'");
             }
         }
 
