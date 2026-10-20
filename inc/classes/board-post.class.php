@@ -243,7 +243,7 @@ class Board
             $exclude = ' AND `id` NOT IN ('.$this->board['hiddenthreads'].')';
         }
 
-        $results = $tc_db->GetAll("SELECT `id` , `subject` , `file` , `file_type` FROM `" . KU_DBPREFIX . "posts` WHERE `boardid` = " . $this->board['id'] . $exclude . " AND `IS_DELETED` = 0 AND `parentid` = 0 ORDER BY `stickied` DESC, `bumped` DESC");
+        $results = $tc_db->GetAll("SELECT `id` , `subject` , `message` , `file` , `file_type` FROM `" . KU_DBPREFIX . "posts` WHERE `boardid` = " . $this->board['id'] . $exclude . " AND `IS_DELETED` = 0 AND `parentid` = 0 ORDER BY `stickied` DESC, `bumped` DESC");
         $numresults = count($results);
         if ($numresults > 0) {
             $columns = 4;
@@ -290,7 +290,13 @@ class Board
                 if ($line['subject'] != '') {
                     $catalog_page .= '<a class="catalog-entry" href="' . KU_BOARDSFOLDER . $this->board['name'] . '/res/' . $line['id'] . '.html">' . $line['subject'] . '</a><br />';
                 } else {
-                    $catalog_page .= '<a class="catalog-entry" href="' . KU_BOARDSFOLDER . $this->board['name'] . '/res/' . $line['id'] . '.html">(Без названия)</a><br />';
+                    $textsrc = strip_tags($line['message']);
+                    if(mb_strlen($textsrc) <= KU_CATALOGTEXTLIMIT) {
+                        $text = $textsrc;
+                    } else {
+                        $text = substr($textsrc, 0, strpos(wordwrap($textsrc, KU_CATALOGTEXTLIMIT - 3, "\n", true), "\n")) . "...";
+                    }
+                    $catalog_page .= '<a class="catalog-entry" href="' . KU_BOARDSFOLDER . $this->board['name'] . '/res/' . $line['id'] . '.html">' . $text . '</a><br />';
                 }
                 $catalog_page .= '<small>' . $replies . ' ответов</small>' . "\n" . '</td>' . "\n";
                 //}
