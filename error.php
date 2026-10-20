@@ -46,8 +46,12 @@ function CreateBoard($board)
 function geoblocked($address, $filetype)
 {
     global $tc_db;
-    preg_match("/^\/([a-z]+)\/(src|thumb)\/([0-9]+)[a-z]?\.".$filetype."$/", $address, $matches);
-    $records = $tc_db->GetAll("SELECT `".KU_DBPREFIX."posts`.`country_restrict_file`, `".KU_DBPREFIX."boards`.`id`, `".KU_DBPREFIX."boards`.`name`, `".KU_DBPREFIX."posts`.`IS_DELETED`, `".KU_DBPREFIX."posts`.`boardid`, `".KU_DBPREFIX."posts`.`file`, `".KU_DBPREFIX."posts`.`file_type` FROM `".KU_DBPREFIX."posts` JOIN `".KU_DBPREFIX."boards` ON `".KU_DBPREFIX."boards`.`id` = `".KU_DBPREFIX."posts`.`boardid` WHERE NOT `".KU_DBPREFIX."posts`.`IS_DELETED` AND `".KU_DBPREFIX."boards`.`name` = ".$tc_db->qstr($matches[1])." AND `".KU_DBPREFIX."posts`.`file` = ".$tc_db->qstr($matches[3])." AND `".KU_DBPREFIX."posts`.`file_type` = ".$tc_db->qstr($filetype));
+    preg_match("/^\/([a-z]+)\/(tmp\/|)(src|thumb)\/([0-9]+)[a-z]?\.".$filetype."$/", $address, $matches);
+    if($matches[2] == 'tmp/') {
+        // Don't block pics from post previews
+        return false;
+    }
+    $records = $tc_db->GetAll("SELECT `".KU_DBPREFIX."posts`.`country_restrict_file`, `".KU_DBPREFIX."boards`.`id`, `".KU_DBPREFIX."boards`.`name`, `".KU_DBPREFIX."posts`.`IS_DELETED`, `".KU_DBPREFIX."posts`.`boardid`, `".KU_DBPREFIX."posts`.`file`, `".KU_DBPREFIX."posts`.`file_type` FROM `".KU_DBPREFIX."posts` JOIN `".KU_DBPREFIX."boards` ON `".KU_DBPREFIX."boards`.`id` = `".KU_DBPREFIX."posts`.`boardid` WHERE NOT `".KU_DBPREFIX."posts`.`IS_DELETED` AND `".KU_DBPREFIX."boards`.`name` = ".$tc_db->qstr($matches[1])." AND `".KU_DBPREFIX."posts`.`file` = ".$tc_db->qstr($matches[4])." AND `".KU_DBPREFIX."posts`.`file_type` = ".$tc_db->qstr($filetype));
     if (count($records) < 1) {
         return true;
     } // Block pics from deleted or missing posts
@@ -217,7 +221,7 @@ elseif (KU_OFFLOAD) {
     // Unfortunately, all attachments will be left visible to banned users, since we don't know which boards are affected.
     $filetypes = $tc_db->GetAll("SELECT `filetype`, `mime` FROM `" . KU_DBPREFIX . "filetypes`");
     foreach ($filetypes as $filetype) {
-        if (preg_match("/^\/[a-z]+\/(src|thumb)\/[0-9]+[a-z]?\." . $filetype['filetype'] . "$/", $address, $matches)) {
+        if (preg_match("/^\/[a-z]+\/(tmp\/|)(src|thumb)\/[0-9]+[a-z]?\." . $filetype['filetype'] . "$/", $address, $matches)) {
             header_remove("Last-Modified");
             header_remove("Cache-Control");
             header_remove("Pragma");
