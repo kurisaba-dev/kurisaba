@@ -963,7 +963,7 @@ class Post extends Board
 
             // Unbump thread after deletion
             $results = $tc_db->GetAll("SELECT * FROM `" . KU_DBPREFIX . "posts` WHERE `boardid` = " . $this->board['id'] . " AND `parentid` = " . $tc_db->qstr($this->post['parentid']) . " AND `IS_DELETED` = 0 AND NOT `bumped` = 0 ORDER BY `stickied` DESC, `bumped` DESC LIMIT 1");
-            if (count($results) != 0) {
+            if (count($results) == 0) {
                 $results = $tc_db->GetAll("SELECT * FROM `" . KU_DBPREFIX . "posts` WHERE `boardid` = " . $this->board['id'] . " AND `id` = " . $tc_db->qstr($this->post['parentid']));
             }
             foreach ($results as $line) {
