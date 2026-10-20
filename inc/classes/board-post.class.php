@@ -296,7 +296,7 @@ class Board
                     } else {
                         $text = substr($textsrc, 0, strpos(wordwrap($textsrc, KU_CATALOGTEXTLIMIT - 3, "\n", true), "\n")) . "...";
                     }
-                    $catalog_page .= '<a class="catalog-entry" href="' . KU_BOARDSFOLDER . $this->board['name'] . '/res/' . $line['id'] . '.html">' . $text . '</a><br />';
+                    $catalog_page .= '<a class="catalog-entry" href="' . KU_BOARDSFOLDER . $this->board['name'] . '/res/' . $line['id'] . '.html"><small><em>' . $text . '</em></small></a><br />';
                 }
                 $catalog_page .= '<small>' . $replies . ' ответов</small>' . "\n" . '</td>' . "\n";
                 //}
