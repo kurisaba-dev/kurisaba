@@ -796,12 +796,14 @@ class Manage
     public function modlog()
     {
         global $tc_db, $tpl_page;
-        $this->AdministratorsOnly();
+        if(!KU_OPEN_MODLOG) {
+            $this->AdministratorsOnly();
+        }
 
         $tc_db->Execute("DELETE FROM `" . KU_DBPREFIX . "modlog` WHERE `timestamp` < '" . ((time() + KU_ADDTIME) - KU_MODLOGDAYS * 86400) . "'");
 
         $tpl_page .= '<h2>'. ('ModLog') . '</h2><br />
-		<table cellspacing="2" cellpadding="1" border="1" width="100%"><tr><th>'. _gettext('Time') .'</th><th>'. _gettext('User') .'</th><th width="100%">'. _gettext('Action') .'</th></tr>';
+        <table cellspacing="2" cellpadding="1" border="1" width="100%"><tr><th>'. _gettext('Time') .'</th><th>'. _gettext('User') .'</th><th width="100%">'. _gettext('Action') .'</th></tr>';
         $results = $tc_db->GetAll("SELECT HIGH_PRIORITY * FROM `" . KU_DBPREFIX . "modlog` ORDER BY `timestamp` DESC");
         foreach ($results as $line) {
             $tpl_page .= "<tr><td>" . date("y/m/d(D)H:i:s", $line['timestamp']) . "</td><td>" . $line['user'] . "</td><td>" . $line['entry'] . "</td></tr>";
@@ -833,8 +835,8 @@ class Manage
             $tpl_page .= $successful . ' of '. $ips . ' IP addresses banned.';
         } else {
             $tpl_page .= '<form id="postform" action="'. KU_CGIPATH . '/manage_page.php?action=proxyban" method="post" enctype="multipart/form-data"> '. _gettext('Proxy list') .'<input type="file" name="imagefile" size="35" accesskey="f" /><br />
-			<input type="submit" value="'. _gettext('Submit') .'" />
-			<br />'. _gettext('The proxy list is assumed to be in plaintext *.*.*.*:port or *.*.*.* format, one IP per line.') .'<br /><br /><hr />';
+            <input type="submit" value="'. _gettext('Submit') .'" />
+            <br />'. _gettext('The proxy list is assumed to be in plaintext *.*.*.*:port or *.*.*.* format, one IP per line.') .'<br /><br /><hr />';
         }
     }
 

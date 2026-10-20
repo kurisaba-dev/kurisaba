@@ -13,6 +13,10 @@
 											Причина:
 											<input name="reportreason" size="10" type="text">
 											<input name="reportpost" value="Репорт" type="submit" onclick="delform_submit = 'Report'; return js_send_delform();">	
+											{if %KU_OPEN_MODLOG}
+												&nbsp;●&nbsp;
+												<a href="{%KU_WEBPATH}/manage_page.php?action=modlog">Модлог</a>
+											{/if}
 										</div>
 										<div style="float:right; text-align: right; vertical-align: top;">
 											Пароль:
