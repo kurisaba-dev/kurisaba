@@ -30,6 +30,11 @@
 						</table>
 						<hr />
 					</form>
+					<div id="formup" style="position: relative; float: right; text-align: right; right: 0px; z-index: 10;">
+						<a href="#boardlist_footer" onclick="if (!rswap.i) rswap.swap(); return true;" title="Вверх">
+							<img src="/css/icons/blank.gif" border="0" class="downscroll spritebtn" style="transform: scaleY(-1);">
+						</a>
+					</div>
 					<script type="text/javascript"><!--
 						set_delpass("delform");
 					//--></script>

@@ -1,7 +1,7 @@
 {if not $onlyclone}
 	<hr />
-	<div id="formdown" style="position: relative; float: right; text-align: right; right: 0px;">
-		<a href="#boardlist_footer" onclick="javascript:rswap.swap();return true;" title="Вниз">
+	<div id="formdown" style="position: relative; float: right; text-align: right; right: 0px; z-index: 10;">
+		<a href="#boardlist_footer" onclick="if (rswap.i) rswap.swap(); return true;" title="Вниз">
 			<img src="/css/icons/blank.gif" border="0" class="downscroll spritebtn">
 		</a>
 	</div>
