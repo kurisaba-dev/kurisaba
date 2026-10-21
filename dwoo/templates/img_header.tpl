@@ -12,7 +12,6 @@
 		var ku_cssver = '{%KU_CSSVER}';
 		var ku_offload = '{%KU_OFFLOAD}';
 		var ku_captchaenabled = '{%KU_CAPTCHAENABLED}';
-		var style_cookie = "kustyle2";
 		var locale = '{$locale}';
 		var search_phrases = Array('{$search_phrases}');
 {if $replythread != 0}
