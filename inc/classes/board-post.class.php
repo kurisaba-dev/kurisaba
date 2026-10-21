@@ -152,7 +152,7 @@ class Board
             $pregen_replies_q = $tc_db->GetAll("SELECT * FROM `".KU_DBPREFIX."answers` WHERE `to_boardid` = '" . $this->board['id'] . "' AND `to_parentid` IN (" . $threads_string . ")");
         }
 
-        $pagination = array_map(fn($j) => "[" . (fn($k) => $i != $j ? "<a href=\"" . KU_BOARDSPATH . "/." . $this->board['name'] . "/\"" . ($j > 0 ? $j . ".html" : "") . ">" . $k . "</a>" : $k)($j) . "]", range(0, $numpages));
+        $pagination = array_map(fn($j) => "[" . (fn($k) => $i != $j ? "<a href=\"" . KU_BOARDSPATH . "/" . $this->board['name'] . "/" . ($j > 0 ? $j . ".html" : "") . "\">" . $k . "</a>" : $k)($j) . "]", range(0, $totalpages));
         $this->dwoo_data->assign('pagination', implode(" ", $pagination));
 
         foreach ($threads as $k => $thread) {
