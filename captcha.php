@@ -14,7 +14,7 @@ if ($_COOKIE['captchalang'] == 'en') {
         $captcha .= rand(0, 9);
     }
 } elseif ($_COOKIE['captchalang'] == 'jp') {
-    $captcha = japanese_word($ltrs);
+    $captcha = japanese_word($ltrs * KU_KANAMULTIPLIER);
 } else {
     $captcha = generate_code($ltrs);
 }
