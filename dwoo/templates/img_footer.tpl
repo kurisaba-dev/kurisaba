@@ -52,30 +52,7 @@
 									{/if}
 								</td>
 								<td>
-									{strip}
-										&#91;
-										{if $thispage neq 0}
-											<a href="{%KU_BOARDSPATH}/{$board.name}/">
-										{/if}
-										0
-										{if $thispage neq 0}
-											</a>
-										{/if}
-										&#93;
-									{/strip}
-									{section name=pages loop=$numpages}
-										{strip}
-											&#91;
-											{if $.section.pages.iteration neq $thispage}
-												<a href="{%KU_BOARDSFOLDER}{$board.name}/{$.section.pages.iteration}.html">
-											{/if}
-											{$.section.pages.iteration}
-											{if $.section.pages.iteration neq $thispage}
-												</a>
-											{/if}
-											&#93;
-										{/strip}
-									{/section}	
+									{$pagination}
 								</td>
 								<td>
 									{if $thispage eq $numpages}
