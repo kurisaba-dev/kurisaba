@@ -1,4 +1,3 @@
-<script type="text/javascript" src="{$cwebpath}lib/javascript/protoaculous-compressed.js"></script>
 <link rel="stylesheet" type="text/css" href="{$cwebpath}css/img_global.css?v={%KU_CSSVER}" />
 {loop $ku_styles}
 	<link rel="{if $ neq $__.ku_defaultstyle}alternate {/if}stylesheet" type="text/css" href="{$__.cwebpath}css/styles/{$}.css?v={%KU_CSSVER}" title="{$|capitalize}" />
