@@ -176,6 +176,14 @@ function scrolling(elem, direction) {
 	var scroll_timer = setInterval(scroll_it, 7);
 }
 </script>
+{if not $iscatalog and $replythread eq 0}
+	{if $thispage neq 0}
+		<link rel="prev" href="{%KU_BOARDSPATH}/{$board.name}/{if ($thispage-1) neq 0}{$thispage-1}.html{/if}">&lt;&lt;</a>
+	{/if}
+	{if $thispage neq $numpages}
+		<link rel="next" href="{%KU_BOARDSPATH}/{$board.name}/{$thispage+1}.html">&gt;&gt;</a>
+	{/if}
+{/if}
 </head>
 <body>
 <div class="scroll"><div onmouseover="scrolling(this, 'up');">∧</div><div onmouseover="scrolling(this, 'down');">∨</div></div>

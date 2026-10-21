@@ -46,11 +46,9 @@
 							<tr>
 								<td>
 									{if $thispage eq 0}
-										{t}Previous{/t}
+										&lt;&lt;
 									{else}
-										<form method="get" action="{%KU_BOARDSFOLDER}{$board.name}/{if ($thispage-1) neq 0}{$thispage-1}.html{/if}">
-											<input value="{t}Previous{/t}" type="submit" />
-										</form>
+										<a class="nav-prevpage" rel="prev" href="{%KU_BOARDSPATH}/{$board.name}/{if ($thispage-1) neq 0}{$thispage-1}.html{/if}">&lt;&lt;</a>
 									{/if}
 								</td>
 								<td>
@@ -81,11 +79,9 @@
 								</td>
 								<td>
 									{if $thispage eq $numpages}
-										{t}Next{/t}
+										&gt;&gt;
 									{else}
-										<form method="get" action="{%KU_BOARDSPATH}/{$board.name}/{$thispage+1}.html">
-											<input value="{t}Next{/t}" type="submit" />
-										</form>
+										<a class="nav-nextpage" rel="next" href="{%KU_BOARDSPATH}/{$board.name}/{$thispage+1}.html">&gt;&gt;</a>
 									{/if}
 								</td>
 							</tr>
