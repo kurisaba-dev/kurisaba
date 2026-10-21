@@ -178,10 +178,10 @@ function scrolling(elem, direction) {
 </script>
 {if not $iscatalog and $replythread eq 0}
 	{if $thispage neq 0}
-		<link rel="prev" href="{%KU_BOARDSPATH}/{$board.name}/{if ($thispage-1) neq 0}{$thispage-1}.html{/if}">&lt;&lt;</a>
+		<link rel="prev" href="{%KU_BOARDSPATH}/{$board.name}/{if ($thispage-1) neq 0}{$thispage-1}.html{/if}" />
 	{/if}
 	{if $thispage neq $numpages}
-		<link rel="next" href="{%KU_BOARDSPATH}/{$board.name}/{$thispage+1}.html">&gt;&gt;</a>
+		<link rel="next" href="{%KU_BOARDSPATH}/{$board.name}/{$thispage+1}.html" />
 	{/if}
 {/if}
 </head>
