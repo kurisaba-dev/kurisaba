@@ -24,8 +24,12 @@
 {if $captchalang == 'mt'}
   <script>
     var mtcaptchaConfig = {
-      "sitekey": "{$captchaid}"
+      "sitekey": "{$captchaid}",
+      "verified-callback": "focusToTextarea"
     };
+    function focusToTextarea() {
+      $('#top-textarea').focus();
+    }
     (function () {
       var mt_service = document.createElement('script');
       mt_service.async = true;
