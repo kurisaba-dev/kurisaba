@@ -46,6 +46,9 @@ if ($cf['KU_APC']) {
 
 if (!$cache_loaded) {
 
+    $cf['KU_PROTO']             = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == "on") ? 'https://' : 'http://';
+    $cf['KU_BASE_HOST']         = $_SERVER['HTTP_HOST'];
+
     include 'config.php';
 
     putenv('TZ='.$cf['KU_TZ']);
