@@ -2048,7 +2048,7 @@ msgid "Flush limit of threads"
 msgstr "Сбросить лимит тредов"
 
 msgid "Verbose statistics"
-msgstr "Подневная статистика по бордам /sg/ и /vg/"
+msgstr "Подневная статистика по бордам"
 
 msgid "This material is unavailable in your country."
 msgstr "451: Забанено <s>кровавой гэбнёй</s> Организацией!"

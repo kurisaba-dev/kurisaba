@@ -397,32 +397,30 @@ class Manage
     {
         global $tc_db, $tpl_page, $CURRENTLOCALE;
 
-        $tpl_page .= '<h2>Количество постов, созданных в конкретный день:</h2><table><tr><td>Date</td><td>/sg/</td><td>/vg/</td></tr>';
+        $boards = $tc_db->GetAll("SELECT `id`, `name` FROM `" . KU_DBPREFIX . "boards` ORDER BY `name` ASC");
 
-        $timestamp = $tc_db->GetOne("SELECT `timestamp` FROM `" . KU_DBPREFIX . "posts` WHERE `id` = '1' AND `boardid` = '9'"); // First post
+        $tpl_page .= '<h2>Количество постов, созданных в конкретный день:</h2><table><tr><td>Date</td>';
+        $posts = array();
+
+        $timestamp = $tc_db->GetOne("SELECT `timestamp` FROM `" . KU_DBPREFIX . "posts` ORDER BY `timestamp` ASC LIMIT 1"); // First post
         $timestamp = floor($timestamp / 86400) * 86400;
-        $vgposts = $tc_db->GetAll("SELECT `timestamp` FROM `" . KU_DBPREFIX . "posts` WHERE `boardid` = '5'");
-        $sgposts = $tc_db->GetAll("SELECT `timestamp` FROM `" . KU_DBPREFIX . "posts` WHERE `boardid` = '9'");
 
+        foreach ($boards as $board) {
+            $tpl_page .= '<td>' . $board['name'] . '</td>';
+            $posts[$board['id']] = $tc_db->GetAll("SELECT `timestamp` FROM `" . KU_DBPREFIX . "posts` WHERE `boardid` = '" . $board['id'] . "'");
+        }
+
+        $tpl_page .= '</tr>';
 
         while ($timestamp < time() + KU_ADDTIME + 86400) {
             $date = date('j.m.Y', $timestamp);
+            $tpl_page .= '<tr><td>'.$date.'</td>';
 
-            $sgposts_today = 0;
-            foreach ($sgposts as $sgpost) {
-                if ($sgpost['timestamp'] >= $timestamp && $sgpost['timestamp'] < $timestamp + 86400) {
-                    ++$sgposts_today;
-                }
+            foreach ($boards as $board) {
+                $tpl_page .= '<td>' . count(array_filter($posts[$board['id']], fn($elem) => $elem['timestamp'] >= $timestamp && $elem['timestamp'] < $timestamp + 86400)) . '</td>';
             }
 
-            $vgposts_today = 0;
-            foreach ($vgposts as $vgpost) {
-                if ($vgpost['timestamp'] >= $timestamp && $vgpost['timestamp'] < $timestamp + 86400) {
-                    ++$vgposts_today;
-                }
-            }
-
-            $tpl_page .= '<tr><td>'.$date.'</td><td>'.$sgposts_today.'</td><td>'.$vgposts_today.'</td></tr>';
+            $tpl_page .= '</tr>';
             $timestamp += 86400;
         }
 
