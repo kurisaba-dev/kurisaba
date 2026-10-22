@@ -173,6 +173,11 @@ class Posting
                 return _gettext('Captcha timeout, try again.');
             }
 
+            // Check if captcha has allowed language
+            if (!isset($_POST['captchalang']) || empty($_POST['captchalang']) || !in_array($_POST['captchalang'], explode(",", KU_CAPTCHAENABLED)) || $_COOKIE['captchalang'] != $_POST['captchalang']) {
+                return _gettext('Please submit captcha of the correct language.');
+            }
+
             // Check if they entered the correct code. If not...
             if (mb_strtoupper(romanize($_SESSION['security_code'.$_POST['captchaid']])) != mb_strtoupper(romanize($_POST['captcha'])) || empty($_SESSION['security_code'.$_POST['captchaid']])) {
                 // Give user another chance: compare with old-style security code. It's so if he use dollscript.
