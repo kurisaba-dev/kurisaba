@@ -46,16 +46,18 @@ if ($cf['KU_APC']) {
 
 if (!$cache_loaded) {
 
-    $cf['KU_PROTO']             = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == "on") ? 'https://' : 'http://';
-    $cf['KU_BASE_HOST']         = $_SERVER['HTTP_HOST'];
+    $cf['KU_PROTO'] = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == "on") ? 'https://' : 'http://';
+    $cf['KU_BASE_HOST'] = $_SERVER['HTTP_HOST'];
 
     include 'config.php';
 
+    $cf['KU_MENUSTYLES'] = $cf['KU_STYLES'];
+
     putenv('TZ='.$cf['KU_TZ']);
 
-    $cf['KU_ROOTDIR']           = realpath(dirname(__FILE__))."/";
-    $cf['KU_WEBFOLDER']         = '/';
-    $cf['KU_TEMPLATEDIR']       = $cf['KU_ROOTDIR'] . 'dwoo/templates';
+    $cf['KU_ROOTDIR'] = realpath(dirname(__FILE__))."/";
+    $cf['KU_WEBFOLDER'] = '/';
+    $cf['KU_TEMPLATEDIR'] = $cf['KU_ROOTDIR'] . 'dwoo/templates';
     $cf['KU_CACHEDTEMPLATEDIR'] = $cf['KU_ROOTDIR'] . 'tmp/dwoo';
 
     $css_js_files = array("css/*.css", "css/styles/*.css", "lib/javascript/*.js", "lib/javascript/prettify/*.js");
