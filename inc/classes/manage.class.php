@@ -399,14 +399,14 @@ class Manage
 
         $boards = $tc_db->GetAll("SELECT `id`, `name` FROM `" . KU_DBPREFIX . "boards` ORDER BY `name` ASC");
 
-        $tpl_page .= '<h2>Количество постов, созданных в конкретный день:</h2><table><tr><td>Date</td>';
+        $tpl_page .= '<h2>Количество постов, созданных в конкретный день:</h2><table style="border-spacing: 1px;text-align: center;" border="1" align="center"><tr><th>Date</th>';
         $posts = array();
 
         $timestamp = $tc_db->GetOne("SELECT `timestamp` FROM `" . KU_DBPREFIX . "posts` ORDER BY `timestamp` ASC LIMIT 1"); // First post
         $timestamp = floor($timestamp / 86400) * 86400;
 
         foreach ($boards as $board) {
-            $tpl_page .= '<td>' . $board['name'] . '</td>';
+            $tpl_page .= '<th>' . $board['name'] . '</th>';
             $posts[$board['id']] = $tc_db->GetAll("SELECT `timestamp` FROM `" . KU_DBPREFIX . "posts` WHERE `boardid` = '" . $board['id'] . "'");
         }
 
@@ -414,10 +414,10 @@ class Manage
 
         while ($timestamp < time() + KU_ADDTIME + 86400) {
             $date = date('j.m.Y', $timestamp);
-            $tpl_page .= '<tr><td>'.$date.'</td>';
+            $tpl_page .= '<tr><td style="padding: 5px;">'.$date.'</td>';
 
             foreach ($boards as $board) {
-                $tpl_page .= '<td>' . count(array_filter($posts[$board['id']], fn($elem) => $elem['timestamp'] >= $timestamp && $elem['timestamp'] < $timestamp + 86400)) . '</td>';
+                $tpl_page .= '<td style="padding: 5px;">' . count(array_filter($posts[$board['id']], fn($elem) => $elem['timestamp'] >= $timestamp && $elem['timestamp'] < $timestamp + 86400)) . '</td>';
             }
 
             $tpl_page .= '</tr>';
