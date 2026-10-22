@@ -58,6 +58,10 @@ if (!$cache_loaded) {
     $cf['KU_TEMPLATEDIR']       = $cf['KU_ROOTDIR'] . 'dwoo/templates';
     $cf['KU_CACHEDTEMPLATEDIR'] = $cf['KU_ROOTDIR'] . 'tmp/dwoo';
 
+    $css_js_files = array("css/*.css", "css/styles/*.css", "lib/javascript/*.js", "lib/javascript/prettify/*.js");
+    $maxtimestamp = max(array_map("filemtime", array_merge(...array_map(fn($x) => glob($cf['KU_ROOTDIR'] . $x), $css_js_files))));
+    $cf['KU_CSSVER'] = $cf['KU_JSVER'] = $maxtimestamp;
+
     $cf['KU_SUPPORTED_LOCALES'] = 'ru|en';
     $cf['KU_REACT_ENA'] = false;
     $cf['KU_LOCAL_REACT_API'] = 'http://127.0.0.1:1337';
