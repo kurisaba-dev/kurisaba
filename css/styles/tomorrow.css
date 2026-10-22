@@ -399,3 +399,7 @@ li a {
 .stradio:checked+span:before {
     content: '\25E3';
 }
+
+.captcha {
+    color: rgb(255, 255, 255);
+}

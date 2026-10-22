@@ -237,3 +237,7 @@ a:hover {
 .reflinkpreview {
     background-color: #D6DAF0 !important;
 }
+
+.captcha {
+    color: rgb(0, 0, 0);
+}

@@ -270,3 +270,7 @@ textarea:focus {
     color: gray;
     background-color: gray;
 }
+
+.captcha {
+    color: rgb(255, 255, 255);
+}

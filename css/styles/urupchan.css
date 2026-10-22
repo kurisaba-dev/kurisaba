@@ -222,3 +222,7 @@ a:hover[href$=SAGE] {
 .omittedposts {
     color: #666;
 }
+
+.captcha {
+    color: rgb(0, 0, 0);
+}

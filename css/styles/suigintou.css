@@ -415,3 +415,7 @@ textarea:focus {
     border: 1px #324 solid;
     box-shadow: #648 0px 0px 10px;
 }
+
+.captcha {
+    color: #c0b0c0;
+}

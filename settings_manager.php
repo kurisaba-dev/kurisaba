@@ -130,13 +130,10 @@ if (in_array('CHANGEME', $required) || in_array('', $required)) {
 require KU_ROOTDIR . 'lib/gettext/gettext.inc.php';
 require KU_ROOTDIR . 'lib/adodb/adodb.inc.php';
 
-function style_to_captcha_color($style)
+function captcha_color($color)
 {
-    global $stylecolors;
-    if (!isset($stylecolors[$style])) {
-        $style = 'default';
-    }
-    return $stylecolors[$style];
+    if(preg_match('/^rgb\(([0-9]+), ?([0-9]+), ?([0-9]+)\)$/', strtolower($color), $matches)) return array((int)$matches[1], (int)$matches[2], (int)$matches[3]);
+    return array(85, 85, 85);
 }
 
 // Gettext

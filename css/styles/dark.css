@@ -407,3 +407,7 @@ textarea:focus {
 #imagefile {
     border: 0px;
 }
+
+.captcha {
+    color: rgb(200, 200, 200);
+}

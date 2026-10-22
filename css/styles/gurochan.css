@@ -243,3 +243,7 @@ span.spoiler {
 .reflinkpreview {
     background-color: #E9B18E !important;
 }
+
+.captcha {
+    color: rgb(0, 0, 0);
+}

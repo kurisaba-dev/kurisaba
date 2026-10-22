@@ -319,3 +319,7 @@ table td {
 .reflinkpreview {
     background-color: #DDDDDD !important;
 }
+
+.captcha {
+    color: #333333;
+}

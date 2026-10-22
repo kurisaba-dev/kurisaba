@@ -23,7 +23,7 @@ if ($_COOKIE['captchalang'] == 'en') {
 session_start(['cookie_samesite' => 'Strict']);
 function img_code($code)
 {
-    $scolor = style_to_captcha_color(isset($_COOKIE['kustyle2']) ? $_COOKIE['kustyle2'] : '');
+    $scolor = captcha_color(isset($_COOKIE['captchacolor']) ? $_COOKIE['captchacolor'] : '');
     $img_arr = array("1.png");
     $font_arr = array();
     if ($_COOKIE['captchalang'] == 'jp') {

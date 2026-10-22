@@ -450,3 +450,7 @@ input[type=file]::-webkit-file-upload-button:focus {
 #imagefile {
     border: 0px;
 }
+
+.captcha {
+    color: #C7C7C7;
+}

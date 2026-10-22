@@ -187,6 +187,7 @@
 			{/if}
 
 			<tr>
+			<span class="captcha"></span>
 			{if $captchalang == 'mt'}
 				<td class="postblock" colspan=2 align="center">
 					<div class="mtcaptcha" style="display:inline-block;"></div>

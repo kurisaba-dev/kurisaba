@@ -312,3 +312,7 @@ table td {
     color: #111;
     background-color: #111;
 }
+
+.captcha {
+    color: rgb(0, 204, 204);
+}

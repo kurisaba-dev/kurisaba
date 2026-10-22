@@ -373,3 +373,7 @@ textarea {
 .reflinkpreview {
     background-color: #DDDDDD !important;
 }
+
+.captcha {
+    color: rgb(95, 95, 95);
+}

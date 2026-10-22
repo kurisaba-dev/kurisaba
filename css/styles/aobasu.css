@@ -444,3 +444,7 @@ body.site-wrapper {
     color: gray;
     background-color: gray;
 }
+
+.captcha {
+    color: rgb(85, 85, 85);
+}

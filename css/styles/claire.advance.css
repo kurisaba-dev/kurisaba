@@ -319,3 +319,7 @@ li a {
 .ulsearch {
     background: #282a2e !important;
 }
+
+.captcha {
+    color: rgb(255,255,255);
+}
