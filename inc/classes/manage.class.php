@@ -429,14 +429,9 @@ class Manage
 
     public function statistics()
     {
-        global $tc_db, $tpl_page;
-
+        global $tpl_page;
         $tpl_page .= '<h2>'. _gettext('Statistics') .'</h2><br />';
-        $tpl_page .= '<img src="manage_page.php?graph&type=day" />
-		<img src="manage_page.php?graph&type=week" />
-		<img src="manage_page.php?graph&type=postnum" />
-		<img src="manage_page.php?graph&type=unique" />
-		<img src="manage_page.php?graph&type=posttime" />';
+        $tpl_page .= '<img src="manage_page.php?graph&type=day" /><img src="manage_page.php?graph&type=week" /><img src="manage_page.php?graph&type=postnum" /><img src="manage_page.php?graph&type=unique" /><img src="manage_page.php?graph&type=posttime" />';
     }
 
     public function changepwd()
