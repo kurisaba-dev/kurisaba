@@ -153,6 +153,15 @@ CREATE TABLE IF NOT EXISTS `module_settings` (
   `type` varchar(255) NOT NULL DEFAULT 'string'
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
+CREATE TABLE IF NOT EXISTS `captcha_solve` (
+  `lang` varchar(32),
+  `etalon` varchar(32),
+  `entered` varchar(32),
+  `time` int(20) unsigned NOT NULL,
+  `solved` tinyint(1) unsigned NOT NULL,
+  `message` varchar(255)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
 CREATE TABLE IF NOT EXISTS `posts` (
 `id` int(10) unsigned NOT NULL,
   `boardid` smallint(5) unsigned NOT NULL,

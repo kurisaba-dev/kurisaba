@@ -132,78 +132,65 @@ class Posting
 
     public function CheckCaptcha($post_message = '')
     {
-        global $board_class;
+        global $tc_db, $board_class;
 
         if (!isset($_POST['captchaid'])) {
             $_POST['captchaid'] = '';
         }
 
+        $retval = '';
+
         mb_internal_encoding("UTF-8");
         /* If the board has captcha's enabled... */
         if ($board_class->board['enablecaptcha'] == 1) {
+            $submit_time = time() + KU_ADDTIME;
+
             if (isset($_POST['mtcaptcha-verifiedtoken'])) {
                 $mtcaptcha_url = "https://service.mtcaptcha.com/mtcv1/api/checktoken?privatekey=" . KU_MTCAPTCHA_PRVKEY . "&token=" . $_POST['mtcaptcha-verifiedtoken'];
                 $resp = file_get_contents($mtcaptcha_url);
                 if ($resp === false) {
-                    return _gettext('MTCaptcha service is unavailable, try again or choose different captcha type.');
+                    $retval = _gettext('MTCaptcha service is unavailable, try again or choose different captcha type.');
+                } else {
+                    $resp_data = json_decode($resp);
+                    if (json_last_error() != JSON_ERROR_NONE) {
+                        $retval = _gettext('MTCaptcha returned non-JSON data: ' . json_last_error_msg());
+                    } else if (!property_exists($resp_data, "success")) {
+                        $retval = _gettext('MTCaptcha does not return "success" entry');
+                    } else if ($resp_data->success == true) {
+                        $retval = '';
+                    } else if ($resp_data->success !== false) {
+                        $retval = _gettext('MTCaptcha "success" entry is not true or false.');
+                    } else if (!property_exists($resp_data, "fail_codes")) {
+                        $retval = _gettext('Incorrect captcha entered, but MTCaptcha does not return "fail_codes" entry');
+                    } else {
+                        $retval = _gettext('Incorrect captcha entered.') . _gettext(' Reason: ') . implode(", ", $resp_data->fail_codes);
+                    }
                 }
-                $resp_data = json_decode($resp);
-                if (json_last_error() != JSON_ERROR_NONE) {
-                    return _gettext('MTCaptcha returned non-JSON data: ' . json_last_error_msg());
-                }
-                if (!property_exists($resp_data, "success")) {
-                    return _gettext('MTCaptcha does not return "success" entry');
-                }
-                if ($resp_data->success == true) {
-                    return '';
-                }
-                if ($resp_data->success !== false) {
-                    return _gettext('MTCaptcha "success" entry is not true or false.');
-                }
-                if (!property_exists($resp_data, "fail_codes")) {
-                    return _gettext('Incorrect captcha entered, but MTCaptcha does not return "fail_codes" entry');
-                }
-                return _gettext('Incorrect captcha entered.') . _gettext(' Reason: ') . implode(", ", $resp_data->fail_codes);
-            }
-
-            $submit_time = time() + KU_ADDTIME;
-
-            // Check if captcha is not stale yet
-            if ($_SESSION['captchatime'] + KU_CAPTCHATIME < $submit_time) {
-                return _gettext('Captcha timeout, try again.');
-            }
-
-            // Check if captcha has allowed language
-            if (!isset($_POST['captchalang']) || empty($_POST['captchalang']) || !in_array($_POST['captchalang'], explode(",", KU_CAPTCHAENABLED)) || $_COOKIE['captchalang'] != $_POST['captchalang']) {
-                return _gettext('Please submit captcha of the correct language.');
-            }
-
-            // Check if they entered the correct code. If not...
-            if (mb_strtoupper(romanize($_SESSION['security_code'.$_POST['captchaid']])) != mb_strtoupper(romanize($_POST['captcha'])) || empty($_SESSION['security_code'.$_POST['captchaid']])) {
-                // Give user another chance: compare with old-style security code. It's so if he use dollscript.
+            } else if ($_SESSION['captchatime'] + KU_CAPTCHATIME < $submit_time) {
+                $retval = _gettext('Captcha timeout, try again.');
+            } else if (!isset($_POST['captchalang']) || empty($_POST['captchalang']) || !in_array($_POST['captchalang'], explode(",", KU_CAPTCHAENABLED)) || $_COOKIE['captchalang'] != $_POST['captchalang']) {
+                $retval = _gettext('Please submit captcha of the correct language.');
+            } else if (mb_strtoupper(romanize($_SESSION['security_code'.$_POST['captchaid']])) != mb_strtoupper(romanize($_POST['captcha'])) || empty($_SESSION['security_code'.$_POST['captchaid']])) {
+                // Compare with old-style security code. It's so if he use dollscript.
                 if (mb_strtoupper(romanize($_SESSION['security_code'])) != mb_strtoupper(romanize($_POST['captcha'])) || empty($_SESSION['security_code'])) {
-                    // Delete used captchas
-                    if (isset($_SESSION['security_code'.$_POST['captchaid']])) {
-                        unset($_SESSION['security_code'.$_POST['captchaid']]);
-                    }
-                    if (isset($_SESSION['security_code'])) {
-                        unset($_SESSION['security_code']);
-                    }
-
-                    // Kill the script, stopping the posting process
-                    return _gettext('Incorrect captcha entered.');
+                    $retval = _gettext('Incorrect captcha entered.');
                 }
+            }
+
+            // Record captcha result
+            $tc_db->Execute("CREATE TABLE IF NOT EXISTS `" . KU_DBPREFIX . "captcha_solve` (`lang` varchar(32), `etalon` varchar(32), `entered` varchar(32), `time` int(20) unsigned NOT NULL, `solved` tinyint(1) unsigned NOT NULL, `message` varchar(255)) ENGINE=MyISAM DEFAULT CHARSET=utf8;");
+            $tc_db->Execute("INSERT INTO `" . KU_DBPREFIX . "captcha_solve` (`lang`, `etalon`, `entered`, `time`, `solved`, `message`) VALUES (" . $tc_db->qstr($_POST['captchalang']) . ", " . $tc_db->qstr(isset($_SESSION['security_code'.$_POST['captchaid']]) ? $_SESSION['security_code'.$_POST['captchaid']] : $_SESSION['security_code']) . ", " . $tc_db->qstr($_POST['captcha']) . ", " . $tc_db->qstr($submit_time) . ", '" . ($retval == '' ? 1 : 0) . "', " . $tc_db->qstr($retval) . ")");
+
+            // Delete used captchas
+            if (isset($_SESSION['security_code'.$_POST['captchaid']])) {
+                unset($_SESSION['security_code'.$_POST['captchaid']]);
+            }
+            if (isset($_SESSION['security_code'])) {
+                unset($_SESSION['security_code']);
             }
         }
 
-        // Delete used captchas
-        if (isset($_SESSION['security_code'.$_POST['captchaid']])) {
-            unset($_SESSION['security_code'.$_POST['captchaid']]);
-        }
-        if (isset($_SESSION['security_code'])) {
-            unset($_SESSION['security_code']);
-        }
-        return '';
+        return $retval;
     }
 
     public function CheckBannedHashNew($file_location = '', $only_file = false)
