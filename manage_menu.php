@@ -141,7 +141,8 @@ if (!$manage_class->ValidateSession(true)) {
 		<li><a href="manage_page.php?action=bans&ishashban=1">' . _gettext('View/Add/Remove file bans') . '</a></li>
 		<li><a href="manage_page.php?action=threadlimit">' . _gettext('Flush limit of threads') . '</a></li>
 		<li><a href="manage_page.php?action=statistics">' . _gettext('Statistics') . '</a></li>
-		<li><a href="manage_page.php?action=verbosestats">' . _gettext('Verbose statistics') . '</a></li>';
+		<li><a href="manage_page.php?action=verbosestats">' . _gettext('Verbose statistics') . '</a></li>
+		<li><a href="manage_page.php?action=captchastats">' . _gettext('Captcha statistics') . '</a></li>';
         if (KU_APPEAL) {
             $tpl_links .= '<li><a href="manage_page.php?action=appeals">' . _gettext('View Appeals') . '</a></li>';
         }
