@@ -52,6 +52,7 @@ if (!$cache_loaded) {
     include 'config.php';
 
     $cf['KU_MENUSTYLES'] = $cf['KU_STYLES'];
+    $cf['KU_DEFAULTMENUSTYLE'] = $cf['KU_DEFAULTSTYLE'];
 
     putenv('TZ='.$cf['KU_TZ']);
 

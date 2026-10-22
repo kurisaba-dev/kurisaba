@@ -87,7 +87,6 @@ $cf['KU_REPLIESSTICKY']     = 1;      // Количество показывае
 $cf['KU_STYLES']            = 'aobasu:myata:cdark:claire:claire.advance:cchaos:summer:winter:autumn:photon:modern:dark:tomorrow:urupchan:futaba:burichan:kusabax:gurochan:gentoochan:tuvik:suigintou'; // Список стилей, маленькими буквами, разделяется двоеточием.
 $cf['KU_MENUTYPE']          = 'normal';         // Тип меню. 'normal' - с использованием стилей, 'plain' - без них.
 $cf['KU_DEFAULTSTYLE']      = 'aobasu';         // Дефолтный стиль для досок, на которых он не задан. Маленькими буквами.
-$cf['KU_DEFAULTMENUSTYLE']  = 'aobasu';         // Дефолтный стиль для меню. Маленькими буквами.
 $stylecolors                = array             // Цвета капчи для разных стилей (RGB).
 (
     'Aobasu'                => array(85,85,85),
