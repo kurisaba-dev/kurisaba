@@ -399,14 +399,14 @@ class Manage
 
         $boards = $tc_db->GetAll("SELECT `id`, `name` FROM `" . KU_DBPREFIX . "boards` ORDER BY `name` ASC");
 
-        $tpl_page .= '<h2>Количество постов, созданных в конкретный день:</h2><table style="border-spacing: 1px;text-align: center;" border="1" align="center"><tr><th>Date</th>';
+        $tpl_page .= '<h2>Количество постов, созданных в конкретный день:</h2><table style="border-spacing: 1px;text-align: center;" border="1" align="center"><tr><th style="padding: 5px;">Date</th>';
         $posts = array();
 
         $timestamp = $tc_db->GetOne("SELECT `timestamp` FROM `" . KU_DBPREFIX . "posts` ORDER BY `timestamp` ASC LIMIT 1"); // First post
         $timestamp = floor($timestamp / 86400) * 86400;
 
         foreach ($boards as $board) {
-            $tpl_page .= '<th>' . $board['name'] . '</th>';
+            $tpl_page .= '<th style="padding: 5px;">' . $board['name'] . '</th>';
             $posts[$board['id']] = $tc_db->GetAll("SELECT `timestamp` FROM `" . KU_DBPREFIX . "posts` WHERE `boardid` = '" . $board['id'] . "'");
         }
 
@@ -430,7 +430,7 @@ class Manage
     public function captchastats()
     {
         global $tc_db, $tpl_page;
-        $tpl_page .= '<h2>' . _gettext('Captcha statistics') . ':</h2><table style="border-spacing: 1px;text-align: center;" border="1" align="center"><tr><th>' . _gettext('Language') . '</th><th>' . _gettext('Solved') . '</th><th>' . _gettext('Unsolved') . '</th></tr>';
+        $tpl_page .= '<h2>' . _gettext('Captcha statistics') . ':</h2><table style="border-spacing: 1px;text-align: center;" border="1" align="center"><tr><th style="padding: 5px;">' . _gettext('Language') . '</th><th style="padding: 5px;">' . _gettext('Solved') . '</th><th style="padding: 5px;">' . _gettext('Unsolved') . '</th></tr>';
         $posts = array();
         $data = $tc_db->GetAll("SELECT `lang1` as `lang`, `okays`, `fails` FROM (SELECT `lang` as `lang1`, count(*) as `okays` FROM `" . KU_DBPREFIX . "captcha_solve` WHERE `solved` GROUP BY `lang`) `req1` INNER JOIN (SELECT `lang` as `lang2`, count(*) as `fails` FROM `" . KU_DBPREFIX . "captcha_solve` WHERE NOT `solved` GROUP BY `lang`) `req2` ON `lang1` = `lang2`");
         foreach ($data as $lang) {
