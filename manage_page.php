@@ -37,7 +37,6 @@ require KU_ROOTDIR . 'inc/functions.php';
 require KU_ROOTDIR . 'inc/classes/manage.class.php';
 require KU_ROOTDIR . 'inc/classes/board-post.class.php';
 require KU_ROOTDIR . 'inc/classes/bans.class.php';
-require KU_ROOTDIR . 'inc/AYAH/ayah.php';
 
 $dwoo_data->assign('styles', explode(':', KU_STYLES));
 
