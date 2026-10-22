@@ -24,10 +24,10 @@
   <script>
     var mtcaptchaConfig = {
       "sitekey": "{$captchaid}",
-      "verified-callback": "focusToTextarea"
+      "verified-callback": "focusToSubmitButton"
     };
-    function focusToTextarea() {
-      $('#top-textarea').focus();
+    function focusToSubmitButton() {
+      $('#postform-submit').focus();
     }
     (function () {
       var mt_service = document.createElement('script');

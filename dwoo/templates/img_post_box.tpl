@@ -63,7 +63,7 @@
 				<td>
 					{strip}
 						<input type="text" name="subject" size="48" maxlength="{%KU_MAXSUBJLENGTH}" accesskey="s" style="width: 330px;" />&nbsp;
-					<input type="submit" value="
+					<input type="submit" id="postform-submit" value="
 						{if %KU_QUICKREPLY && $replythread eq 0}
 							{t}Submit{/t}" accesskey="z" />&nbsp;<small id="posttypeindicator">({t}new thread{/t})</small>
 						{elseif %KU_QUICKREPLY && $replythread neq 0}
