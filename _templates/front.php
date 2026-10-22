@@ -1,6 +1,6 @@
 <?php
 
-require_once 'config.php';
+require_once 'settings_manager.php';
 
 if (KU_MAINPAGE != "front.php") {
     header("Location: " . KU_WEBPATH . "/" . KU_MAINPAGE);

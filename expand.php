@@ -24,7 +24,7 @@
  * @package kusaba
  */
 
-require 'config.php';
+require 'settings_manager.php';
 /* No need to waste effort if expansion is disabled */
 if (!KU_EXPAND) {
     die();

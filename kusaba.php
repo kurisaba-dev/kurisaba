@@ -5,7 +5,7 @@ if (file_exists("install.php")) {
 if (!isset($_GET['info'])) {
     $preconfig_db_unnecessary = true;
 }
-require 'config.php';
+require 'settings_manager.php';
 $menufile = 'menu.php';
 ?>
 <!DOCTYPE html>

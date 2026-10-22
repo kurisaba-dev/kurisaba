@@ -1,6 +1,6 @@
 <?php
 
-require 'config.php';
+require 'settings_manager.php';
 if (!isset($_POST['board']) || !isset($_POST['thread']) || !isset($_POST['posts'])) {
     die(json_encode(array('state' => 'неправильное использование json_get - его должна вызывать яваскриптовая часть курисабы')));
 } else {

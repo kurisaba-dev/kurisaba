@@ -821,7 +821,7 @@ msgid "Order to show board in menu list, in ascending order."
 msgstr "Порядок отображения досок в меню."
 
 msgid "Overrides the header set in the config file.  Leave blank to use configured global header image.  Needs to be a full url including http://.  Set to none to show no header image."
-msgstr "Конфликтует с файлом из config.php.  Оставьте пустым для использования изображения из глобальных настроек.  Требубется полная ссылка, включая http://.  Установите None для того чтобы убрать изображение."
+msgstr "Конфликтует с файлом из конфига.  Оставьте пустым для использования изображения из глобальных настроек.  Требубется полная ссылка, включая http://.  Установите None для того чтобы убрать изображение."
 
 msgid "Pages"
 msgstr "Страницы"
@@ -1665,9 +1665,6 @@ msgstr "Не может оставаться пустым. То что идет 
 
 msgid "Code:"
 msgstr "Код:"
-
-msgid "This can be left blank. It will be reset with the default width set in config.php"
-msgstr "Может оставаться пустым. В таком случае данные берутся из config.php"
 
 msgid "When adding an embed, please check http://www.kusabax.org/wiki/embedding and check if there is a tutorial image for the site you are adding. Put this image in the /inc/embedhelp/ folder, or create your own in this folder if one does not exist. The image must be the same as the site name in all lowercase."
 msgstr "Проверьте http://www.kusabax.org/wiki/embedding на наличие видеоресурса, которого Вы хотите добавить. Положите изображение помощи в /inc/embedhelp/, или создайте сами, если она не существует. Изображение должно состоять из имени, которое указано в поле Имя сайта"

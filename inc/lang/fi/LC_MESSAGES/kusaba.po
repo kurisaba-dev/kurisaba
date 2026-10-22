@@ -753,9 +753,6 @@ msgstr "Järjestys"
 msgid "Order to show board in menu list, in ascending order."
 msgstr "Näyttää boardin menulistassa, nousevassa järjestyksessä"
 
-msgid "Overrides the header set in the config file.  Leave blank to use configured global header image.  Needs to be a full url including http://.  Set to none to show no header image."
-msgstr "Menee config.php:ssä asetetun header imagen edelle,  jätä tyhjäksi jos haluat pitää sen tällä boardilla. Pitää olla koko url mukaanlukien http://"
-
 msgid "Pages"
 msgstr "Sivut"
 

@@ -32,7 +32,7 @@
  */
 
 session_start(['cookie_samesite' => 'Strict']);
-require 'config.php';
+require 'settings_manager.php';
 require KU_ROOTDIR . 'inc/functions.php';
 require KU_ROOTDIR . 'inc/func/nrand.php';
 require KU_ROOTDIR . 'inc/classes/board-post.class.php';

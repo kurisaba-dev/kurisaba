@@ -8,7 +8,7 @@
 /* example:
 curl -s "https://kurisaba.lan/api.php" --data '{"version":"1.1","method":"get_posts_by_id","id":"1","params":{"board":"sg", "ids":[206]}}' */
 
-require 'config.php';
+require 'settings_manager.php';
 require KU_ROOTDIR . 'inc/functions.php';
 session_start(['cookie_samesite' => 'Strict']);
 

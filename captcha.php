@@ -1,6 +1,6 @@
 <?php
 
-require 'config.php';
+require 'settings_manager.php';
 define('DOCUMENT_ROOT', dirname(__FILE__));
 include("inc/func/nrand.php");
 $ltrs = rand(KU_CAPTCHAMINLENGTH, KU_CAPTCHAMAXLENGTH);

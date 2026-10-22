@@ -997,9 +997,6 @@ msgstr "Parola scriptului adiţional"
 msgid "Load balance URL"
 msgstr "Script adiţional"
 
-msgid "Locale to use on this board. Leave blank to use the locale defined in config.php"
-msgstr "Limba forumului. Lasă gol ca să foloseşti limba definită în config.php"
-
 msgid "Locale"
 msgstr "Limbă"
 
@@ -1302,9 +1299,6 @@ msgstr "Ordinea în care secţiunea să apară în listă (crescătoare)"
 
 msgid "Order"
 msgstr "Ordine"
-
-msgid "Overrides the header set in the config file. Leave blank to use configured global header image. Needs to be a full url including http://. Set to none to show no header image."
-msgstr "Înlocuieşte headerul din config.php. Lasă-l gol pentru a folosi headerul global. Trebuie să fie un URL complet (cu http:// )"
 
 msgid "Pages"
 msgstr "Pagini"
@@ -1873,9 +1867,6 @@ msgstr "Parola pe care-ai pus-o nu e cea curentă."
 msgid "The password which will be passed to the script above. The script must have this same password entered at the top, in the configuration area."
 msgstr "Parola pentru scriptul de mai sus. Scriptul trebuie să conţină această parolă în zona de configurare."
 
-msgid "The passwords of the load balancer password in the board configuration and the load receiver script differ."
-msgstr "Parolele pentru scriptul adiţional din config.php şi din scriptul în sine sunt diferite."
-
 msgid "The proxy list is assumed to be in plaintext *.*.*.*:port or *.*.*.* format, one IP per line."
 msgstr "Lista de proxy-uri e text simplu, în format: *.*.*.*:port sau *.*.*.*, cu un singur IP pe linie."
 
@@ -1941,12 +1932,6 @@ msgstr "Pe forumul acesta nu se pot raporta răspunsurile."
 
 msgid "This can be left blank, however it will appear at the very top of the list"
 msgstr "Poate fi lăsat gol; intrarea va fi prima în listă."
-
-msgid "This can be left blank. It will be reset with the default height set in config.php"
-msgstr "Poate fi lăsat gol. Valoarea implicită va fi cea din config.php"
-
-msgid "This can be left blank. It will be reset with the default width set in config.php"
-msgstr "Poate fi lăsat gol. Valoarea implicită va fi cea din config.php"
 
 msgid "This file is disabled because KU_STATICMENU is set to true."
 msgstr "Cum KU_STATICMENU e adevărat, nu poţi vedea fişierul acesta."

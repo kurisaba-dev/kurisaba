@@ -2,7 +2,7 @@
 
 header('Content-type: text/html; charset=utf-8');
 
-require 'config.php';
+require 'settings_manager.php';
 session_start(['cookie_samesite' => 'Strict']);
 
 if (isset($_GET['v'])) {

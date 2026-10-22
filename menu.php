@@ -25,7 +25,7 @@
  * @package kusaba
  */
 
-require 'config.php';
+require 'settings_manager.php';
 require KU_ROOTDIR . 'inc/functions.php';
 require KU_ROOTDIR . 'inc/classes/menu.class.php';
 
