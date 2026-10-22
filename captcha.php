@@ -15,8 +15,10 @@ if ($_COOKIE['captchalang'] == 'en') {
     }
 } elseif ($_COOKIE['captchalang'] == 'jp') {
     $captcha = japanese_word($ltrs * KU_KANAMULTIPLIER);
-} else {
+} elseif ($_COOKIE['captchalang'] == 'ru') {
     $captcha = generate_code($ltrs);
+} else {
+    die(); // We may get here if captcha.php called by mistake when unsupported captcha is enabled, like MTCaptcha
 }
 session_start(['cookie_samesite' => 'Strict']);
 function img_code($code)
