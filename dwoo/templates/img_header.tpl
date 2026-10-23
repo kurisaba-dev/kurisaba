@@ -60,6 +60,7 @@
 	</style>
 	{/literal}
 {/if}
+<script type="text/javascript" src="{$cwebpath}lib/javascript/voice-recorder.js"></script>
 <!-- <script src="//cdnjs.cloudflare.com/ajax/libs/headjs/1.0.3/head.load.min.js"></script> -->
 <script type="text/javascript" src="{$cwebpath}lib/javascript/gettext.js"></script>
 <!-- <script src="//cdnjs.cloudflare.com/ajax/libs/headjs/1.0.3/head.load.min.js"></script> -->
