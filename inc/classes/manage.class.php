@@ -430,11 +430,12 @@ class Manage
     public function captchastats()
     {
         global $tc_db, $tpl_page;
-        $tpl_page .= '<h2>' . _gettext('Captcha statistics') . ':</h2><table style="border-spacing: 1px;text-align: center;" border="1" align="center"><tr><th style="padding: 5px;">' . _gettext('Language') . '</th><th style="padding: 5px;">' . _gettext('Solved') . '</th><th style="padding: 5px;">' . _gettext('Unsolved') . '</th></tr>';
+        $tpl_page .= '<h2>' . _gettext('Captcha statistics') . ':</h2><table style="border-spacing: 1px;text-align: center;" border="1" align="center"><tr><th style="padding: 5px;">' . _gettext('Language') . '</th><th style="padding: 5px;">' . _gettext('Generated') . '</th><th style="padding: 5px;">' . _gettext('Solved') . '</th><th style="padding: 5px;">' . _gettext('Unsolved') . '</th><th style="padding: 5px;">' . _gettext('No attempt') . '</th></tr>';
         $posts = array();
         $data = $tc_db->GetAll("SELECT `lang1` as `lang`, `okays`, `fails` FROM (SELECT `lang` as `lang1`, count(*) as `okays` FROM `" . KU_DBPREFIX . "captcha_solve` WHERE `solved` GROUP BY `lang`) `req1` INNER JOIN (SELECT `lang` as `lang2`, count(*) as `fails` FROM `" . KU_DBPREFIX . "captcha_solve` WHERE NOT `solved` GROUP BY `lang`) `req2` ON `lang1` = `lang2`");
         foreach ($data as $lang) {
-            $tpl_page .= '<tr><td style="padding: 5px;">' . $lang['lang'] . '</td><td style="padding: 5px;">' . $lang['okays'] . '</td><td style="padding: 5px;">' . $lang['fails'] . '</td></tr>';
+            $gens = $tc_db->GetAll("SELECT count(*) as `gens` FROM `" . KU_DBPREFIX . "captcha_generate` WHERE `lang` = " .  $tc_db->qstr($lang['lang']));
+            $tpl_page .= '<tr><td style="padding: 5px;">' . $lang['lang'] . '</td><td style="padding: 5px;">' . $gens[0]['gens'] . '</td><td style="padding: 5px;">' . $lang['okays'] . '</td><td style="padding: 5px;">' . $lang['fails'] . '</td><td style="padding: 5px;">' . ((int)$gens[0]['gens'] - (int)$lang['okays'] - (int)$lang['fails']) . '</td></tr>';
         }
         $tpl_page .= '</table>';
     }

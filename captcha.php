@@ -18,7 +18,7 @@ if ($_COOKIE['captchalang'] == 'en') {
 } elseif ($_COOKIE['captchalang'] == 'ru') {
     $captcha = generate_code($ltrs);
 } else {
-    die(); // We may get here if captcha.php called by mistake when unsupported captcha is enabled, like MTCaptcha
+    $captcha = ''; // We get here if captcha.php called when captcha of unsupported type is enabled, like MTCaptcha; so we just record generate call and leave.
 }
 session_start(['cookie_samesite' => 'Strict']);
 function img_code($code)
@@ -125,5 +125,11 @@ function opsmaz($img, $ncolor)
     }
     return $img2;
 }
-$_SESSION['captchatime'] = time() + KU_ADDTIME;
-img_code($captcha);
+
+if($captcha) {
+    $_SESSION['captchatime'] = time() + KU_ADDTIME;
+    img_code($captcha);
+}
+
+$tc_db->Execute("CREATE TABLE IF NOT EXISTS `" . KU_DBPREFIX . "captcha_generate` (`lang` varchar(32), `etalon` varchar(32), `time` int(20) unsigned NOT NULL) ENGINE=MyISAM DEFAULT CHARSET=utf8;");
+$tc_db->Execute("INSERT INTO `" . KU_DBPREFIX . "captcha_generate` (`lang`, `etalon`, `time`) VALUES (" . $tc_db->qstr($_COOKIE['captchalang']) . ", " . $tc_db->qstr($captcha) . ", '" . (time() + KU_ADDTIME) . "')");

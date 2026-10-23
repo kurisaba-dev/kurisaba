@@ -24,7 +24,8 @@
   <script>
     var mtcaptchaConfig = {
       "sitekey": "{$captchaid}",
-      "verified-callback": "focusToSubmitButton"
+      "verified-callback": "focusToSubmitButton",
+      "rendered-callback": "recordMTCaptcha"
     };
     function focusToSubmitButton() {
       $('#postform-submit').focus();
