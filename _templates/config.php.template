@@ -103,7 +103,7 @@ $cf['KU_REPLYTHUMBHEIGHT']  = 255;  // Максимальная высота п�
 $cf['KU_THUMBMETHOD']       = 'imagemagick+gifsicle'; // Метод создания предпросмотра jpg, gif, webm и png ('gd' или 'imagemagick+gifsicle'). Анимированные предпросмотры доступны только в последнем варианте.
 $cf['KU_THUMBMSG']          = false; // Показывать сообщение "Thumbnail displayed, click image for full size." у предпросмотров картинок.
 
-// Теги файлов для upload-досок. Для отключения можно установить в ''.
+// Теги файлов для upload-досок. Для отключения можно установить в 'array()'.
 $cf['KU_TAGS'] = array('Japanese' => 'J', 'Anime' => 'A', 'Game' => 'G', 'Loop' => 'L', 'Other' => '*');
 
 // Специальные трипкоды (до 30 символов). Для отключения можно установить в array().
