@@ -60,14 +60,18 @@ function img_code($code)
     }
     $im = opsmaz($im, $scolor);
 
+    $im_80x19 = imagecreatetruecolor(80, 19);
+    imagecopyresampled($im_80x19, $im, 0, 0, 0, 0, 80, 19, $img_width, 30);
+    ImageDestroy($im);
+
     header("Expires: Mon, 26 Jul 1997 05:00:00 GMT");
     header("Last-Modified: " . gmdate("D, d M Y H:i:s", 10000) . " GMT");
     header("Cache-Control: no-store, no-cache, must-revalidate");
     header("Cache-Control: post-check=0, pre-check=0", false);
     header("Pragma: no-cache");
     header("Content-Type:image/png");
-    ImagePNG($im);
-    ImageDestroy($im);
+    ImagePNG($im_80x19);
+    ImageDestroy($im_80x19);
 }
 function getKeyString()
 {
