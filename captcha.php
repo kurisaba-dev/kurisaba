@@ -61,6 +61,9 @@ function img_code($code)
     $im = opsmaz($im, $scolor);
 
     $im_80x19 = imagecreatetruecolor(80, 19);
+    imagecolortransparent($im_80x19, imagecolorallocatealpha($im_80x19, 0, 0, 0, 127));
+    imagealphablending($im_80x19, false);
+    imagesavealpha($im_80x19, true);
     imagecopyresampled($im_80x19, $im, 0, 0, 0, 0, 80, 19, $img_width, 30);
     ImageDestroy($im);
 
