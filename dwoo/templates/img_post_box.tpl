@@ -116,7 +116,7 @@
 						{t}File{/t}
 					</td>
 					<td>
-						<label><input type="file" name="imagefile" id="imagefile" style="width: 430px;" accesskey="f" /><span style="display:none">Файл</span></label>
+						<label><input type="file" name="imagefile" id="imagefile" style="width: 370px;" accesskey="f" /><span style="display:none">Файл</span></label>
 						{if $replythread eq 0 && $board.enablenofile eq 1 }
 							[<label><input class="stchkbox" type="checkbox" name="nofile" id="nofile" accesskey="q" /><span>{t}No File{/t}</span></label>]
 						{/if}
