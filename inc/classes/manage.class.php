@@ -4544,20 +4544,19 @@ class Manage
         if (isset($_POST['apply'])) {
         } else {
             $tpl_page .= '<h2>' . _gettext('Engine settings') . '</h2>';
-            $tpl_page .= '<form action="?action=enginesettings"  method="post">';
+            $tpl_page .= '<table border=0><form action="?action=enginesettings"  method="post">';
             $tpl_page .= '<input type="hidden" name="token" value="' . $_SESSION['token'] . '" />';
             $tpl_page .= '<input type="hidden" name="apply" value="1" />';
             foreach ($configs['config'] as $section) {
-                $tpl_page .= '<h3>' . $section['name'] . '</h3>';
+                $tpl_page .= '<tr><td colspan=2><h3 style="color: #ffffbf;">' . $section['name'] . '</h3></td></tr>';
                 foreach ($section['options'] as $optname => $option) {
-                    $tpl_page .= '<label for="option_' . $optname . '">'. $optname . ':</label>';
-                    $tpl_page .= '<input type="text" name="option_' . $optname . '" id="option_' . $optname . '" value="' . constant($optname) . '" />';
-                    $tpl_page .= '<div class=desc">'. $option['comment'] . '</div>';
+                    $tpl_page .= '<tr><td style="padding: 5px; width: 100px;"><strong><label for="option_' . $optname . '">'. $optname . ':</label></strong></td>';
+                    $tpl_page .= '<td style="padding: 5px;"><input type="text" style="width: 100%;" name="option_' . $optname . '" id="option_' . $optname . '" value="' . htmlentities(constant($optname)) . '" /></td></tr>';
+                    $tpl_page .= '<tr><td style="padding-left: 5px; padding-right: 5px; padding-top: 0px; padding-bottom: 15px;" colspan=2><div class=desc" style="color: #bfbfff;">'. $option['comment'] . '</div></td></tr>';
                 }
-                $tpl_page .= '<hr>';
             }
-            $tpl_page .= '<input type="submit" value="'. _gettext('Submit') .'" />';
-            $tpl_page .= '</form>';
+            $tpl_page .= '<tr><td colspan=2><input type="submit" value="'. _gettext('Submit') .'" /></td></tr>';
+            $tpl_page .= '</form></table>';
         }
     }
 }
