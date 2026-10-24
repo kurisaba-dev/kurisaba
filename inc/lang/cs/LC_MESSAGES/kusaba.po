@@ -51,9 +51,6 @@ msgstr "Board"
 msgid "Board successfully deleted."
 msgstr "Nástěnka smazána"
 
-msgid "Board type:"
-msgstr "Typ nástěnky"
-
 msgid "Boards"
 msgstr "Nástěnky"
 

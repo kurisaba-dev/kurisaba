@@ -92,7 +92,6 @@ if (!$cache_loaded) {
     $cf['KU_CGIPATH']   = $cf['KU_BOARDSPATH'];
 
     // Post-configuration actions
-    $cf['KU_TAGS']       = serialize($cf['KU_TAGS']);
     $cf['KU_TRIPS']      = serialize($cf['KU_TRIPS']);
 
     if (substr($cf['KU_WEBFOLDER'], -2) == '//') {

@@ -96,15 +96,13 @@ if (count($posts_to_print) > 0) {
     $board_class->dwoo_data->assign('isread', true);
     $board_class->dwoo_data->assign('file_path', KU_BOARDSPATH . '/' . $board_class->board['name']);
     $board_class->dwoo_data->assign('replythread', $thread);
-    if ($board_class->board['type'] == 0) {
-        $embeds = $tc_db->GetAll("SELECT filetype FROM `" . KU_DBPREFIX . "embeds`");
-        foreach ($embeds as $embed) {
-            $board_class->board['filetypes'][] .= $embed['filetype'];
-        }
-        $board_class->dwoo_data->assign('filetypes', $board_class->board['filetypes']);
+    $embeds = $tc_db->GetAll("SELECT filetype FROM `" . KU_DBPREFIX . "embeds`");
+    foreach ($embeds as $embed) {
+        $board_class->board['filetypes'][] .= $embed['filetype'];
     }
+    $board_class->dwoo_data->assign('filetypes', $board_class->board['filetypes']);
     $board_class->dwoo_data->assign('posts', $posts_to_print);
-    $return_addposts = $board_class->dwoo->get(KU_TEMPLATEDIR . '/' . $board_class->board['text_readable'] . '_thread.tpl', $board_class->dwoo_data);
+    $return_addposts = $board_class->dwoo->get(KU_TEMPLATEDIR . '/img_thread.tpl', $board_class->dwoo_data);
 }
 
 // Return final array

@@ -180,9 +180,6 @@ msgstr "Доска добавлена."
 msgid "Board successfully deleted."
 msgstr "Доска удалена."
 
-msgid "Board type:"
-msgstr "Тип доски:"
-
 msgid "Boards"
 msgstr "Доски"
 
@@ -790,9 +787,6 @@ msgstr "Нет"
 msgid "Normal imageboard"
 msgstr "Обычный доски"
 
-msgid "Oekaki imageboard"
-msgstr "Оекаки-доски"
-
 msgid "Old password"
 msgstr "Старый пароль"
 
@@ -1200,9 +1194,6 @@ msgstr "Секция, в которой находится доска. Испо�
 
 msgid "The style which will be set when the user first visits the board."
 msgstr "Стиль, который видит пользователь, впервые посещая доску."
-
-msgid "The type of posts which will be accepted on this board.  A normal imageboard will feature image and extended format posts, a text board will have no images, and an Oekaki board will allow users to draw images and use them in their posts."
-msgstr "Тип постов, который будет разрешен на данной доске. Нормальная доска представляет изображение и расширенное форматирование постов, текстовая доска не имеет изображений, Оекаки предлагает пользователям самим нарисовать картинку."
 
 msgid "There are currently no bans."
 msgstr "В данный момент баны отсутствуют."
@@ -1698,12 +1689,6 @@ msgstr "Перегенирированно меню"
 
 msgid "Rebuild complete."
 msgstr "Конпеляция завершена."
-
-msgid "Board type:"
-msgstr "Тип доски:"
-
-msgid "Board type"
-msgstr "Тип доски"
 
 msgid "hidden."
 msgstr "скрыт."

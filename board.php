@@ -142,31 +142,22 @@ if (isset($_POST['through_js'])) {
     $bans_class->BanCheck(KU_REMOTE_ADDR, $board_class->board['name']);
 }
 
-// 3.4. Oekaki stuff
-$oekaki = $posting_class->CheckOekaki();
-$is_oekaki = empty($oekaki) ? false : true;
-
-// 3.5. Ensure that UTF-8 is used on some of the post variables
+// 3.4. Ensure that UTF-8 is used on some of the post variables
 $posting_class->UTF8Strings();
 
-// 3.6. Determine mode of posting/deleting
+// 3.5. Determine mode of posting/deleting
 $operation_delete = false;
 $operation_post = false;
-if ($posting_class->CheckValidPost($is_oekaki)) {
+if ($posting_class->CheckValidPost()) {
     // Generic post
     $operation_post = true;
 } elseif ((isset($_POST['deletepost']) || isset($_POST['reportpost']) || isset($_POST['moddelete'])) && isset($_POST['post'])) {
     // Generic delete/report.
     $operation_delete = true;
     $delete_post = $_POST['post'];
-} elseif (isset($_GET['postoek'])) {
-    // Oekaki stuff?
-    $board_class->OekakiHeader($_GET['replyto'], $_GET['postoek']);
-    die();
 } else {
     // Indeterminate operation.
     kurisaba_exit('Неправильный вызов board.php.');
-    //kurisaba_redirect(KU_BOARDSPATH . '/' . $board_class->board['name'] . '/');
 }
 
 // STAGE 4. Delete
@@ -310,29 +301,26 @@ if ($operation_post) { // it's `noreturn`.
             kurisaba_exit(_gettext('Invalid thread ID.'), _gettext('That thread may have been recently deleted.'));
         }
     } else {
-        // type: 0=image, 1=text, 2=oekaki, 3=upload
-        if ($board_class->board['type'] != 1) {
-            if ($board_class->board['embeds_allowed'] != '') {
-                if (!isset($_POST['embed'])) {
-                    if ($imagefile_name == '') {
-                        kurisaba_exit('ОП-пост нельзя отправить без картинки или видео.', '', $_POST['message']);
+        if ($board_class->board['embeds_allowed'] != '') {
+            if (!isset($_POST['embed'])) {
+                if ($imagefile_name == '') {
+                    kurisaba_exit('ОП-пост нельзя отправить без картинки или видео.', '', $_POST['message']);
+                }
+            } else {
+                if (isset($_POST['attach_type'])) { // new behavior
+                    if ($_POST['attach_type'] == 'file' && $imagefile_name == '') {
+                        kurisaba_exit('Нельзя просто так взять и отправить ОП-пост.<br>Выбери картинку для отправки со своего компьютера.', '', $_POST['message']);
+                    } elseif ($_POST['attach_type'] == 'drop' && (!isset($_POST['drop_file_name']) || $_POST['drop_file_name'] == '')) {
+                        kurisaba_exit('Нельзя просто так взять и отправить ОП-пост.<br>Перетащи картинку со своего компьютера на поле отправки.', '', $_POST['message']);
+                    } elseif ($_POST['attach_type'] == 'embed' && $_POST['embed'] == '') {
+                        kurisaba_exit('Нельзя просто так взять и отправить ОП-пост.<br>Введи ID видео с какого-либо сайта для встраивания в пост.', '', $_POST['message']);
+                    } elseif ($_POST['attach_type'] == 'link' && $_POST['embedlink'] == '') {
+                        kurisaba_exit('Нельзя просто так взять и отправить ОП-пост.<br>Введи ссылку на изображение, которое нужно встроить в пост.', '', $_POST['message']);
                     }
-                } else {
-                    if (isset($_POST['attach_type'])) { // new behavior
-                        if ($_POST['attach_type'] == 'file' && $imagefile_name == '') {
-                            kurisaba_exit('Нельзя просто так взять и отправить ОП-пост.<br>Выбери картинку для отправки со своего компьютера.', '', $_POST['message']);
-                        } elseif ($_POST['attach_type'] == 'drop' && (!isset($_POST['drop_file_name']) || $_POST['drop_file_name'] == '')) {
-                            kurisaba_exit('Нельзя просто так взять и отправить ОП-пост.<br>Перетащи картинку со своего компьютера на поле отправки.', '', $_POST['message']);
-                        } elseif ($_POST['attach_type'] == 'embed' && $_POST['embed'] == '') {
-                            kurisaba_exit('Нельзя просто так взять и отправить ОП-пост.<br>Введи ID видео с какого-либо сайта для встраивания в пост.', '', $_POST['message']);
-                        } elseif ($_POST['attach_type'] == 'link' && $_POST['embedlink'] == '') {
-                            kurisaba_exit('Нельзя просто так взять и отправить ОП-пост.<br>Введи ссылку на изображение, которое нужно встроить в пост.', '', $_POST['message']);
-                        }
-                    } else { // old behavior; if there is an embed or imagefile_name - is to be determined.
-                        if ($_POST['embed'] == '') {
-                            if ($imagefile_name == '') {
-                                kurisaba_exit('ОП-пост нельзя отправить без картинки или видео.', '', $_POST['message']);
-                            }
+                } else { // old behavior; if there is an embed or imagefile_name - is to be determined.
+                    if ($_POST['embed'] == '') {
+                        if ($imagefile_name == '') {
+                            kurisaba_exit('ОП-пост нельзя отправить без картинки или видео.', '', $_POST['message']);
                         }
                     }
                 }
@@ -346,16 +334,6 @@ if ($operation_post) { // it's `noreturn`.
 
     list($post_name, $post_email, $post_subject, $post_tag) = $posting_class->GetFields();
     $post_password = isset($_POST['postpassword']) ? $_POST['postpassword'] : '';
-
-    if ($board_class->board['type'] == 1) {
-        if ($post_isreply) {
-            $post_subject = '';
-        } else {
-            if ($posting_class->CheckNotDuplicateSubject($post_subject)) {
-                exitWithErrorPage(_gettext('Duplicate thread subject'), _gettext('Text boards may have only one thread with a unique subject. Please pick another.'), '', $_POST['message']);
-            }
-        }
-    }
 
     $post_fileused = false;
     $post_autosticky = false;
@@ -396,7 +374,7 @@ if ($operation_post) { // it's `noreturn`.
             kurisaba_exit(_gettext('Sorry, this thread is locked and can not be replied to.'), '', $_POST['message']);
         }
 
-        $post_message = $parse_class->ParsePost($_POST['message'], $board_class->board['name'], $board_class->board['type'], $thread_replyto, $board_class->board['id'], false, $ua, $dice, $ipmd5);
+        $post_message = $parse_class->ParsePost($_POST['message'], $board_class->board['name'], $thread_replyto, $board_class->board['id'], false, $ua, $dice, $ipmd5);
 
         // Or, if they are a moderator/administrator...
     } else {
@@ -410,7 +388,7 @@ if ($operation_post) { // it's `noreturn`.
             $post_message = $_POST['message'];
             // Otherwise, parse it as usual...
         } else {
-            $post_message = $parse_class->ParsePost($_POST['message'], $board_class->board['name'], $board_class->board['type'], $thread_replyto, $board_class->board['id'], false, $ua, $dice, $ipmd5);
+            $post_message = $parse_class->ParsePost($_POST['message'], $board_class->board['name'], $thread_replyto, $board_class->board['id'], false, $ua, $dice, $ipmd5);
             // (Moved) check against blacklist and detect flood
         }
 
@@ -443,10 +421,8 @@ if ($operation_post) { // it's `noreturn`.
         kurisaba_exit(_gettext('Your post contains one or more illegal characters.'));
     }
 
-    $post_tag = $posting_class->GetPostTag();
-
     if ($post_isreply) {
-        if (!$is_oekaki && $post_message == '') {
+        if ($post_message == '') {
             if (($_POST['attach_type'] == 'embed' && $_POST['embed'] == '') ||
                     ($_POST['attach_type'] == 'file' && $imagefile_name == '') ||
                     ($_POST['attach_type'] == 'drop' && (!isset($_POST['drop_file_name']) || $_POST['drop_file_name'] == '')) ||
@@ -459,10 +435,6 @@ if ($operation_post) { // it's `noreturn`.
         if ($post_message == '') {
             kurisaba_exit('Нужно ввести текст сообщения или приложить картинку или видео.', '', $_POST['message']);
         }
-    }
-
-    if ($board_class->board['type'] == 1 && !$post_isreply && $post_subject == '') {
-        kurisaba_exit('Новый тред обязан иметь заголовок.', '', $_POST['message']);
     }
 
     if ($board_class->board['locked'] == 0 || ($user_authority > 0 && $user_authority != 3)) {
@@ -561,12 +533,6 @@ if ($operation_post) { // it's `noreturn`.
 
             $post = hook_process('posting', $post);
 
-            if ($is_oekaki) {
-                if (file_exists(KU_BOARDSDIR . $board_class->board['name'] . '/src/' . $upload_class->file_name . '.pch')) {
-                    $post['message'] .= '<br /><small><a href="' . KU_CGIPATH . '/animation.php?board=' . $board_class->board['name'] . '&amp;id=' . $upload_class->file_name . '">' . _gettext('View animation') . '</a></small>';
-                }
-            }
-
             if ($thread_replyto != '0') {
                 if ($post['message'] == '' && KU_NOMESSAGEREPLY != '') {
                     $post['message'] = KU_NOMESSAGEREPLY;
@@ -614,20 +580,18 @@ if ($operation_post) { // it's `noreturn`.
 
                 $page = '';
 
-                if ($board_class->board['type'] == 0) {
-                    $embeds = $tc_db->GetAll("SELECT filetype FROM `" . KU_DBPREFIX . "embeds`");
-                    foreach ($embeds as $embed) {
-                        $board_class->board['filetypes'][] .= $embed['filetype'];
-                    }
-                    $board_class->dwoo_data->assign('filetypes', $board_class->board['filetypes']);
+                $embeds = $tc_db->GetAll("SELECT filetype FROM `" . KU_DBPREFIX . "embeds`");
+                foreach ($embeds as $embed) {
+                    $board_class->board['filetypes'][] .= $embed['filetype'];
                 }
+                $board_class->dwoo_data->assign('filetypes', $board_class->board['filetypes']);
 
                 $results = array($board_class->BuildPost($post, false, array(), true));
 
                 $board_class->dwoo_data->assign('posts', $results);
                 $board_class->dwoo_data->assign('replink', $_GET['replink']);
 
-                $page .= $board_class->dwoo->get(KU_TEMPLATEDIR . '/' . $board_class->board['text_readable'] . '_thread.tpl', $board_class->dwoo_data);
+                $page .= $board_class->dwoo->get(KU_TEMPLATEDIR . '/img_thread.tpl', $board_class->dwoo_data);
 
                 $board_class->PrintPage('', $page, true);
                 die;

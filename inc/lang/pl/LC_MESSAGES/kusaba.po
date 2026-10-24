@@ -138,9 +138,6 @@ msgstr "Pomyślnie dodano board."
 msgid "Board successfully deleted."
 msgstr "Pomyślnie usunięto board."
 
-msgid "Board type:"
-msgstr "Typ boardu:"
-
 msgid "Boards"
 msgstr "Boardy"
 
@@ -567,9 +564,6 @@ msgstr "Brak widocznych boardów"
 msgid "Normal imageboard"
 msgstr "Zwykły imageboard"
 
-msgid "Oekaki imageboard"
-msgstr "Board oekaki"
-
 msgid "Old password"
 msgstr "Stare hasło"
 
@@ -857,9 +851,6 @@ msgstr "Sekcja, w której jest board. Używane do wyświetlania listy boardów n
 
 msgid "The style which will be set when the user first visits the board."
 msgstr "Styl, który zostanie użyty, gdy użytkownik poraz pierwszy odwiedzi board."
-
-msgid "The type of posts which will be accepted on this board.  A normal imageboard will feature image and extended format posts, a text board will have no images, and an Oekaki board will allow users to draw images and use them in their posts."
-msgstr "Typ postów akceptowanych na tym boardzie. Zwykły imageboard będzie obsługiwał obrazy i rozszerzone formaty, board tekstowy nie będzie miał możliwości wysłania obrazków, a board Oekaki pozwala użytkownikom na rysosowanie obrazów w przeglądarce i załączanie ich do postów."
 
 msgid "There are currently no bans."
 msgstr "Obecnie nie ma żadnych banów."

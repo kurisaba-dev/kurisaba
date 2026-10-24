@@ -180,9 +180,6 @@ msgstr "Boardi lisätty onnistuneesti"
 msgid "Board successfully deleted."
 msgstr "Boardi onnistuneesti poistettu"
 
-msgid "Board type:"
-msgstr "Boardin tyyppi:"
-
 msgid "Boards"
 msgstr "Boardit"
 
@@ -732,9 +729,6 @@ msgstr "Ei mitään"
 msgid "Normal imageboard"
 msgstr "Tavallinen imageboardi"
 
-msgid "Oekaki imageboard"
-msgstr "Oekaki imageboardi"
-
 msgid "Old password"
 msgstr "Vanha salasana"
 
@@ -1109,9 +1103,6 @@ msgstr "Alue jossa boardi on. Tätä käytetään näyttämään lista kaikista 
 
 msgid "The style which will be set when the user first visits the board."
 msgstr "Tyyli joka on asetettu, kun käviä kävi boardilla ensikertaa."
-
-msgid "The type of posts which will be accepted on this board.  A normal imageboard will feature image and extended format posts, a text board will have no images, and an Oekaki board will allow users to draw images and use them in their posts."
-msgstr "Viestin tyyppi, joka sallitaan tällä boardilla. Tavalliselle imageboardille voidaan lähettää kuvia, Tekstiboardille ei hyväksytä ollenkaan kuvia ja Oekaki imageboardilla kävijät saavat itse piirtää kuvia."
 
 msgid "There are currently no bans."
 msgstr "Ei banneja tällä hetkellä!"

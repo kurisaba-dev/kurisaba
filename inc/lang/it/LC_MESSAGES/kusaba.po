@@ -66,9 +66,6 @@ msgstr "Board aggiunta con successo."
 msgid "Board successfully deleted."
 msgstr "Board cancellata con successo"
 
-msgid "Board type:"
-msgstr "Tipo di board:"
-
 msgid "Can be left blank."
 msgstr "Può essere lasciato in bianco."
 

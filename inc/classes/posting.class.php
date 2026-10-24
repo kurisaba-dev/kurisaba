@@ -21,21 +21,6 @@
  */
 class Posting
 {
-    public function CheckOekaki()
-    {
-        global $board_class;
-        /* If oekaki seems to be in the url... */
-        if (isset($_POST['oekaki'])) {
-            /* See if it checks out and is a valid oekaki id */
-            if ($_POST['oekaki'] != '' && is_file(KU_CGIDIR . 'kusabaoek/' . $_POST['oekaki'] . '.png') && $board_class->board['type'] == '2') {
-                /* Set the variable to tell the script it is handling an oekaki posting, and the oekaki file which will be posted */
-                return KU_CGIDIR . 'kusabaoek/' . $_POST['oekaki'] . '.png';
-            }
-        }
-
-        return '';
-    }
-
     public function CheckReplyTime($post_message = '')
     {
         global $tc_db, $board_class;
@@ -84,27 +69,9 @@ class Posting
         }
     }
 
-    public function CheckValidPost($is_oekaki)
+    public function CheckValidPost()
     {
-        global $tc_db, $board_class;
-
-        if (
-            ( /* A message is set, or an image was provided */
-                isset($_POST['message']) ||
-                isset($_FILES['imagefile'])
-            ) || /* It is a validated oekaki posting */
-            $is_oekaki ||
-            ( /* It is a text board, meaning only a message is required */
-                $board_class->board['type'] == '1' &&
-                isset($_POST['message'])
-            ) || ( /* An embed ID was provided */
-                isset($_POST['embed'])
-            )
-        ) {
-            return true;
-        } else {
-            return false;
-        }
+        return isset($_POST['message']) || isset($_FILES['imagefile']) || isset($_POST['embed']);
     }
 
     public function CheckMessageLength($post_message = '')
@@ -331,30 +298,6 @@ class Posting
             }
         }
         return false;
-    }
-
-    public function GetPostTag()
-    {
-        global $board_class;
-
-        /* Check for and parse tags if one was provided, and they are enabled */
-        $post_tag = '';
-        $tags = unserialize(KU_TAGS);
-        if ($board_class->board['type'] == 3 && $tags != '' && isset($_POST['tag'])) {
-            if ($_POST['tag'] != '') {
-                $validtag = false;
-                while (list($tag, $tag_abbr) = each($tags)) {
-                    if ($tag_abbr == $_POST['tag']) {
-                        $validtag = true;
-                    }
-                }
-                if ($validtag) {
-                    $post_tag = $_POST['tag'];
-                }
-            }
-        }
-
-        return $post_tag;
     }
 
     public function CheckBlacklistedText()

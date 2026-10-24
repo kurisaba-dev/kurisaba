@@ -299,7 +299,7 @@ function TrimToPageLimit($board)
         // If the maximum pages setting is not zero (do not limit pages), find posts which are over the limit, and delete them
         $results = $tc_db->GetAll("SELECT `id`, `stickied` FROM `".KU_DBPREFIX."posts` WHERE `boardid` = " . $board['id'] . " AND `IS_DELETED` = 0 AND `parentid` = 0");
         $results_count = count($results);
-        if (calculatenumpages($board['type'], $results_count) >= $board['maxpages']) {
+        if (calculatenumpages($results_count) >= $board['maxpages']) {
             $board['maxthreads'] = ($board['maxpages'] * KU_THREADS);
             $numthreadsover = ($results_count - $board['maxthreads']);
             if ($numthreadsover > 0) {

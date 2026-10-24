@@ -96,26 +96,12 @@ function array_insert(&$array, $position, $insert_array)
     $array = array_merge($first_array, $insert_array, $array);
 }
 
-
 function cleanBoardName($board)
 {
     return preg_replace('/[^a-z]/', '', strtolower($board));
 }
 
-/**
- * Calculate the number of pages which will be needed for the supplied number of posts
- *
- * @param integer $boardtype Board type
- * @param integer $numposts Number of posts
- * @return integer Number of pages required
- */
-function calculatenumpages($boardtype, $numposts)
+function calculatenumpages($numposts)
 {
-    if ($boardtype == 1) {
-        return (floor($numposts / KU_THREADSTXT));
-    } elseif ($boardtype == 3) {
-        return (floor($numposts / 30));
-    }
-
     return (floor($numposts / KU_THREADS));
 }

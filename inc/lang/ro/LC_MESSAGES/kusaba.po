@@ -340,9 +340,6 @@ msgstr "Forum adăugat."
 msgid "Board successfully deleted."
 msgstr "Forum şters."
 
-msgid "Board type"
-msgstr "Tip de forum"
-
 msgid "Board"
 msgstr "Forum"
 
@@ -826,9 +823,6 @@ msgstr "Selectează pentru a ascunde secţiunea la accesare."
 msgid "If enabled, each post will display the poster's ID, which is a representation of their IP address."
 msgstr "Dacă alegi <strong>Da</strong>, fiecare răspuns va afişa ID-ul userului, adică o reprezentare a IP-ului său."
 
-msgid "If set to yes, a catalog.html file will be built with the other files, displaying the original picture of every thread in a box. This will only work on normal/oekaki imageboards."
-msgstr "Dacă alegi <strong>Da</strong>, va fi creat fişierul <strong>catalog.html</strong> care va afişa imaginile originale din fiecare discuţie. Funcţionează doar pe forumurile normale şi cele de Oekaki."
-
 msgid "If set to yes, new threads will not require an image to be posted."
 msgstr "Dacă alegi <strong>Da</strong>, discuţiile noi nu vor avea nevoie de o imagine."
 
@@ -1266,9 +1260,6 @@ msgstr "Numărul de imagini pe pagină"
 
 msgid "Number of posts to show per page"
 msgstr "Numărul de mesaje pe pagină"
-
-msgid "Oekaki imageboard"
-msgstr "Oekaki"
 
 msgid "Old password"
 msgstr "Parola veche"
@@ -1774,9 +1765,6 @@ msgstr "ID-ul e un răspuns, nu o discuţie."
 msgid "That IP has already been banned."
 msgstr "IP-ul este deja banat."
 
-msgid "That is not a Oekaki compatible board!"
-msgstr "Ăsta nu e un forum de Oekaki!"
-
 msgid "That name is for internal use. Please pick another."
 msgstr "Numele acesta este rezervat. Alege şi tu altceva."
 
@@ -1884,12 +1872,6 @@ msgstr "Stilul vizibil atunci când un user viziteaza pentru prima oară forumul
 
 msgid "The type of ban. A single IP can be banned by providing the full address. A whitelist ban prevents that IP from being banned. An IP range can be banned by providing the IP range you would like to ban, in this format: 123.123.12"
 msgstr "Tipul de banare. Un IP unic se poate bana folosind adresa lui completă. O listă albă <strong>previne banarea</strong> acelui IP. O serie de IP-uri banează toate IP-urile dependente; formatul este 123.123.12"
-
-msgid "The type of posts which will be accepted on this board. A normal imageboard will feature image and extended format posts, a text board will have no images, an Oekaki board will allow users to draw images and use them in their posts, and an Upload imageboard will be styled more towards file uploads."
-msgstr "Tipul de postări permise. Un imageboard normal va afişa imagini şi texte extinse; un forum text nu va avea imagini; un forum de Oekaki permite desenarea şi postarea de imagini, iar un forum de upload permite uploadarea de fişiere."
-
-msgid "The type of posts which will be accepted on this board. A normal imageboard will feature image and extended format posts, a text board will have no images, and an Oekaki board will allow users to draw images and use them in their posts."
-msgstr "Tipul de postări permise. Un imageboard normal va afişa imagini şi texte extinse; un forum text nu va avea imagini; un forum de Oekaki permite desenarea şi postarea de imagini."
 
 msgid "The uploaded file exceeds the upload_max_filesize directive (%s) in php.ini."
 msgstr "Fişierul postat e mai mare decât e specificat de directiva upload_max_filesize (%s) în php.ini."

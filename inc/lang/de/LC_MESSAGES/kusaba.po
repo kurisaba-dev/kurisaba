@@ -180,9 +180,6 @@ msgstr "Forum erfolgreich hinzugefügt."
 msgid "Board successfully deleted."
 msgstr "Forum erfolgreich gelöscht."
 
-msgid "Board type:"
-msgstr "Forumstyp:"
-
 msgid "Boards"
 msgstr "Foren"
 
@@ -732,9 +729,6 @@ msgstr "Keine"
 msgid "Normal imageboard"
 msgstr "Normales Bilderforum"
 
-msgid "Oekaki imageboard"
-msgstr "Oekaki Bilderforum"
-
 msgid "Old password"
 msgstr "Altes Passwort"
 
@@ -1115,9 +1109,6 @@ msgstr "Die Sektion in welcher sich das Forum befindet. Dadurch wird eine Liste 
 
 msgid "The style which will be set when the user first visits the board."
 msgstr "Der Stil welcher festgelegt wird, wenn der Benutzer das Forum zuerst besucht."
-
-msgid "The type of posts which will be accepted on this board.  A normal imageboard will feature image and extended format posts, a text board will have no images, and an Oekaki board will allow users to draw images and use them in their posts."
-msgstr "Die Art der Einträge welche in diesem Forum akzeptiert wird. Ein normales Bilderforum erlaubt Bilder- und erweiterte Formateinträge, ein Textforum wird keine Bilder haben, und ein Oekakiforum wird es Benutzern gestatten Bilder zu zeichnen und diese in ihren Einträgen zu verwenden."
 
 msgid "There are currently no bans."
 msgstr "Gegenwärtig sind keine Sperren angelegt."

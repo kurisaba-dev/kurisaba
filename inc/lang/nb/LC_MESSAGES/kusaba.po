@@ -123,9 +123,6 @@ msgstr "Kategoriopsjoner"
 msgid "Board successfully added."
 msgstr "Kategori lagt til."
 
-msgid "Board type:"
-msgstr "Kategoritype:"
-
 msgid "Boards"
 msgstr "Kategorier"
 
@@ -540,9 +537,6 @@ msgstr "Ingen"
 msgid "Normal imageboard"
 msgstr "Normal bildekategori"
 
-msgid "Oekaki imageboard"
-msgstr "Oekakibildekategori"
-
 msgid "Old password"
 msgstr "Gammelt passord"
 
@@ -830,9 +824,6 @@ msgstr "Seksjonen kategorien er i. Dette er brukt for å vise listen over katego
 
 msgid "The style which will be set when the user first visits the board."
 msgstr "Den stilen som vil bli benyttet når en bruker besøker kategorien for første gang."
-
-msgid "The type of posts which will be accepted on this board.  A normal imageboard will feature image and extended format posts, a text board will have no images, and an Oekaki board will allow users to draw images and use them in their posts."
-msgstr "Typer innlegg som vil bli akseptert i denne kategorien. En normal bildekategori vil inneholde bilder og formaterte innlegg, en tekstkategori vil ha ingen bilder, og en Oekakikategori vil tillate brukere å tegne bilder og bruke dem i innleggene sine."
 
 msgid "There are currently no bans."
 msgstr "Det er foreløpig ingen utestengelser."

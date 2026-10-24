@@ -8,7 +8,6 @@
 
 class Parse
 {
-    public $boardtype;
     public $parentid;
     public $id;
     public $boardid;
@@ -221,32 +220,19 @@ class Parse
         return $return;
     }
 
-    public function ColoredQuote($buffer, $boardtype)
+    public function ColoredQuote($buffer)
     {
         /* Add a \n to keep regular expressions happy */
         if (substr($buffer, -1, 1) != "\n") {
             $buffer .= "\n";
         }
-
-        if ($boardtype == 1) {
-            /* The css for text boards use 'quote' as the class for quotes */
-            $class = 'quote';
-            $linechar = '';
-        } else {
-            /* The css for imageboards use 'unkfunc' (???) as the class for quotes */
-            $class = 'unkfunc';
-            $linechar = "\n";
-        }
+        $class = 'unkfunc';
+        $linechar = "\n";
         $buffer = preg_replace('/^(&gt;[^>](.*))\n/m', '<span class="'.$class.'">\\1</span>' . $linechar, $buffer);
-        /* Remove the > from the quoted line if it is a text board */
-        if ($boardtype == 1) {
-            $buffer = str_replace('<span class="'.$class.'">&gt;', '<span class="'.$class.'">', $buffer);
-        }
-
         return $buffer;
     }
 
-    public function ClickableQuote($buffer, $board, $boardtype, $parentid, $boardid, $ispage = false)
+    public function ClickableQuote($buffer, $board, $parentid, $boardid, $ispage = false)
     {
         global $thread_board_return;
         $thread_board_return = $board;
@@ -267,13 +253,14 @@ class Parse
 
         return $buffer;
     }
+
     public function InterthreadProofLabel($matches)
     {
         global $tc_db, $ispage, $thread_board_return, $thread_board_id;
         if (in_array(strtoupper($matches[1]), array('OP'/*, 'ОП' */))) {
             $matches[1] = $this->parentid;
         }
-        if ($this->boardtype != 1 && is_numeric($matches[1])) {
+        if (is_numeric($matches[1])) {
             $result = $tc_db->GetAll("SELECT `parentid`, `ipmd5` FROM `".KU_DBPREFIX."posts` WHERE `boardid` = " . $this->boardid . " AND `id` = ".$tc_db->qstr($matches[1]));
             if (count($result) > 0) {
                 $result = $result[0];
@@ -290,30 +277,23 @@ class Parse
         }
         return $matches[0];
     }
+
     public function InterboardProofLabel($matches)
     {
         global $tc_db;
-        $result = $tc_db->GetAll("SELECT `id`, `type` FROM `".KU_DBPREFIX."boards` WHERE `name` = ".$tc_db->qstr($matches[1])."");
-        if ($result[0]["type"] != '') {
-            $result2 = $tc_db->GetAll("SELECT `parentid`, `ipmd5` FROM `".KU_DBPREFIX."posts` WHERE `boardid` = " . $result[0]['id'] . " AND `id` = ".$tc_db->qstr($matches[2])."");
-            if (count($result2) > 0) {
-                $result2 = $result2[0];
-                $proven = ($result2['ipmd5'] == $this->ipmd5) ? 'proven' : 'disproven';
-                if ($result2['parentid'] == 0) {
-                    $realid = $matches[2];
-                } else {
-                    $realid = $result2['parentid'];
-                }
-
-                if ($result[0]["type"] != 1) {
-                    return '<a href="'.KU_BOARDSFOLDER.$matches[1].'/res/'.$realid.'.html#'.$matches[2].'" class="ref|' . $matches[1] . '|' . $realid . '|' . $matches[2] . ' prooflabel '.$proven.'">'.$matches[0].'</a>';
-                } else {
-                    return '<a href="'.KU_BOARDSFOLDER.$matches[1].'/res/'.$realid.'.html" class="ref|' . $matches[1] . '|' . $realid . '|' . $realid . ' prooflabel '.$proven.'">'.$matches[0].'</a>';
-                }
+        $result = $tc_db->GetAll("SELECT `id` FROM `".KU_DBPREFIX."boards` WHERE `name` = ".$tc_db->qstr($matches[1])."");
+        $result2 = $tc_db->GetAll("SELECT `parentid`, `ipmd5` FROM `".KU_DBPREFIX."posts` WHERE `boardid` = " . $result[0]['id'] . " AND `id` = ".$tc_db->qstr($matches[2])."");
+        if (count($result2) > 0) {
+            $result2 = $result2[0];
+            $proven = ($result2['ipmd5'] == $this->ipmd5) ? 'proven' : 'disproven';
+            if ($result2['parentid'] == 0) {
+                $realid = $matches[2];
             } else {
-                return $matches[0];
+                $realid = $result2['parentid'];
             }
-
+            return '<a href="'.KU_BOARDSFOLDER.$matches[1].'/res/'.$realid.'.html#'.$matches[2].'" class="ref|' . $matches[1] . '|' . $realid . '|' . $matches[2] . ' prooflabel '.$proven.'">'.$matches[0].'</a>';
+        } else {
+            return $matches[0];
         }
         return $matches[0];
     }
@@ -328,7 +308,7 @@ class Parse
             $matches[1] = substr($matches[1], 0, -1);
             $matches[0] = substr($matches[0], 0, -1);
         }
-        if ($this->boardtype != 1 && is_numeric($matches[1])) {
+        if (is_numeric($matches[1])) {
             $query = "SELECT `parentid` FROM `".KU_DBPREFIX."posts` WHERE `boardid` = " . $this->boardid . " AND `id` = ".$tc_db->qstr($matches[1]);
             $result = $tc_db->GetOne($query);
             if ($result !== '') {
@@ -366,26 +346,16 @@ class Parse
     public function InterboardQuoteCheck($matches)
     {
         global $tc_db;
-        $result = $tc_db->GetAll("SELECT `id`, `type` FROM `".KU_DBPREFIX."boards` WHERE `name` = ".$tc_db->qstr($matches[1])."");
-        if ($result[0]["type"] != '') {
-            $result2 = $tc_db->GetOne("SELECT `parentid` FROM `".KU_DBPREFIX."posts` WHERE `boardid` = " . $result[0]['id'] . " AND `id` = ".$tc_db->qstr($matches[2])."");
-            if ($result2 != '') {
-                if ($result2 == 0) {
-                    $realid = $matches[2];
-                } else {
-                    if ($result[0]['type'] != 1) {
-                        $realid = $result2;
-                    }
-                }
-
-                if ($result[0]["type"] != 1) {
-                    return '<a href="'.KU_BOARDSFOLDER.$matches[1].'/res/'.$realid.'.html#'.$matches[2].'" class="ref|' . $matches[1] . '|' . $realid . '|' . $matches[2] . '">'.$matches[0].'</a>';
-                } else {
-                    return '<a href="'.KU_BOARDSFOLDER.$matches[1].'/res/'.$realid.'.html" class="ref|' . $matches[1] . '|' . $realid . '|' . $realid . '">'.$matches[0].'</a>';
-                }
+        $result = $tc_db->GetAll("SELECT `id` FROM `".KU_DBPREFIX."boards` WHERE `name` = ".$tc_db->qstr($matches[1])."");
+        $result2 = $tc_db->GetAll("SELECT `parentid` FROM `".KU_DBPREFIX."posts` WHERE `boardid` = " . $result[0]['id'] . " AND `id` = ".$tc_db->qstr($matches[2])."");
+        if (count($result2) > 0) {
+            if ($result2[0]['parentid'] == 0) {
+                $realid = $matches[2];
+            } else {
+                $realid = $result2[0]['parentid'];
             }
+            return '<a href="'.KU_BOARDSFOLDER.$matches[1].'/res/'.$realid.'.html#'.$matches[2].'" class="ref|' . $matches[1] . '|' . $realid . '|' . $matches[2] . '">'.$matches[0].'</a>';
         }
-
         return $matches[0];
     }
 
@@ -522,10 +492,9 @@ class Parse
         $ret .= '<span class="dice" title="'.$desc.'">'.$expr.' &rarr; <b>'.$res.'</b></span>';
         return $ret;
     }
-    public function ParsePost($message, $board, $boardtype, $parentid, $boardid, $ispage = false, $useragent = '', $dice = '', $ipmd5 = '')
+    public function ParsePost($message, $board, $parentid, $boardid, $ispage = false, $useragent = '', $dice = '', $ipmd5 = '')
     {
         $message = str_replace("\r", "", $message);
-        $this->boardtype = $boardtype;
         $this->parentid = $parentid;
         $this->boardid = $boardid;
         $this->ipmd5 = $ipmd5;
@@ -533,8 +502,8 @@ class Parse
         $message = htmlspecialchars($message, ENT_QUOTES);
         $message = $this->BBCode($message);
         $message = preg_replace("/ *\\[hr\\]/i", "<br /><hr />\n", $message);
-        $message = $this->ClickableQuote($message, $board, $boardtype, $parentid, $boardid, $ispage);
-        $message = $this->ColoredQuote($message, $boardtype);
+        $message = $this->ClickableQuote($message, $board, $parentid, $boardid, $ispage);
+        $message = $this->ColoredQuote($message);
         if (KU_MAKELINKS) {
             $message = $this->MakeClickable($message);
         }

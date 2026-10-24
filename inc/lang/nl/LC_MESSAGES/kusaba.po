@@ -135,9 +135,6 @@ msgstr "Board succesvol toegevoegd."
 msgid "Board successfully deleted."
 msgstr "Board succesvol verwijderd."
 
-msgid "Board type:"
-msgstr "Boardtype:"
-
 msgid "Boards"
 msgstr "Boards"
 
@@ -564,9 +561,6 @@ msgstr "Geen"
 msgid "Normal imageboard"
 msgstr "Normaal afbeeldingenboard"
 
-msgid "Oekaki imageboard"
-msgstr "Oekaki afbeeldingenboard"
-
 msgid "Old password"
 msgstr "Oud wachtwoord"
 
@@ -845,9 +839,6 @@ msgstr "De sectie waarin dit board zich bevind. DIt wordt gebruikt voor het weer
 
 msgid "The style which will be set when the user first visits the board."
 msgstr "De stijl die ingesteld wordt wanneer de gebruiker dit board voor het eerst bezoekt."
-
-msgid "The type of posts which will be accepted on this board.  A normal imageboard will feature image and extended format posts, a text board will have no images, and an Oekaki board will allow users to draw images and use them in their posts."
-msgstr "Het type berichten dat geaccepteert wordt op dit board. Een normaal afbeeldingenboard accepteert afbeeldingen en berichten met uitgebreid tekstformaat. In een tekstboard kunnen geen afbeeldingen worden geplaatst en in een Oekakiboard mogen gebruikers zelf online tekeningen maken en in hun berichten plaatsen."
 
 msgid "There are currently no bans."
 msgstr "Er zijn momenteel geen bans."

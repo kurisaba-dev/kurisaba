@@ -180,9 +180,6 @@ msgstr "Board añadido con éxito."
 msgid "Board successfully deleted."
 msgstr "Boar eliminado con éxito."
 
-msgid "Board type:"
-msgstr "Tipo de board:"
-
 msgid "Boards"
 msgstr "Boards"
 
@@ -729,9 +726,6 @@ msgstr "Ninguno"
 msgid "Normal imageboard"
 msgstr "Imageboard normal"
 
-msgid "Oekaki imageboard"
-msgstr "Oekaki imageboard"
-
 msgid "Old password"
 msgstr "Contraseña actual"
 
@@ -1109,9 +1103,6 @@ msgstr "Sección en la que se encuentra el board. Esto se usa para mostrar  la l
 
 msgid "The style which will be set when the user first visits the board."
 msgstr "Estilo que verá el usuario en su primera visita al board."
-
-msgid "The type of posts which will be accepted on this board.  A normal imageboard will feature image and extended format posts, a text board will have no images, and an Oekaki board will allow users to draw images and use them in their posts."
-msgstr "Tipo de posts que serán aceptados en este board. Un imageboard normal mostrará imagenes y posts de formato extendido; un board textual no tendrá imagenes; Un board de Oekaki permitirá a los usuarios dibujar imagenes y usarlas en sus posts."
 
 msgid "There are currently no bans."
 msgstr "Actualmene no hay ningún ban."

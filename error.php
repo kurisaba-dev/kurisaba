@@ -141,14 +141,7 @@ elseif (preg_match("/^\/([a-z]+)\/([0-9]+)\.html$/", $address, $matches)) {
             do_redirect(KU_BOARDSPATH . '/banned.php');
         }
         $postsperpage = KU_THREADS;
-        if ($board_class->board['type'] == 1) {
-            $postsperpage = KU_THREADSTXT;
-        } elseif ($board_class->board['type'] == 3) {
-            $postsperpage = 30;
-        }
-
         $threads_on_page = $tc_db->GetOne("SELECT COUNT(*) FROM `" . KU_DBPREFIX . "posts` WHERE `boardid` = " . $board_class->board['id'] . " AND `parentid` = 0 AND `IS_DELETED` = 0 ORDER BY `stickied` DESC, `bumped` DESC LIMIT " . ($postsperpage) . " OFFSET " . ($postsperpage * $i));
-
         if ($threads_on_page > 0) {
             http_response_code(200);
             header("Status: 200 OK");

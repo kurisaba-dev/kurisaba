@@ -180,9 +180,6 @@ msgstr "Tahvel edukalt lisatud."
 msgid "Board successfully deleted."
 msgstr "Tahvel edukalt kustutatud."
 
-msgid "Board type:"
-msgstr "Tahvli tüüp:"
-
 msgid "Boards"
 msgstr "Tahvlid"
 
@@ -729,9 +726,6 @@ msgstr "Puudub"
 msgid "Normal imageboard"
 msgstr "Tavaline pilditahvel"
 
-msgid "Oekaki imageboard"
-msgstr "Oekaki joonistustahvel"
-
 msgid "Old password"
 msgstr "Vana parool"
 
@@ -1106,9 +1100,6 @@ msgstr "Osa, millel tahvel on. See on kasutatud tahvlite nimekirja näitamiseks 
 
 msgid "The style which will be set when the user first visits the board."
 msgstr "See stiil säetakse tahvli esimesel külastusel."
-
-msgid "The type of posts which will be accepted on this board.  A normal imageboard will feature image and extended format posts, a text board will have no images, and an Oekaki board will allow users to draw images and use them in their posts."
-msgstr "Postituste tüüp, mis on sellel tahvlil lubatud. Tavaline pilditahvel lubab pilte ja laiendatud formaadiga postitusi, tekstitahvlil ei ole pilte ja Oekaki tahvel lubab kasutajatel joonistada pilte ja kasutada neid postitustes."
 
 msgid "There are currently no bans."
 msgstr "Hetkel tõkendid puuduvad."

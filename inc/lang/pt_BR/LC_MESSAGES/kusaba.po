@@ -180,9 +180,6 @@ msgstr "Fórum adicionado com sucesso."
 msgid "Board successfully deleted."
 msgstr "Fórum apagado com sucesso."
 
-msgid "Board type:"
-msgstr "Tipo do fórum."
-
 msgid "Boards"
 msgstr "Fóruns"
 
@@ -729,9 +726,6 @@ msgstr "Nenhum"
 msgid "Normal imageboard"
 msgstr "Fórum de imagens normal"
 
-msgid "Oekaki imageboard"
-msgstr "Fórum de imagens oekaki"
-
 msgid "Old password"
 msgstr "Senha antiga"
 
@@ -1109,9 +1103,6 @@ msgstr "A seção em que o fórum está. Usado para na lista de fóruns do topo 
 
 msgid "The style which will be set when the user first visits the board."
 msgstr "O estilo que será apresentado na primeira visita ao fórum."
-
-msgid "The type of posts which will be accepted on this board.  A normal imageboard will feature image and extended format posts, a text board will have no images, and an Oekaki board will allow users to draw images and use them in their posts."
-msgstr "O tipo de posts que serão aceitos neste fórum. Um fórum de imagens normal aceitará posts de imagens e alguns formatos, um fórum de texto não terá imagens, e um oekaki permitirá que os usuários desenhem imagens e as usem em seus posts."
 
 msgid "There are currently no bans."
 msgstr "Não existe nenhuma expulsão atualmente"

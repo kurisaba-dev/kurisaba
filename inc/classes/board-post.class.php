@@ -70,9 +70,6 @@ class Board
                 $this->boardids[$line['name']] = $line['id'];
             }
 
-            // Type
-            $types = array('img', 'txt', 'oek', 'upl');
-            $this->board['text_readable'] = $types[$this->board['type']];
             if ($extra) {
                 // Boardlist
                 $this->board['boardlist'] = $this->DisplayBoardList();
@@ -80,10 +77,7 @@ class Board
                 // Get the unique posts for this board
                 $this->board['uniqueposts']   = $tc_db->GetOne("SELECT COUNT(DISTINCT `ipmd5`) FROM `" . KU_DBPREFIX . "posts` WHERE `boardid` = " . $this->board['id']. " AND  `IS_DELETED` = 0");
 
-                if ($this->board['type'] != 1) {
-                    $this->board['filetypes_allowed'] = $tc_db->GetAll("SELECT ".KU_DBPREFIX."filetypes.filetype FROM ".KU_DBPREFIX."boards, ".KU_DBPREFIX."filetypes, ".KU_DBPREFIX."board_filetypes WHERE ".KU_DBPREFIX."boards.id = " . $this->board['id'] . " AND ".KU_DBPREFIX."board_filetypes.boardid = " . $this->board['id'] . " AND ".KU_DBPREFIX."board_filetypes.typeid = ".KU_DBPREFIX."filetypes.id ORDER BY ".KU_DBPREFIX."filetypes.filetype ASC;");
-                }
-
+                $this->board['filetypes_allowed'] = $tc_db->GetAll("SELECT ".KU_DBPREFIX."filetypes.filetype FROM ".KU_DBPREFIX."boards, ".KU_DBPREFIX."filetypes, ".KU_DBPREFIX."board_filetypes WHERE ".KU_DBPREFIX."boards.id = " . $this->board['id'] . " AND ".KU_DBPREFIX."board_filetypes.boardid = " . $this->board['id'] . " AND ".KU_DBPREFIX."board_filetypes.typeid = ".KU_DBPREFIX."filetypes.id ORDER BY ".KU_DBPREFIX."filetypes.filetype ASC;");
                 if ($this->board['locale'] && $this->board['locale'] != KU_LOCALE) {
                     changeLocale($this->board['locale']);
                 }
@@ -117,19 +111,10 @@ class Board
             $exclude = ' AND `id` NOT IN ('.$this->board['hiddenthreads'].')';
         }
 
-
         $numposts = $tc_db->GetAll("SELECT COUNT(*) FROM `" . KU_DBPREFIX . "posts` WHERE `boardid` = " . $this->board['id'] . $exclude . " AND `parentid` = 0 AND `IS_DELETED` = 0");
-
-        if ($this->board['type'] == 1) {
-            $postsperpage = KU_THREADSTXT;
-        } elseif ($this->board['type'] == 3) {
-            $postsperpage = 30;
-        } else {
-            $postsperpage = KU_THREADS;
-        }
-
+        $postsperpage = KU_THREADS;
         $liststooutput = 0;
-        $totalpages = calculatenumpages($this->board['type'], ($numposts[0][0] - 1));
+        $totalpages = calculatenumpages($numposts[0][0] - 1);
         if ($totalpages == '-1') {
             $totalpages = 0;
         }
@@ -173,28 +158,20 @@ class Board
             $thread['n'] = 1;
             $thread = $this->BuildPost($thread, true, $pregen_replies_q);
 
-            $posts_all = $tc_db->GetAll("SELECT * FROM `" . KU_DBPREFIX . "posts` WHERE `boardid` = " . $this->board['id']." AND `parentid` = ".$thread['id']." " . (($this->board['type'] != 1) ? ("AND `IS_DELETED` = 0") : ("")) . " ORDER BY `id` ASC ");
-            $n_stickied = ($thread['stickied'] == 1) ? (KU_REPLIESSTICKY) : (KU_REPLIES);
-            if ($this->board['type'] != 3) {
-                $posts = array();
-                $nlast = count($posts_all) + 1;
-                for ($j = 0; $j < $n_stickied; $j++) {
-                    $post = array_pop($posts_all);
-                    if ($post == null) {
-                        break;
-                    }
-                    $post['n'] = $nlast - $j;
-                    array_unshift($posts, $this->BuildPost($post, true, $pregen_replies_q));
+            $posts_all = $tc_db->GetAll("SELECT * FROM `" . KU_DBPREFIX . "posts` WHERE `boardid` = " . $this->board['id']." AND `parentid` = ".$thread['id']." AND `IS_DELETED` = 0 ORDER BY `id` ASC ");
+            $n_stickied = ($thread['stickied'] == 1) ? KU_REPLIESSTICKY : KU_REPLIES;
+            $posts = array();
+            $nlast = count($posts_all) + 1;
+            for ($j = 0; $j < $n_stickied; $j++) {
+                $post = array_pop($posts_all);
+                if ($post == null) {
+                    break;
                 }
-                //array_reverse($posts);
-                array_unshift($posts, $thread);
-                $newposts[] = $posts;
-            } else {
-                if (!$thread['tag']) {
-                    $thread['tag'] = '*';
-                }
-                $newposts[] = $thread;
+                $post['n'] = $nlast - $j;
+                array_unshift($posts, $this->BuildPost($post, true, $pregen_replies_q));
             }
+            array_unshift($posts, $thread);
+            $newposts[] = $posts;
             $replycount = count($posts_all);
             $imgcount = 0;
             foreach ($posts_all as $post_test) { // Ending posts are popped out already.
@@ -202,17 +179,11 @@ class Board
                     $imgcount++;
                 }
             }
-
-            // Workaround for upload boards
-            if ($this->board['type'] == 3) {
-                $newposts[$k]['replies'] = $replycount;
-            } else {
-                $newposts[$k][0]['replies'] = $replycount;
-                $newposts[$k][0]['images'] = $imgcount;
-            }
+            $newposts[$k][0]['replies'] = $replycount;
+            $newposts[$k][0]['images'] = $imgcount;
         }
 
-        if ($this->board['type'] == 0 && !isset($embeds)) {
+        if (!isset($embeds)) {
             $embeds = $tc_db->GetAll("SELECT * FROM `" . KU_DBPREFIX . "embeds`");
             $this->dwoo_data->assign('embeds', $embeds);
         }
@@ -228,8 +199,8 @@ class Board
         $this->dwoo_data->assign('posts', $newposts);
         $this->dwoo_data->assign('file_path', KU_BOARDSPATH . '/' . $this->board['name']);
 
-        $content = $this->dwoo->get(KU_TEMPLATEDIR . '/' . $this->board['text_readable'] . '_board_page.tpl', $this->dwoo_data);
-        $footer = $this->Footer(false, (microtime_float() - $executiontime_start_page), (($this->board['type'] == 1) ? (true) : (false)));
+        $content = $this->dwoo->get(KU_TEMPLATEDIR . '/img_board_page.tpl', $this->dwoo_data);
+        $footer = $this->Footer(microtime_float() - $executiontime_start_page);
         $content = $header.$postbox.$content.$footer;
 
         $content = str_replace("\t", '', $content);
@@ -320,7 +291,7 @@ class Board
 
         $this->dwoo_data->assign('iscatalog', 1);
         $catalog_page .= '</tr>' . "\n" . '</table><br /><hr />' .
-        $this->Footer(false, (microtime_float() - $executiontime_start_catalog));
+        $this->Footer(microtime_float() - $executiontime_start_catalog);
         print $catalog_head.$catalog_page;
         $this->dwoo_data->assign('iscatalog', 0);
     }
@@ -336,7 +307,7 @@ class Board
         }
         $embeds = array();
         $numimages = 0;
-        if ($this->board['type'] != 1 && !$embeds) {
+        if (!$embeds) {
             $embeds = $tc_db->GetAll("SELECT * FROM `" . KU_DBPREFIX . "embeds`");
             $this->dwoo_data->assign('embeds', $embeds);
             foreach ($embeds as $embed) {
@@ -347,10 +318,10 @@ class Board
 
         $executiontime_start_thread = microtime_float();
         // Build only that thread
-        $thread = $tc_db->GetAll("SELECT * FROM `" . KU_DBPREFIX . "posts` WHERE `boardid` = " . $this->board['id'] . " AND (`id` = " . $id . " OR `parentid` = " . $id . ") " . (($this->board['type'] != 1) ? ("AND `IS_DELETED` = 0") : ("")) . " ORDER BY `id` ASC");
+        $thread = $tc_db->GetAll("SELECT * FROM `" . KU_DBPREFIX . "posts` WHERE `boardid` = " . $this->board['id'] . " AND (`id` = " . $id . " OR `parentid` = " . $id . ") AND `IS_DELETED` = 0 ORDER BY `id` ASC");
         $pregen_replies_q = $tc_db->GetAll("SELECT * FROM `".KU_DBPREFIX."answers` WHERE `to_boardid` = '" . $this->board['id'] . "' AND `to_parentid` = " . $id);
 
-        if (count($thread) > 0 && ($this->board['type'] != 1 || ((isset($thread[0]['IS_DELETED']) && $thread[0]['IS_DELETED'] == 0) || (isset($thread[0]['is_deleted']) && $thread[0]['is_deleted'] == 0)))) {
+        if (count($thread) > 0) {
             foreach ($thread as $key => $post) {
                 if (($post['file_type'] == 'jpg' || $post['file_type'] == 'gif' || $post['file_type'] == 'webp' || $post['file_type'] == 'png') && $post['parentid'] != 0) {
                     $numimages++;
@@ -363,19 +334,16 @@ class Board
             $postbox = $this->Postbox($id);
             $this->dwoo_data->assign('numimages', $numimages);
             $header = str_replace("<!sm_threadid>", $id, $header);
-
-            if ($this->board['type'] != 2) {
-                $postbox = str_replace("<!sm_threadid>", $id, $postbox);
-            }
+            $postbox = str_replace("<!sm_threadid>", $id, $postbox);
 
             $this->dwoo_data->assign('threadid', $thread[0]['id']);
             $this->dwoo_data->assign('fullposts', $thread);
             $this->dwoo_data->assign('posts', $thread);
             $this->dwoo_data->assign('file_path', KU_BOARDSPATH . '/' . $this->board['name']);
 
-            $postbox = $this->dwoo->get(KU_TEMPLATEDIR . '/' . $this->board['text_readable'] . '_reply_header.tpl', $this->dwoo_data).$postbox;
+            $postbox = $this->dwoo->get(KU_TEMPLATEDIR . '/img_reply_header.tpl', $this->dwoo_data).$postbox;
             if (!isset($footer)) {
-                $footer = $this->Footer(false, microtime_float() - $executiontime_start_thread, $this->board['type'] == 1);
+                $footer = $this->Footer(microtime_float() - $executiontime_start_thread);
             }
 
             $postnum_rounded_to_1k = floor($tc_db->GetOne("SELECT COUNT(*) FROM `" . KU_DBPREFIX . "posts` WHERE `boardid` = 9") / 1000) * 1000;
@@ -425,7 +393,7 @@ class Board
                     exitWithErrorPage('Слишком мало постов в треде', 'Убери из строки запроса модификаторы +50 или -100.');
                 }
             } else {
-                $content = $this->dwoo->get(KU_TEMPLATEDIR . '/' . $this->board['text_readable'] . '_thread.tpl', $this->dwoo_data);
+                $content = $this->dwoo->get(KU_TEMPLATEDIR . '/img_thread.tpl', $this->dwoo_data);
                 $content = $header.$postbox.$content.$footer;
                 $content = str_replace("\t", '', $content);
                 $content = str_replace("&nbsp;\r\n", '&nbsp;', $content);
@@ -482,13 +450,8 @@ class Board
         // (You) indicator in message
         $post['message'] = preg_replace_callback('/\<a [^\<\>]* class\=\\\"ref\|([^\|]*)\|([^\|]*)\|([^"]*)\\\"\>.*?\<\/a\>/', array(&$this, 'replace_reflinks'), $post['message']);
 
-        if ($this->board['type'] == 1 && ((isset($post['IS_DELETED']) && $post['IS_DELETED'] == 1) || (isset($post['is_deleted']) && $post['is_deleted'] == 1))) {
-            $post['name'] = '';
-            $post['email'] = '';
-            $post['tripcode'] .= _gettext('Deleted');
-            $post['message'] = '<font color="gray">'._gettext('This post has been deleted.').'</font>';
-        }
         $dateEmail = (empty($this->board['anonymous'])) ? $post['email'] : 0;
+
         //by Snivy
         if (KU_CUTPOSTS) {
             $post['message'] = stripslashes(formatLongMessage($post['message'], $this->board['name'], (($post['parentid'] == 0) ? ($post['id']) : ($post['parentid'])), $page, $post['id']));
@@ -676,15 +639,8 @@ class Board
 
         $ad_top = 185;
         $ad_right = 25;
-        if ($this->board['type'] == 1) {
-            $ad_top -= 50;
-        } else {
-            if ($replythread != 0) {
-                $ad_top += 50;
-            }
-        }
-        if ($this->board['type'] == 2) {
-            $ad_top += 40;
+        if ($replythread != 0) {
+            $ad_top += 50;
         }
         $this->dwoo_data->assign('title', $tpl['title']);
         $this->dwoo_data->assign('htmloptions', $tpl['htmloptions']);
@@ -694,18 +650,13 @@ class Board
         $this->dwoo_data->assign('board', $this->board);
         $this->dwoo_data->assign('replythread', $replythread);
         $this->dwoo_data->assign('faq_enabled', $faq_enabled);
-        if ($this->board['type'] != 1) {
-            $styles =  explode(':', KU_STYLES);
-            $defaultstyle = $this->board['defaultstyle'];
-            if (empty($defaultstyle)) {
-                $defaultstyle = KU_DEFAULTSTYLE;
-            }
-            $this->dwoo_data->assign('ku_styles', $styles);
-            $this->dwoo_data->assign('ku_defaultstyle', $defaultstyle);
-        } else {
-            $this->dwoo_data->assign('ku_styles', explode(':', KU_TXTSTYLES));
-            $this->dwoo_data->assign('ku_defaultstyle', (!empty($this->board['defaultstyle']) ? ($this->board['defaultstyle']) : (KU_DEFAULTTXTSTYLE)));
+        $styles =  explode(':', KU_STYLES);
+        $defaultstyle = $this->board['defaultstyle'];
+        if (empty($defaultstyle)) {
+            $defaultstyle = KU_DEFAULTSTYLE;
         }
+        $this->dwoo_data->assign('ku_styles', $styles);
+        $this->dwoo_data->assign('ku_defaultstyle', $defaultstyle);
         $this->dwoo_data->assign('boardlist', $this->board['boardlist']);
         $this->dwoo_data->assign('maxfilesize', $this->board['maximagesize']);
 
@@ -719,55 +670,10 @@ class Board
         $this->dwoo_data->assign('captchalang', $captchalang);
         $this->dwoo_data->assign('captchaid', KU_MTCAPTCHA_PUBKEY);
 
-        if ($this->board['type'] != 1) {
-            $header = $this->dwoo->get(KU_TEMPLATEDIR . '/' . $this->board['text_readable'] . '_header.tpl', $this->dwoo_data);
-        } else {
-            if ($liststooutput == -1) {
-                $this->dwoo_data->assign('isindex', true);
-            } else {
-                $this->dwoo_data->assign('isindex', false);
-            }
-            if ($replythread != 0) {
-                $this->dwoo_data->assign('isthread', true);
-            }
-            $header = $this->dwoo->get(KU_TEMPLATEDIR . '/txt_header.tpl', $this->dwoo_data);
-
-            if ($replythread == 0) {
-                $startrecord = ($liststooutput >= 0 || $this->board['compactlist']) ? 40 : KU_THREADSTXT ;
-                $threads = $tc_db->GetAll("SELECT * FROM `" . KU_DBPREFIX . "posts` WHERE `boardid` = " . $tc_db->qstr($this->board['id']) . " AND `parentid` = 0 AND `IS_DELETED` = 0 ORDER BY `stickied` DESC, `bumped` DESC LIMIT " . $startrecord . " OFFSET " . $liststart);
-                foreach ($threads as $key => $thread) {
-                    $replycount = $tc_db->GetOne("SELECT COUNT(`id`) FROM `" . KU_DBPREFIX . "posts` WHERE `boardid` = " . $tc_db->qstr($this->board['id']) . " AND `parentid` = " . $thread['id']);
-                    $threads[$key]['replies'] = $replycount;
-                }
-                $this->dwoo_data->assign('threads', $threads);
-                $header .= $this->dwoo->get(KU_TEMPLATEDIR . '/txt_threadlist.tpl', $this->dwoo_data);
-            }
-        }
+        $header = $this->dwoo->get(KU_TEMPLATEDIR . '/img_header.tpl', $this->dwoo_data);
 
         return $global_header.$header;
     }
-
-    /**
-     * Build the page header for an oekaki posting
-     *
-     * @param integer $replyto The ID of the thread being replied to.  0 for a new thread
-     */
-    public function OekakiHeader($replyto, $postoek)
-    {
-        $executiontime_start = microtime_float();
-        $this->InitializeDwoo();
-
-        $page = $this->PageHeader();
-        $this->dwoo_data->assign('replythread', $replyto);
-        $page .= $this->Postbox($replyto);
-
-        $executiontime_stop = microtime_float();
-
-        $page .= $this->Footer(false, ($executiontime_stop - $executiontime_start));
-
-        $this->PrintPage('', $page, true);
-    }
-
 
     public function ProduceSmileImages($add = '')
     {
@@ -805,28 +711,11 @@ class Board
     public function Postbox($replythread = 0)
     {
         global $tc_db;
-        $postbox = '';
-
-        if ($this->board['type'] == 2 && $replythread > 0) {
-            $oekposts = $tc_db->GetAll("SELECT `id` FROM `" . KU_DBPREFIX."posts` WHERE `boardid` = " . $this->board['id']." AND (`id` = ".$replythread." OR `parentid` = ".$replythread.") AND `file` != '' AND `file` != 'removed' AND `file_type` IN ('jpg', 'gif', 'png', 'webp') AND `IS_DELETED` = 0 ORDER BY `parentid` ASC, `timestamp` ASC");
-            $this->dwoo_data->assign('oekposts', $oekposts);
-        }
-
         $captchalang = $_COOKIE['captchalang'];
         $this->dwoo_data->assign('captchalang', $captchalang);
         $this->dwoo_data->assign('captchaid', $captchalang == 'mt' ? KU_MTCAPTCHA_PUBKEY : rand() / getrandmax());
         $this->dwoo_data->assign('smile_images', $this->ProduceSmileImages());
-
-        if (($this->board['type'] == 1 && $replythread == 0) || $this->board['type'] != 1) {
-            $pb_tpl = KU_TEMPLATEDIR . '/' . $this->board['text_readable'] . '_post_box.tpl';
-            if ($_COOKIE["kudev"] === "1") {
-                $pb_tpl = KU_TEMPLATEDIR . '/' . $this->board['text_readable'] . '_post_box-dev.tpl';
-                echo "kudev mode on: " . $_COOKIE["kudev"];
-            }
-
-            $postbox = $this->dwoo->get($pb_tpl, $this->dwoo_data);
-        }
-        return $postbox;
+        return $this->dwoo->get(KU_TEMPLATEDIR . '/img_post_box.tpl', $this->dwoo_data);
     }
 
     /**
@@ -866,17 +755,11 @@ class Board
      * @param boolean $hide_extra Hide extra footer information, and display the manage link
      * @return string The generated footer
      */
-    public function Footer($noboardlist = false, $executiontime = '', $hide_extra = false)
+    public function Footer($executiontime)
     {
         global $tc_db, $dwoo, $dwoo_data;
-        $footer = '';
-        if ($hide_extra || $noboardlist) {
-            $this->dwoo_data->assign('boardlist', '');
-        }
-        if ($executiontime != '') {
-            $this->dwoo_data->assign('executiontime', round($executiontime, 2));
-        }
-        $footer = $this->dwoo->get(KU_TEMPLATEDIR . '/' . $this->board['text_readable'] . '_footer.tpl', $this->dwoo_data);
+        $this->dwoo_data->assign('executiontime', round($executiontime, 2));
+        $footer = $this->dwoo->get(KU_TEMPLATEDIR . '/img_footer.tpl', $this->dwoo_data);
         $footer .= $this->dwoo->get(KU_TEMPLATEDIR . '/global_board_footer.tpl', $this->dwoo_data);
         return $footer;
     }

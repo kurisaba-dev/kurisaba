@@ -888,25 +888,11 @@ class Manage
             $tpl_page .= '<hr />'. _gettext('Deleting unused images.') .'<hr />';
             $this->delunusedimages(true);
             $tpl_page .= '<hr />'. _gettext('Removing posts deleted more than one week ago from the database.') .'<hr />';
-            $results = $tc_db->GetAll("SELECT `name`, `type`, `id` FROM `" . KU_DBPREFIX . "boards`");
+            $results = $tc_db->GetAll("SELECT `name`, `id` FROM `" . KU_DBPREFIX . "boards`");
             foreach ($results as $line) {
-                if ($line['type'] != 1) {
-                    $tc_db->Execute("DELETE FROM `" . KU_DBPREFIX . "posts` WHERE `boardid` = " . $line['id'] . " AND `IS_DELETED` = 1 AND `deleted_timestamp` < " . ((time() + KU_ADDTIME) - 604800) . "");
-                }
+                $tc_db->Execute("DELETE FROM `" . KU_DBPREFIX . "posts` WHERE `boardid` = " . $line['id'] . " AND `IS_DELETED` = 1 AND `deleted_timestamp` < " . ((time() + KU_ADDTIME) - 604800) . "");
             }
             $tpl_page .= _gettext('Optimizing all tables in database.') .'<hr />';
-            if (KU_DBTYPE == 'mysql' || KU_DBTYPE == 'mysqli') {
-                $results = $tc_db->GetAll("SHOW TABLES");
-                foreach ($results as $line) {
-                    $tc_db->Execute("OPTIMIZE TABLE `" . $line[0] . "`");
-                }
-            }
-            if (KU_DBTYPE == 'postgres7' || KU_DBTYPE == 'postgres8' || KU_DBTYPE == 'postgres') {
-                $results = $tc_db->GetAll("SELECT table_name FROM information_schema.tables WHERE table_schema='public' AND table_type='BASE TABLE'");
-                foreach ($results as $line) {
-                    $tc_db->Execute("VACUUM ANALYZE `" . $line[0] . "`");
-                }
-            }
             $tpl_page .= _gettext('Cleanup finished.');
             management_addlogentry(_gettext('Ran cleanup'), 2);
         } else {
@@ -2425,38 +2411,29 @@ class Manage
                     $updateboard_dice = isset($_POST['dice']) ? '1' : '0';
                     $updateboard_useragent = isset($_POST['useragent']) ? '1' : '0';
 
-                    if ($_POST['type'] == '0' || $_POST['type'] == '1' || $_POST['type'] == '2' || $_POST['type'] == '3') {
-                        if (!($_POST['type'] == '3')) {
-                            if (in_array($_POST['locale'], explode('|', KU_SUPPORTED_LOCALES))) {
-                                if (count($_POST['allowedembeds']) > 0) {
-                                    $updateboard_allowedembeds = '';
-                                    $results = $tc_db->GetAll("SELECT `filetype` FROM `" . KU_DBPREFIX . "embeds`");
-                                    foreach ($results as $line) {
-                                        if (in_array($line['filetype'], $_POST['allowedembeds'])) {
-                                            $updateboard_allowedembeds .= $line['filetype'].',';
-                                        }
-                                    }
-                                    if ($updateboard_allowedembeds != '') {
-                                        $updateboard_allowedembeds = substr($updateboard_allowedembeds, 0, -1);
-                                    }
+                    if (in_array($_POST['locale'], explode('|', KU_SUPPORTED_LOCALES))) {
+                        if (count($_POST['allowedembeds']) > 0) {
+                            $updateboard_allowedembeds = '';
+                            $results = $tc_db->GetAll("SELECT `filetype` FROM `" . KU_DBPREFIX . "embeds`");
+                            foreach ($results as $line) {
+                                if (in_array($line['filetype'], $_POST['allowedembeds'])) {
+                                    $updateboard_allowedembeds .= $line['filetype'].',';
                                 }
-                                $tc_db->Execute("UPDATE `" . KU_DBPREFIX . "boards` SET `type` = " . $tc_db->qstr($_POST['type']) . " , `order` = " . $tc_db->qstr(intval($_POST['order'])) . " , `section` = " . $tc_db->qstr(intval($_POST['section'])) . " , `desc` = " . $tc_db->qstr($_POST['desc']) . " , `locale` = " . $tc_db->qstr($_POST['locale']) . " , `showid` = '" . $updateboard_showid . "' , `compactlist` = '" . $updateboard_compactlist . "' , `locked` = '" . $updateboard_locked . "' , `balls` = '" . $updateboard_balls . "' , `dice` = '" . $updateboard_dice . "' , `useragent` = '" . $updateboard_useragent . "' , `maximagesize` = " . $tc_db->qstr($_POST['maximagesize']) . " , `messagelength` = " . $tc_db->qstr($_POST['messagelength']) . " , `maxpages` = " . $tc_db->qstr($_POST['maxpages']) . " , `maxage` = " . $tc_db->qstr($_POST['maxage']) . " , `markpage` = " . $tc_db->qstr($_POST['markpage']) . " , `maxreplies` = " . $tc_db->qstr($_POST['maxreplies']) . " , `image` = " . $tc_db->qstr($_POST['image']) . " , `includeheader` = " . $tc_db->qstr($_POST['includeheader']) . " , `redirecttothread` = '" . $updateboard_redirecttothread . "' , `anonymous` = " . $tc_db->qstr($_POST['anonymous']) . " , `forcedanon` = '" . $updateboard_forcedanon . "' , `embeds_allowed` = " . $tc_db->qstr($updateboard_allowedembeds) . " , `trial` = '" . $updateboard_trial . "' , `popular` = '" . $updateboard_popular . "' , `defaultstyle` = " . $tc_db->qstr($_POST['defaultstyle']) . " , `enablereporting` = '" . $updateboard_enablereporting . "', `enablecaptcha` = '" . $updateboard_enablecaptcha . "' , `enablenofile` = '" . $updateboard_enablenofile . "', `opmoderation` = '" . $updateboard_opmoderation . "', `enablecatalog` = '" . $updateboard_enablecatalog . "', `enablefeed` = '" . $updateboard_enablefeed . "' , `hiddenthreads` = " . $tc_db->qstr($_POST['hiddenthreads']) ." , `country_restrict` = " . $tc_db->qstr($_POST['country_restrict']) . " WHERE `name` = " . $tc_db->qstr($_GET['updateboard']) . "");
-                                $tc_db->Execute("DELETE FROM `" . KU_DBPREFIX . "board_filetypes` WHERE `boardid` = '" . $boardid . "'");
-                                foreach ($filetypes as $filetype) {
-                                    $tc_db->Execute("INSERT INTO `" . KU_DBPREFIX . "board_filetypes` ( `boardid`, `typeid` ) VALUES ( '" . $boardid . "', " . $tc_db->qstr($filetype) . " )");
-                                }
-                                require_once KU_ROOTDIR . 'inc/classes/menu.class.php';
-                                $menu_class = new Menu();
-                                $menu_class->Generate();
-                                $tpl_page .= _gettext('Update successful.');
-                                management_addlogentry(_gettext('Updated board configuration') . " - /" . $_GET['updateboard'] . "/", 4);
-                            } else {
-                                $tpl_page .= _gettext('Sorry, a generic error has occurred.');
                             }
-
-                        } else {
-                            $tpl_page .= _gettext('Sorry, embed may only be enabled on normal imageboards.');
+                            if ($updateboard_allowedembeds != '') {
+                                $updateboard_allowedembeds = substr($updateboard_allowedembeds, 0, -1);
+                            }
                         }
+                        $tc_db->Execute("UPDATE `" . KU_DBPREFIX . "boards` SET `order` = " . $tc_db->qstr(intval($_POST['order'])) . " , `section` = " . $tc_db->qstr(intval($_POST['section'])) . " , `desc` = " . $tc_db->qstr($_POST['desc']) . " , `locale` = " . $tc_db->qstr($_POST['locale']) . " , `showid` = '" . $updateboard_showid . "' , `compactlist` = '" . $updateboard_compactlist . "' , `locked` = '" . $updateboard_locked . "' , `balls` = '" . $updateboard_balls . "' , `dice` = '" . $updateboard_dice . "' , `useragent` = '" . $updateboard_useragent . "' , `maximagesize` = " . $tc_db->qstr($_POST['maximagesize']) . " , `messagelength` = " . $tc_db->qstr($_POST['messagelength']) . " , `maxpages` = " . $tc_db->qstr($_POST['maxpages']) . " , `maxage` = " . $tc_db->qstr($_POST['maxage']) . " , `markpage` = " . $tc_db->qstr($_POST['markpage']) . " , `maxreplies` = " . $tc_db->qstr($_POST['maxreplies']) . " , `image` = " . $tc_db->qstr($_POST['image']) . " , `includeheader` = " . $tc_db->qstr($_POST['includeheader']) . " , `redirecttothread` = '" . $updateboard_redirecttothread . "' , `anonymous` = " . $tc_db->qstr($_POST['anonymous']) . " , `forcedanon` = '" . $updateboard_forcedanon . "' , `embeds_allowed` = " . $tc_db->qstr($updateboard_allowedembeds) . " , `trial` = '" . $updateboard_trial . "' , `popular` = '" . $updateboard_popular . "' , `defaultstyle` = " . $tc_db->qstr($_POST['defaultstyle']) . " , `enablereporting` = '" . $updateboard_enablereporting . "', `enablecaptcha` = '" . $updateboard_enablecaptcha . "' , `enablenofile` = '" . $updateboard_enablenofile . "', `opmoderation` = '" . $updateboard_opmoderation . "', `enablecatalog` = '" . $updateboard_enablecatalog . "', `enablefeed` = '" . $updateboard_enablefeed . "' , `hiddenthreads` = " . $tc_db->qstr($_POST['hiddenthreads']) ." , `country_restrict` = " . $tc_db->qstr($_POST['country_restrict']) . " WHERE `name` = " . $tc_db->qstr($_GET['updateboard']) . "");
+                        $tc_db->Execute("DELETE FROM `" . KU_DBPREFIX . "board_filetypes` WHERE `boardid` = '" . $boardid . "'");
+                        foreach ($filetypes as $filetype) {
+                            $tc_db->Execute("INSERT INTO `" . KU_DBPREFIX . "board_filetypes` ( `boardid`, `typeid` ) VALUES ( '" . $boardid . "', " . $tc_db->qstr($filetype) . " )");
+                        }
+                        require_once KU_ROOTDIR . 'inc/classes/menu.class.php';
+                        $menu_class = new Menu();
+                        $menu_class->Generate();
+                        $tpl_page .= _gettext('Update successful.');
+                        management_addlogentry(_gettext('Updated board configuration') . " - /" . $_GET['updateboard'] . "/", 4);
                     } else {
                         $tpl_page .= _gettext('Sorry, a generic error has occurred.');
                     }
@@ -2485,30 +2462,6 @@ class Manage
                     $tpl_page .= '<label for="desc">'. _gettext('Description') .':</label>
 					<input type="text" name="desc" value="'.$lineboard['desc'].'" />
 					<div class="desc">'. _gettext('The name of the board.') .'</div><br />';
-
-                    /* Board type */
-                    $tpl_page .= '<label for="type">'. _gettext('Board type') .':</label>
-					<select name="type">
-					<option value="0"';
-                    if ($lineboard['type'] == '0') {
-                        $tpl_page .= ' selected="selected"';
-                    }
-                    $tpl_page .= '>'. _gettext('Normal imageboard') .'</option>
-					<option value="1"';
-                    if ($lineboard['type'] == '1') {
-                        $tpl_page .= ' selected="selected"';
-                    }
-                    $tpl_page .= '>'. _gettext('Text board') .'</option><option value="2"';
-                    if ($lineboard['type'] == '2') {
-                        $tpl_page .= ' selected="selected"';
-                    }
-                    $tpl_page .= '>'. _gettext('Oekaki imageboard') .'</option><option value="3"';
-                    if ($lineboard['type'] == '3') {
-                        $tpl_page .= ' selected="selected"';
-                    }
-                    $tpl_page .= '>'. _gettext('Upload imageboard') .'</option>
-					</select>
-					<div class="desc">'. _gettext('The type of posts which will be accepted on this board. A normal imageboard will feature image and extended format posts, a text board will have no images, an Oekaki board will allow users to draw images and use them in their posts, and an Upload imageboard will be styled more towards file uploads.') .' '. _gettext('Default') .': <strong>Normal Imageboard</strong></div><br />';
 
                     /* Order */
                     $tpl_page .= '<label for="order">'. _gettext('Order') .':</label>
@@ -2707,7 +2660,7 @@ class Manage
                         $tpl_page .= ' checked';
                     }
                     $tpl_page .= ' />
-					<div class="desc">'. _gettext('If set to yes, a catalog.html file will be built with the other files, displaying the original picture of every thread in a box. This will only work on normal/oekaki imageboards.') .' '. _gettext('Default') .': <strong>'. _gettext('Yes') .'</strong></div><br />';
+					<div class="desc">'. _gettext('If set to yes, a catalog.html file will be built with the other files, displaying the original picture of every thread in a box.') .' '. _gettext('Default') .': <strong>'. _gettext('Yes') .'</strong></div><br />';
 
                     /* Enable feed */
                     $tpl_page .= '<label for="enablefeed">'. _gettext('Enable board in feed') .':</label>
