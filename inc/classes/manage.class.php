@@ -4533,4 +4533,31 @@ class Manage
         }
         die();
     }
+
+    public function enginesettings()
+    {
+        global $tc_db, $tpl_page;
+        $this->AdministratorsOnly();
+
+        $configs = yaml_parse(file_get_contents(KU_ROOTDIR . 'settings_schema.yaml'));
+
+        if (isset($_POST['apply'])) {
+        } else {
+            $tpl_page .= '<h2>' . _gettext('Engine settings') . '</h2>';
+            $tpl_page .= '<form action="?action=enginesettings"  method="post">';
+            $tpl_page .= '<input type="hidden" name="token" value="' . $_SESSION['token'] . '" />';
+            $tpl_page .= '<input type="hidden" name="apply" value="1" />';
+            foreach ($configs['config'] as $section) {
+                $tpl_page .= '<h3>' . $section['name'] . '</h3>';
+                foreach ($section['options'] as $optname => $option) {
+                    $tpl_page .= '<label for="option_' . $optname . '">'. $optname . ':</label>';
+                    $tpl_page .= '<input type="text" name="option_' . $optname . '" id="option_' . $optname . '" value="' . constant($optname) . '" />';
+                    $tpl_page .= '<div class=desc">'. $option['comment'] . '</div>';
+                }
+                $tpl_page .= '<hr>';
+            }
+            $tpl_page .= '<input type="submit" value="'. _gettext('Submit') .'" />';
+            $tpl_page .= '</form>';
+        }
+    }
 }
