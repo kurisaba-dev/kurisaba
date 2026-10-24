@@ -168,7 +168,7 @@ class DatabaseProxy
 
     public function GetAll($query)
     {
-        return $this->$PDO_object->query($query)->fetchAll(PDO::FETCH_ASSOC);
+        return $this->$PDO_object->query($query)->fetchAll();
     }
 
     public function GetOne($query)
