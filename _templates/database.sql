@@ -118,18 +118,17 @@ INSERT INTO `filetypes` (`id`, `filetype`, `mime`, `image`, `image_w`, `image_h`
 (11, 'mp4',  'video/mp4;video/x-m4v', 'generic.png', 255, 255, 1);
 
 CREATE TABLE IF NOT EXISTS `kurisaba_ext_data` (
-`id` int(11) NOT NULL,
-  `name` text CHARACTER SET cp1251 NOT NULL,
+  `name` varchar(255) NOT NULL,
   `value` text CHARACTER SET cp1251 NOT NULL
-) ENGINE=MyISAM AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
-INSERT INTO `kurisaba_ext_data` (`id`, `name`, `value`) VALUES
-(1, 'threadlimit_timestamp', '0'),
-(3, 'thread_random', '/b/1'),
-(4, 'thread_cirno', '/a/9'),
-(5, 'thread_faq', '/d/1'),
-(6, 'thread_dev', '/d/2'),
-(7, 'special_threads', 'BOARD b\r\nTHREAD 100 /some/ Some Thread\r\nBOARD d\r\nBOARD a\r\nTHREAD 1 /a/a/ General Anime\r\nHIDDEN 9 /9/ Cirno Thread\r\n');
+INSERT INTO `kurisaba_ext_data` (`name`, `value`) VALUES
+('threadlimit_timestamp', '0'),
+('thread_random', '/b/1'),
+('thread_cirno', '/a/9'),
+('thread_faq', '/d/1'),
+('thread_dev', '/d/2'),
+('special_threads', 'BOARD b\r\nTHREAD 100 /some/ Some Thread\r\nBOARD d\r\nBOARD a\r\nTHREAD 1 /a/a/ General Anime\r\nHIDDEN 9 /9/ Cirno Thread\r\n');
 
 CREATE TABLE IF NOT EXISTS `loginattempts` (
   `username` varchar(255) NOT NULL,
@@ -268,7 +267,7 @@ ALTER TABLE `filetypes`
  ADD PRIMARY KEY (`id`);
 
 ALTER TABLE `kurisaba_ext_data`
- ADD PRIMARY KEY (`id`);
+ ADD PRIMARY KEY (`name`);
 
 ALTER TABLE `posts`
  ADD PRIMARY KEY (`boardid`,`id`), ADD KEY `parentid` (`parentid`), ADD KEY `bumped` (`bumped`), ADD KEY `file_md5` (`file_md5`), ADD KEY `stickied` (`stickied`);
@@ -299,9 +298,6 @@ MODIFY `id` tinyint(5) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=5;
 
 ALTER TABLE `filetypes`
 MODIFY `id` smallint(5) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=9;
-
-ALTER TABLE `kurisaba_ext_data`
-MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=8;
 
 ALTER TABLE `posts`
 MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT;

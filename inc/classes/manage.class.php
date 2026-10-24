@@ -4538,12 +4538,25 @@ class Manage
     {
         global $tc_db, $tpl_page;
         $this->AdministratorsOnly();
+        $tpl_page .= '<h2>' . _gettext('Engine settings') . '</h2>';
 
         $configs = yaml_parse(file_get_contents(KU_ROOTDIR . 'settings_schema.yaml'));
 
         if (isset($_POST['apply'])) {
+            $tc_db->Execute("START TRANSACTION");
+            foreach ($configs['config'] as $section) {
+                foreach ($section['options'] as $optname => $option) {
+                    if($option['type'] == 'bool') {
+                        $value = (isset($_POST['option_'. $optname])) ? 'true' : 'false';
+                    } else {
+                        $value = (isset($_POST['option_'. $optname])) ? $_POST['option_'. $optname] : $option['default'];
+                    }
+                    $tc_db->Execute("REPLACE INTO `" . KU_DBPREFIX . "kurisaba_ext_data` (`name`, `value`) VALUES (" . $tc_db->qstr($optname) . ", " . $tc_db->qstr($value) . ")");
+                }
+            }
+            $tc_db->Execute("COMMIT");
+            $tpl_page .= _gettext('Settings saved!');
         } else {
-            $tpl_page .= '<h2>' . _gettext('Engine settings') . '</h2>';
             $tpl_page .= '<table border=0><form action="?action=enginesettings"  method="post">';
             $tpl_page .= '<input type="hidden" name="token" value="' . $_SESSION['token'] . '" />';
             $tpl_page .= '<input type="hidden" name="apply" value="1" />';
