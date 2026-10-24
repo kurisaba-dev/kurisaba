@@ -150,40 +150,40 @@ class DatabaseProxy
     private $PDO_object;
     private $ErrorMessage;
 
-    function __construct($dsn, $dbusername, $dbpassword)
+    public function __construct($dsn, $dbusername, $dbpassword)
     {
-        $ErrorMessage = "No error";
-        $PDO_object = new PDO($dsn, $dbusername, $dbpassword);
+        $this->$ErrorMessage = "No error";
+        $this->$PDO_object = new PDO($dsn, $dbusername, $dbpassword);
     }
 
-    function ErrorMsg()
+    public function ErrorMsg()
     {
-        return $PDO_object->errorInfo[2];
+        return $this->$PDO_object->errorInfo[2];
     }
 
-    function Execute($query)
+    public function Execute($query)
     {
-        return $PDO_object->query($query);
+        return $this->$PDO_object->query($query);
     }
 
-    function GetAll($query)
+    public function GetAll($query)
     {
-        return $PDO_object->query($query)->fetchAll(PDO::FETCH_ASSOC);
+        return $this->$PDO_object->query($query)->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    function GetOne($query)
+    public function GetOne($query)
     {
-        return $PDO_object->query($query)->fetchColumn();
+        return $this->$PDO_object->query($query)->fetchColumn();
     }
 
-    function Insert_Id()
+    public function Insert_Id()
     {
-        return $PDO_object->lastInsertId();
+        return $this->$PDO_object->lastInsertId();
     }
 
-    function qstr($str)
+    public function qstr($str)
     {
-        return $PDO_object->quote($str);
+        return $this->$PDO_object->quote($str);
     }
 }
 
