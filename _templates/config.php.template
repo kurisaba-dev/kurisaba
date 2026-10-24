@@ -96,5 +96,5 @@ $cf['KU_REPLYTHUMBHEIGHT']  = 255;  // Максимальная высота п�
 $cf['KU_THUMBMETHOD']       = 'imagemagick+gifsicle'; // Метод создания предпросмотра jpg, gif, webm и png ('gd' или 'imagemagick+gifsicle'). Анимированные предпросмотры доступны только в последнем варианте.
 $cf['KU_THUMBMSG']          = false; // Показывать сообщение "Thumbnail displayed, click image for full size." у предпросмотров картинок.
 
-// Специальные трипкоды (до 30 символов). Для отключения можно установить в array().
-$cf['KU_TRIPS'] = array('#tripcode1' => 'tripresult1', '#tripcode2' => 'tripresult2');
+// Специальные трипкоды (до 30 символов каждый, serialized-массив). Для отключения можно установить в 'a:0:{}'.
+$cf['KU_TRIPS']             = 'a:2:{s:10:"#tripcode1";s:11:"tripresult1";s:10:"#tripcode2";s:11:"tripresult2";}';
