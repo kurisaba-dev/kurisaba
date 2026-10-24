@@ -3,39 +3,39 @@ config:
   - main:
     name: 'Главные настройки'
     options:
-      - KU_NAME:
+      KU_NAME:
         default: 'Insert your text here'
         comment: 'Название имиджборды'
         type: string
-      - KU_MAINPAGE:
+      KU_MAINPAGE:
         default: 'front.php'
         comment: 'Имя начальной странички сайта (front.php - "заставка", kusaba.php - основная страница дефотной борды).'
         type: string
-      - KU_DEFAULTBOARD:
+      KU_DEFAULTBOARD:
         default: 'b'
         comment: 'Борда "по умолчанию", показываемая в правом фрейме фреймсета.'
         type: string
-      - KU_SEARCH_PHRASES:
+      KU_SEARCH_PHRASES:
         default: 'Фраза 1#Фраза 2#Фраза 3'
         comment: 'Случайные фразы, показываемые в окошках поиска текста.'
         type: string
-      - KU_SEARCH_BOARD:
+      KU_SEARCH_BOARD:
         default: 'b'
         comment: 'Дефолтная борда в поле ввода поиска.'
         type: string
-      - KU_SEARCH_THREAD:
+      KU_SEARCH_THREAD:
         default: '1'
         comment: 'Дефолтный тред в поле ввода поиска.'
         type: string
-      - KU_BANREASON:
+      KU_BANREASON:
         default: ''
         comment: 'Причина бана по умолчанию.'
         type: string
-      - KU_BANMSG:
+      KU_BANMSG:
         default: '<br /><font color="#FF0000"><b>(USER WAS BANNED FOR THIS POST)</b></font>'
         comment: 'Сообщение к посту, по которому дан бан (добавляется при включённой настройке "Add ban message").'
         type: string
-      - KU_RANDOMSEED:
+      KU_RANDOMSEED:
         default: 'ENTERRANDOMSHIT'
         comment: 'Инициализационное значение для md5-Функций. Лучше задать побольше, 35+ символов. Нельзя менять после запуска борды, иначе слетят данные о ip постов, трипкоды с двумя восклицательными знаками и т.п.'
         type: string
@@ -43,11 +43,11 @@ config:
   - proxy:
     name: 'Проксирование загрузок'
     options:
-      - KU_CURL_PROXY:
+      KU_CURL_PROXY:
         default: 'none'
         comment: 'Если нужен прокси для загрузки'
         type: string
-      - KU_CURL_INTERFACE:
+      KU_CURL_INTERFACE:
         default: ''
         comment: 'Сетевой интерфейс для загрузки файла по ссылке (например, "tun0"). Чтобы при загрузке файла не палить IP, рекомендуется поднять VPN до какого-нибудь сервера, который не жалко подставлять под DDoS и указать здесь сетевой интерфейс VPN.'
         type: string
@@ -55,19 +55,19 @@ config:
   - database:
     name: 'Настройки базы данных'
     options:
-      - KU_DSN:
+      KU_DSN:
         default: 'mysql:host=localhost;dbname=kurisaba'
         comment: 'DSN-строка, описывающая способ соединения с базой данных для PDO. Более подробно: https://www.php.net/manual/en/pdo.connect.php'
         type: string
-      - KU_DBUSERNAME:
+      KU_DBUSERNAME:
         default: 'db_user'
         comment: 'Имя пользователя. На SQLite игнорируется.'
         type: string
-      - KU_DBPASSWORD:
+      KU_DBPASSWORD:
         default: 'password'
         comment: 'Пароль. На SQLite игнорируется.'
         type: string
-      - KU_DBPREFIX:
+      KU_DBPREFIX:
         default: ''
         comment: 'Префикс таблиц. Это позволяет держать несколько независимых борд на домене с одной разрешённой базой. Например, таблицы одной борды могут называться "boards", "posts", и т.п. (префикс пустой), а другой - "NEWboards", "NEWposts", и т.п. (префикс "NEW"). При первой установке после импорта шаблона базы это надо учесть.'
         type: string
@@ -75,27 +75,27 @@ config:
   - locale:
     name: 'Локаль и время'
     options:
-      - KU_LOCALE:
+      KU_LOCALE:
         default: 'ru'
         comment: 'Текущая локаль. Возможные значения: en, de, et, es, fi, pl, nl, nb, ro, ru, it, ja.'
         type: string
-      - KU_CHARSET:
+      KU_CHARSET:
         default: 'UTF-8'
         comment: 'Кодировка. Должна совпадать с той, что указана в .htaccess (AddCharset <кодировка> .html, AddCharset <кодировка> .php).'
         type: string
-      - KU_ID3_ENCODING:
+      KU_ID3_ENCODING:
         default: 'cp1251'
         comment: 'Кодировка ID3-тегов в MP3.'
         type: string
-      - KU_ADDTIME:
+      KU_ADDTIME:
         default: 10800
         comment: 'Это значение автоматически добавляется к time(). В зависимости от настроек сервера (определяются экспериментально) должно быть либо 0, либо соответствовать смещению часового пояса (в секундах). Для Москвы это 10800.'
         type: int
-      - KU_TZ:
+      KU_TZ:
         default: 'Europe/Moscow'
         comment: 'Часовой пояс'
         type: string
-      - KU_DATEFORMAT:
+      KU_DATEFORMAT:
         default: 'D Y M d H:i:s'
         comment: 'Формат даты в постах (например, "d/m/y(D)H:i").'
         type: string
@@ -103,63 +103,63 @@ config:
   - features:
     name: 'Разные фичи'
     options:
-      - KU_OFFLOAD:
+      KU_OFFLOAD:
         default: true
         comment: 'Включить offload-движок. Без него не будет доступна геоблокировка постов/файлов (но не досок) и обратимое удаление файлов в постах.'
         type: bool
-      - KU_KEEPFILES:
+      KU_KEEPFILES:
         default: true
         comment: 'Оставлять ли файлы при удалении постов для возможности их полного восстановления. Возможно только при включённом KU_OFFLOAD.'
         type: bool
-      - KU_SAVEIP:
+      KU_SAVEIP:
         default: true
         comment: 'Сохранять ли IP постов. Если отключить, то будут сохраняться только MD5, а в качестве IP будет использоваться 0.0.0.0. Баны через .htaccess будут невозможны.'
         type: bool
-      - KU_EXPAND:
+      KU_EXPAND:
         default: true
         comment: 'Включить возможность разворотат тредов на странице борд.'
         type: bool
-      - KU_QUICKREPLY:
+      KU_QUICKREPLY:
         default: true
         comment: 'Включить возможность быстрого ответа на пост.'
         type: bool
-      - KU_FIRSTLAST:
+      KU_FIRSTLAST:
         default: true
         comment: 'Включить возможность смотреть не только весь тред, но и первые 100/последние 50 постов.'
         type: bool
-      - KU_APPEAL:
+      KU_APPEAL:
         default: true
         comment: 'Включить возможность просить снять бан.'
         type: bool
-      - KU_GENERATEBOARDLIST:
+      KU_GENERATEBOARDLIST:
         default: true
         comment: 'Генерировать список борд сверху/снизу автоматически (если нет - вместо него используется файл boards.html).'
         type: bool
-      - KU_DIRTITLE:
+      KU_DIRTITLE:
         default: true
         comment: 'Показывать путь к доске в заголовке страницы (например, "/b/ - Random" вместо "Random").'
         type: bool
-      - KU_CUTPOSTS:
+      KU_CUTPOSTS:
         default: true
         comment: 'Обрезать слишком длинные посты на странице доски (можно развернуть по клику).'
         type: bool
-      - KU_NEWWINDOW:
+      KU_NEWWINDOW:
         default: true
         comment: 'Открывать картинки в новом окне (если не используется javascript-разворачивание).'
         type: bool
-      - KU_MAKELINKS:
+      KU_MAKELINKS:
         default: true
         comment: 'Делать внешние ссылки в постах кликабельными.'
         type: bool
-      - KU_OPEN_MODLOG:
+      KU_OPEN_MODLOG:
         default: true
         comment: 'Давать ли доступ к модлогу обычным пользователям.'
         type: bool
-      - KU_NOMESSAGETHREAD:
+      KU_NOMESSAGETHREAD:
         default: ''
         comment: 'Если пользователь создаёт тред с ОП-постом без текста, то этот пост будет содержать этот текст.'
         type: string
-      - KU_NOMESSAGEREPLY:
+      KU_NOMESSAGEREPLY:
         default: ''
         comment: 'Если пользователь отвечает в тред постом без текста, то этот пост будет содержать этот текст.'
         type: string
@@ -167,115 +167,115 @@ config:
   - limits:
     name: 'Ограничения'
     options:
-      - KU_CAPTCHAENABLED:
+      KU_CAPTCHAENABLED:
         default: 'en,ru,jp,num,mt'
         comment: 'Типы включённой капчи через запятую: en = латинская, ru = кириллическая, jp = канакапча, num = цифровая, mt = MTCaptcha.'
         type: string
-      - KU_CAPTCHATIME:
+      KU_CAPTCHATIME:
         default: 30
         comment: 'Время протухания капчи в секундах.'
         type: int
-      - KU_CAPTCHAMINLENGTH:
+      KU_CAPTCHAMINLENGTH:
         default: 5
         comment: 'Минимальная длина капчи'
         type: int
-      - KU_CAPTCHAMAXLENGTH:
+      KU_CAPTCHAMAXLENGTH:
         default: 7
         comment: 'Максимальная длина капчи'
         type: int
-      - KU_KANAMULTIPLIER:
+      KU_KANAMULTIPLIER:
         default: 0.5
         comment: 'Соотношение количества знаков канакапчи к обычной капче (например, 0.5 значит, что при 4-8 символах в en,ru,num-капчах в канакапче будет 2-4 каны).'
         type: float
-      - KU_MTCAPTCHA_PUBKEY:
+      KU_MTCAPTCHA_PUBKEY:
         default: ''
         comment: 'Если разрешена MTCaptcha: публичный ключ'
         type: string
-      - KU_MTCAPTCHA_PRVKEY:
+      KU_MTCAPTCHA_PRVKEY:
         default: ''
         comment: 'Если разрешена MTCaptcha: приватный ключ'
         type: string
-      - KU_OFFLOADCACHEDAYS:
+      KU_OFFLOADCACHEDAYS:
         default: 7
         comment: 'Количество дней, на которые кэшируются картинки, отдаваемые offload-движком (имеет смысл только при включённом KU_OFFLOAD).'
         type: int
-      - KU_MAXSMILIES:
+      KU_MAXSMILIES:
         default: 10
         comment: 'Максимальное количество смайлов в посте.'
         type: int
-      - KU_FEEDLENGTH:
+      KU_FEEDLENGTH:
         default: 100
         comment: 'Длина однопотока (в постах).'
         type: int
-      - KU_MAXTHREADSADAY:
+      KU_MAXTHREADSADAY:
         default: 10
         comment: 'Максимальное количество тредов в день (защита от вайпа). Если столько тредов уже создано, но нужно ещё - админ может сбросить этот отсчёт с помощью пункта "Сбросить лимит тредов" в админке.'
         type: int
-      - KU_MAXSEARCHRESULTS:
+      KU_MAXSEARCHRESULTS:
         default: 500
         comment: 'Максимальное количество элементов на странице поиска.'
         type: int
-      - KU_HASHCHECKLAG:
+      KU_HASHCHECKLAG:
         default: 604800
         comment: 'Кулдаун файлов (в секундах). Нельзя загрузить файл, уже имеющийся на борде, если с момента его создания прошло меньше секунд. Кулдаун можно обойти с использованием куклоскрипта (так задумано), бан по картинке - нельзя.'
         type: int
-      - KU_MAXNAMELENGTH:
+      KU_MAXNAMELENGTH:
         default: 75
         comment: 'Максимальная длина имени постера.'
         type: int
-      - KU_MAXEMAILLENGTH:
+      KU_MAXEMAILLENGTH:
         default: 75
         comment: 'Длина невидимого "поля" e-mail (такое значение может понадобиться для внешних приложений).'
         type: int
-      - KU_MAXSUBJLENGTH:
+      KU_MAXSUBJLENGTH:
         default: 75
         comment: 'Максимальная длина темы поста/треда.'
         type: int
-      - KU_PAGINATIONLENGTH:
+      KU_PAGINATIONLENGTH:
         default: 5
         comment: 'Пагинация будет сокращаться, оставляя не менее такого количества страниц слева/справа от нулевой, последней и текущей. Если не нужно, то можно поставить достаточно большое число (типа 100000).'
         type: int
-      - KU_MODLOGDAYS:
+      KU_MODLOGDAYS:
         default: 365
         comment: 'Записи лога модераторов старше этого количества дней будут удаляться.'
         type: int
-      - KU_NEWTHREADDELAY:
+      KU_NEWTHREADDELAY:
         default: 1
         comment: 'Через сколько секунд после создания треда тот же ip может создать ещё тред.'
         type: int
-      - KU_REPLYDELAY:
+      KU_REPLYDELAY:
         default: 1
         comment: 'Через сколько секунд после отправки поста тот же ip может отправить ещё пост.'
         type: int
-      - KU_CUTMSGLENGTH:
+      KU_CUTMSGLENGTH:
         default: 2000
         comment: 'Размер поста, после которого на странице доски он будет обрезаться, если включен KU_CUTPOSTS.'
         type: int
-      - KU_CATALOGTEXTLIMIT:
+      KU_CATALOGTEXTLIMIT:
         default: 320
         comment: 'Количество показываемых символов текста поста на странице каталога, если заголовок пуст.'
         type: int
-      - KU_LOADLIMIT:
+      KU_LOADLIMIT:
         default: 20
         comment: 'Максимальное количество файлов, одновременно загружаемых на сервер (находящихся в процессе обработки). Если этот лимит будет исчерпан, то тому, кто попробует загрузить ещё один файл, будет предложено немного подождать.'
         type: int
-      - KU_XHRLOADLIMIT:
+      KU_XHRLOADLIMIT:
         default: 20
         comment: 'Максимальное количество файлов, подготовленных на сервере для загрузки через drag-n-drop. Если этот лимит будет исчерпан, то тому, кто попробует загрузить ещё один файл, будет предложено немного подождать.'
         type: int
-      - KU_TEMPFILESCLEAN:
+      KU_TEMPFILESCLEAN:
         default: 600
         comment: 'Сколько секунд хранить временные файлы, подготовленные для загрузки через drag-n-drop. Если пользователь загрузил файл, но не отправил пост, то при попытке отправки ему будет предложено загрузить файл снова.'
         type: int
-      - KU_THREADS:
+      KU_THREADS:
         default: 15
         comment: 'Количество тредов на страницу обычных и upload-досок'
         type: int
-      - KU_REPLIES:
+      KU_REPLIES:
         default: 3
         comment: 'Количество показываемых последних ответов в обычном треде на странице доски'
         type: int
-      - KU_REPLIESSTICKY:
+      KU_REPLIESSTICKY:
         default: 1
         comment: 'Количество показываемых последних ответов в прикреплённом треде на странице доски'
         type: int
@@ -283,27 +283,27 @@ config:
   - styles:
     name: 'Стили досок. Для каждого стиля обычной или upload-доски в каталоге css/styles должны быть файлы <имя_стиля>.css и menu_<имя_стиля>.css.'
     options:
-      - KU_STYLES:
+      KU_STYLES:
         default: 'aobasu:myata:cdark:claire:claire.advance:cchaos:summer:winter:autumn:photon:modern:dark:tomorrow:urupchan:futaba:burichan:kusabax:gurochan:gentoochan:tuvik:suigintou'
         comment: 'Список стилей, маленькими буквами, разделяется двоеточием.'
         type: string
-      - KU_MENUTYPE:
+      KU_MENUTYPE:
         default: 'normal'
         comment: 'Тип меню. "normal" - с использованием стилей, "plain" - без них.'
         type: string
-      - KU_DEFAULTSTYLE:
+      KU_DEFAULTSTYLE:
         default: 'aobasu'
         comment: 'Дефолтный стиль для досок, на которых он не задан. Маленькими буквами.'
         type: string
-      - KU_MENUSTYLESWITCHER:
+      KU_MENUSTYLESWITCHER:
         default: true
         comment: 'Показывать переключалку стилей в меню.'
         type: bool
-      - KU_STYLESWITCHER:
+      KU_STYLESWITCHER:
         default: true
         comment: 'Показывать переключалку стилей на upload-досках.'
         type: bool
-      - KU_DROPSWITCHER:
+      KU_DROPSWITCHER:
         default: true
         comment: 'Показывать переключалку стилей на upload-досках в виде выпадающего списка, а не обычно.'
         type: bool
@@ -311,31 +311,31 @@ config:
   - images:
     name: 'Изображения'
     options:
-      - KU_WIDTHHEIGHTLIMIT:
+      KU_WIDTHHEIGHTLIMIT:
         default: 9000
         comment: 'Максимальная ширина или высота загружаемого изображения.'
         type: int
-      - KU_THUMBWIDTH:
+      KU_THUMBWIDTH:
         default: 255
         comment: 'Максимальная ширина предпросмотра картинки в ОП-посте.'
         type: int
-      - KU_THUMBHEIGHT:
+      KU_THUMBHEIGHT:
         default: 255
         comment: 'Максимальная высота предпросмотра картинки в ОП-посте.'
         type: int
-      - KU_REPLYTHUMBWIDTH:
+      KU_REPLYTHUMBWIDTH:
         default: 255
         comment: 'Максимальная ширина предпросмотра картинки в ответе в тред.'
         type: int
-      - KU_REPLYTHUMBHEIGHT:
+      KU_REPLYTHUMBHEIGHT:
         default: 255
         comment: 'Максимальная высота предпросмотра картинки в ответе в тред.'
         type: int
-      - KU_THUMBMETHOD:
+      KU_THUMBMETHOD:
         default: 'imagemagick+gifsicle'
         comment: 'Метод создания предпросмотра jpg, gif, webm и png ("gd" или "imagemagick+gifsicle"). Анимированные предпросмотры доступны только в последнем варианте.'
         type: string
-      - KU_THUMBMSG:
+      KU_THUMBMSG:
         default: false
         comment: 'Показывать сообщение "Thumbnail displayed, click image for full size." у предпросмотров картинок.'
         type: bool
@@ -343,7 +343,7 @@ config:
   - others:
     name: 'Другое'
     options:
-      - KU_TRIPS:
+      KU_TRIPS:
         default: 'a:2:{s:10:"#tripcode1";s:11:"tripresult1";s:10:"#tripcode2";s:11:"tripresult2";}'
         comment: 'Специальные трипкоды (до 30 символов каждый, serialized-массив). Для отключения можно установить в "a:0:{}".'
         type: string
