@@ -85,7 +85,7 @@ if (isset($_GET['graph'])) {
                 if (count($results) > 0) {
                     $data = array();
                     foreach ($results as $line) {
-                        $posts = $tc_db->GetOne("SELECT `id` FROM `" . KU_DBPREFIX . "posts` WHERE `boardid` = " . $line['id'] . " ORDER BY `id` DESC LIMIT 1");
+                        $posts = $tc_db->GetOne("SELECT COUNT(*) FROM `" . KU_DBPREFIX . "posts` WHERE `boardid` = " . $line['id']);
 
                         $data = array_merge($data, array($line['name'] => $posts));
                     }
