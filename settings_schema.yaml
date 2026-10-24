@@ -55,17 +55,9 @@ config:
   - database:
     name: 'Настройки базы данных'
     options:
-      - KU_DBTYPE:
-        default: 'mysqli'
-        comment: 'Тип базы данных. Поддерживаются: mysql, mysqli (рекомендуется), postgres64 (не проверен), postgres7 (не проверен), postgres8, sqlite.'
-        type: string
-      - KU_DBHOST:
-        default: 'localhost'
-        comment: 'Хостнейм базы. На SQLite игнорируется.'
-        type: string
-      - KU_DBDATABASE:
-        default: 'database'
-        comment: 'Имя базы или путь к файлу базы для SQLite.'
+      - KU_DSN:
+        default: 'mysql:host=localhost;dbname=kurisaba'
+        comment: 'DSN-строка, описывающая способ соединения с базой данных для PDO. Более подробно: https://www.php.net/manual/en/pdo.connect.php'
         type: string
       - KU_DBUSERNAME:
         default: 'db_user'
@@ -79,10 +71,6 @@ config:
         default: ''
         comment: 'Префикс таблиц. Это позволяет держать несколько независимых борд на домене с одной разрешённой базой. Например, таблицы одной борды могут называться "boards", "posts", и т.п. (префикс пустой), а другой - "NEWboards", "NEWposts", и т.п. (префикс "NEW"). При первой установке после импорта шаблона базы это надо учесть.'
         type: string
-      - KU_DBUSEPERSISTENT:
-        default: true
-        comment: 'Использовать PConnect вместо Connect (persistent connection). Рекомендуется для быстродействия.'
-        type: bool
 
   - locale:
     name: 'Локаль и время'

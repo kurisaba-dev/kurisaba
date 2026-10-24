@@ -125,7 +125,6 @@ if (in_array('CHANGEME', $required) || in_array('', $required)) {
     die();
 }
 require KU_ROOTDIR . 'lib/gettext/gettext.inc.php';
-require KU_ROOTDIR . 'lib/adodb/adodb.inc.php';
 
 function captcha_color($color)
 {
@@ -146,21 +145,60 @@ function setcookie_strict(string $name, string $value = "", int $expires_or_opti
     return setcookie($name, $value, [ 'expires' => $expires_or_options, 'path' => $path, 'domain' => $domain, 'secure' => $secure, 'httponly' => $httponly, 'samesite' => 'Strict' ]);
 }
 
-// SQL  database
-if (!isset($tc_db) && !isset($preconfig_db_unnecessary)) {
-    $tc_db = &NewADOConnection(KU_DBTYPE);
-    if (KU_DBUSEPERSISTENT) {
-        $tc_db->PConnect(KU_DBHOST, KU_DBUSERNAME, KU_DBPASSWORD, KU_DBDATABASE) or die('SQL database connection error: ' . $tc_db->ErrorMsg());
-    } else {
-        $tc_db->Connect(KU_DBHOST, KU_DBUSERNAME, KU_DBPASSWORD, KU_DBDATABASE) or die('SQL database connection error: ' . $tc_db->ErrorMsg());
+class DatabaseProxy
+{
+    private $PDO_object;
+    private $ErrorMessage;
+
+    function __construct($dsn, $dbusername, $dbpassword)
+    {
+        $ErrorMessage = "No error";
+        $PDO_object = new PDO($dsn, $dbusername, $dbpassword);
     }
-    //file_put_contents('connects.log','.',FILE_APPEND);
+
+    function ErrorMsg()
+    {
+        return $PDO_object->errorInfo[2];
+    }
+
+    function Execute($query)
+    {
+        return $PDO_object->query($query);
+    }
+
+    function GetAll($query)
+    {
+        return $PDO_object->query($query)->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    function GetOne($query)
+    {
+        return $PDO_object->query($query)->fetchColumn();
+    }
+
+    function Insert_Id()
+    {
+        return $PDO_object->lastInsertId();
+    }
+
+    function qstr($str)
+    {
+        return $PDO_object->quote($str);
+    }
+}
+
+// SQL database
+if (!isset($tc_db) && !isset($preconfig_db_unnecessary)) {
+    try {
+        $tc_db = new DatabaseProxy(KU_DSN, KU_DBUSERNAME, KU_DBPASSWORD);
+    } catch (PDOException $e) {
+        die('SQL database connection error: ' . $e->getMessage());
+    }
     $tc_db->Execute("SET NAMES 'utf8mb4'");
     $tc_db->Execute("SET character_set_connection = 'utf8mb4'");
     $tc_db->Execute("SET character_set_results = 'utf8mb4'");
     $tc_db->Execute("SET character_set_client = 'utf8mb4'");
 }
-
 
 function stripslashes_deep($value)
 {
