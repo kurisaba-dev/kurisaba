@@ -4551,7 +4551,11 @@ class Manage
                 $tpl_page .= '<tr><td colspan=2><h3 style="color: #ffffbf;">' . $section['name'] . '</h3></td></tr>';
                 foreach ($section['options'] as $optname => $option) {
                     $tpl_page .= '<tr><td style="padding: 5px; width: 100px;"><strong><label for="option_' . $optname . '">'. $optname . ':</label></strong></td>';
-                    $tpl_page .= '<td style="padding: 5px;"><input type="text" style="width: 100%;" name="option_' . $optname . '" id="option_' . $optname . '" value="' . htmlentities(constant($optname)) . '" /></td></tr>';
+                    if($option['type'] == 'bool') {
+                        $tpl_page .= '<td style="padding: 5px;"><input type="checkbox" name="option_' . $optname . '" id="option_' . $optname . '"' . (constant($optname) ? ' checked' : '') . ' /></td></tr>';
+                    } else {
+                        $tpl_page .= '<td style="padding: 5px;"><input type="text" style="width: 100%;" name="option_' . $optname . '" id="option_' . $optname . '" value="' . htmlentities(constant($optname)) . '" /></td></tr>';
+                    }
                     $tpl_page .= '<tr><td style="padding-left: 5px; padding-right: 5px; padding-top: 0px; padding-bottom: 15px;" colspan=2><div class=desc" style="color: #bfbfff;">'. $option['comment'] . '</div></td></tr>';
                 }
             }
