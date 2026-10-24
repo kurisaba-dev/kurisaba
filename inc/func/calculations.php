@@ -103,25 +103,6 @@ function cleanBoardName($board)
 }
 
 /**
- * Convert a board ID to a board name
- *
- * @param integer $boardid Board ID
- * @return string Board directory
- */
-function boardid_to_dir($boardid)
-{
-    global $tc_db;
-
-    $query = "SELECT `name` FROM `".KU_DBPREFIX."boards` WHERE `id` = ".$tc_db->qstr($boardid)."";
-    $results = $tc_db->SelectLimit($query, 1);
-    if (count($results) > 0) {
-        foreach ($results as $line) {
-            return $line['name'];
-        }
-    }
-}
-
-/**
  * Calculate the number of pages which will be needed for the supplied number of posts
  *
  * @param integer $boardtype Board type

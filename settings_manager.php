@@ -75,9 +75,6 @@ if (!$cache_loaded) {
     // Версия курисабы
     $cf['KU_VERSION']    = '1.0 based on KusabaX-0.9.3/0chan';
 
-    // Debug
-    $cf['KU_DEBUG'] = false; // When enabled, debug information will be printed (Warning: all queries will be shown publicly)
-
     // Host and domain stuff
     $cf['KU_HOST'] = isset($_SERVER['HTTP_HOST']) ? preg_replace("/[^A-Za-z0-9.:]/", '', $_SERVER['HTTP_HOST']) : $cf['KU_BASE_HOST']; // escape string
     $cf['KU_DOMAIN'] = '.' . $cf['KU_HOST']; // Used in cookies for the domain parameter.  Should be a period and then the top level domain, which will allow the cookies to be set for all subdomains.
@@ -162,12 +159,6 @@ if (!isset($tc_db) && !isset($preconfig_db_unnecessary)) {
     $tc_db->Execute("SET character_set_connection = 'utf8mb4'");
     $tc_db->Execute("SET character_set_results = 'utf8mb4'");
     $tc_db->Execute("SET character_set_client = 'utf8mb4'");
-    //$tc_db->SetCharSet('utf8mb4');
-
-    // SQL debug
-    if (KU_DEBUG) {
-        $tc_db->debug = true;
-    }
 }
 
 
