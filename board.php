@@ -310,13 +310,11 @@ if ($operation_post) { // it's `noreturn`.
             kurisaba_exit(_gettext('Invalid thread ID.'), _gettext('That thread may have been recently deleted.'));
         }
     } else {
-        // type: 0=image, 1=text, 2=oekaki, 3=upload; uploadtype: 0=none, 1=image/video, 2=video
+        // type: 0=image, 1=text, 2=oekaki, 3=upload
         if ($board_class->board['type'] != 1) {
-            if (($board_class->board['uploadtype'] == '1' || $board_class->board['uploadtype'] == '2') && $board_class->board['embeds_allowed'] != '') {
+            if ($board_class->board['embeds_allowed'] != '') {
                 if (!isset($_POST['embed'])) {
-                    if ($board_class->board['uploadtype'] == '2') {
-                        kurisaba_exit('ОП-пост должен начинаться с видео; твой клиент не поддерживает их загрузку.', '', $_POST['message']);
-                    } elseif ($board_class->board['uploadtype'] == '1' && $imagefile_name == '') {
+                    if ($imagefile_name == '') {
                         kurisaba_exit('ОП-пост нельзя отправить без картинки или видео.', '', $_POST['message']);
                     }
                 } else {
@@ -332,9 +330,7 @@ if ($operation_post) { // it's `noreturn`.
                         }
                     } else { // old behavior; if there is an embed or imagefile_name - is to be determined.
                         if ($_POST['embed'] == '') {
-                            if ($board_class->board['uploadtype'] == '2') {
-                                kurisaba_exit('ОП-пост должен начинаться с видео.', '', $_POST['message']);
-                            } elseif ($board_class->board['uploadtype'] == '1' && $imagefile_name == '') {
+                            if ($imagefile_name == '') {
                                 kurisaba_exit('ОП-пост нельзя отправить без картинки или видео.', '', $_POST['message']);
                             }
                         }
@@ -458,14 +454,7 @@ if ($operation_post) { // it's `noreturn`.
                 kurisaba_exit(_gettext('An image, video, or message, is required for a reply.'), '', $_POST['message']);
             }
         }
-    } else {
-        if ($imagefile_name == '' && !$is_oekaki  && $_POST['embed'] == '' && $_POST['embedlink'] == '' && $_POST['drop_file_name'] == '' && ((!isset($_POST['nofile']) && $board_class->board['enablenofile'] == 1) || $board_class->board['enablenofile'] == 0) && ($board_class->board['type'] == 0 || $board_class->board['type'] == 2 || $board_class->board['type'] == 3)) {
-            if (!isset($_POST['embed']) && $board_class->board['uploadtype'] != 1) {
-                kurisaba_exit('ОП-пост нельзя отправить без картинки или видео.', '', $_POST['message']);
-            }
-        }
     }
-
     if (isset($_POST['nofile']) && $board_class->board['enablenofile'] == 1) {
         if ($post_message == '') {
             kurisaba_exit('Нужно ввести текст сообщения или приложить картинку или видео.', '', $_POST['message']);

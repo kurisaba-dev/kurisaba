@@ -41,7 +41,6 @@ CREATE TABLE IF NOT EXISTS `boards` (
   `name` varchar(75) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
   `type` tinyint(1) NOT NULL DEFAULT '0',
   `start` int(10) unsigned NOT NULL DEFAULT '1',
-  `uploadtype` tinyint(1) NOT NULL DEFAULT '1',
   `desc` varchar(75) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
   `image` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `section` tinyint(2) NOT NULL DEFAULT '0',

@@ -97,19 +97,8 @@ class Posting
             ( /* It is a text board, meaning only a message is required */
                 $board_class->board['type'] == '1' &&
                 isset($_POST['message'])
-            ) || (
-                ( /* It has embedding allowed */
-                    $board_class->board['uploadtype'] == '1' ||
-                    $board_class->board['uploadtype'] == '2'
-                ) && ( /* An embed ID was provided, or no file was checked and no ID was supplied */
-                    isset($_POST['embed']) ||
-                    (
-                        $board_class->board['uploadtype'] == '2' &&
-                        !isset($_FILES['imagefile']) &&
-                        isset($_POST['nofile']) &&
-                        $board_class->board['enablenofile'] == true
-                    )
-                )
+            ) || ( /* An embed ID was provided */
+                isset($_POST['embed'])
             )
         ) {
             return true;

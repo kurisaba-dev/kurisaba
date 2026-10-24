@@ -97,7 +97,6 @@
 				</td>
 			</tr>
 
-			{if $board.uploadtype eq 0 || $board.uploadtype eq 1 || $board.uploadtype eq 2}
 				<tr>
 					<td class="postblock">
 						Прикрепить
@@ -105,7 +104,7 @@
 					<td>
 						<label><input class="stradio" type="radio" name="attach_type" value="file" checked onchange="showembedfield(this);"><span> Открыть файл</span></label>
 						<label><input class="stradio" type="radio" name="attach_type" value="drop" onchange="showembedfield(this);"><span> Перетащить файл</span></label>
-						{if ($board.uploadtype eq 1 || $board.uploadtype eq 2) && $board.embeds_allowed neq ''}
+						{if $board.embeds_allowed neq ''}
 							<label><input class="stradio" type="radio" name="attach_type" value="embed" onchange="showembedfield(this);"><span> Видео</span></label>
 						{/if}
 						<label><input class="stradio" type="radio" name="attach_type" value="link" onchange="showembedfield(this);"><span> Ссылка</span></label>
@@ -160,7 +159,7 @@
 					</td>
 				</tr>
 				
-				{if ($board.uploadtype eq 1 || $board.uploadtype eq 2) && $board.embeds_allowed neq ''}
+				{if $board.embeds_allowed neq ''}
 					<tr id="attachembed_tr" style="height: 26px; display: none;">
 						<td class="postblock">
 							<select name="embedtype" style="margin-top: -2px; margin-bottom: -2px;">
@@ -184,7 +183,6 @@
 						<input type="text" name="embedlink" value="" size="76" style="width: 520px;" />
 					</td>
 				</tr>
-			{/if}
 
 			<tr>
 			<span class="captcha"></span>

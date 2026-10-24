@@ -57,7 +57,6 @@
 			<td colspan="2">{$recaptcha}</td>
 		</tr>
 	{/if}
-	{if $board.uploadtype eq 0 || $board.uploadtype eq 1}
 		<tr>
 			<td class="postblock">
 				{t}File{/t}
@@ -69,7 +68,6 @@
 			{/if}
 			</td>
 		</tr>
-	{/if}
 	{if $replythread eq 0 && %KU_TAGS neq ''}
 		<tr>
 			<td class="postblock">
