@@ -4491,6 +4491,55 @@ class Manage
         die();
     }
 
+    public function edittrips()
+    {
+        global $tc_db, $tpl_page;
+        $this->AdministratorsOnly();
+        $tpl_page .= '<h2>' . _gettext('Special tripcodes') . '</h2>';
+
+        if (isset($_POST['apply'])) {
+            $tpl_page .= _gettext('Not implemented!');
+        } else {
+            $trips = array();
+            $trips_data = $tc_db->GetAll("SELECT `value` FROM `" . KU_DBPREFIX . "kurisaba_ext_data` WHERE `name` = 'trips' LIMIT 1");
+            if (count($trips_data) > 0) {
+                $trips = unserialize($trips_data[0]['value']);
+            }
+            $tpl_page .= '<script>
+                function trip_add() {
+                    rows = document.querySelectorAll("table#trip-table tr.tripstring");
+                    if (rows.length > 0) {
+                        num = parseInt(rows[rows.length-1].id.replace("trip-",""));
+                        sel = "#trip-" + num;
+                        num++;
+                    } else {
+                        num = 0;
+                        sel = "#trip-hdr";
+                    }
+                    newrow = document.createElement("tr");
+                    newrow.id = "trip-" + num;
+                    newrow.className = "tripstring";
+                    newrow.innerHTML = "<td style=\"padding: 5px;\"><input type=\"text\" size=\"50\" name=\"tripcode-" + num + "\"></td><td style=\"padding: 5px;\"><input type=\"text\" size=\"50\" name=\"tripresult-" + num + "\"></td><td style=\"padding: 5px;\"><input type=\"button\" onclick=\"javascript:document.querySelector(&quot;#trip-" + num + "&quot;).remove();\" value=\"' . _gettext('Delete') . '\" /></td>";
+                    document.querySelector(sel).after(newrow);
+                }
+            </script>';
+            $tpl_page .= '<form action="?action=edittrips"  method="post"><table id="trip-table" border=0>';
+            $tpl_page .= '<input type="hidden" name="token" value="' . $_SESSION['token'] . '" />';
+            $tpl_page .= '<input type="hidden" name="apply" value="1" />';
+            $tpl_page .= '<tr id="trip-hdr"><th style="padding: 5px;"><strong>' . _gettext('Tripcode') . '</strong></th><th style="padding: 5px;"><strong>' . _gettext('Result') . '</strong></th>';
+            $tpl_page .= '<th style="padding: 5px;"><input type="button" onclick="javascript:trip_add();" value="' . _gettext('Add more') . '" /></th></tr>';
+            $idx = 0;
+            foreach ($trips as $tripcode => $tripresult) {
+                $tpl_page .= '<tr class="tripstring" id="trip-'. $idx . '"><td style="padding: 5px;"><input type="text" size="50" name="tripcode-' . $idx . '" value="' . $tripcode . '"/></td>';
+                $tpl_page .= '<td style="padding: 5px;"><input type="text" size="50" name="tripresult-' . $idx . '" value="' . $tripresult . '"/></td>';
+                $tpl_page .= '<td style="padding: 5px;"><input type="button" onclick="javascript:document.querySelector(&quot;#trip-'. $idx . '&quot;).remove();" value="' . _gettext('Delete') . '" /></td></tr>';
+                $idx++;
+            }
+            $tpl_page .= '<tr><td colspan=3><input type="submit" value="'. _gettext('Submit') .'" /></td></tr>';
+            $tpl_page .= '</table></form>';
+        }
+    }
+
     public function enginesettings()
     {
         global $tc_db, $tpl_page;

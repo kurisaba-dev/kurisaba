@@ -103,6 +103,7 @@ if (!$manage_class->ValidateSession(true)) {
 		<li><a href="manage_page.php?action=viewthread">'._gettext('View thread (including deleted)').'</a></li>
 		<li><a href="manage_page.php?action=editfiletypes">' . _gettext('Edit filetypes') . '</a></li>
 		<li><a href="manage_page.php?action=editsections">' . _gettext('Edit sections') . '</a></li>
+		<li><a href="manage_page.php?action=edittrips">' . _gettext('Edit special tripcodes') . '</a></li>
 		<li><a href="manage_page.php?action=enginesettings">' . _gettext('Engine settings') . '</a></li>' . "\n";
     }
     if ($manage_class->CurrentUserIsAdministrator() || $manage_class->CurrentUserIsModerator()) {

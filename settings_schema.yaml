@@ -311,11 +311,3 @@ config:
         default: false
         comment: 'Показывать сообщение "Thumbnail displayed, click image for full size." у предпросмотров картинок.'
         type: bool
-
-  - others:
-    name: 'Другое'
-    options:
-      KU_TRIPS:
-        default: 'a:2:{s:10:"#tripcode1";s:11:"tripresult1";s:10:"#tripcode2";s:11:"tripresult2";}'
-        comment: 'Специальные трипкоды (до 30 символов каждый, serialized-массив). Для отключения можно установить в "a:0:{}".'
-        type: string

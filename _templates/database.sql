@@ -128,6 +128,7 @@ INSERT INTO `kurisaba_ext_data` (`name`, `value`) VALUES
 ('thread_cirno', '/a/9'),
 ('thread_faq', '/d/1'),
 ('thread_dev', '/d/2'),
+('trips', 'a:2:{s:10:"#tripcode1";s:11:"tripresult1";s:10:"#tripcode2";s:11:"tripresult2";}'),
 ('special_threads', 'BOARD b\r\nTHREAD 100 /some/ Some Thread\r\nBOARD d\r\nBOARD a\r\nTHREAD 1 /a/a/ General Anime\r\nHIDDEN 9 /9/ Cirno Thread\r\n');
 
 CREATE TABLE IF NOT EXISTS `loginattempts` (

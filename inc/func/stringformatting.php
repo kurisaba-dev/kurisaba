@@ -111,13 +111,19 @@ function calculateNameAndTripcode($post_name)
 {
     global $tc_db;
 
+    $trips = array();
+    $trips_data = $tc_db->GetAll("SELECT `value` FROM `" . KU_DBPREFIX . "kurisaba_ext_data` WHERE `name` = 'trips' LIMIT 1");
+
+    if (count($trips_data) > 0) {
+        $trips = unserialize($trips_data[0]['value']);
+    }
+
     if (preg_match("/(#|!)(.*)/", $post_name, $regs)) {
         $cap = $regs[2];
         $cap_full = '#' . $regs[2];
 
         // {{{ Special tripcode check
 
-        $trips = unserialize(KU_TRIPS);
         if (count($trips) > 0) {
             if (isset($trips[$cap_full])) {
                 $forcedtrip = $trips[$cap_full];
@@ -328,7 +334,7 @@ function processPost($id, $newthreadid, $oldthreadid, $board_from, $board_to, $b
         $message_new = str_replace('/read.php/' . $board_from . '/' . $oldthreadid, '/read.php/' . $board_to . '/' . $newthreadid, $message);
 
         if ($message_new != $message) {
-            $tc_db->GetOne("UPDATE " . KU_DBPREFIX . "posts SET `message` = " . $tc_db->qstr($message) . " WHERE `boardid` = " . $boardid . " AND `id` = " . $id);
+            $tc_db->Execute("UPDATE " . KU_DBPREFIX . "posts SET `message` = " . $tc_db->qstr($message) . " WHERE `boardid` = " . $boardid . " AND `id` = " . $id);
         }
     }
 }
