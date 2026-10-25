@@ -34,113 +34,65 @@ if (!headers_sent()) {
 
 $cf = array();
 
-// Caching (this needs to be set at the start because if enabled, it skips the rest of the configuration process)
-$cf['KU_APC'] = false;
+$cf['KU_PROTO'] = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == "on") ? 'https://' : 'http://';
+$cf['KU_BASE_HOST'] = $_SERVER['HTTP_HOST'];
 
-$cache_loaded = false;
-if ($cf['KU_APC']) {
-    if (apc_load_constants('config')) {
-        $cache_loaded = true;
-    }
+include 'config.php';
+
+$cf['KU_MENUSTYLES'] = $cf['KU_STYLES'];
+$cf['KU_DEFAULTMENUSTYLE'] = $cf['KU_DEFAULTSTYLE'];
+
+putenv('TZ='.$cf['KU_TZ']);
+
+$cf['KU_ROOTDIR'] = realpath(dirname(__FILE__))."/";
+$cf['KU_WEBFOLDER'] = '/';
+$cf['KU_TEMPLATEDIR'] = $cf['KU_ROOTDIR'] . 'dwoo/templates';
+$cf['KU_CACHEDTEMPLATEDIR'] = $cf['KU_ROOTDIR'] . 'tmp/dwoo';
+
+$css_js_files = array("css/*.css", "css/styles/*.css", "lib/javascript/*.js", "lib/javascript/prettify/*.js");
+$maxtimestamp = max(array_map("filemtime", array_merge(...array_map(fn($x) => glob($cf['KU_ROOTDIR'] . $x), $css_js_files))));
+$cf['KU_CSSVER'] = $cf['KU_JSVER'] = $maxtimestamp;
+
+$cf['KU_SUPPORTED_LOCALES'] = 'ru|en';
+$cf['KU_REACT_ENA'] = false;
+$cf['KU_LOCAL_REACT_API'] = 'http://127.0.0.1:1337';
+$cf['KU_REACT_SITENAME'] = 'yourchanid';
+$cf['KU_CLI_REACT_API'] = 'http://example.com:1337';
+$cf['KU_REACT_SRVTOKEN'] = 'ENTERRANDOMSHIT';
+
+// Версия курисабы
+$cf['KU_VERSION']    = '1.0 based on KusabaX-0.9.3/0chan';
+
+// Host and domain stuff
+$cf['KU_HOST'] = $_SERVER['HTTP_HOST'];
+$cf['KU_DOMAIN'] = '.' . $cf['KU_HOST']; // Used in cookies for the domain parameter.  Should be a period and then the top level domain, which will allow the cookies to be set for all subdomains.
+$cf['KU_WEBPATH'] = $cf['KU_PROTO'] . $cf['KU_HOST'];
+$cf['KU_REMOTE_ADDR'] = (array_key_exists("HTTP_CF_CONNECTING_IP", $_SERVER)) ? $_SERVER["HTTP_CF_CONNECTING_IP"] : $_SERVER['REMOTE_ADDR'];
+
+// Board subdomain/alternate directory (optional, change to enable)
+$cf['KU_BOARDSDIR']    = $cf['KU_ROOTDIR'];
+$cf['KU_BOARDSFOLDER'] = $cf['KU_WEBFOLDER'];
+$cf['KU_BOARDSPATH']   = $cf['KU_WEBPATH'];
+
+// CGI subdomain/alternate directory (optional, change to enable)
+$cf['KU_CGIDIR']    = $cf['KU_BOARDSDIR'];
+$cf['KU_CGIFOLDER'] = $cf['KU_BOARDSFOLDER'];
+$cf['KU_CGIPATH']   = $cf['KU_BOARDSPATH'];
+
+// Post-configuration actions
+if (substr($cf['KU_WEBFOLDER'], -2) == '//') {
+    $cf['KU_WEBFOLDER'] = substr($cf['KU_WEBFOLDER'], 0, -1);
+}
+if (substr($cf['KU_BOARDSFOLDER'], -2) == '//') {
+    $cf['KU_BOARDSFOLDER'] = substr($cf['KU_BOARDSFOLDER'], 0, -1);
+}
+if (substr($cf['KU_CGIFOLDER'], -2) == '//') {
+    $cf['KU_CGIFOLDER'] = substr($cf['KU_CGIFOLDER'], 0, -1);
 }
 
-if (!$cache_loaded) {
-
-    $cf['KU_PROTO'] = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == "on") ? 'https://' : 'http://';
-    $cf['KU_BASE_HOST'] = $_SERVER['HTTP_HOST'];
-
-    include 'config.php';
-
-    $cf['KU_MENUSTYLES'] = $cf['KU_STYLES'];
-    $cf['KU_DEFAULTMENUSTYLE'] = $cf['KU_DEFAULTSTYLE'];
-
-    putenv('TZ='.$cf['KU_TZ']);
-
-    $cf['KU_ROOTDIR'] = realpath(dirname(__FILE__))."/";
-    $cf['KU_WEBFOLDER'] = '/';
-    $cf['KU_TEMPLATEDIR'] = $cf['KU_ROOTDIR'] . 'dwoo/templates';
-    $cf['KU_CACHEDTEMPLATEDIR'] = $cf['KU_ROOTDIR'] . 'tmp/dwoo';
-
-    $css_js_files = array("css/*.css", "css/styles/*.css", "lib/javascript/*.js", "lib/javascript/prettify/*.js");
-    $maxtimestamp = max(array_map("filemtime", array_merge(...array_map(fn($x) => glob($cf['KU_ROOTDIR'] . $x), $css_js_files))));
-    $cf['KU_CSSVER'] = $cf['KU_JSVER'] = $maxtimestamp;
-
-    $cf['KU_SUPPORTED_LOCALES'] = 'ru|en';
-    $cf['KU_REACT_ENA'] = false;
-    $cf['KU_LOCAL_REACT_API'] = 'http://127.0.0.1:1337';
-    $cf['KU_REACT_SITENAME'] = 'yourchanid';
-    $cf['KU_CLI_REACT_API'] = 'http://example.com:1337';
-    $cf['KU_REACT_SRVTOKEN'] = 'ENTERRANDOMSHIT';
-
-    // Версия курисабы
-    $cf['KU_VERSION']    = '1.0 based on KusabaX-0.9.3/0chan';
-
-    // Host and domain stuff
-    $cf['KU_HOST'] = isset($_SERVER['HTTP_HOST']) ? preg_replace("/[^A-Za-z0-9.:]/", '', $_SERVER['HTTP_HOST']) : $cf['KU_BASE_HOST']; // escape string
-    $cf['KU_DOMAIN'] = '.' . $cf['KU_HOST']; // Used in cookies for the domain parameter.  Should be a period and then the top level domain, which will allow the cookies to be set for all subdomains.
-    $cf['KU_WEBPATH'] = $cf['KU_PROTO'] . $cf['KU_HOST'];
-    $cf['KU_REMOTE_ADDR'] = (array_key_exists("HTTP_CF_CONNECTING_IP", $_SERVER)) ? $_SERVER["HTTP_CF_CONNECTING_IP"] : $_SERVER['REMOTE_ADDR'];
-
-    // Board subdomain/alternate directory (optional, change to enable)
-    $cf['KU_BOARDSDIR']    = $cf['KU_ROOTDIR'];
-    $cf['KU_BOARDSFOLDER'] = $cf['KU_WEBFOLDER'];
-    $cf['KU_BOARDSPATH']   = $cf['KU_WEBPATH'];
-
-    // CGI subdomain/alternate directory (optional, change to enable)
-    $cf['KU_CGIDIR']    = $cf['KU_BOARDSDIR'];
-    $cf['KU_CGIFOLDER'] = $cf['KU_BOARDSFOLDER'];
-    $cf['KU_CGIPATH']   = $cf['KU_BOARDSPATH'];
-
-    // Post-configuration actions
-    if (substr($cf['KU_WEBFOLDER'], -2) == '//') {
-        $cf['KU_WEBFOLDER'] = substr($cf['KU_WEBFOLDER'], 0, -1);
-    }
-    if (substr($cf['KU_BOARDSFOLDER'], -2) == '//') {
-        $cf['KU_BOARDSFOLDER'] = substr($cf['KU_BOARDSFOLDER'], 0, -1);
-    }
-    if (substr($cf['KU_CGIFOLDER'], -2) == '//') {
-        $cf['KU_CGIFOLDER'] = substr($cf['KU_CGIFOLDER'], 0, -1);
-    }
-
-    $cf['KU_WEBPATH'] = trim($cf['KU_WEBPATH'], '/');
-    $cf['KU_BOARDSPATH'] = trim($cf['KU_BOARDSPATH'], '/');
-    $cf['KU_CGIPATH'] = trim($cf['KU_CGIPATH'], '/');
-
-    if ($cf['KU_APC']) {
-        apc_define_constants('config', $cf);
-    }
-    foreach ($cf as $key => $value) {
-        define($key, $value);
-    }
-    unset($cf);
-}
-
-$modules_loaded = array();
-$required = array(KU_ROOTDIR, KU_WEBFOLDER, KU_WEBPATH);
-if (in_array('CHANGEME', $required) || in_array('', $required)) {
-    echo 'You must set KU_ROOTDIR, KU_WEBFOLDER, and KU_WEBPATH before installation will finish!';
-    die();
-}
-require KU_ROOTDIR . 'lib/gettext/gettext.inc.php';
-
-function captcha_color($color)
-{
-    if(preg_match('/^rgb\(([0-9]+), ?([0-9]+), ?([0-9]+)\)$/', strtolower($color), $matches)) return array((int)$matches[1], (int)$matches[2], (int)$matches[3]);
-    return array(85, 85, 85);
-}
-
-// Gettext
-_textdomain('kusaba');
-_setlocale(LC_ALL, KU_LOCALE);
-_bindtextdomain('kusaba', KU_ROOTDIR . 'inc/lang');
-_bind_textdomain_codeset('kusaba', KU_CHARSET);
-
-// Cookies
-function setcookie_strict(string $name, string $value = "", int $expires_or_options = 0, string $path = "", string $domain = "", bool $secure = false, bool $httponly = false): bool
-{
-    // PHP < 7.3.0 (unsupported for now): return setcookie($name, $value, $expires_or_options, $path, $domain, $secure, $httponly);
-    return setcookie($name, $value, [ 'expires' => $expires_or_options, 'path' => $path, 'domain' => $domain, 'secure' => $secure, 'httponly' => $httponly, 'samesite' => 'Strict' ]);
-}
+$cf['KU_WEBPATH'] = trim($cf['KU_WEBPATH'], '/');
+$cf['KU_BOARDSPATH'] = trim($cf['KU_BOARDSPATH'], '/');
+$cf['KU_CGIPATH'] = trim($cf['KU_CGIPATH'], '/');
 
 class DatabaseProxy
 {
@@ -184,18 +136,70 @@ class DatabaseProxy
     }
 }
 
-// SQL database
+// Connect to database and load config data
 if (!isset($tc_db) && !isset($preconfig_db_unnecessary)) {
+    if (!isset($cf['KU_DSN'])) {
+        die('You have no database configuration in config.php.');
+    }
     try {
-        $tc_db = new DatabaseProxy(KU_DSN, KU_DBUSERNAME, KU_DBPASSWORD);
+        $tc_db = new DatabaseProxy($cf['KU_DSN'], $cf['KU_DBUSERNAME'], $cf['KU_DBPASSWORD']);
     } catch (PDOException $e) {
         die('SQL database connection error: ' . $e->getMessage());
+    }
+    if (!$tc_db) {
+        die('SQL database connection error');
     }
     $tc_db->Execute("SET NAMES 'utf8mb4'");
     $tc_db->Execute("SET character_set_connection = 'utf8mb4'");
     $tc_db->Execute("SET character_set_results = 'utf8mb4'");
     $tc_db->Execute("SET character_set_client = 'utf8mb4'");
+
+    $configs = yaml_parse(file_get_contents($cf['KU_ROOTDIR'] . 'settings_schema.yaml'));
+    $configdata = $tc_db->GetAll("SELECT HIGH_PRIORITY * FROM `" . $cf['KU_DBPREFIX'] . "kurisaba_ext_data`");
+    foreach ($configs['config'] as $section) {
+        foreach ($section['options'] as $optname => $option) {
+            $dataval = isset($cf[$optname]) ? $cf[$optname] : $option['default'];
+            foreach ($configdata as $configentry) {
+                if ($configentry['name'] == $optname) {
+                    $dataval = $configentry['value'];
+                    break;
+                }
+            }
+            if($option['type'] == 'bool') {
+                if ($dataval === 'false') $dataval = false;
+            }
+            $cf[$optname] = $dataval;
+        }
+    }
 }
+
+foreach ($cf as $key => $value) {
+    define($key, $value);
+}
+unset($cf);
+
+$modules_loaded = array();
+require KU_ROOTDIR . 'lib/gettext/gettext.inc.php';
+
+function captcha_color($color)
+{
+    if(preg_match('/^rgb\(([0-9]+), ?([0-9]+), ?([0-9]+)\)$/', strtolower($color), $matches)) return array((int)$matches[1], (int)$matches[2], (int)$matches[3]);
+    return array(85, 85, 85);
+}
+
+// Gettext
+_textdomain('kusaba');
+_setlocale(LC_ALL, KU_LOCALE);
+_bindtextdomain('kusaba', KU_ROOTDIR . 'inc/lang');
+_bind_textdomain_codeset('kusaba', KU_CHARSET);
+
+// Cookies
+function setcookie_strict(string $name, string $value = "", int $expires_or_options = 0, string $path = "", string $domain = "", bool $secure = false, bool $httponly = false): bool
+{
+    // PHP < 7.3.0 (unsupported for now): return setcookie($name, $value, $expires_or_options, $path, $domain, $secure, $httponly);
+    return setcookie($name, $value, [ 'expires' => $expires_or_options, 'path' => $path, 'domain' => $domain, 'secure' => $secure, 'httponly' => $httponly, 'samesite' => 'Strict' ]);
+}
+
 
 function stripslashes_deep($value)
 {

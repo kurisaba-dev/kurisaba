@@ -1,12 +1,5 @@
 <?php
-if (file_exists("install.php")) {
-    die('You are seeing this message because either you haven\'t ran the install file yet, and can do so <a href="install.php">here</a>, or already have, and <strong>must delete it</strong>.');
-}
-if (!isset($_GET['info'])) {
-    $preconfig_db_unnecessary = true;
-}
 require 'settings_manager.php';
-$menufile = 'menu.php';
 ?>
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
@@ -64,8 +57,8 @@ if (isset($_GET['info'])) {
 ?>
 <body style="overflow: hidden;">
 	<table style="width: 100%; height: 100%; border-collapse: collapse;"><tr><td style="width: 15%; min-width: 240px; padding: 0px;">
-	<iframe src="<?php echo $menufile; ?>" name="menu" id="menu">
-		<a href="<?php echo KU_WEBPATH . '/' . $menufile; ?>"><?php echo KU_NAME; ?></a>
+	<iframe src="menu.php" name="menu" id="menu">
+		<a href="<?php echo KU_WEBPATH . '/menu.php'; ?>"><?php echo KU_NAME; ?></a>
 	</iframe>
 	</td><td style="padding: 0px; height: 100%;">
 	<iframe src="/<?php echo KU_DEFAULTBOARD;?>/" name="main" id="main">

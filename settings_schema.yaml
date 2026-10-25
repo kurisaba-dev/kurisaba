@@ -52,26 +52,6 @@ config:
         comment: 'Сетевой интерфейс для загрузки файла по ссылке (например, "tun0"). Чтобы при загрузке файла не палить IP, рекомендуется поднять VPN до какого-нибудь сервера, который не жалко подставлять под DDoS и указать здесь сетевой интерфейс VPN.'
         type: string
 
-  - database:
-    name: 'Настройки базы данных'
-    options:
-      KU_DSN:
-        default: 'mysql:host=localhost;dbname=kurisaba'
-        comment: 'DSN-строка, описывающая способ соединения с базой данных для PDO. Более подробно: https://www.php.net/manual/en/pdo.connect.php'
-        type: string
-      KU_DBUSERNAME:
-        default: 'db_user'
-        comment: 'Имя пользователя. На SQLite игнорируется.'
-        type: string
-      KU_DBPASSWORD:
-        default: 'password'
-        comment: 'Пароль. На SQLite игнорируется.'
-        type: string
-      KU_DBPREFIX:
-        default: ''
-        comment: 'Префикс таблиц. Это позволяет держать несколько независимых борд на домене с одной разрешённой базой. Например, таблицы одной борды могут называться "boards", "posts", и т.п. (префикс пустой), а другой - "NEWboards", "NEWposts", и т.п. (префикс "NEW"). При первой установке после импорта шаблона базы это надо учесть.'
-        type: string
-
   - locale:
     name: 'Локаль и время'
     options:
