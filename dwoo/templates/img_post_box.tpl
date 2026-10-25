@@ -270,12 +270,14 @@
 		if (getCookie('ku_showblotter') != '1') {
 			hideblotter();
 		}
-		document.forms.postform.email.value = "";
-		window.addEventListener('DOMContentLoaded', function() {
+		if(document.forms.postform.email) {
 			document.forms.postform.email.value = "";
-			setTimeout(function() {
+			window.addEventListener('DOMContentLoaded', function() {
 				document.forms.postform.email.value = "";
-			}, 18000);
-		});
+				setTimeout(function() {
+					document.forms.postform.email.value = "";
+				}, 18000);
+			});
+		}
 	</script>
 </div>
