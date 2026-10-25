@@ -4498,7 +4498,15 @@ class Manage
         $tpl_page .= '<h2>' . _gettext('Special tripcodes') . '</h2>';
 
         if (isset($_POST['apply'])) {
-            $tpl_page .= _gettext('Not implemented!');
+            $trips = array();
+            foreach($_POST as $key => $value) {
+                if (preg_match('/tripcode-([0-9]+)/', $key, $matches)) {
+                    $trips[$value] = $_POST['tripresult-'. $matches[1]];
+                }
+            }
+            $trips_data = serialize($trips);
+            $tc_db->Execute("REPLACE INTO `" . KU_DBPREFIX . "kurisaba_ext_data` (`name`, `value`) VALUES ('trips', " . $tc_db->qstr($trips_data) . ")");
+            $tpl_page .= _gettext('Tripcodes saved') . ':<br /><pre>' . print_r($trips, true) . '</pre>';
         } else {
             $trips = array();
             $trips_data = $tc_db->GetAll("SELECT `value` FROM `" . KU_DBPREFIX . "kurisaba_ext_data` WHERE `name` = 'trips' LIMIT 1");
