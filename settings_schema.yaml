@@ -295,17 +295,9 @@ config:
         default: 'aobasu'
         comment: 'Дефолтный стиль для досок, на которых он не задан. Маленькими буквами.'
         type: string
-      KU_MENUSTYLESWITCHER:
-        default: true
-        comment: 'Показывать переключалку стилей в меню.'
-        type: bool
       KU_STYLESWITCHER:
         default: true
-        comment: 'Показывать переключалку стилей на upload-досках.'
-        type: bool
-      KU_DROPSWITCHER:
-        default: true
-        comment: 'Показывать переключалку стилей на upload-досках в виде выпадающего списка, а не обычно.'
+        comment: 'Показывать переключалку стилей в меню.'
         type: bool
 
   - images:
