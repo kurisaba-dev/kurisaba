@@ -4527,8 +4527,14 @@ class Manage
                     newrow = document.createElement("tr");
                     newrow.id = "trip-" + num;
                     newrow.className = "tripstring";
-                    newrow.innerHTML = "<td style=\"padding: 5px;\"><input type=\"text\" size=\"50\" name=\"tripcode-" + num + "\"></td><td style=\"padding: 5px;\"><input type=\"text\" size=\"50\" name=\"tripresult-" + num + "\"></td><td style=\"padding: 5px;\"><input type=\"button\" onclick=\"javascript:document.querySelector(&quot;#trip-" + num + "&quot;).remove();\" value=\"' . _gettext('Delete') . '\" /></td>";
+                    newrow.innerHTML = "<td style=\"padding: 5px;\"><input class=\"tripkey\" type=\"text\" size=\"50\" name=\"tripcode-" + num + "\"></td><td style=\"padding: 5px;\"><input type=\"text\" size=\"50\" name=\"tripresult-" + num + "\"></td><td style=\"padding: 5px;\"><input type=\"button\" onclick=\"javascript:document.querySelector(&quot;#trip-" + num + "&quot;).remove();\" value=\"' . _gettext('Delete') . '\" /></td>";
                     document.querySelector(sel).after(newrow);
+                }
+                function trip_check() {
+                    tripcodes = Array.from(document.querySelectorAll(".tripkey")).map((x)=>{return x.value;})
+                    if (tripcodes.includes("")) {alert("' . _gettext("Tripcode can't be empty.") . '"); return false;}
+                    if (new Set(tripcodes).size !== tripcodes.length) {alert("' . _gettext("You have duplicate tripcodes, remove them.") . '"); return false;}
+                    return true;
                 }
             </script>';
             $tpl_page .= '<form action="?action=edittrips"  method="post"><table id="trip-table" border=0>';
@@ -4538,12 +4544,12 @@ class Manage
             $tpl_page .= '<th style="padding: 5px;"><input type="button" onclick="javascript:trip_add();" value="' . _gettext('Add more') . '" /></th></tr>';
             $idx = 0;
             foreach ($trips as $tripcode => $tripresult) {
-                $tpl_page .= '<tr class="tripstring" id="trip-'. $idx . '"><td style="padding: 5px;"><input type="text" size="50" name="tripcode-' . $idx . '" value="' . $tripcode . '"/></td>';
+                $tpl_page .= '<tr class="tripstring" id="trip-'. $idx . '"><td style="padding: 5px;"><input class="tripkey" type="text" size="50" name="tripcode-' . $idx . '" value="' . $tripcode . '"/></td>';
                 $tpl_page .= '<td style="padding: 5px;"><input type="text" size="50" name="tripresult-' . $idx . '" value="' . $tripresult . '"/></td>';
                 $tpl_page .= '<td style="padding: 5px;"><input type="button" onclick="javascript:document.querySelector(&quot;#trip-'. $idx . '&quot;).remove();" value="' . _gettext('Delete') . '" /></td></tr>';
                 $idx++;
             }
-            $tpl_page .= '<tr><td colspan=3><input type="submit" value="'. _gettext('Submit') .'" /></td></tr>';
+            $tpl_page .= '<tr><td colspan=3><input type="submit" value="'. _gettext('Submit') .'" onclick="javascript:return trip_check();"/></td></tr>';
             $tpl_page .= '</table></form>';
         }
     }
