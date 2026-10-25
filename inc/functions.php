@@ -25,16 +25,12 @@
  * @package kusaba
  */
 
-include KU_ROOTDIR . 'inc/func/apc.php';
 include KU_ROOTDIR . 'inc/func/calculations.php';
 include KU_ROOTDIR . 'inc/func/directories.php';
 include KU_ROOTDIR . 'inc/func/encryption.php';
-include KU_ROOTDIR . 'inc/func/fetching.php';
 include KU_ROOTDIR . 'inc/func/misc.php';
 include KU_ROOTDIR . 'inc/func/module.php';
 include KU_ROOTDIR . 'inc/func/numberformatting.php';
-include KU_ROOTDIR . 'inc/func/pages.php';
 include KU_ROOTDIR . 'inc/func/posts.php';
 include KU_ROOTDIR . 'inc/func/stringformatting.php';
-include KU_ROOTDIR . 'inc/func/validation.php';
 include KU_ROOTDIR . 'inc/func/custom.php';

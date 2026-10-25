@@ -400,9 +400,6 @@ msgstr "Toate sunt în regulă"
 msgid "Clear"
 msgstr "Şterge"
 
-msgid "Cleared APC cache"
-msgstr "Cache APC şters"
-
 msgid "Click %shere%s to return to Ad Management."
 msgstr "Click %saici%s pentru a te întoarce la Administrarea Reclamelor."
 

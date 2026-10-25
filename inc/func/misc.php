@@ -508,3 +508,81 @@ function do_redirect($url, $ispost = false, $file = '')
         die('<meta http-equiv="refresh" content="1;url=' . $url . '">');
     }
 }
+
+/**
+ * Gets information about the filetype provided, which is specified in the manage panel
+ *
+ * @param string $filetype Filetype
+ * @return array Filetype image, width, and height
+ */
+function getfiletypeinfo($filetype)
+{
+    global $tc_db;
+
+    $results = $tc_db->GetAll("SELECT `image`, `image_w`, `image_h` FROM `" . KU_DBPREFIX . "filetypes` WHERE `filetype` = " . $tc_db->qstr($filetype) . " LIMIT 1");
+    if (count($results) > 0) {
+        foreach ($results as $line) {
+            $return = array($line['image'],$line['image_w'],$line['image_h']);
+        }
+    } else {
+        /* No info was found, return the generic icon */
+        $return = array('generic.png',48,48);
+    }
+
+    return $return;
+}
+
+/**
+ * Clear cache for the supplied post ID of the supplied board
+ *
+ * @param integer $id Post ID
+ * @param string $board Board name
+ */
+function clearPostCache($id, $board)
+{
+    global $tc_db;
+    $tc_db->Execute("DELETE FROM `" . KU_DBPREFIX . "reports` WHERE `postid` = " . $id . " AND `board` = " . $tc_db->qstr($board));
+}
+
+/**
+ * Generate the list of pages, linking to each
+ *
+ * @param integer $boardpage Current board page
+ * @param integer $pages Number of pages
+ * @param string $board Board directory
+ * @return string Generated page list
+ */
+
+/* <3 coda for this wonderful snippet
+print $contents to $filename by using a temporary file and renaming it */
+function print_page($filename, $contents, $board)
+{
+    global $tc_db;
+
+    $tempfile = tempnam(KU_BOARDSDIR . $board . '/res', 'tmp'); /* Create the temporary file */
+    $fp = fopen($tempfile, 'w');
+    fwrite($fp, $contents);
+    fclose($fp);
+    /* If we aren't able to use the rename function, try the alternate method */
+    if (!@rename($tempfile, $filename)) {
+        copy($tempfile, $filename);
+        unlink($tempfile);
+    }
+
+    chmod($filename, 0664); /* it was created 0600 */
+}
+
+/**
+ * Run a greater than zero check on each ID in the array
+ *
+ * @param array $ids Array of thread IDs
+ */
+
+function isNormalUser($authority)
+{
+    if ($authority == 1 || $authority == 2 || $authority == 4) {
+        return false;
+    } else {
+        return true;
+    }
+}

@@ -88,9 +88,6 @@ if (!$manage_class->ValidateSession(true)) {
 		<li><a href="manage_page.php?action=sql">' . _gettext('SQL query') . '</a></li>
 		<li><a href="manage_page.php?action=rebuildanswerslist">' . _gettext('Rebuild static reply map') . '</a></li>
 		<li><a href="manage_page.php?action=apachelog">' . _gettext('Apache log') . '</a></li>' . "\n";
-        if (KU_APC) {
-            $tpl_links .= '<li><a href="manage_page.php?action=apc">APC</a></li>' . "\n";
-        }
         $tpl_links .= '</ul></div>';
     }
     if ($manage_class->CurrentUserIsAdministrator()) {

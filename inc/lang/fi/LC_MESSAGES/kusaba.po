@@ -216,9 +216,6 @@ msgstr "Puhdista"
 msgid "Cleanup finished."
 msgstr "Siivoaminen suoritettu."
 
-msgid "Cleared APC cache"
-msgstr "APC-välimuisti tyhjennetty"
-
 msgid "Click Reply to view, or %sexpand%s."
 msgstr "Klikkaa Vastaa katsellaksesi, tai %sexpand%s."
 

@@ -216,9 +216,6 @@ msgstr "Limpiar"
 msgid "Cleanup finished."
 msgstr "Limpieza finalizada."
 
-msgid "Cleared APC cache"
-msgstr "Caché APC limpiado"
-
 msgid "Click Reply to view, or %sexpand%s."
 msgstr "Haz click en Responder para ver, o %sexpande%s."
 

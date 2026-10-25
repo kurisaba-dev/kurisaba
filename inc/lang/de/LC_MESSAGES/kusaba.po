@@ -216,9 +216,6 @@ msgstr "Säubern"
 msgid "Cleanup finished."
 msgstr "Säuberung vollendet."
 
-msgid "Cleared APC cache"
-msgstr "APC Zwischenspeicher geleert"
-
 msgid "Click Reply to view, or %sexpand%s."
 msgstr "Klicke Antworten zum Anzeigen, oder %sexpandiere%s."
 

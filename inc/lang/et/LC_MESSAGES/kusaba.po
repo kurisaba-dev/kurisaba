@@ -216,9 +216,6 @@ msgstr "Koristamine"
 msgid "Cleanup finished."
 msgstr "Koristamine lõpetatud."
 
-msgid "Cleared APC cache"
-msgstr "Kustutas APC vahemälu"
-
 msgid "Click Reply to view, or %sexpand%s."
 msgstr "Klikka Vasta vaatamiseks, või %ssuurendamiseks%s."
 
