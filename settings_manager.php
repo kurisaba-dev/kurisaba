@@ -107,7 +107,7 @@ class DatabaseProxy
 
     public function ErrorMsg()
     {
-        return $this->$PDO_object->errorInfo[2];
+        return $this->$PDO_object->errorInfo()[2];
     }
 
     public function Execute($query)

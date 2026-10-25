@@ -857,10 +857,13 @@ class Manage
             $tpl_page .= '<hr />';
             $result = $tc_db->Execute($_POST['query']);
             if ($result) {
-                $tpl_page .= _gettext('Query executed successfully');
-                $tpl_page .= '<br>Результат:<pre>'."\n";
-                $tpl_page .= print_r($result, true);
-                $tpl_page .= '</pre>';
+                $tpl_page .= _gettext('Query executed successfully') . '.';
+                $data = $result->fetchAll();
+                if($data) {
+                    $tpl_page .= '<br>' . _gettext('Result:') . '<pre>'."\n";
+                    $tpl_page .= print_r($data, true);
+                    $tpl_page .= '</pre>';
+                }
             } else {
                 $tpl_page .= 'Error: '. $tc_db->ErrorMsg();
             }
