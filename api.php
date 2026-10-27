@@ -451,7 +451,7 @@ $api_function = array(
                     json_exit(400, "get_new_posts_count(): Board ID(s) are not valid", $request_id);
                 }
             } else {
-                $result[$board] = $tc_db->GetOne('SELECT COUNT(1) FROM `posts` WHERE `boardid` = '.$boardid.' AND`timestamp` > '.$timestamp);
+                $result[$board] = $tc_db->GetOne('SELECT COUNT(1) FROM `' . KU_DBPREFIX . 'posts` WHERE `boardid` = ' . $boardid . ' AND `timestamp` > ' . $timestamp);
             }
         }
 
@@ -476,14 +476,14 @@ $api_function = array(
 
         switch ($request['type']) {
             case "postslastday":
-                $result = $tc_db->GetOne("SELECT COUNT(*) FROM `" . KU_DBPREFIX . "posts` WHERE timestamp > " . (time() + KU_ADDTIME - 86400) . " ORDER BY `id` ASC");
+                $result = $tc_db->GetOne("SELECT COUNT(*) FROM `" . KU_DBPREFIX . "posts` WHERE `timestamp` > " . (time() + KU_ADDTIME - 86400) . " ORDER BY `id` ASC");
                 break;
             case "postslasthour":
-                $result = $tc_db->GetOne("SELECT COUNT(*) FROM `" . KU_DBPREFIX . "posts` WHERE timestamp > " . (time() + KU_ADDTIME - 3600) . " ORDER BY `id` ASC");
+                $result = $tc_db->GetOne("SELECT COUNT(*) FROM `" . KU_DBPREFIX . "posts` WHERE `timestamp` > " . (time() + KU_ADDTIME - 3600) . " ORDER BY `id` ASC");
                 break;
             case "postsboard":
                 $boardid      = get_boardid_by_name($request_id, $request['board']);
-                $result = $tc_db->GetOne("SELECT MAX(id) FROM posts WHERE boardid = " . $boardid);
+                $result = $tc_db->GetOne("SELECT MAX(id) FROM `" . KU_DBPREFIX . "posts` WHERE `boardid` = " . $boardid);
                 break;
             default:
                 json_exit(501, "get_stats(): Requested stats type is not implemented.", $request_id);
