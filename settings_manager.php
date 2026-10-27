@@ -37,6 +37,31 @@ $cf = array();
 $cf['KU_PROTO'] = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == "on") ? 'https://' : 'http://';
 $cf['KU_BASE_HOST'] = $_SERVER['HTTP_HOST'];
 
+function configure_database()
+{
+    global $cf;
+    if (isset($_POST['dsn']) && isset($_POST['dbusername']) && isset($_POST['dbpassword']) && isset($_POST['dbprefix'])) {
+        file_put_contents('config.php', '<' . "?php\n");
+        file_put_contents('config.php', '$cf["KU_DSN"]        = "' . $_POST['dsn'] . '";' . "\n", FILE_APPEND);
+        file_put_contents('config.php', '$cf["KU_DBUSERNAME"] = "' . $_POST['dbusername'] . '";' . "\n", FILE_APPEND);
+        file_put_contents('config.php', '$cf["KU_DBPASSWORD"] = "' . $_POST['dbpassword'] . '";' . "\n", FILE_APPEND);
+        file_put_contents('config.php', '$cf["KU_DBPREFIX"]   = "' . $_POST['dbprefix'] . '";' . "\n", FILE_APPEND);
+        header("Refresh: 0");
+        die();
+    }
+    print('<!DOCTYPE html><html><head><title>Database configuration</title></head><body><h3>You have no configured database in config.php. Please provide database credentials:</h3>');
+    print('<form action="settings_manager.php" method="POST">');
+    print('Database DSN: <input name="dsn" value="' . (isset($cf['KU_DSN']) ? $cf['KU_DSN'] : 'mysql:host=localhost;dbname=kurisaba') . '"><br />');
+    print('Database user name: <input name="dbusername" value="' . (isset($cf['KU_DBUSERNAME']) ? $cf['KU_DBUSERNAME'] : 'kurisaba') . '"><br />');
+    print('Database password: <input name="dbpassword" value="' . (isset($cf['KU_DBPASSWORD']) ? $cf['KU_DBPASSWORD'] : 'change me') . '"><br />');
+    print('Database table prefix: <input name="dbprefix" value="' . (isset($cf['KU_DBPREFIX']) ? $cf['KU_DBPREFIX'] : '') . '"><br />');
+    print('<input type="submit" value="Submit"></form></body></html>');
+    die();
+}
+
+if (!file_exists('config.php')) {
+    configure_database();
+}
 include 'config.php';
 
 $cf['KU_MENUSTYLES'] = $cf['KU_STYLES'];
@@ -136,10 +161,32 @@ class DatabaseProxy
     }
 }
 
+function prepare_database()
+{
+    global $cf, $tc_db;
+    $sql = explode(";\n", file_get_contents($cf['KU_ROOTDIR'] . "lib/deploy/database.sql"));
+    foreach ($sql as $statement) {
+        $statement = trim(str_replace("\n", " ", str_replace("{{KU_DBPREFIX}}", $cf['KU_DBPREFIX'], $statement)));
+        if(!empty($statement)) {
+            $tc_db->Execute($statement);
+        }
+    }
+    if(!file_exists($cf['KU_ROOTDIR'] . 'front.php')) {
+        copy($cf['KU_ROOTDIR'] . 'lib/deploy/front.php', $cf['KU_ROOTDIR'] . 'front.php');
+    }
+    if(stristr("Apache", $_SERVER['SERVER_SOFTWARE']) && !file_exists($cf['KU_ROOTDIR'] . '.htaccess.template')) {
+        copy($cf['KU_ROOTDIR'] . 'lib/deploy/.htaccess.template', $cf['KU_ROOTDIR'] . '.htaccess.template');
+    }
+    @mkdir($cf['KU_ROOTDIR'] . "tmp", 0755);
+    @mkdir($cf['KU_ROOTDIR'] . "tmp/dwoo", 0755);
+    @mkdir($cf['KU_ROOTDIR'] . "tmp/xhrupload", 0755);
+    header('Location: ' . $cf['KU_WEBPATH'] . '/manage.php');
+}
+
 // Connect to database and load config data
 if (!isset($tc_db) && !isset($preconfig_db_unnecessary)) {
-    if (!isset($cf['KU_DSN'])) {
-        die('You have no database configuration in config.php.');
+    if (!isset($cf['KU_DSN']) || empty($cf['KU_DSN'])) {
+        configure_database();
     }
     try {
         $tc_db = new DatabaseProxy($cf['KU_DSN'], $cf['KU_DBUSERNAME'], $cf['KU_DBPASSWORD']);
@@ -153,6 +200,11 @@ if (!isset($tc_db) && !isset($preconfig_db_unnecessary)) {
     $tc_db->Execute("SET character_set_connection = 'utf8mb4'");
     $tc_db->Execute("SET character_set_results = 'utf8mb4'");
     $tc_db->Execute("SET character_set_client = 'utf8mb4'");
+
+    $tables = $tc_db->GetAll("SHOW TABLES");
+    if(count($tables) == 0) {
+        prepare_database();
+    }
 
     $configs = yaml_parse(file_get_contents($cf['KU_ROOTDIR'] . 'settings_schema.yaml'));
     $configdata = $tc_db->GetAll("SELECT HIGH_PRIORITY * FROM `" . $cf['KU_DBPREFIX'] . "kurisaba_ext_data`");

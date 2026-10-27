@@ -1,4 +1,4 @@
-CREATE TABLE IF NOT EXISTS `answers` (
+CREATE TABLE IF NOT EXISTS `{{KU_DBPREFIX}}answers` (
   `from_id` int(10) unsigned NOT NULL,
   `from_boardid` smallint(5) unsigned NOT NULL,
   `from_parentid` int(10) NOT NULL,
@@ -10,7 +10,7 @@ CREATE TABLE IF NOT EXISTS `answers` (
   `IS_ARCHIVED` tinyint(1) NOT NULL DEFAULT '0'
 ) ENGINE=MyISAM DEFAULT CHARSET=cp1251;
 
-CREATE TABLE IF NOT EXISTS `banlist` (
+CREATE TABLE IF NOT EXISTS `{{KU_DBPREFIX}}banlist` (
 `id` mediumint(8) unsigned NOT NULL,
   `type` tinyint(1) NOT NULL DEFAULT '0',
   `expired` tinyint(1) NOT NULL DEFAULT '0',
@@ -28,14 +28,14 @@ CREATE TABLE IF NOT EXISTS `banlist` (
   `appealat` int(20) NOT NULL DEFAULT '0'
 ) ENGINE=MyISAM AUTO_INCREMENT=230 DEFAULT CHARSET=utf8;
 
-CREATE TABLE IF NOT EXISTS `bannedhashes` (
+CREATE TABLE IF NOT EXISTS `{{KU_DBPREFIX}}bannedhashes` (
 `id` int(10) NOT NULL,
   `md5` varchar(255) NOT NULL,
   `bantime` int(10) NOT NULL DEFAULT '0',
   `description` text NOT NULL
 ) ENGINE=MyISAM AUTO_INCREMENT=63 DEFAULT CHARSET=utf8;
 
-CREATE TABLE IF NOT EXISTS `boards` (
+CREATE TABLE IF NOT EXISTS `{{KU_DBPREFIX}}boards` (
 `id` smallint(5) unsigned NOT NULL,
   `order` tinyint(5) NOT NULL DEFAULT '0',
   `name` varchar(75) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
@@ -75,12 +75,12 @@ CREATE TABLE IF NOT EXISTS `boards` (
   `country_restrict` text COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT ''
 ) ENGINE=MyISAM AUTO_INCREMENT=52 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
-CREATE TABLE IF NOT EXISTS `board_filetypes` (
+CREATE TABLE IF NOT EXISTS `{{KU_DBPREFIX}}board_filetypes` (
   `boardid` tinyint(5) NOT NULL DEFAULT '0',
   `typeid` mediumint(5) NOT NULL DEFAULT '0'
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
-CREATE TABLE IF NOT EXISTS `embeds` (
+CREATE TABLE IF NOT EXISTS `{{KU_DBPREFIX}}embeds` (
 `id` tinyint(5) unsigned NOT NULL,
   `filetype` varchar(3) NOT NULL,
   `name` varchar(255) NOT NULL,
@@ -90,12 +90,12 @@ CREATE TABLE IF NOT EXISTS `embeds` (
   `code` text NOT NULL
 ) ENGINE=MyISAM AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
 
-INSERT INTO `embeds` (`id`, `filetype`, `name`, `videourl`, `width`, `height`, `code`) VALUES
+INSERT INTO `{{KU_DBPREFIX}}embeds` (`id`, `filetype`, `name`, `videourl`, `width`, `height`, `code`) VALUES
 (1, 'you', 'Youtube', 'http://www.youtube.com/watch?v=', 255, 255, '<div class="thumb youtube embed wrapper" style="margin: 0px 20px 0px 0px; background-image:url(https://i.ytimg.com/vi/EMBED_ID_SHORT/0.jpg)" data-id="EMBED_ID" data-site="youtube" ONCLICK></div>'),
 (2, 'vim', 'Vimeo', 'http://vimeo.com/', 200, 164, '<div class="thumb vimeo embed wrapper" style="margin: 0px;" data-id="EMBED_ID" data-site="vimeo" ONCLICK></div>'),
 (3, 'cob', 'Coub', 'http://coub.com/view/', 200, 164, '<div class="thumb coub embed wrapper" style="margin: 0px;" data-id="EMBED_ID" data-site="coub" ONCLICK></div>');
 
-CREATE TABLE IF NOT EXISTS `filetypes` (
+CREATE TABLE IF NOT EXISTS `{{KU_DBPREFIX}}filetypes` (
 `id` smallint(5) unsigned NOT NULL,
   `filetype` varchar(255) NOT NULL,
   `mime` varchar(255) NOT NULL DEFAULT '',
@@ -105,7 +105,7 @@ CREATE TABLE IF NOT EXISTS `filetypes` (
   `force_thumb` int(1) NOT NULL DEFAULT '1'
 ) ENGINE=MyISAM AUTO_INCREMENT=9 DEFAULT CHARSET=utf8;
 
-INSERT INTO `filetypes` (`id`, `filetype`, `mime`, `image`, `image_w`, `image_h`, `force_thumb`) VALUES
+INSERT INTO `{{KU_DBPREFIX}}filetypes` (`id`, `filetype`, `mime`, `image`, `image_w`, `image_h`, `force_thumb`) VALUES
 (1,  'jpg',  'image/jpeg', '', 0, 0, 0),
 (2,  'gif',  'image/gif', '', 0, 0, 0),
 (3,  'png',  'image/png', '', 0, 0, 0),
@@ -117,12 +117,12 @@ INSERT INTO `filetypes` (`id`, `filetype`, `mime`, `image`, `image_w`, `image_h`
 (10, 'm4a',  'audio/x-m4a;audio/x-hx-aac-adts', 'm4a.png', 36, 48, 1),
 (11, 'mp4',  'video/mp4;video/x-m4v', 'generic.png', 255, 255, 1);
 
-CREATE TABLE IF NOT EXISTS `kurisaba_ext_data` (
+CREATE TABLE IF NOT EXISTS `{{KU_DBPREFIX}}kurisaba_ext_data` (
   `name` varchar(255) NOT NULL,
   `value` text CHARACTER SET cp1251 NOT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
-INSERT INTO `kurisaba_ext_data` (`name`, `value`) VALUES
+INSERT INTO `{{KU_DBPREFIX}}kurisaba_ext_data` (`name`, `value`) VALUES
 ('threadlimit_timestamp', '0'),
 ('thread_random', '/b/1'),
 ('thread_cirno', '/a/9'),
@@ -131,27 +131,27 @@ INSERT INTO `kurisaba_ext_data` (`name`, `value`) VALUES
 ('trips', 'a:2:{s:10:"#tripcode1";s:11:"tripresult1";s:10:"#tripcode2";s:11:"tripresult2";}'),
 ('special_threads', 'BOARD b\r\nTHREAD 100 /some/ Some Thread\r\nBOARD d\r\nBOARD a\r\nTHREAD 1 /a/a/ General Anime\r\nHIDDEN 9 /9/ Cirno Thread\r\n');
 
-CREATE TABLE IF NOT EXISTS `loginattempts` (
+CREATE TABLE IF NOT EXISTS `{{KU_DBPREFIX}}loginattempts` (
   `username` varchar(255) NOT NULL,
   `ip` varchar(20) NOT NULL,
   `timestamp` int(20) NOT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
-CREATE TABLE IF NOT EXISTS `modlog` (
+CREATE TABLE IF NOT EXISTS `{{KU_DBPREFIX}}modlog` (
   `entry` text NOT NULL,
   `user` varchar(255) NOT NULL,
   `category` tinyint(2) NOT NULL DEFAULT '0',
   `timestamp` int(20) NOT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
-CREATE TABLE IF NOT EXISTS `module_settings` (
+CREATE TABLE IF NOT EXISTS `{{KU_DBPREFIX}}module_settings` (
   `module` varchar(255) NOT NULL,
   `key` varchar(255) NOT NULL,
   `value` text CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
   `type` varchar(255) NOT NULL DEFAULT 'string'
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
-CREATE TABLE IF NOT EXISTS `captcha_solve` (
+CREATE TABLE IF NOT EXISTS `{{KU_DBPREFIX}}captcha_solve` (
   `lang` varchar(32),
   `etalon` varchar(32),
   `entered` varchar(32),
@@ -160,13 +160,13 @@ CREATE TABLE IF NOT EXISTS `captcha_solve` (
   `message` varchar(255)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
-CREATE TABLE IF NOT EXISTS `captcha_generate` (
+CREATE TABLE IF NOT EXISTS `{{KU_DBPREFIX}}captcha_generate` (
   `lang` varchar(32),
   `etalon` varchar(32),
   `time` int(20) unsigned NOT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
-CREATE TABLE IF NOT EXISTS `posts` (
+CREATE TABLE IF NOT EXISTS `{{KU_DBPREFIX}}posts` (
 `id` int(10) unsigned NOT NULL,
   `boardid` smallint(5) unsigned NOT NULL,
   `parentid` int(10) unsigned NOT NULL DEFAULT '0',
@@ -208,7 +208,7 @@ CREATE TABLE IF NOT EXISTS `posts` (
   `pic_animated` tinyint(1) NOT NULL DEFAULT '0'
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
-CREATE TABLE IF NOT EXISTS `reports` (
+CREATE TABLE IF NOT EXISTS `{{KU_DBPREFIX}}reports` (
 `id` smallint(5) unsigned NOT NULL,
   `cleared` tinyint(1) NOT NULL DEFAULT '0',
   `board` varchar(255) NOT NULL,
@@ -218,7 +218,7 @@ CREATE TABLE IF NOT EXISTS `reports` (
   `reason` varchar(255) NOT NULL
 ) ENGINE=MyISAM AUTO_INCREMENT=838 DEFAULT CHARSET=utf8;
 
-CREATE TABLE IF NOT EXISTS `sections` (
+CREATE TABLE IF NOT EXISTS `{{KU_DBPREFIX}}sections` (
 `id` smallint(5) unsigned NOT NULL,
   `order` tinyint(3) NOT NULL DEFAULT '0',
   `hidden` tinyint(1) NOT NULL DEFAULT '0',
@@ -226,10 +226,10 @@ CREATE TABLE IF NOT EXISTS `sections` (
   `abbreviation` varchar(10) NOT NULL
 ) ENGINE=MyISAM AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
 
-INSERT INTO `sections` (`id`, `order`, `hidden`, `name`, `abbreviation`) VALUES
+INSERT INTO `{{KU_DBPREFIX}}sections` (`id`, `order`, `hidden`, `name`, `abbreviation`) VALUES
 (1, 1, 0, 'Борды', 'boards');
 
-CREATE TABLE IF NOT EXISTS `staff` (
+CREATE TABLE IF NOT EXISTS `{{KU_DBPREFIX}}staff` (
 `id` smallint(5) unsigned NOT NULL,
   `username` varchar(255) NOT NULL,
   `password` varchar(255) NOT NULL,
@@ -240,7 +240,7 @@ CREATE TABLE IF NOT EXISTS `staff` (
   `lastactive` int(20) NOT NULL DEFAULT '0'
 ) ENGINE=MyISAM AUTO_INCREMENT=27 DEFAULT CHARSET=utf8;
 
-CREATE TABLE IF NOT EXISTS `wordfilter` (
+CREATE TABLE IF NOT EXISTS `{{KU_DBPREFIX}}wordfilter` (
 `id` smallint(5) unsigned NOT NULL,
   `word` varchar(75) NOT NULL,
   `replacedby` varchar(75) NOT NULL,
@@ -249,71 +249,71 @@ CREATE TABLE IF NOT EXISTS `wordfilter` (
   `regex` tinyint(1) NOT NULL DEFAULT '0'
 ) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 
-ALTER TABLE `answers`
+ALTER TABLE `{{KU_DBPREFIX}}answers`
  ADD KEY `destination` (`to_id`,`to_boardid`), ADD KEY `source` (`from_id`,`from_boardid`);
 
-ALTER TABLE `banlist`
+ALTER TABLE `{{KU_DBPREFIX}}banlist`
  ADD PRIMARY KEY (`id`);
 
-ALTER TABLE `bannedhashes`
+ALTER TABLE `{{KU_DBPREFIX}}bannedhashes`
  ADD UNIQUE KEY `id` (`id`);
 
-ALTER TABLE `boards`
+ALTER TABLE `{{KU_DBPREFIX}}boards`
  ADD PRIMARY KEY (`id`);
 
-ALTER TABLE `embeds`
+ALTER TABLE `{{KU_DBPREFIX}}embeds`
  ADD PRIMARY KEY (`id`);
 
-ALTER TABLE `filetypes`
+ALTER TABLE `{{KU_DBPREFIX}}filetypes`
  ADD PRIMARY KEY (`id`);
 
-ALTER TABLE `kurisaba_ext_data`
+ALTER TABLE `{{KU_DBPREFIX}}kurisaba_ext_data`
  ADD PRIMARY KEY (`name`);
 
-ALTER TABLE `posts`
+ALTER TABLE `{{KU_DBPREFIX}}posts`
  ADD PRIMARY KEY (`boardid`,`id`), ADD KEY `parentid` (`parentid`), ADD KEY `bumped` (`bumped`), ADD KEY `file_md5` (`file_md5`), ADD KEY `stickied` (`stickied`);
 
-ALTER TABLE `reports`
+ALTER TABLE `{{KU_DBPREFIX}}reports`
  ADD PRIMARY KEY (`id`);
 
-ALTER TABLE `sections`
+ALTER TABLE `{{KU_DBPREFIX}}sections`
  ADD PRIMARY KEY (`id`);
 
-ALTER TABLE `staff`
+ALTER TABLE `{{KU_DBPREFIX}}staff`
  ADD PRIMARY KEY (`id`);
 
-ALTER TABLE `wordfilter`
+ALTER TABLE `{{KU_DBPREFIX}}wordfilter`
  ADD PRIMARY KEY (`id`);
 
-ALTER TABLE `banlist`
+ALTER TABLE `{{KU_DBPREFIX}}banlist`
 MODIFY `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=230;
 
-ALTER TABLE `bannedhashes`
+ALTER TABLE `{{KU_DBPREFIX}}bannedhashes`
 MODIFY `id` int(10) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=63;
 
-ALTER TABLE `boards`
+ALTER TABLE `{{KU_DBPREFIX}}boards`
 MODIFY `id` smallint(5) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=52;
 
-ALTER TABLE `embeds`
+ALTER TABLE `{{KU_DBPREFIX}}embeds`
 MODIFY `id` tinyint(5) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=5;
 
-ALTER TABLE `filetypes`
+ALTER TABLE `{{KU_DBPREFIX}}filetypes`
 MODIFY `id` smallint(5) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=9;
 
-ALTER TABLE `posts`
+ALTER TABLE `{{KU_DBPREFIX}}posts`
 MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT;
 
-ALTER TABLE `reports`
+ALTER TABLE `{{KU_DBPREFIX}}reports`
 MODIFY `id` smallint(5) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=838;
 
-ALTER TABLE `sections`
+ALTER TABLE `{{KU_DBPREFIX}}sections`
 MODIFY `id` smallint(5) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=8;
 
-ALTER TABLE `staff`
+ALTER TABLE `{{KU_DBPREFIX}}staff`
 MODIFY `id` smallint(5) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=27;
 
-ALTER TABLE `wordfilter`
+ALTER TABLE `{{KU_DBPREFIX}}wordfilter`
 MODIFY `id` smallint(5) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=2;
 
-INSERT INTO `staff` (`username`, `password`, `salt`, `type`, `addedon`)
+INSERT INTO `{{KU_DBPREFIX}}staff` (`username`, `password`, `salt`, `type`, `addedon`)
              VALUES ('admin', '21232f297a57a5a743894a0e4a801fc3', '', 1, UNIX_TIMESTAMP(NOW()));

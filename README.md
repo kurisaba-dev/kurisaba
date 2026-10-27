@@ -7,11 +7,23 @@ A nullchan-kusabaX based imageboard engine with some modern features
 
 Если кто-то захочет развернуть курисабу у себя с нуля и поделится с нами своим опытом, например, в виде написания issue-в на github - мы будем очень рады.
 
-- Развернуть LAMP или LNMP-сервер, опционально настроить Cloudflare, Let's Encrypt и т.п.
-- Убедиться, что стоит PHP <= 7.x (Dwoo не умеет работать с PHP >= 8.0) с модулями `mbstring`, `gd`, `curl`, `yaml`, а также `mysql` или `mysqli`.
-- Поставить `imagemagick` и `gifsicle` (если нужна поддержка, например, анимированных превьюшек и т.п.).
-- Поставить `git` (чтобы работало обновление движка из админки).
-- Если сервер - apache, то скопировать шаблон `.htaccess.template` из каталога `_templates` в корень борды, возможно, что-то в нём поправить в соответствии с настройками сервера.
+- Развернуть LAMP или LNMP-сервер, создать необходимый конфиг для сайта, проверить, что всё открывается, опционально настроить Cloudflare, Let's Encrypt и т.п. Примеры далее будут для Debian/Ubuntu + nginx.
+- Использовать PHP 7.x (Dwoo не умеет работать с PHP >= 8.0) с модулями `mbstring`, `gd`, `curl`, `yaml` и с поддержкой нужной базы данных (например, MySQL) в PDO (обычно модуль `mysql`):
+```
+    wget https://packages.sury.org/debsuryorg-archive-keyring.deb && sudo dpkg -i debsuryorg-archive-keyring.deb && rm debsuryorg-archive-keyring.deb
+    . /etc/os-release
+    echo "deb [signed-by=/usr/share/keyrings/debsuryorg-archive-keyring.gpg] https://packages.sury.org/php/ ${VERSION_CODENAME} main" | sudo tee /etc/apt/sources.list.d/php.list
+    sudo apt update
+    sudo apt install php7.4 php7.4-fpm php7.4-mbstring php7.4-curl php7.4-yaml php7.4-gd
+```
+- Поставить `imagemagick` и `gifsicle` (если нужна поддержка, например, анимированных превьюшек и т.п.). и `git` (чтобы работало обновление движка из админки):
+```
+    sudo apt install git imagemagick gifsicle mariadb-server mariadb-client-core
+```
+- Под пользователем веб-сервера склонировать репозиторий в нужный каталог:
+```
+    sudo -u www-data git clone https://github.com/kurisaba-dev/kurisaba /var/www/kurisaba
+```
 - Если сервер - nginx, то сконфигурировать директивы `error_page` в конфиге сайта (обязательно с символом "=", иначе особые треды работать не будут), а также по возможности всё остальное по образцу из `.htaccess.template`:
 ```
     error_page 403 = /error.php?p=403;
@@ -31,13 +43,14 @@ A nullchan-kusabaX based imageboard engine with some modern features
     }
 ```
 - Возможно, потребуется прописать директивы типа `client_max_body_size` для nginx или аналогичную для apache.
-- Создать базу данных с любым названием (если ещё не создана).
-- Импортировать файл `database.sql` из каталога `_templates` в эту базу.
-- Скопировать шаблон `config.php.template` из каталога `_templates` в корень борды, вписать в него настройки базы данных.
-- Создать каталоги `tmp`, `tmp/dwoo` (настраивается в конфиге), `tmp/xhrupload`. Они должны быть доступны для записи веб-серверу. Можно удалить каталог `_templates`.
-- После этого можно заходить в админку (`http://example.com/manage.php`, пользователь `admin`, пароль `admin` - разумеется, надо немедленно сменить!) и создавать секции (по умолчанию определена секция "борды") и доски на них.
-- Можно либо скопировать главную (`front.php`) в корень борды из каталога `_templates`, либо подложить туда свою в соответствии с тематикой борды (и, возможно, поправить `KU_MAINPAGE` в настройках движка в админке). Для примера, главная Курисача есть в отдельном [репозитории](https://github.com/makise-homura/kurisach-resources).
-- Желательно положить фавиконку (`favicon.ico`) в корень борды.
+- Создать базу данных с любым названием (если ещё не создана), а также пользователя, который имеет полный доступ к этой базе, например (здесь нужно заменить `some_password` на свой пароль):
+```
+    sudo mysql -e 'CREATE DATABASE `kurisaba`; CREATE USER `kurisaba`@`localhost` IDENTIFIED BY "some_password"; GRANT ALL PRIVILEGES ON `kurisaba`.* TO `kurisaba`@`localhost`;'
+```
+- Открыть любую страницу борды, вписать туда настройки базы данных и нажать "Submit".
+- После этого движок проинициализирует себя и откроет админку (`http://example.com/manage.php`, пользователь `admin`, пароль `admin` - разумеется, надо немедленно сменить!) Можно начинать создавать секции (по умолчанию определена секция "борды") и доски на них.
+- Опционально можно поменять главную (`front.php` в корневом каталоге движка) в соответствии с тематикой борды (и поправить `KU_MAINPAGE` в настройках движка в админке, если она называется иначе). Для примера, главная Курисача есть в отдельном [репозитории](https://github.com/makise-homura/kurisach-resources).
+- Желательно положить фавиконку (`favicon.ico`) в корневой каталог движка.
 
 ## Конфиг
 
