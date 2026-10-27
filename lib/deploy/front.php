@@ -8,3 +8,4 @@ if (KU_MAINPAGE != "front.php") {
 }
 
 // Put your front page code here
+header("Location: " . KU_WEBPATH . "/kusaba.php");
