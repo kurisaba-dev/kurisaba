@@ -49,7 +49,7 @@ function modules_list()
 {
     $modules = array();
 
-    if ($modules_handle = opendir(KU_ROOTDIR . 'inc/modules')) {
+    if ($modules_handle = opendir(KU_ENGINEDIR . 'inc/modules')) {
         while (false !== ($file = readdir($modules_handle))) {
             /* We don't want hidden files, nor . or .. */
             if ($file != '.' && $file != '..' && !is_dir($file) && strpos($file, '.php') != false) {
@@ -70,7 +70,7 @@ function module_load($module)
 
     if (!in_array($module, $modules_loaded)) {
         /* Include the module file */
-        include(KU_ROOTDIR . 'inc/modules/' . $module . '.php');
+        include(KU_ENGINEDIR . 'inc/modules/' . $module . '.php');
 
         /* Call the initialization function */
         module_call_function($module, 'init');

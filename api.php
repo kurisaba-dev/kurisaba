@@ -9,11 +9,11 @@
 curl -s "https://kurisaba.lan/api.php" --data '{"version":"1.1","method":"get_posts_by_id","id":"1","params":{"board":"sg", "ids":[206]}}' */
 
 require 'settings_manager.php';
-require KU_ROOTDIR . 'inc/functions.php';
+require KU_ENGINEDIR . 'inc/functions.php';
 session_start(['cookie_samesite' => 'Strict']);
 
 // Users that banned at at least one board, can't use API.
-require KU_ROOTDIR . 'inc/classes/bans.class.php';
+require KU_ENGINEDIR . 'inc/classes/bans.class.php';
 $bans_class = new Bans();
 if ($bans_class->BanCheckSilent(KU_REMOTE_ADDR, '', true)) {
     do_redirect(KU_BOARDSPATH . '/banned.php');

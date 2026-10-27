@@ -155,7 +155,7 @@ class Bans
         /* Set a cookie with the users current IP address in case they use a proxy to attempt to make another post */
         setcookie_strict('tc_previousip', KU_REMOTE_ADDR, (time() + KU_ADDTIME + 604800), "/");
 
-        require_once KU_ROOTDIR . 'lib/dwoo.php';
+        require_once KU_ENGINEDIR . 'lib/dwoo.php';
 
         $dwoo_data->assign('bans', $bans);
 
@@ -167,7 +167,7 @@ class Bans
         if (KU_SAVEIP) {
             global $tc_db;
 
-            $htaccess_contents = file_get_contents(KU_BOARDSDIR.'.htaccess');
+            $htaccess_contents = file_get_contents(KU_STORAGEDIR.'.htaccess');
             $htaccess_contents_preserve = substr($htaccess_contents, 0, strpos($htaccess_contents, '## !KU_BANS:') + 12)."\n";
 
             $htaccess_contents_bans_iplist = '';
@@ -188,7 +188,7 @@ class Bans
                 $htaccess_contents_bans_end = '';
             }
             $htaccess_contents_new = $htaccess_contents_preserve.$htaccess_contents_bans_start.$htaccess_contents_bans_iplist.$htaccess_contents_bans_end;
-            file_put_contents(KU_BOARDSDIR.'.htaccess', $htaccess_contents_new);
+            file_put_contents(KU_STORAGEDIR.'.htaccess', $htaccess_contents_new);
         }
     }
 }

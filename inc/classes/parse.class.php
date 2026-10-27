@@ -119,9 +119,9 @@ class Parse
           //'<span class="inline-code">\\1</span>',
           '<span class="unkfunc">&gt;\\1</span>'
           );
-        //file_put_contents(KU_BOARDSDIR . '_captcha_debug.txt', $string, FILE_APPEND);
+        //file_put_contents(KU_STORAGEDIR . '_captcha_debug.txt', $string, FILE_APPEND);
         $string = preg_replace($patterns, $replaces, $string);
-        //file_put_contents(KU_BOARDSDIR . '_captcha_debug.txt', $string, FILE_APPEND);
+        //file_put_contents(KU_STORAGEDIR . '_captcha_debug.txt', $string, FILE_APPEND);
         return $string;
     }
     public function bullet_list($matches)
@@ -428,7 +428,7 @@ class Parse
 
     public function CountSmilies($string)
     {
-        require KU_ROOTDIR . 'images/smilies/smilies_list.php';
+        require KU_ENGINEDIR . 'images/smilies/smilies_list.php';
         $total = 0;
 
         foreach ($smilies_replace as $smilies_groupkey => $smilies_group) {
@@ -442,7 +442,7 @@ class Parse
 
     public function Smilies($string)
     {
-        require KU_ROOTDIR . 'images/smilies/smilies_list.php';
+        require KU_ENGINEDIR . 'images/smilies/smilies_list.php';
 
         foreach ($smilies_replace as $smilies_groupkey => $smilies_group) {
             foreach ($smilies_group as $key => $value) {
@@ -451,13 +451,6 @@ class Parse
         }
         return $string;
     }
-
-    /*	function smiley_callback($matches) {
-            $realfilename = KU_ROOTDIR.'images/smileys/'.md5($matches[1]).'.gif';
-            $filename = KU_WEBPATH.'/images/smileys/'.md5($matches[1]).'.gif';
-            $return = (file_exists($realfilename)) ? '<img style="vertical-align: middle;" src="'.$filename.'" />': ':'.$matches[1].':';
-            return $return;
-        }*/
 
     public function dice($matches)
     {

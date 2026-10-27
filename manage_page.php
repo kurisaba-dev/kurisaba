@@ -32,11 +32,11 @@ session_set_cookie_params(60 * 60 * 24 * 100); /* 100 Days */
 session_start(['cookie_samesite' => 'Strict']);
 
 require 'settings_manager.php';
-require KU_ROOTDIR . 'lib/dwoo.php';
-require KU_ROOTDIR . 'inc/functions.php';
-require KU_ROOTDIR . 'inc/classes/manage.class.php';
-require KU_ROOTDIR . 'inc/classes/board-post.class.php';
-require KU_ROOTDIR . 'inc/classes/bans.class.php';
+require KU_ENGINEDIR . 'lib/dwoo.php';
+require KU_ENGINEDIR . 'inc/functions.php';
+require KU_ENGINEDIR . 'inc/classes/manage.class.php';
+require KU_ENGINEDIR . 'inc/classes/board-post.class.php';
+require KU_ENGINEDIR . 'inc/classes/bans.class.php';
 
 $dwoo_data->assign('styles', explode(':', KU_STYLES));
 
@@ -46,7 +46,7 @@ $bans_class = new Bans();
 if (isset($_GET['graph'])) {
     $manage_class->ValidateSession();
 
-    require KU_ROOTDIR . 'lib/graph/phpgraphlib.php';
+    require KU_ENGINEDIR . 'lib/graph/phpgraphlib.php';
 
     if (isset($_GET['type'])) {
         if ($_GET['type'] == 'day' || $_GET['type'] == 'week' || $_GET['type'] == 'postnum' || $_GET['type'] == 'unique' || $_GET['type'] == 'posttime') {

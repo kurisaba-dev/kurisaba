@@ -27,7 +27,7 @@ class RSS
     {
         if (isset($rssboard)) {
             global $tc_db;
-            require_once KU_ROOTDIR.'lib/dwoo.php';
+            require_once KU_ENGINEDIR . 'lib/dwoo.php';
             $dwoo = new Dwoo();
             $dwoo_data = new Dwoo_Data();
             $posts = $tc_db->GetAll("SELECT * FROM `".KU_DBPREFIX."posts` WHERE `boardid` = " . $rssboardid . " AND `IS_DELETED` = '0' ORDER BY `id` DESC LIMIT 15");
@@ -41,7 +41,7 @@ class RSS
     public function GenerateModLogRSS()
     {
         global $tc_db;
-        require_once KU_ROOTDIR.'lib/dwoo.php';
+        require_once KU_ENGINEDIR . 'lib/dwoo.php';
         $dwoo = new Dwoo();
         $dwoo_data = new Dwoo_Data();
         $entries = $tc_db->GetAll("SELECT * FROM `".KU_DBPREFIX."modlog` ORDER BY `timestamp` DESC LIMIT 15");

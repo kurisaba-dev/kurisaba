@@ -8,7 +8,7 @@ A nullchan-kusabaX based imageboard engine with some modern features
 Если кто-то захочет развернуть курисабу у себя с нуля и поделится с нами своим опытом, например, в виде написания issue-в на github - мы будем очень рады.
 
 - Развернуть LAMP или LNMP-сервер, создать необходимый конфиг для сайта, проверить, что всё открывается, опционально настроить Cloudflare, Let's Encrypt и т.п. Примеры далее будут для Debian/Ubuntu + nginx.
-- Использовать PHP 7.x (Dwoo не умеет работать с PHP >= 8.0) с модулями `mbstring`, `gd`, `curl`, `yaml` и с поддержкой нужной базы данных (например, MySQL) в PDO (обычно модуль `mysql`):
+- Использовать PHP 7.3 или 7.4 (Dwoo не умеет работать с PHP >= 8.0) с модулями `mbstring`, `gd`, `curl`, `yaml` и с поддержкой нужной базы данных (например, MySQL) в PDO (обычно модуль `mysql`):
 ```
     wget https://packages.sury.org/debsuryorg-archive-keyring.deb && sudo dpkg -i debsuryorg-archive-keyring.deb && rm debsuryorg-archive-keyring.deb
     . /etc/os-release

@@ -26,8 +26,8 @@
  */
 
 require 'settings_manager.php';
-require KU_ROOTDIR . 'inc/functions.php';
-require KU_ROOTDIR . 'inc/classes/menu.class.php';
+require KU_ENGINEDIR . 'inc/functions.php';
+require KU_ENGINEDIR . 'inc/classes/menu.class.php';
 
 $menu_class = new Menu();
 if (isset($_COOKIE['tcshowdirs'])) {

@@ -12,10 +12,10 @@ if (!isset($_POST['board']) || !isset($_POST['thread']) || !isset($_POST['posts'
         die(json_encode(array('state' => 'неправильно сконструирован массив постов')));
     }
 }
-require KU_ROOTDIR . 'inc/functions.php';
-require KU_ROOTDIR . 'inc/classes/board-post.class.php';
+require KU_ENGINEDIR . 'inc/functions.php';
+require KU_ENGINEDIR . 'inc/classes/board-post.class.php';
 
-require KU_ROOTDIR . 'inc/classes/bans.class.php';
+require KU_ENGINEDIR . 'inc/classes/bans.class.php';
 $bans_class = new Bans();
 if ($bans_class->BanCheckSilent(KU_REMOTE_ADDR, $board, true)) {
     die(json_encode(array('state' => 'этот IP забанен на выбранной доске')));

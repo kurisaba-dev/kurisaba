@@ -85,8 +85,8 @@ class Manage
     {
         global $tc_db, $tpl_page;
 
-        if (file_exists(KU_ROOTDIR . 'inc/pages/manage_login.html')) {
-            $tpl_page .= file_get_contents(KU_ROOTDIR . 'inc/pages/manage_login.html');
+        if (file_exists(KU_ENGINEDIR . 'inc/pages/manage_login.html')) {
+            $tpl_page .= file_get_contents(KU_ENGINEDIR . 'inc/pages/manage_login.html');
         }
     }
 
@@ -152,16 +152,16 @@ class Manage
         global $tc_db, $tpl_page;
         if (isset($_SESSION['manageusername'])) {
             if ($this->CurrentUserIsAdministrator()) {
-                setcookie_strict("kuadm", "admin", time() + KU_ADDTIME + 3600, "/", KU_DOMAIN);
+                setcookie_strict("kuadm", "admin", time() + KU_ADDTIME + 3600);
             } else {
-                setcookie_strict("kuadm", "", 1000000, "/", KU_DOMAIN);
+                setcookie_strict("kuadm", "", 1000000);
             }
             $results = $tc_db->GetAll("SELECT HIGH_PRIORITY `boards` FROM `" . KU_DBPREFIX . "staff` WHERE `username` = " . $tc_db->qstr($_SESSION['manageusername']) . " LIMIT 1");
             if ($this->CurrentUserIsAdministrator() || $results[0][0] == 'allboards') {
-                setcookie_strict("kumod", "allboards", time() + KU_ADDTIME + 3600, "/", KU_DOMAIN);
+                setcookie_strict("kumod", "allboards", time() + KU_ADDTIME + 3600);
             } else {
                 if ($results[0][0] != '') {
-                    setcookie_strict("kumod", $results[0][0], time() + KU_ADDTIME + 3600, "/", KU_DOMAIN);
+                    setcookie_strict("kumod", $results[0][0], time() + KU_ADDTIME + 3600);
                 }
             }
         }
@@ -181,8 +181,8 @@ class Manage
     {
         global $tc_db, $tpl_page;
 
-        setcookie_strict("kumod", "", 1000000, "/", KU_DOMAIN);
-        setcookie_strict("kuadm", "", 1000000, "/", KU_DOMAIN);
+        setcookie_strict("kumod", "", 1000000);
+        setcookie_strict("kuadm", "", 1000000);
 
         session_destroy();
         unset($_SESSION['manageusername']);
@@ -578,9 +578,9 @@ class Manage
         $tpl_page .= '<table border="1" width="100%"><tr><th>'. _gettext('Board') .'</th><th>'. _gettext('Area') .'</th><th>'. _gettext('Files') .'</th><th>'. _gettext('Space Used') .'</th></tr>';
         $results = $tc_db->GetAll("SELECT HIGH_PRIORITY `name` FROM `" . KU_DBPREFIX . "boards` ORDER BY `name` ASC");
         foreach ($results as $line) {
-            list($spaceused_board_res, $files_board_res) = recursive_directory_size(KU_BOARDSDIR . $line['name'] . '/res');
-            list($spaceused_board_src, $files_board_src) = recursive_directory_size(KU_BOARDSDIR . $line['name'] . '/src');
-            list($spaceused_board_thumb, $files_board_thumb) = recursive_directory_size(KU_BOARDSDIR . $line['name'] . '/thumb');
+            list($spaceused_board_res, $files_board_res) = recursive_directory_size(KU_STORAGEDIR . $line['name'] . '/res');
+            list($spaceused_board_src, $files_board_src) = recursive_directory_size(KU_STORAGEDIR . $line['name'] . '/src');
+            list($spaceused_board_thumb, $files_board_thumb) = recursive_directory_size(KU_STORAGEDIR . $line['name'] . '/thumb');
 
             $spaceused_board_total = $spaceused_board_res + $spaceused_board_src + $spaceused_board_thumb;
             $files_board_total = $files_board_res + $files_board_src + $files_board_thumb;
@@ -1024,13 +1024,13 @@ class Manage
             if (strtolower($dir) != 'allboards') {
                 $results = $tc_db->GetAll("SELECT HIGH_PRIORITY * FROM `" . KU_DBPREFIX . "boards` WHERE `name` = " . $tc_db->qstr($dir) . "");
                 if (count($results) == 0) {
-                    if (mkdir(KU_BOARDSDIR . $dir, 0777) && mkdir(KU_BOARDSDIR . $dir . '/res', 0777) && mkdir(KU_BOARDSDIR . $dir . '/src', 0777) && mkdir(KU_BOARDSDIR . $dir . '/thumb', 0777) && mkdir(KU_BOARDSDIR . $dir . '/tmp', 0777) && mkdir(KU_BOARDSDIR . $dir . '/tmp/thumb', 0777)) {
-                        file_put_contents(KU_BOARDSDIR . $dir . '/.htaccess', 'DirectoryIndex '. 'board.html' . '');
+                    if (mkdir(KU_STORAGEDIR . $dir, 0777) && mkdir(KU_STORAGEDIR . $dir . '/res', 0777) && mkdir(KU_STORAGEDIR . $dir . '/src', 0777) && mkdir(KU_STORAGEDIR . $dir . '/thumb', 0777) && mkdir(KU_STORAGEDIR . $dir . '/tmp', 0777) && mkdir(KU_STORAGEDIR . $dir . '/tmp/thumb', 0777)) {
+                        file_put_contents(KU_STORAGEDIR . $dir . '/.htaccess', 'DirectoryIndex '. 'board.html' . '');
                         if (KU_OFFLOAD) {
-                            file_put_contents(KU_BOARDSDIR . $dir . '/src/.htaccess', "AddType text/plain .ASM .C .CPP .CSS .JAVA .JS .LSP .PHP .PL .PY .RAR .SCM .TXT\nSetHandler default-handler\nDeny from all\n");
-                            file_put_contents(KU_BOARDSDIR . $dir . '/thumb/.htaccess', "Deny from all\n");
+                            file_put_contents(KU_STORAGEDIR . $dir . '/src/.htaccess', "AddType text/plain .ASM .C .CPP .CSS .JAVA .JS .LSP .PHP .PL .PY .RAR .SCM .TXT\nSetHandler default-handler\nDeny from all\n");
+                            file_put_contents(KU_STORAGEDIR . $dir . '/thumb/.htaccess', "Deny from all\n");
                         } else {
-                            file_put_contents(KU_BOARDSDIR . $dir . '/src/.htaccess', "AddType text/plain .ASM .C .CPP .CSS .JAVA .JS .LSP .PHP .PL .PY .RAR .SCM .TXT\nSetHandler default-handler\n");
+                            file_put_contents(KU_STORAGEDIR . $dir . '/src/.htaccess', "AddType text/plain .ASM .C .CPP .CSS .JAVA .JS .LSP .PHP .PL .PY .RAR .SCM .TXT\nSetHandler default-handler\n");
                         }
                         if ($_POST['firstpostid'] < 1) {
                             $_POST['firstpostid'] = 1;
@@ -1047,15 +1047,15 @@ class Manage
                             management_addlogentry(_gettext('Added board') . ': /'. $dir . '/', 3);
                         } else {
                             $output .= '<br />'. _gettext('Unable to add board to database: ') . $tc_db->ErrorMsg();
-                            @unlink(KU_BOARDSDIR . $dir . '/src/.htaccess');
-                            @unlink(KU_BOARDSDIR . $dir . '/thumb/.htaccess');
-                            @unlink(KU_BOARDSDIR . $dir . '/.htaccess');
-                            @rmdir(KU_BOARDSDIR . $dir . '/tmp/thumb');
-                            @rmdir(KU_BOARDSDIR . $dir . '/tmp');
-                            @rmdir(KU_BOARDSDIR . $dir . '/thumb');
-                            @rmdir(KU_BOARDSDIR . $dir . '/src');
-                            @rmdir(KU_BOARDSDIR . $dir . '/res');
-                            @rmdir(KU_BOARDSDIR . $dir);
+                            @unlink(KU_STORAGEDIR . $dir . '/src/.htaccess');
+                            @unlink(KU_STORAGEDIR . $dir . '/thumb/.htaccess');
+                            @unlink(KU_STORAGEDIR . $dir . '/.htaccess');
+                            @rmdir(KU_STORAGEDIR . $dir . '/tmp/thumb');
+                            @rmdir(KU_STORAGEDIR . $dir . '/tmp');
+                            @rmdir(KU_STORAGEDIR . $dir . '/thumb');
+                            @rmdir(KU_STORAGEDIR . $dir . '/src');
+                            @rmdir(KU_STORAGEDIR . $dir . '/res');
+                            @rmdir(KU_STORAGEDIR . $dir);
                         }
                     } else {
                         $output .= '<br />'. _gettext('Unable to create directories.');
@@ -1092,16 +1092,16 @@ class Manage
                 }
                 $moderating = array_intersect($moderating, $xba);
                 unset($exb);
-                if (mkdir(KU_BOARDSDIR . $dir, 0777) && mkdir(KU_BOARDSDIR . $dir . '/res', 0777) && mkdir(KU_BOARDSDIR . $dir . '/src', 0777) && mkdir(KU_BOARDSDIR . $dir . '/thumb', 0777) && mkdir(KU_BOARDSDIR . $dir . '/tmp', 0777) && mkdir(KU_BOARDSDIR . $dir . '/tmp/thumb', 0777)) {
+                if (mkdir(KU_STORAGEDIR . $dir, 0777) && mkdir(KU_STORAGEDIR . $dir . '/res', 0777) && mkdir(KU_STORAGEDIR . $dir . '/src', 0777) && mkdir(KU_STORAGEDIR . $dir . '/thumb', 0777) && mkdir(KU_STORAGEDIR . $dir . '/tmp', 0777) && mkdir(KU_STORAGEDIR . $dir . '/tmp/thumb', 0777)) {
                     /* Add mod rights */
                     $moderating[] = $dir;
                     $tc_db->Execute("UPDATE `" . KU_DBPREFIX . "staff` SET `boards` = " . $tc_db->qstr(implode('|', $moderating)) . " WHERE `username` = " . $tc_db->qstr($_SESSION['manageusername']) . "");
-                    file_put_contents(KU_BOARDSDIR . $dir . '/.htaccess', 'DirectoryIndex '. 'board.html' . '');
+                    file_put_contents(KU_STORAGEDIR . $dir . '/.htaccess', 'DirectoryIndex '. 'board.html' . '');
                     if (KU_OFFLOAD) {
-                        file_put_contents(KU_BOARDSDIR . $dir . '/src/.htaccess', "AddType text/plain .ASM .C .CPP .CSS .JAVA .JS .LSP .PHP .PL .PY .RAR .SCM .TXT\nSetHandler default-handler\nDeny from all\n");
-                        file_put_contents(KU_BOARDSDIR . $dir . '/thumb/.htaccess', "Deny from all\n");
+                        file_put_contents(KU_STORAGEDIR . $dir . '/src/.htaccess', "AddType text/plain .ASM .C .CPP .CSS .JAVA .JS .LSP .PHP .PL .PY .RAR .SCM .TXT\nSetHandler default-handler\nDeny from all\n");
+                        file_put_contents(KU_STORAGEDIR . $dir . '/thumb/.htaccess', "Deny from all\n");
                     } else {
-                        file_put_contents(KU_BOARDSDIR . $dir . '/src/.htaccess', "AddType text/plain .ASM .C .CPP .CSS .JAVA .JS .LSP .PHP .PL .PY .RAR .SCM .TXT\nSetHandler default-handler\n");
+                        file_put_contents(KU_STORAGEDIR . $dir . '/src/.htaccess', "AddType text/plain .ASM .C .CPP .CSS .JAVA .JS .LSP .PHP .PL .PY .RAR .SCM .TXT\nSetHandler default-handler\n");
                     }
                     $_POST['firstpostid'] = 1;
                     $sect20 = $tc_db->GetOne('SELECT `id` FROM `'. KU_DBPREFIX .'sections` WHERE `abbreviation`="20"');
@@ -1168,7 +1168,7 @@ class Manage
                             }
                         }
 
-                        require_once KU_ROOTDIR . 'inc/classes/menu.class.php';
+                        require_once KU_ENGINEDIR . 'inc/classes/menu.class.php';
                         $menu_class = new Menu();
                         $menu_class->Generate();
                         $output .= _gettext('Board successfully deleted.');
@@ -1244,7 +1244,7 @@ class Manage
                         }
 
                         unset($moder);
-                        require_once KU_ROOTDIR . 'inc/classes/menu.class.php';
+                        require_once KU_ENGINEDIR . 'inc/classes/menu.class.php';
                         $menu_class = new Menu();
                         $menu_class->Generate();
                         $output .= _gettext('Board successfully deleted.');
@@ -1575,12 +1575,12 @@ class Manage
             if (isset($_POST['mf'])) {
                 $image		= $tc_db->GetOne("SELECT `file` FROM " .KU_DBPREFIX. "posts WHERE `boardid` = " .$board_from_id. " AND `id` = " .$id);
                 $filetype	= $tc_db->GetOne("SELECT `file_type` FROM " .KU_DBPREFIX. "posts WHERE `boardid` = " .$board_from_id. " AND `id` = " .$id);
-                $from_pic	= KU_BOARDSDIR . $board_from . '/src/'. $image . '.'. $filetype;
-                $from_thumb	= KU_BOARDSDIR . $board_from . '/thumb/'. $image . 's'. '.'. $filetype;
-                $from_cat	= KU_BOARDSDIR . $board_from . '/thumb/'. $image . 'c'. '.'. $filetype;
-                $to_pic	= KU_BOARDSDIR . $board_to . '/src/'. $image . '.'. $filetype;
-                $to_thumb	= KU_BOARDSDIR . $board_to . '/thumb/'. $image . 's'. '.'. $filetype;
-                $to_cat	= KU_BOARDSDIR . $board_to . '/thumb/'. $image . 'c'. '.'. $filetype;
+                $from_pic	= KU_STORAGEDIR . $board_from . '/src/'. $image . '.'. $filetype;
+                $from_thumb	= KU_STORAGEDIR . $board_from . '/thumb/'. $image . 's'. '.'. $filetype;
+                $from_cat	= KU_STORAGEDIR . $board_from . '/thumb/'. $image . 'c'. '.'. $filetype;
+                $to_pic	= KU_STORAGEDIR . $board_to . '/src/'. $image . '.'. $filetype;
+                $to_thumb	= KU_STORAGEDIR . $board_to . '/thumb/'. $image . 's'. '.'. $filetype;
+                $to_cat	= KU_STORAGEDIR . $board_to . '/thumb/'. $image . 'c'. '.'. $filetype;
                 @rename($from_pic, $to_pic);
                 @rename($from_thumb, $to_thumb);
                 @rename($from_cat, $to_cat);
@@ -1589,9 +1589,9 @@ class Manage
                 @unlink($from_cat);
             }
 
-            $from_html = KU_BOARDSDIR . $board_from . '/res/'. $_POST['id'] . '.html';
-            $from_html_50 = KU_BOARDSDIR . $board_from . '/res/'. $_POST['id'] . '+50.html';
-            $from_html_100 = KU_BOARDSDIR . $board_from . '/res/'. $_POST['id'] . '-100.html';
+            $from_html = KU_STORAGEDIR . $board_from . '/res/'. $_POST['id'] . '.html';
+            $from_html_50 = KU_STORAGEDIR . $board_from . '/res/'. $_POST['id'] . '+50.html';
+            $from_html_100 = KU_STORAGEDIR . $board_from . '/res/'. $_POST['id'] . '-100.html';
             @unlink($from_html);
             @unlink($from_html_50);
             @unlink($from_html_100);
@@ -1606,12 +1606,12 @@ class Manage
                 if (isset($_POST['mf'])) {
                     $image		= $tc_db->GetOne("SELECT `file` FROM `" .KU_DBPREFIX. "posts` WHERE `boardid` = " .$board_from_id. " AND `id` = " .$line['id']);
                     $filetype	= $tc_db->GetOne("SELECT `file_type` FROM `" .KU_DBPREFIX. "posts` WHERE `boardid` = " .$board_from_id. " AND `id` = " .$line['id']);
-                    $from_pic	= KU_BOARDSDIR . $board_from . '/src/'. $image . '.'. $filetype;
-                    $from_thumb	= KU_BOARDSDIR . $board_from . '/thumb/'. $image . 's'. '.'. $filetype;
-                    $from_cat	= KU_BOARDSDIR . $board_from . '/thumb/'. $image . 'c'. '.'. $filetype;
-                    $to_pic	= KU_BOARDSDIR . $board_to . '/src/'. $image . '.'. $filetype;
-                    $to_thumb	= KU_BOARDSDIR . $board_to . '/thumb/'. $image . 's'. '.'. $filetype;
-                    $to_cat	= KU_BOARDSDIR . $board_to . '/thumb/'. $image . 'c'. '.'. $filetype;
+                    $from_pic	= KU_STORAGEDIR . $board_from . '/src/'. $image . '.'. $filetype;
+                    $from_thumb	= KU_STORAGEDIR . $board_from . '/thumb/'. $image . 's'. '.'. $filetype;
+                    $from_cat	= KU_STORAGEDIR . $board_from . '/thumb/'. $image . 'c'. '.'. $filetype;
+                    $to_pic	= KU_STORAGEDIR . $board_to . '/src/'. $image . '.'. $filetype;
+                    $to_thumb	= KU_STORAGEDIR . $board_to . '/thumb/'. $image . 's'. '.'. $filetype;
+                    $to_cat	= KU_STORAGEDIR . $board_to . '/thumb/'. $image . 'c'. '.'. $filetype;
                     @rename($from_pic, $to_pic);
                     @rename($from_thumb, $to_thumb);
                     @rename($from_cat, $to_cat);
@@ -1723,7 +1723,7 @@ class Manage
 
         $tpl_page .= '<h2>'. _gettext('Update engine') .'</h2><br />'. "\n";
 
-        $command = 'git -C ' . escapeshellarg(KU_ROOTDIR) . ' pull --ff-only origin master 2>&1';
+        $command = 'git -C ' . escapeshellarg(KU_ENGINEDIR) . ' pull --ff-only origin master 2>&1';
         exec($command, $output, $exit_code);
         $tpl_page .= _gettext('Exit code: ') . $exit_code . '<br />';
         $tpl_page .= '<textarea cols="80" rows="25">'. join("\n", $output) . '</textarea>';
@@ -2236,7 +2236,7 @@ class Manage
                     if ($_POST['name'] != '' && $_POST['abbreviation'] != '') {
                         $this->CheckToken($_POST['token']);
                         $tc_db->Execute("INSERT HIGH_PRIORITY INTO `" . KU_DBPREFIX . "sections` ( `name` , `abbreviation` , `order` , `hidden` ) VALUES ( " . $tc_db->qstr($_POST['name']) . " , " . $tc_db->qstr($_POST['abbreviation']) . " , " . $tc_db->qstr($_POST['order']) . " , '" . (isset($_POST['hidden']) ? '1' : '0') . "' )");
-                        require_once KU_ROOTDIR . 'inc/classes/menu.class.php';
+                        require_once KU_ENGINEDIR . 'inc/classes/menu.class.php';
                         $menu_class = new Menu();
                         $menu_class->Generate();
                         $tpl_page .= _gettext('Section added.');
@@ -2258,7 +2258,7 @@ class Manage
                     if ($_POST['name'] != '' && $_POST['abbreviation'] != '') {
                         $this->CheckToken($_POST['token']);
                         $tc_db->Execute("UPDATE `" . KU_DBPREFIX . "sections` SET `name` = " . $tc_db->qstr($_POST['name']) . " , `abbreviation` = " . $tc_db->qstr($_POST['abbreviation']) . " , `order` = " . $tc_db->qstr($_POST['order']) . " , `hidden` = '" . (isset($_POST['hidden']) ? '1' : '0') . "' WHERE `id` = '" . $_GET['sectionid'] . "'");
-                        require_once KU_ROOTDIR . 'inc/classes/menu.class.php';
+                        require_once KU_ENGINEDIR . 'inc/classes/menu.class.php';
                         $menu_class = new Menu();
                         $menu_class->Generate();
                         $tpl_page .= _gettext('Section updated.');
@@ -2300,7 +2300,7 @@ class Manage
             if ($_GET['do'] == 'deletesection' && isset($_GET['sectionid'])) {
                 if ($_GET['sectionid'] > 0) {
                     $tc_db->Execute("DELETE FROM `" . KU_DBPREFIX . "sections` WHERE `id` = " . $tc_db->qstr($_GET['sectionid']) . "");
-                    require_once KU_ROOTDIR . 'inc/classes/menu.class.php';
+                    require_once KU_ENGINEDIR . 'inc/classes/menu.class.php';
                     $menu_class = new Menu();
                     $menu_class->Generate();
                     $tpl_page .= _gettext('Section deleted.') . '<br /><hr />';
@@ -2429,7 +2429,7 @@ class Manage
                         foreach ($filetypes as $filetype) {
                             $tc_db->Execute("INSERT INTO `" . KU_DBPREFIX . "board_filetypes` ( `boardid`, `typeid` ) VALUES ( '" . $boardid . "', " . $tc_db->qstr($filetype) . " )");
                         }
-                        require_once KU_ROOTDIR . 'inc/classes/menu.class.php';
+                        require_once KU_ENGINEDIR . 'inc/classes/menu.class.php';
                         $menu_class = new Menu();
                         $menu_class->Generate();
                         $tpl_page .= _gettext('Update successful.');
@@ -2804,7 +2804,7 @@ class Manage
                         foreach ($filetypes as $filetype) {
                             $tc_db->Execute("INSERT INTO `" . KU_DBPREFIX . "board_filetypes` ( `boardid`, `typeid` ) VALUES ( '" . $boardid . "', " . $tc_db->qstr($filetype) . " )");
                         }
-                        require_once KU_ROOTDIR . 'inc/classes/menu.class.php';
+                        require_once KU_ENGINEDIR . 'inc/classes/menu.class.php';
                         $menu_class = new Menu();
                         $menu_class->Generate();
                         $tpl_page .= _gettext('Update successful.');
@@ -3269,9 +3269,9 @@ class Manage
                             if (isset($_POST['fileonly'])) {
                                 foreach ($results as $line) {
                                     if (!empty($line['file'])) {
-                                        $del = @unlink(KU_ROOTDIR . $_POST['boarddir'] . '/src/'. $line['file'] . '.'. $line['file_type']);
+                                        $del = @unlink(KU_STORAGEDIR . $_POST['boarddir'] . '/src/'. $line['file'] . '.'. $line['file_type']);
                                         if ($del) {
-                                            @unlink(KU_ROOTDIR . $_POST['boarddir'] . '/thumb/'. $line['file'] . 's.'. $line['file_type']);
+                                            @unlink(KU_STORAGEDIR . $_POST['boarddir'] . '/thumb/'. $line['file'] . 's.'. $line['file_type']);
                                             $tc_db->Execute("UPDATE `".KU_DBPREFIX."posts` SET `file` = 'removed', `file_md5` = '' WHERE `boardid` = " . $board_id . " AND `id` = ".$_POST['delpostid']." LIMIT 1");
                                             $tpl_page .= '<hr />File successfully deleted<hr />';
                                         } else {
@@ -4382,14 +4382,14 @@ class Manage
             $files = glob("$dir/{*.jpg, *.png, *.gif, *.webp, *.swf}", GLOB_BRACE);
             if (is_array($files)) {
                 foreach ($files as $file) {
-                    if (in_array(md5_file(KU_BOARDSDIR . $lineboard['name'] . '/src/'. basename($file)), $file_md5list) == false) {
-                        if ((time() + KU_ADDTIME) - filemtime(KU_BOARDSDIR . $lineboard['name'] . '/src/'. basename($file)) > 120) {
+                    if (in_array(md5_file(KU_STORAGEDIR . $lineboard['name'] . '/src/'. basename($file)), $file_md5list) == false) {
+                        if ((time() + KU_ADDTIME) - filemtime(KU_STORAGEDIR . $lineboard['name'] . '/src/'. basename($file)) > 120) {
                             if ($verbose == true) {
                                 $tpl_page .= sprintf(_gettext('A live record for %s was not found; the file has been removed.'), $file).'<br />';
                             }
-                            unlink(KU_BOARDSDIR . $lineboard['name'] . '/src/'. basename($file));
-                            @unlink(KU_BOARDSDIR . $lineboard['name'] . '/thumb/'. substr(basename($file), 0, -4) . 's'. substr(basename($file), strlen(basename($file)) - 4));
-                            @unlink(KU_BOARDSDIR . $lineboard['name'] . '/thumb/'. substr(basename($file), 0, -4) . 'c'. substr(basename($file), strlen(basename($file)) - 4));
+                            unlink(KU_STORAGEDIR . $lineboard['name'] . '/src/'. basename($file));
+                            @unlink(KU_STORAGEDIR . $lineboard['name'] . '/thumb/'. substr(basename($file), 0, -4) . 's'. substr(basename($file), strlen(basename($file)) - 4));
+                            @unlink(KU_STORAGEDIR . $lineboard['name'] . '/thumb/'. substr(basename($file), 0, -4) . 'c'. substr(basename($file), strlen(basename($file)) - 4));
                         }
                     }
                 }
@@ -4441,7 +4441,7 @@ class Manage
             }
             $boardid = $tc_db->GetOne("SELECT HIGH_PRIORITY `id` FROM `" . KU_DBPREFIX . "boards` WHERE `name` = " . $tc_db->qstr($_GET['updateboard']) . " LIMIT 1");
             if ($boardid != '') {
-                file_put_contents(KU_ROOTDIR . $_GET['updateboard']. '/spam.txt', $_POST['spam']);
+                file_put_contents(KU_STORAGEDIR . $_GET['updateboard'] . '/spam.txt', $_POST['spam']);
                 management_addlogentry(_gettext('Updated spam list') . " - /" . $_GET['updateboard'] . "/", 4);
                 $tpl_page .= '<hr />'. _gettext('Spam.txt successfully edited.') .'<hr />';
             } else {
@@ -4453,7 +4453,7 @@ class Manage
             }
             $resultsboard = $tc_db->GetAll("SELECT HIGH_PRIORITY * FROM `" . KU_DBPREFIX . "boards` WHERE `name` = " . $tc_db->qstr($_POST['board']) . "");
             if (count($resultsboard) > 0) {
-                $spamfile = KU_ROOTDIR . $_POST['board']. '/spam.txt';
+                $spamfile = KU_STORAGEDIR . $_POST['board'] . '/spam.txt';
                 $content = file_exists($spamfile) ? htmlspecialchars(file_get_contents($spamfile)) : '';
                 $tpl_page .= '<p>Доска: '. $_POST['board'] . '</p>' . "\n" .
                     '<p><b>PROTIP: </b>'._gettext("You don't have to include all variations of the word since it's done autamatically.").'</p>'.
@@ -4563,7 +4563,7 @@ class Manage
         $this->AdministratorsOnly();
         $tpl_page .= '<h2>' . _gettext('Engine settings') . '</h2>';
 
-        $configs = yaml_parse(file_get_contents(KU_ROOTDIR . 'settings_schema.yaml'));
+        $configs = yaml_parse(file_get_contents(KU_ENGINEDIR . 'settings_schema.yaml'));
 
         if (isset($_POST['apply'])) {
             $tc_db->Execute("START TRANSACTION");

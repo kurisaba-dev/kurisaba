@@ -299,7 +299,7 @@ class Board
     public function RegenerateAndPrintThread($id, $mode = '')
     {
         global $tc_db, $CURRENTLOCALE;
-        require_once(KU_ROOTDIR."lib/dwoo.php");
+        require_once(KU_ENGINEDIR . "lib/dwoo.php");
         if (!isset($this->dwoo)) {
             $this->dwoo = new Dwoo();
             $this->dwoo_data = new Dwoo_Data();
@@ -467,14 +467,14 @@ class Board
             //Grab the ID3 info.
             // include getID3() library
 
-            require_once(KU_ROOTDIR . 'lib/getid3/getid3.php');
+            require_once(KU_ENGINEDIR . 'lib/getid3/getid3.php');
 
             // Initialize getID3 engine
             $getID3 = new getID3();
             $getID3->encoding_id3v1 = KU_ID3_ENCODING;
 
             try {
-                $post['id3'] = $getID3->analyze(KU_BOARDSDIR.$this->board['name'].'/' . $srcdir . '/' . $post['file'] . '.' . $post['file_type']);
+                $post['id3'] = $getID3->analyze(KU_STORAGEDIR.$this->board['name'].'/' . $srcdir . '/' . $post['file'] . '.' . $post['file_type']);
                 getid3_lib::CopyTagsToComments($post['id3']);
             } catch (\Throwable $e) {
                 // We just leave $post['id3'] empty in a case of corrupt tags
@@ -486,13 +486,13 @@ class Board
             }
             $post['nonstandard_file'] = KU_WEBPATH . '/inc/filetypes/' . $filetype_info[$post['file_type']][0];
             if ($post['thumb_w'] != 0 && $post['thumb_h'] != 0) {
-                if (file_exists(KU_BOARDSDIR.$this->board['name'].'/' . $thumbdir . '/'.$post['file'].'s.jpg')) {
+                if (file_exists(KU_STORAGEDIR.$this->board['name'].'/' . $thumbdir . '/'.$post['file'].'s.jpg')) {
                     $post['nonstandard_file'] = KU_WEBPATH . '/' .$this->board['name'].'/' . $thumbdir . '/'.$post['file'].'s.jpg';
-                } elseif (file_exists(KU_BOARDSDIR.$this->board['name'].'/' . $thumbdir . '/'.$post['file'].'s.png')) {
+                } elseif (file_exists(KU_STORAGEDIR.$this->board['name'].'/' . $thumbdir . '/'.$post['file'].'s.png')) {
                     $post['nonstandard_file'] = KU_WEBPATH . '/' .$this->board['name'].'/' . $thumbdir . '/'.$post['file'].'s.png';
-                } elseif (file_exists(KU_BOARDSDIR.$this->board['name'].'/' . $thumbdir . '/'.$post['file'].'s.webp')) {
+                } elseif (file_exists(KU_STORAGEDIR.$this->board['name'].'/' . $thumbdir . '/'.$post['file'].'s.webp')) {
                     $post['nonstandard_file'] = KU_WEBPATH . '/' .$this->board['name'].'/' . $thumbdir . '/'.$post['file'].'s.webp';
-                } elseif (file_exists(KU_BOARDSDIR.$this->board['name'].'/' . $thumbdir . '/'.$post['file'].'s.gif')) {
+                } elseif (file_exists(KU_STORAGEDIR.$this->board['name'].'/' . $thumbdir . '/'.$post['file'].'s.gif')) {
                     $post['nonstandard_file'] = KU_WEBPATH . '/' .$this->board['name'].'/' . $thumbdir . '/'.$post['file'].'s.gif';
                 } else {
                     $post['thumb_w'] = $filetype_info[$post['file_type']][1];
@@ -677,7 +677,7 @@ class Board
 
     public function ProduceSmileImages($add = '')
     {
-        require KU_ROOTDIR . 'images/smilies/smilies_list.php';
+        require KU_ENGINEDIR . 'images/smilies/smilies_list.php';
 
         $string = '';
 
@@ -741,7 +741,7 @@ class Board
                 }
             }
         } else {
-            $boards = KU_ROOTDIR . 'boards.html';
+            $boards = KU_STORAGEDIR . 'boards.html';
         }
 
         return $boards;
@@ -788,7 +788,7 @@ class Board
     public function InitializeDwoo()
     {
 
-        require_once KU_ROOTDIR . 'lib/dwoo.php';
+        require_once KU_ENGINEDIR . 'lib/dwoo.php';
         $this->dwoo = new Dwoo();
         $this->dwoo_data = new Dwoo_Data();
 
@@ -845,10 +845,10 @@ class Post extends Board
         if ($this->post['isthread'] == true) {
             AnswerMapDelete($this->post['id'], $this->board['id']);
             AnswerMapDelete(0, $this->board['id'], $this->post['id']);
-            @unlink(KU_BOARDSDIR.$this->board['name'].'/res/'.$this->post['id'].'.html');
+            @unlink(KU_STORAGEDIR.$this->board['name'].'/res/'.$this->post['id'].'.html');
             $this->DeleteFile(false, true, $save_picture, KU_OFFLOAD && KU_KEEPFILES);
-            @unlink(KU_BOARDSDIR.$this->board['name'].'/res/'.$this->post['id'].'-100.html');
-            @unlink(KU_BOARDSDIR.$this->board['name'].'/res/'.$this->post['id'].'+50.html');
+            @unlink(KU_STORAGEDIR.$this->board['name'].'/res/'.$this->post['id'].'-100.html');
+            @unlink(KU_STORAGEDIR.$this->board['name'].'/res/'.$this->post['id'].'+50.html');
 
             $results = $tc_db->GetAll("SELECT `id`, `file`, `file_type` FROM `".KU_DBPREFIX."posts` WHERE `boardid` = '" . $this->board['id'] . "' AND `IS_DELETED` = 0 AND `parentid` = ".$tc_db->qstr($this->post['id']));
             foreach ($results as $line) {
@@ -886,16 +886,16 @@ class Post extends Board
                 foreach ($results as $line) {
                     if ($line['file'] != '' && $line['file'] != 'removed') {
                         if (!$skip_delete) {
-                            @unlink(KU_BOARDSDIR.$this->board['name'].'/src/'.$line['file'].'.'.$line['file_type']);
-                            @unlink(KU_BOARDSDIR.$this->board['name'].'/src/'.$line['file'].'.pch');
-                            @unlink(KU_BOARDSDIR.$this->board['name'].'/thumb/'.$line['file'].'s.'.$line['file_type']);
-                            @unlink(KU_BOARDSDIR.$this->board['name'].'/thumb/'.$line['file'].'a.'.$line['file_type']);
-                            @unlink(KU_BOARDSDIR.$this->board['name'].'/thumb/'.$line['file'].'c.'.$line['file_type']);
+                            @unlink(KU_STORAGEDIR.$this->board['name'].'/src/'.$line['file'].'.'.$line['file_type']);
+                            @unlink(KU_STORAGEDIR.$this->board['name'].'/src/'.$line['file'].'.pch');
+                            @unlink(KU_STORAGEDIR.$this->board['name'].'/thumb/'.$line['file'].'s.'.$line['file_type']);
+                            @unlink(KU_STORAGEDIR.$this->board['name'].'/thumb/'.$line['file'].'a.'.$line['file_type']);
+                            @unlink(KU_STORAGEDIR.$this->board['name'].'/thumb/'.$line['file'].'c.'.$line['file_type']);
                             if ($line['file_type'] == 'mp3' || $line['file_type'] == 'ogg' || $line['file_type'] == 'm4a') {
-                                @unlink(KU_BOARDSDIR.$this->board['name'].'/thumb/'.$line['file'].'s.jpg');
-                                @unlink(KU_BOARDSDIR.$this->board['name'].'/thumb/'.$line['file'].'s.webp');
-                                @unlink(KU_BOARDSDIR.$this->board['name'].'/thumb/'.$line['file'].'s.png');
-                                @unlink(KU_BOARDSDIR.$this->board['name'].'/thumb/'.$line['file'].'s.gif');
+                                @unlink(KU_STORAGEDIR.$this->board['name'].'/thumb/'.$line['file'].'s.jpg');
+                                @unlink(KU_STORAGEDIR.$this->board['name'].'/thumb/'.$line['file'].'s.webp');
+                                @unlink(KU_STORAGEDIR.$this->board['name'].'/thumb/'.$line['file'].'s.png');
+                                @unlink(KU_STORAGEDIR.$this->board['name'].'/thumb/'.$line['file'].'s.gif');
                             }
                             if ($update_to_removed) {
                                 $tc_db->Execute("UPDATE `".KU_DBPREFIX."posts` SET `file` = 'removed', `file_md5` = '' WHERE `boardid` = '" . $this->board['id'] . "' AND `id` = ".$line['id']);
@@ -910,21 +910,21 @@ class Post extends Board
             if ($this->post['file'] != '' && $this->post['file'] != 'removed') {
                 if ($save_picture) {
                     @copy(
-                        KU_BOARDSDIR.$this->board['name'].'/src/'.$this->post['file'].'.'.$this->post['file_type'],
-                        KU_BOARDSDIR.$this->board['name'].'/tmp/saved'.$this->post['file'].'.'.$this->post['file_type']
+                        KU_STORAGEDIR.$this->board['name'].'/src/'.$this->post['file'].'.'.$this->post['file_type'],
+                        KU_STORAGEDIR.$this->board['name'].'/tmp/saved'.$this->post['file'].'.'.$this->post['file_type']
                     );
                 }
                 if (!$skip_delete) {
-                    @unlink(KU_BOARDSDIR.$this->board['name'].'/src/'.$this->post['file'].'.'.$this->post['file_type']);
-                    @unlink(KU_BOARDSDIR.$this->board['name'].'/src/'.$this->post['file'].'.pch');
-                    @unlink(KU_BOARDSDIR.$this->board['name'].'/thumb/'.$this->post['file'].'s.'.$this->post['file_type']);
-                    @unlink(KU_BOARDSDIR.$this->board['name'].'/thumb/'.$this->post['file'].'a.'.$this->post['file_type']);
-                    @unlink(KU_BOARDSDIR.$this->board['name'].'/thumb/'.$this->post['file'].'c.'.$this->post['file_type']);
+                    @unlink(KU_STORAGEDIR.$this->board['name'].'/src/'.$this->post['file'].'.'.$this->post['file_type']);
+                    @unlink(KU_STORAGEDIR.$this->board['name'].'/src/'.$this->post['file'].'.pch');
+                    @unlink(KU_STORAGEDIR.$this->board['name'].'/thumb/'.$this->post['file'].'s.'.$this->post['file_type']);
+                    @unlink(KU_STORAGEDIR.$this->board['name'].'/thumb/'.$this->post['file'].'a.'.$this->post['file_type']);
+                    @unlink(KU_STORAGEDIR.$this->board['name'].'/thumb/'.$this->post['file'].'c.'.$this->post['file_type']);
                     if ($this->post['file_type'] == 'mp3' || $this->post['file_type'] == 'ogg' || $this->post['file_type'] == 'm4a') {
-                        @unlink(KU_BOARDSDIR.$this->board['name'].'/thumb/'.$this->post['file'].'s.jpg');
-                        @unlink(KU_BOARDSDIR.$this->board['name'].'/thumb/'.$this->post['file'].'s.webp');
-                        @unlink(KU_BOARDSDIR.$this->board['name'].'/thumb/'.$this->post['file'].'s.png');
-                        @unlink(KU_BOARDSDIR.$this->board['name'].'/thumb/'.$this->post['file'].'s.gif');
+                        @unlink(KU_STORAGEDIR.$this->board['name'].'/thumb/'.$this->post['file'].'s.jpg');
+                        @unlink(KU_STORAGEDIR.$this->board['name'].'/thumb/'.$this->post['file'].'s.webp');
+                        @unlink(KU_STORAGEDIR.$this->board['name'].'/thumb/'.$this->post['file'].'s.png');
+                        @unlink(KU_STORAGEDIR.$this->board['name'].'/thumb/'.$this->post['file'].'s.gif');
                     }
                     if ($update_to_removed) {
                         $tc_db->Execute("UPDATE `".KU_DBPREFIX."posts` SET `file` = 'removed', `file_md5` = '' WHERE `boardid` = '" . $this->board['id'] . "' AND `id` = ".$tc_db->qstr($this->post['id']));

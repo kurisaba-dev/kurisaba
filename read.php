@@ -30,14 +30,14 @@ if (isset($_GET['v'])) {
 $singlepost = (isset($_GET['single'])) ? true : false;
 $issearch = (isset($textstr)) ? true : false;
 
-require KU_ROOTDIR . 'inc/functions.php';
-require KU_ROOTDIR . 'inc/classes/bans.class.php';
+require KU_ENGINEDIR . 'inc/functions.php';
+require KU_ENGINEDIR . 'inc/classes/bans.class.php';
 $bans_class = new Bans();
 if ($bans_class->BanCheckSilent(KU_REMOTE_ADDR, $board, true)) {
     do_redirect(KU_BOARDSPATH . '/banned.php');
 }
 
-require KU_ROOTDIR . 'inc/classes/board-post.class.php';
+require KU_ENGINEDIR . 'inc/classes/board-post.class.php';
 
 $executiontime_start = microtime_float();
 

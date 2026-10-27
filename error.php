@@ -3,12 +3,12 @@
 $errorcode = $_GET['p'];
 
 require 'settings_manager.php';
-require KU_ROOTDIR . 'inc/functions.php';
-require KU_ROOTDIR . 'inc/classes/board-post.class.php';
+require KU_ENGINEDIR . 'inc/functions.php';
+require KU_ENGINEDIR . 'inc/classes/board-post.class.php';
 session_start(['cookie_samesite' => 'Strict']);
 modules_load_all();
 
-require KU_ROOTDIR . 'inc/classes/bans.class.php';
+require KU_ENGINEDIR . 'inc/classes/bans.class.php';
 $bans_class = new Bans();
 
 function request_log($text)
@@ -222,10 +222,10 @@ elseif (KU_OFFLOAD) {
                 http_response_code(451);
                 header('Expires: ' . date(DATE_RFC7231, time() + KU_OFFLOADCACHEDAYS * 86400));
                 header('Content-type: image/jpeg');
-                echo file_get_contents(KU_ROOTDIR . 'images/451.jpg');
+                echo file_get_contents(KU_ENGINEDIR . 'images/451.jpg');
                 exit();
             }
-            $content = file_get_contents(KU_ROOTDIR . $address);
+            $content = file_get_contents(KU_STORAGEDIR . $address);
             if ($content !== false) {
                 http_response_code(200);
                 header("Status: 200 OK");
@@ -237,7 +237,7 @@ elseif (KU_OFFLOAD) {
                 http_response_code($errorcode);
                 header('Expires: ' . date(DATE_RFC7231, time() + KU_OFFLOADCACHEDAYS * 86400));
                 header('Content-type: image/jpeg');
-                echo file_get_contents(KU_ROOTDIR . 'images/404.jpg');
+                echo file_get_contents(KU_ENGINEDIR . 'images/404.jpg');
                 exit();
             }
         }

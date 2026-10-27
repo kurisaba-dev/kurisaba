@@ -5,7 +5,7 @@
 		var react_sitename = {if %KU_REACT_SITENAME}'{%KU_REACT_SITENAME}:'{else}''{/if};
 		var this_board_dir = '{$board.name}';
 		var ku_boardspath = '{%KU_BOARDSPATH}';
-		var ku_boardsdir = '{%KU_BOARDSDIR}';
+		var ku_storagedir = '{%KU_STORAGEDIR}';
 		var ku_cgipath = '{%KU_CGIPATH}';
 		var ku_defaultboard = '{%KU_DEFAULTBOARD}';
 		var ku_maxfilesize = {$maxfilesize};

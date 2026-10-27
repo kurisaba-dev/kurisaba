@@ -54,9 +54,9 @@ class Upload
         }
 
         // Delete temporary files older than 10 min.
-        $dir1 = KU_BOARDSDIR . $board_class->board['name'] . '/tmp';
-        $dir2 = KU_BOARDSDIR . $board_class->board['name'] . '/tmp/thumb';
-        $dir3 = KU_BOARDSDIR . 'tmp/xhrupload';
+        $dir1 = KU_STORAGEDIR . $board_class->board['name'] . '/tmp';
+        $dir2 = KU_STORAGEDIR . $board_class->board['name'] . '/tmp/thumb';
+        $dir3 = KU_STORAGEDIR . 'tmp/xhrupload';
         $files1 = array();
         $files2 = array();
         $files3 = array();
@@ -189,10 +189,10 @@ class Upload
                             return 'Недопустимое имя файла.';
                         }
                         if ($temporary) {
-                            $reuse_base_dir = KU_BOARDSDIR . $board_class->board['name'] . '/src';
+                            $reuse_base_dir = KU_STORAGEDIR . $board_class->board['name'] . '/src';
                             $file['tmp_name'] = $reuse_base_dir . '/' . $file['name'];
                         } else {
-                            $reuse_base_dir = KU_BOARDSDIR . $board_class->board['name'] . '/tmp';
+                            $reuse_base_dir = KU_STORAGEDIR . $board_class->board['name'] . '/tmp';
                             $file['tmp_name'] = $reuse_base_dir . '/saved' . $file['name'];
                         }
                         if (!file_exists($file['tmp_name'])) {
@@ -342,10 +342,10 @@ class Upload
                     if ($filetype_forcethumb == 0) {
                         $this->file_name = (time() + KU_ADDTIME) . mt_rand(1, 99);
 
-                        $this->file_location = KU_BOARDSDIR . $board_class->board['name'] . '/' . $srcdir . '/' . $this->file_name . $this->file_type;
+                        $this->file_location = KU_STORAGEDIR . $board_class->board['name'] . '/' . $srcdir . '/' . $this->file_name . $this->file_type;
 
                         if ($this->file_type != '.webm' && $this->file_type != '.mp4' && $this->file_type != '.m4v') {
-                            $this->file_thumb_location = KU_BOARDSDIR . $board_class->board['name'] . '/' . $thumbdir . '/' . $this->file_name . 's' . $this->file_type;
+                            $this->file_thumb_location = KU_STORAGEDIR . $board_class->board['name'] . '/' . $thumbdir . '/' . $this->file_name . 's' . $this->file_type;
                             $this->file_thumb_cat_location = $this->file_thumb_location;
 
                             // Move file to its final place
@@ -400,13 +400,13 @@ class Upload
                         /* Fetch the mime requirement for this special filetype */
                         $filetype_required_mime = $tc_db->GetOne("SELECT `mime` FROM `" . KU_DBPREFIX . "filetypes` WHERE `filetype` = " . $tc_db->qstr(substr($this->file_type, 1)));
                         $this->file_name = (time() + KU_ADDTIME) . mt_rand(1, 99);
-                        $this->file_location = KU_BOARDSDIR . $board_class->board['name'] . '/' . $srcdir . '/' . $this->file_name . $this->file_type;
+                        $this->file_location = KU_STORAGEDIR . $board_class->board['name'] . '/' . $srcdir . '/' . $this->file_name . $this->file_type;
 
                         if (file_exists($this->file_location)) {
                             return _gettext('A file by that name already exists');
                         }
                         if ($this->file_type == '.mp3' || $this->file_type == '.ogg' || $this->file_type == '.m4a') {
-                            require_once(KU_ROOTDIR . 'lib/getid3/getid3.php');
+                            require_once(KU_ENGINEDIR . 'lib/getid3/getid3.php');
 
                             $getID3 = new getID3();
                             $getID3->analyze($file['tmp_name']);
@@ -430,7 +430,7 @@ class Upload
                                     $ext = ".webp";
                                     imagewebp($im, $this->file_location.".tmp");
                                 }
-                                $this->file_thumb_location = KU_BOARDSDIR . $board_class->board['name'] . '/' . $thumbdir . '/' . $this->file_name .'s'. $ext;
+                                $this->file_thumb_location = KU_STORAGEDIR . $board_class->board['name'] . '/' . $thumbdir . '/' . $this->file_name .'s'. $ext;
                                 if (!$this->isreply) {
                                     if (($thumb_result = createThumbnail($this->file_location.".tmp", $this->file_thumb_location, KU_THUMBWIDTH, KU_THUMBHEIGHT)) > 0) {
                                         return ($thumb_result > 1) ? _gettext('Could not create thumbnail.') : _gettext('Unable to read uploaded file during thumbnailing.');

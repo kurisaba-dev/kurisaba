@@ -304,7 +304,7 @@ class Posting
     {
         global $bans_class, $tc_db;
 
-        $badlinks = array_map('rtrim', file(KU_ROOTDIR . 'spam.txt', FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES));
+        $badlinks = array_map('rtrim', file(KU_STORAGEDIR . 'spam.txt', FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES));
 
         foreach ($badlinks as $badlink) {
             if (stripos($_POST['message'], $badlink) !== false) {
@@ -336,7 +336,7 @@ class Posting
 
         if($msg == $lastmsg) return 1; */
 
-        $sturl = KU_BOARDSDIR . $board . '/spam.txt';
+        $sturl = KU_STORAGEDIR . $board . '/spam.txt';
         if (!file_exists($sturl)) {
             return 0;
         }

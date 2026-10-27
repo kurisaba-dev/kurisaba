@@ -310,7 +310,7 @@ function changeLocale($newlocale)
     $EMULATEGETTEXT = 1;
     _textdomain('kusaba');
     _setlocale(LC_ALL, $newlocale);
-    _bindtextdomain('kusaba', KU_ROOTDIR . 'inc/lang', $newlocale);
+    _bindtextdomain('kusaba', KU_ENGINEDIR . 'inc/lang', $newlocale);
     _bind_textdomain_codeset('kusaba', KU_CHARSET);
 
 }
@@ -359,14 +359,14 @@ function exitWithErrorPage($errormsg, $extended = '', $posttext = '', $template 
 {
     global $dwoo, $dwoo_data, $board_class;
     if (!isset($dwoo)) {
-        require_once KU_ROOTDIR . 'lib/dwoo.php';
+        require_once KU_ENGINEDIR . 'lib/dwoo.php';
         $dwoo = new Dwoo();
         $dwoo_data = new Dwoo_Data();
         $dwoo_data->assign('cwebpath', KU_WEBPATH . '/');
         $dwoo_data->assign('boardpath', KU_BOARDSPATH . '/');
     }
     if (!isset($board_class)) {
-        require_once KU_ROOTDIR . 'inc/classes/board-post.class.php';
+        require_once KU_ENGINEDIR . 'inc/classes/board-post.class.php';
         $board_class = new Board('');
     }
 
@@ -480,7 +480,7 @@ function sendStaffMail($subject, $message)
     $emails = split(':', KU_APPEAL);
     $expires = ($line['until'] > 0) ? date("F j, Y, g:i a", $line['until']) : 'never';
     foreach ($emails as $email) {
-        @mail($email, $subject, $message, 'From: "' . KU_NAME . '" <kusaba@noreply' . KU_DOMAIN . '>' . "\r\n" . 'Reply-To: kusaba@noreply' . KU_DOMAIN . "\r\n" . 'X-Mailer: kurisaba' . KU_VERSION . '/PHP' . phpversion());
+        @mail($email, $subject, $message, 'From: "' . KU_NAME . '" <kusaba@noreply.' . KU_HOST . '>' . "\r\n" . 'Reply-To: kusaba@noreply.' . KU_HOST . "\r\n" . 'X-Mailer: kurisaba' . KU_VERSION . '/PHP' . phpversion());
     }
 }
 
@@ -491,7 +491,6 @@ function do_redirect($url, $ispost = false, $file = '')
     $headermethod = true;
 
     if ($headermethod) {
-        /* setcookie_strict('tothread', $gtt, 0, '/', KU_DOMAIN); - Was this even working at all? */
         if ($ispost) {
             header('Location: ' . $url);
         } else {
@@ -559,7 +558,7 @@ function print_page($filename, $contents, $board)
 {
     global $tc_db;
 
-    $tempfile = tempnam(KU_BOARDSDIR . $board . '/res', 'tmp'); /* Create the temporary file */
+    $tempfile = tempnam(KU_STORAGEDIR . $board . '/res', 'tmp'); /* Create the temporary file */
     $fp = fopen($tempfile, 'w');
     fwrite($fp, $contents);
     fclose($fp);

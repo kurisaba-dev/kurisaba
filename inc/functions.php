@@ -25,12 +25,12 @@
  * @package kusaba
  */
 
-include KU_ROOTDIR . 'inc/func/calculations.php';
-include KU_ROOTDIR . 'inc/func/directories.php';
-include KU_ROOTDIR . 'inc/func/encryption.php';
-include KU_ROOTDIR . 'inc/func/misc.php';
-include KU_ROOTDIR . 'inc/func/module.php';
-include KU_ROOTDIR . 'inc/func/numberformatting.php';
-include KU_ROOTDIR . 'inc/func/posts.php';
-include KU_ROOTDIR . 'inc/func/stringformatting.php';
-include KU_ROOTDIR . 'inc/func/custom.php';
+include KU_ENGINEDIR . 'inc/func/calculations.php';
+include KU_ENGINEDIR . 'inc/func/directories.php';
+include KU_ENGINEDIR . 'inc/func/encryption.php';
+include KU_ENGINEDIR . 'inc/func/misc.php';
+include KU_ENGINEDIR . 'inc/func/module.php';
+include KU_ENGINEDIR . 'inc/func/numberformatting.php';
+include KU_ENGINEDIR . 'inc/func/posts.php';
+include KU_ENGINEDIR . 'inc/func/stringformatting.php';
+include KU_ENGINEDIR . 'inc/func/custom.php';

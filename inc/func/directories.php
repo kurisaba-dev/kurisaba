@@ -47,26 +47,26 @@ function removeBoard($dir)
         $GLOBALS['remerror'] = false;
     }
 
-    if ($handle = opendir(KU_BOARDSDIR . $dir)) { /* If the folder exploration is sucsessful, continue */
+    if ($handle = opendir(KU_STORAGEDIR . $dir)) { /* If the folder exploration is sucsessful, continue */
         while (false !== ($file = readdir($handle))) { /* As long as storing the next file to $file is successful, continue */
             $path = $dir . '/' . $file;
 
-            if (is_file(KU_BOARDSDIR . $path)) {
-                if (!unlink(KU_BOARDSDIR . $path)) {
+            if (is_file(KU_STORAGEDIR . $path)) {
+                if (!unlink(KU_STORAGEDIR . $path)) {
                     echo '<u><font color="red">'.sprintf(_gettext('"%s" could not be deleted. This may be due to a permissions problem.</u><br />Directory cannot be deleted until all files are deleted.'), $path).'</font><br />';
                     $GLOBALS['remerror'] = true;
                     return false;
                 }
-            } elseif (is_dir(KU_BOARDSDIR . $path) && substr($file, 0, 1) != '.') {
+            } elseif (is_dir(KU_STORAGEDIR . $path) && substr($file, 0, 1) != '.') {
                 removeBoard($path);
-                @rmdir(KU_BOARDSDIR . $path);
+                @rmdir(KU_STORAGEDIR . $path);
             }
         }
         closedir($handle); /* Close the folder exploration */
     }
 
     if (!$GLOBALS['remerror']) { /* If no errors occured, delete the now empty directory */
-        if (!rmdir(KU_BOARDSDIR . $dir)) {
+        if (!rmdir(KU_STORAGEDIR . $dir)) {
             echo '<strong><font color="red">'.sprintf(_gettext('Could not remove directory "%s". This may be due to a permissions problem.'), $dir).'</font></strong><br />'.$GLOBALS['remerror'];
             return false;
         } else {

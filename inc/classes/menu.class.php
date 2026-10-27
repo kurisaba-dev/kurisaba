@@ -27,7 +27,7 @@ class Menu
     {
         global $tc_db, $dwoo, $dwoo_data, $kusabaxorg;
 
-        require_once KU_ROOTDIR.'lib/dwoo.php';
+        require_once KU_ENGINEDIR . 'lib/dwoo.php';
 
         $faq_enabled = false;
 
@@ -95,9 +95,9 @@ class Menu
 
             if ($savetofile) {
                 if ($i == 0) {
-                    file_put_contents(KU_ROOTDIR . $files[0], $dwoo->get(KU_TEMPLATEDIR . '/menu.tpl', $dwoo_data));
+                    file_put_contents(KU_STORAGEDIR . $files[0], $dwoo->get(KU_TEMPLATEDIR . '/menu.tpl', $dwoo_data));
                 } else {
-                    file_put_contents(KU_ROOTDIR . $files[1], $dwoo->get(KU_TEMPLATEDIR . '/menu.tpl', $dwoo_data));
+                    file_put_contents(KU_STORAGEDIR . $files[1], $dwoo->get(KU_TEMPLATEDIR . '/menu.tpl', $dwoo_data));
                 }
             } else {
                 if ($i == 0) {

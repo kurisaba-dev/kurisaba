@@ -29,8 +29,8 @@
  * Require the configuration file, functions file, and bans class
  */
 require 'settings_manager.php';
-require KU_ROOTDIR . 'inc/functions.php';
-require KU_ROOTDIR . 'inc/classes/bans.class.php';
+require KU_ENGINEDIR . 'inc/functions.php';
+require KU_ENGINEDIR . 'inc/classes/bans.class.php';
 
 $bans_class = new Bans();
 

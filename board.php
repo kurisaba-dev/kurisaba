@@ -33,12 +33,12 @@
 
 session_start(['cookie_samesite' => 'Strict']);
 require 'settings_manager.php';
-require KU_ROOTDIR . 'inc/functions.php';
-require KU_ROOTDIR . 'inc/func/nrand.php';
-require KU_ROOTDIR . 'inc/classes/board-post.class.php';
-require KU_ROOTDIR . 'inc/classes/bans.class.php';
-require KU_ROOTDIR . 'inc/classes/posting.class.php';
-require KU_ROOTDIR . 'inc/classes/parse.class.php';
+require KU_ENGINEDIR . 'inc/functions.php';
+require KU_ENGINEDIR . 'inc/func/nrand.php';
+require KU_ENGINEDIR . 'inc/classes/board-post.class.php';
+require KU_ENGINEDIR . 'inc/classes/bans.class.php';
+require KU_ENGINEDIR . 'inc/classes/posting.class.php';
+require KU_ENGINEDIR . 'inc/classes/parse.class.php';
 
 // STAGE 1: Check type of operation and specifically format return actions.
 
@@ -194,7 +194,7 @@ if ($operation_delete) { // currently `noreturn`.
         }
 
         // 4.2. DELETE or MODDELETE
-        elseif (isset($_POST['postpassword']) || (isset($_POST['moddelete']) && (require_once KU_ROOTDIR . 'inc/classes/manage.class.php') && Manage::CurrentUserIsModeratorOfBoard($board_class->board['name'], $_SESSION['manageusername']) && $ismod = true)) {
+        elseif (isset($_POST['postpassword']) || (isset($_POST['moddelete']) && (require_once KU_ENGINEDIR . 'inc/classes/manage.class.php') && Manage::CurrentUserIsModeratorOfBoard($board_class->board['name'], $_SESSION['manageusername']) && $ismod = true)) {
             // They clicked the Delete button
             if ($_POST['postpassword'] != '' || $ismod) {
                 if (md5($_POST['postpassword']) == $post_class->post['password'] || $ismod) {
@@ -347,7 +347,7 @@ if ($operation_post) { // it's `noreturn`.
         }
 
         if (isset($_POST['rememberformatting'])) {
-            setcookie_strict('kuformatting', urldecode($_POST['formatting']), time() + KU_ADDTIME + (365 * 24 * 3600), '/', KU_DOMAIN);
+            setcookie_strict('kuformatting', urldecode($_POST['formatting']), time() + KU_ADDTIME + (365 * 24 * 3600));
         }
     }
 
@@ -438,7 +438,7 @@ if ($operation_post) { // it's `noreturn`.
     }
 
     if ($board_class->board['locked'] == 0 || ($user_authority > 0 && $user_authority != 3)) {
-        require_once KU_ROOTDIR . 'inc/classes/upload.class.php';
+        require_once KU_ENGINEDIR . 'inc/classes/upload.class.php';
         $upload_class = new Upload();
         if ($post_isreply) {
             $upload_class->isreply = true;
@@ -507,7 +507,7 @@ if ($operation_post) { // it's `noreturn`.
             $user_authority_display = 0;
         }
 
-        if ((file_exists(KU_BOARDSDIR . $board_class->board['name'] . '/src/' . $upload_class->file_name . $upload_class->file_type) && file_exists(KU_BOARDSDIR . $board_class->board['name'] . '/thumb/' . $upload_class->file_name . 's' . $upload_class->file_type)) || ($file_is_special && file_exists(KU_BOARDSDIR . $board_class->board['name'] . '/src/' . $upload_class->file_name . $upload_class->file_type)) || $post_fileused == false) {
+        if ((file_exists(KU_STORAGEDIR . $board_class->board['name'] . '/src/' . $upload_class->file_name . $upload_class->file_type) && file_exists(KU_STORAGEDIR . $board_class->board['name'] . '/thumb/' . $upload_class->file_name . 's' . $upload_class->file_type)) || ($file_is_special && file_exists(KU_STORAGEDIR . $board_class->board['name'] . '/src/' . $upload_class->file_name . $upload_class->file_type)) || $post_fileused == false) {
             $post = array();
 
             //#snivystuff country!
@@ -683,10 +683,10 @@ if ($operation_post) { // it's `noreturn`.
             }
             if ($post_id == -1) {
                 // Don't leave orphan files
-                @unlink(KU_BOARDSDIR . $board_class->board['name'] . '/src/' . $upload_class->file_name . '.pch');
-                @unlink(KU_BOARDSDIR . $board_class->board['name'] . '/src/' . $upload_class->file_name . $upload_class->file_type);
-                @unlink(KU_BOARDSDIR . $board_class->board['name'] . '/thumb/' . $upload_class->file_name . 's' . $upload_class->file_type);
-                @unlink(KU_BOARDSDIR . $board_class->board['name'] . '/src/' . $upload_class->file_name . $upload_class->file_type);
+                @unlink(KU_STORAGEDIR . $board_class->board['name'] . '/src/' . $upload_class->file_name . '.pch');
+                @unlink(KU_STORAGEDIR . $board_class->board['name'] . '/src/' . $upload_class->file_name . $upload_class->file_type);
+                @unlink(KU_STORAGEDIR . $board_class->board['name'] . '/thumb/' . $upload_class->file_name . 's' . $upload_class->file_type);
+                @unlink(KU_STORAGEDIR . $board_class->board['name'] . '/src/' . $upload_class->file_name . $upload_class->file_type);
                 kurisaba_exit('Слишком много сложной разметки в посте, например, ссылок.', '', $_POST['message']);
             }
 
@@ -702,14 +702,14 @@ if ($operation_post) { // it's `noreturn`.
             }
 
             if ($post['name_save'] && isset($_POST['name'])) {
-                setcookie_strict('name', urldecode($_POST['name']), time() + KU_ADDTIME + (365 * 24 * 3600), '/', KU_DOMAIN);
+                setcookie_strict('name', urldecode($_POST['name']), time() + KU_ADDTIME + (365 * 24 * 3600));
             }
 
             if ($post['email_save']) {
-                setcookie_strict('email', urldecode($post['email']), time() + KU_ADDTIME + (365 * 24 * 3600), '/', KU_DOMAIN);
+                setcookie_strict('email', urldecode($post['email']), time() + KU_ADDTIME + (365 * 24 * 3600));
             }
 
-            setcookie_strict('postpassword', urldecode($_POST['postpassword']), time() + KU_ADDTIME + (365 * 24 * 3600), '/');
+            setcookie_strict('postpassword', urldecode($_POST['postpassword']), time() + KU_ADDTIME + (365 * 24 * 3600));
         } else {
             kurisaba_exit(_gettext('Could not copy uploaded image.'), '', $_POST['message']);
         }
