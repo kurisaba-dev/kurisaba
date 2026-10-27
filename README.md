@@ -24,6 +24,10 @@ A nullchan-kusabaX based imageboard engine with some modern features
 ```
     sudo -u www-data git clone https://github.com/kurisaba-dev/kurisaba /var/www/kurisaba
 ```
+- Настроить главную на `front.php` в конфиге сайта, например, для nginx:
+```
+    index front.php;
+```
 - Если сервер - nginx, то сконфигурировать директивы `error_page` в конфиге сайта (обязательно с символом "=", иначе особые треды работать не будут), а также по возможности всё остальное по образцу из `.htaccess.template`:
 ```
     error_page 403 = /error.php?p=403;
