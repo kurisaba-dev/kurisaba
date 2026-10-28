@@ -89,6 +89,9 @@ if (!$manage_class->ValidateSession(true)) {
         $tpl_links .= '<li><a href="manage_page.php?action=staff">' . _gettext('Staff') . '</a></li>';
         $tpl_links .= '<li><a style="color:blue" href="manage_page.php?action=sql">' . _gettext('SQL query') . '</a></li>';
         $tpl_links .= '<li><a style="color:blue" href="manage_page.php?action=phpinfo">' . _gettext('PHP Info') . '</a></li>';
+        if(KU_DEBUGREQUESTS) {
+            $tpl_links .= '<li><a style="color:red" href="manage_page.php?action=reqlog">' . _gettext('Request log') . '</a></li>';
+        }
         $tpl_links .= '<li><a href="manage_page.php?action=rebuildanswerslist">' . _gettext('Rebuild static reply map') . '</a></li>';
         $tpl_links .= '</ul></div>';
         $tpl_links .= section_html(_gettext('Boards Administration'), 'boardsadministration') . '<ul>';

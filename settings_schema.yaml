@@ -315,3 +315,11 @@ config:
         default: false
         comment: 'Показывать сообщение "Thumbnail displayed, click image for full size." у предпросмотров картинок.'
         type: bool
+
+  - debug:
+    name: 'Отладочные фичи'
+    options:
+      KU_DEBUGREQUESTS:
+        default: false
+        comment: 'Записывать все запросы к движку (проходящие через error.php) в таблицу "reqlog" для последующего анализа. Можно посмотреть последние записи в админке.'
+        type: bool

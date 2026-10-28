@@ -13,12 +13,10 @@ $bans_class = new Bans();
 
 function request_log($text)
 {
-    /*global $tc_db;
-    $tc_db->Execute("INSERT INTO `" . KU_DBPREFIX . "reqlog` ( `request`, `text` , `ip` , `timestamp` ) VALUES ( " .
-    $tc_db->qstr($_SERVER['REQUEST_URI']) . " , " .
-    $tc_db->qstr($text) . " , " .
-    $tc_db->qstr(KU_REMOTE_ADDR) . " , '" .
-    (time() + KU_ADDTIME) . "' )");*/
+    if(!KU_DEBUGREQUESTS) return;
+    global $tc_db;
+    $tc_db->Execute("CREATE TABLE IF NOT EXISTS `" . KU_DBPREFIX . "reqlog` (`request` VARCHAR(1024), `text` VARCHAR(1024), `ip` VARCHAR(32), `timestamp` INT(20)) ENGINE=MyISAM DEFAULT CHARSET=utf8");
+    $tc_db->Execute("INSERT INTO `" . KU_DBPREFIX . "reqlog` (`request`, `text` , `ip` , `timestamp` ) VALUES ( " . $tc_db->qstr($_SERVER['REQUEST_URI']) . ", " . $tc_db->qstr($text) . ", " . $tc_db->qstr(KU_REMOTE_ADDR) . ", " . (time() + KU_ADDTIME) . ")");
 }
 
 function CreateBoard($board)
