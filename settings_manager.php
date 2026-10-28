@@ -83,13 +83,12 @@ include 'config.php';
 $cf['KU_TEMPLATEDIR'] = $cf['KU_ENGINEDIR'] . 'dwoo/templates';
 $cf['KU_CACHEDTEMPLATEDIR'] = $cf['KU_STORAGEDIR'] . 'tmp/dwoo';
 
+// CSS/JS caching stuff
 $css_js_files = array("css/*.css", "css/styles/*.css", "lib/javascript/*.js", "lib/javascript/prettify/*.js");
 $maxtimestamp = max(array_map("filemtime", array_merge(...array_map(fn($x) => glob($cf['KU_ENGINEDIR'] . $x), $css_js_files))));
 $cf['KU_JS_CSS_VER'] = $maxtimestamp;
 
-$cf['KU_SUPPORTED_LOCALES'] = 'ru|en';
-
-// Версия курисабы
+// Kurisaba version (not meaningful yet)
 $cf['KU_VERSION']    = '1.0 based on KusabaX-0.9.3/0chan';
 
 class DatabaseProxy

@@ -55,9 +55,13 @@ config:
   - locale:
     name: 'Локаль и время'
     options:
+      KU_SUPPORTED_LOCALES:
+        default: 'ru|en'
+        comment: 'Локали, допустимые для досок (через знак "|"). Возможные значения: en, de, et, es, fi, pl, nl, nb, ro, ru, it, ja.'
+        type: string
       KU_LOCALE:
         default: 'ru'
-        comment: 'Текущая локаль. Возможные значения: en, de, et, es, fi, pl, nl, nb, ro, ru, it, ja.'
+        comment: 'Основная локаль всей имиджборды (в том числе для gettext). Возможные значения: en, de, et, es, fi, pl, nl, nb, ro, ru, it, ja.'
         type: string
       KU_CHARSET:
         default: 'UTF-8'
