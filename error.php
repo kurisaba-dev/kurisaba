@@ -66,7 +66,16 @@ function geoblocked($address, $filetype)
     return false;
 }
 
-$address = explode('?', $_SERVER['REQUEST_URI'])[0]; // Remove request parameters sinse we're mimicking "static" html
+$address = KU_PROTO . KU_HOST . explode('?', $_SERVER['REQUEST_URI'])[0]; // Remove request parameters since we're mimicking "static" html
+if (substr($address, 0, strlen(KU_BOARDSPATH)) != KU_BOARDSPATH) {
+    http_response_code(404);
+    request_log("Попытался обратиться к неверному URL ".$_SERVER['REQUEST_URI']);
+    header('Content-type: text/html; charset=utf-8');
+    exitWithErrorPage('404: Ничего такого на этой борде не обнаружено.', '<a href="' . KU_BOARDSPATH . '/' . KU_DEFAULTBOARD . '">Вернуться на главную</a>');
+}
+$address = substr($address, strlen(KU_BOARDSPATH));
+
+
 // Board Page 0
 if (preg_match("/^\/([a-z]+)\/board\.html$/", $address, $matches)) {
     $board_class = CreateBoard($matches[1]);
@@ -84,7 +93,7 @@ elseif (preg_match("/^\/([A-Z0-9a-z\/]+?)\/$/", $address, $matches) || preg_matc
     $board_class = CreateBoard($matches[1]);
     if ($board_class) {
         if ($bans_class->BanCheckSilent(KU_REMOTE_ADDR, $matches[1], true)) {
-            do_redirect(KU_BOARDSPATH . '/banned.php');
+            do_redirect(KU_WEBPATH . '/banned.php');
         }
         http_response_code(200);
         header("Status: 200 OK");
@@ -110,9 +119,9 @@ elseif (preg_match("/^\/([A-Z0-9a-z\/]+?)\/$/", $address, $matches) || preg_matc
         }
         if ($redirect_to != '') {
             if ($bans_class->BanCheckSilent(KU_REMOTE_ADDR, $current_board, true)) {
-                do_redirect(KU_BOARDSPATH . '/banned.php');
+                do_redirect(KU_WEBPATH . '/banned.php');
             }
-            header('Location: ' . KU_WEBPATH . $redirect_to);
+            header('Location: ' . KU_BOARDSPATH . $redirect_to);
             die();
         }
     }
@@ -123,7 +132,7 @@ elseif (preg_match("/^\/([a-z]+)\/catalog\.html$/", $address, $matches)) {
     $board_class = CreateBoard($matches[1]);
     if ($board_class) {
         if ($bans_class->BanCheckSilent(KU_REMOTE_ADDR, $matches[1], true)) {
-            do_redirect(KU_BOARDSPATH . '/banned.php');
+            do_redirect(KU_WEBPATH . '/banned.php');
         }
         http_response_code(200);
         header("Status: 200 OK");
@@ -138,7 +147,7 @@ elseif (preg_match("/^\/([a-z]+)\/([0-9]+)\.html$/", $address, $matches)) {
     $board_class = CreateBoard($matches[1]);
     if ($board_class) {
         if ($bans_class->BanCheckSilent(KU_REMOTE_ADDR, $matches[1], true)) {
-            do_redirect(KU_BOARDSPATH . '/banned.php');
+            do_redirect(KU_WEBPATH . '/banned.php');
         }
         $postsperpage = KU_THREADS;
         $threads_on_page = $tc_db->GetOne("SELECT COUNT(*) FROM `" . KU_DBPREFIX . "posts` WHERE `boardid` = " . $board_class->board['id'] . " AND `parentid` = 0 AND `IS_DELETED` = 0 ORDER BY `stickied` DESC, `bumped` DESC LIMIT " . ($postsperpage) . " OFFSET " . ($postsperpage * $i));
@@ -157,7 +166,7 @@ elseif (preg_match("/^\/([a-z]+)\/res\/([0-9]+)\.html$/", $address, $matches)) {
     $board_class = CreateBoard($matches[1]);
     if ($board_class) {
         if ($bans_class->BanCheckSilent(KU_REMOTE_ADDR, $matches[1], true)) {
-            do_redirect(KU_BOARDSPATH . '/banned.php');
+            do_redirect(KU_WEBPATH . '/banned.php');
         }
         $thread_exist = $tc_db->GetOne("SELECT COUNT(*) FROM `" . KU_DBPREFIX . "posts` WHERE `boardid` = " . $board_class->board['id'] . " AND `parentid` = 0 AND `IS_DELETED` = 0 AND `id` = " . $matches[2]);
 
@@ -176,7 +185,7 @@ elseif (preg_match("/^\/([a-z]+)\/res\/([0-9]+)\+50\.html$/", $address, $matches
     $board_class = CreateBoard($matches[1]);
     if ($board_class) {
         if ($bans_class->BanCheckSilent(KU_REMOTE_ADDR, $matches[1], true)) {
-            do_redirect(KU_BOARDSPATH . '/banned.php');
+            do_redirect(KU_WEBPATH . '/banned.php');
         }
         $thread_exist = $tc_db->GetOne("SELECT COUNT(*) FROM `" . KU_DBPREFIX . "posts` WHERE `boardid` = " . $board_class->board['id'] . " AND `IS_DELETED` = 0 AND `parentid` = " . $matches[2]);
 
@@ -195,7 +204,7 @@ elseif (preg_match("/^\/([a-z]+)\/res\/([0-9]+)\-100\.html$/", $address, $matche
     $board_class = CreateBoard($matches[1]);
     if ($board_class) {
         if ($bans_class->BanCheckSilent(KU_REMOTE_ADDR, $matches[1], true)) {
-            do_redirect(KU_BOARDSPATH . '/banned.php');
+            do_redirect(KU_WEBPATH . '/banned.php');
         }
         $thread_exist = $tc_db->GetOne("SELECT COUNT(*) FROM `" . KU_DBPREFIX . "posts` WHERE `boardid` = " . $board_class->board['id'] . " AND `IS_DELETED` = 0 AND `parentid` = " . $matches[2]);
 
@@ -261,4 +270,4 @@ if ($error == '') {
     }
 }
 header('Content-type: text/html; charset=utf-8');
-exitWithErrorPage($error, '<a href="/' . KU_DEFAULTBOARD . '">Вернуться на главную</a>');
+exitWithErrorPage($error, '<a href="' . KU_BOARDSPATH . '/' . KU_DEFAULTBOARD . '">Вернуться на главную</a>');

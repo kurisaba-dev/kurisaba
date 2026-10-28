@@ -16,7 +16,7 @@ session_start(['cookie_samesite' => 'Strict']);
 require KU_ENGINEDIR . 'inc/classes/bans.class.php';
 $bans_class = new Bans();
 if ($bans_class->BanCheckSilent(KU_REMOTE_ADDR, '', true)) {
-    do_redirect(KU_BOARDSPATH . '/banned.php');
+    do_redirect(KU_WEBPATH . '/banned.php');
 }
 
 function get_boardid_by_name($request_id, $boardname)

@@ -2,14 +2,14 @@
 <html>
 <head>
 <title>{t}YOU ARE BANNED{/t}!</title>
-<link rel="stylesheet" type="text/css" href="{%KU_BOARDSPATH}/css/banned.css?v={%KU_CSSVER}">
+<link rel="stylesheet" type="text/css" href="{%KU_WEBPATH}/css/banned.css?v={%KU_CSSVER}">
 <link rel="shortcut icon" href="{%KU_WEBPATH}/favicon.ico">
 </head>
 <body>
 <h1>{%KU_NAME}</h1>
 <div style="margin: 3em;">
 	<h2>&nbsp;{t}YOU ARE BANNED{/t}! :\</h2>
-	<img src="{%KU_BOARDSPATH}/images/youarebanned.jpg" style="float: right;" alt=":'(">
+	<img src="{%KU_WEBPATH}/images/youarebanned.jpg" style="float: right;" alt=":'(">
 	{foreach name=bans item=ban from=$bans}
 		{if not $.foreach.bans.first}
 			{t}Additionally{/t},
@@ -52,7 +52,7 @@
 				{if $ban.appealat < $.now}
 					{t}You may now appeal this ban.{/t}
 					<br /><br />
-					<form action="{%KU_BOARDSPATH}/banned.php" method="post">
+					<form action="{%KU_WEBPATH}/banned.php" method="post">
 						<input type="hidden" name="banid" value="{$ban.id}" />
 						<label for="appealmessage">{t}Appeal Message{/t}:</label>
 						<br />

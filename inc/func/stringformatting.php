@@ -88,9 +88,9 @@ function formatReflink($post_board, $post_thread_start_id, $post_id, $locale = '
     $return = '	';
     $board = $fullpath ? '/' . $post_board . '/' : '';
 
-    $reflink_noquote = '<a href="' . KU_BOARDSFOLDER . $post_board . '/res/' . $post_thread_start_id . '.html#' . $post_id . '" class="shl">';
+    $reflink_noquote = '<a href="' . KU_BOARDSPATH . '/' . $post_board . '/res/' . $post_thread_start_id . '.html#' . $post_id . '" class="shl">';
 
-    $reflink_quote = '<a href="' . KU_BOARDSFOLDER . $post_board . '/res/' . $post_thread_start_id . '.html#i' . $post_id . '" class="qr-num qrf" data-parent="' . $post_thread_start_id . '" data-postnum="' . $post_id . '">';
+    $reflink_quote = '<a href="' . KU_BOARDSPATH . '/' . $post_board . '/res/' . $post_thread_start_id . '.html#i' . $post_id . '" class="qr-num qrf" data-parent="' . $post_thread_start_id . '" data-postnum="' . $post_id . '">';
 
     if ($locale == 'ja') {
         $return .= $reflink_quote . $board . formatJapaneseNumbers($post_id) . '</a>' . $reflink_noquote . '番</a>';
@@ -226,7 +226,7 @@ function formatLongMessage($message, $board, $threadid, $page, $msgid)
         $message_shortened = closeOpenTags($message_shortened);
 
         $output = $message_shortened . '<div class="abbrev">' . "\n" .
-        '	' . sprintf(_gettext('Message too long. Click %shere%s to view the full text.'), '<a href="' . KU_BOARDSFOLDER . $board . '/res/' . $threadid . '.html#' . $msgid . '" onclick="expand_post(this,\''.$board.'\','.$threadid.','.$msgid.'); return false;">', '</a>') . "\n" .
+        '	' . sprintf(_gettext('Message too long. Click %shere%s to view the full text.'), '<a href="' . KU_BOARDSPATH . '/' . $board . '/res/' . $threadid . '.html#' . $msgid . '" onclick="expand_post(this,\''.$board.'\','.$threadid.','.$msgid.'); return false;">', '</a>') . "\n" .
         '</div>' . "\n";
     } else {
         $output .= $message . "\n";

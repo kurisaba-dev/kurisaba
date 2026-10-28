@@ -6,7 +6,7 @@
 		var this_board_dir = '{$board.name}';
 		var ku_boardspath = '{%KU_BOARDSPATH}';
 		var ku_storagedir = '{%KU_STORAGEDIR}';
-		var ku_cgipath = '{%KU_CGIPATH}';
+		var ku_webpath = '{%KU_WEBPATH}';
 		var ku_defaultboard = '{%KU_DEFAULTBOARD}';
 		var ku_maxfilesize = {$maxfilesize};
 		var ku_cssver = '{%KU_CSSVER}';
@@ -43,14 +43,14 @@
   </script>
 {/if}
 {if $replythread ne '0'}
-<link rel="canonical" href="{%KU_WEBPATH}/{$board.name}/res/{$replythread}.html" />
+<link rel="canonical" href="{%KU_BOARDSPATH}/{$board.name}/res/{$replythread}.html" />
 {/if}
 <!-- <link href='https://fonts.googleapis.com/css?family=Roboto:400,700,400italic,700italic&subset=latin,cyrillic' rel='stylesheet' type='text/css'> -->
 <link rel="stylesheet" type="text/css" href="{%KU_WEBPATH}/css/img_global.css?v={%KU_CSSVER}" />
 {loop $ku_styles}
 	<link rel="{if $ neq $__.ku_defaultstyle}alternate {/if}stylesheet" type="text/css" href="{%KU_WEBPATH}/css/styles/{$}.css?v={%KU_CSSVER}" title="{$|capitalize}" />
 {/loop}
-<link href="{$cwebpath}css/prettify.css" type="text/css" rel="stylesheet" />
+<link href="{%KU_WEBPATH}/css/prettify.css" type="text/css" rel="stylesheet" />
 {if $locale eq 'ja'}
 	{literal}
 	<style type="text/css">
@@ -61,30 +61,30 @@
 	</style>
 	{/literal}
 {/if}
-<script type="text/javascript" src="{$cwebpath}lib/javascript/voice-recorder.js"></script>
+<script type="text/javascript" src="{%KU_WEBPATH}/lib/javascript/voice-recorder.js"></script>
 <!-- <script src="//cdnjs.cloudflare.com/ajax/libs/headjs/1.0.3/head.load.min.js"></script> -->
-<script type="text/javascript" src="{$cwebpath}lib/javascript/gettext.js"></script>
+<script type="text/javascript" src="{%KU_WEBPATH}/lib/javascript/gettext.js"></script>
 <!-- <script src="//cdnjs.cloudflare.com/ajax/libs/headjs/1.0.3/head.load.min.js"></script> -->
 <script>
 if (!window.head) {
-	document.write('<script src="/lib/javascript/head.load.min.js"><\/script>');
+	document.write('<script src="{%KU_WEBPATH}/lib/javascript/head.load.min.js"><\/script>');
 }
 </script>
 <!-- <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script> -->
 <script>
 if (!window.jQuery) {
-	document.write('<script src="/lib/javascript/jquery-1.11.1.min.js"><\/script>');
+	document.write('<script src="{%KU_WEBPATH}/lib/javascript/jquery-1.11.1.min.js"><\/script>');
 }
 </script>
 <!-- <script src="//cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.min.js"></script> -->
 <script>
 if (!window.prettyPrint) {
-	document.write('<script src="/lib/javascript/prettify/prettify.js"><\/script>');
+	document.write('<script src="{%KU_WEBPATH}/lib/javascript/prettify/prettify.js"><\/script>');
 }
 </script>
 <!-- <script src="{%KU_WEBPATH}/lib/javascript/kusaba.new.js?v={%KU_JSVER}"></script> -->
 <script>
-	document.write('<script src="/lib/javascript/kusaba.new.js?v={%KU_JSVER}"><\/script>');
+	document.write('<script src="{%KU_WEBPATH}/lib/javascript/kusaba.new.js?v={%KU_JSVER}"><\/script>');
 </script>
 {if %KU_REACT_ENA}
 <script src="{%KU_CLI_REACT_API}/socket.io/socket.io.js"></script>
@@ -95,25 +95,25 @@ if (!window.prettyPrint) {
   font-family: 'Roboto';
   font-style: normal;
   font-weight: 400;
-  src: local('Roboto'), local('Roboto-Regular'), url('/css/fonts/Roboto-Regular.woff') format('woff');
+  src: local('Roboto'), local('Roboto-Regular'), url('{%KU_WEBPATH}/css/fonts/Roboto-Regular.woff') format('woff');
 }
 @font-face {
   font-family: 'Roboto';
   font-style: normal;
   font-weight: 700;
-  src: local('Roboto Bold'), local('Roboto-Bold'), url('/css/fonts/Roboto-Bold.woff') format('woff');
+  src: local('Roboto Bold'), local('Roboto-Bold'), url('{%KU_WEBPATH}/css/fonts/Roboto-Bold.woff') format('woff');
 }
 @font-face {
   font-family: 'Roboto';
   font-style: italic;
   font-weight: 400;
-  src: local('Roboto Italic'), local('Roboto-Italic'), url('/css/fonts/Roboto-Italic.woff') format('woff');
+  src: local('Roboto Italic'), local('Roboto-Italic'), url('{%KU_WEBPATH}/css/fonts/Roboto-Italic.woff') format('woff');
 }
 @font-face {
   font-family: 'Roboto';
   font-style: italic;
   font-weight: 700;
-  src: local('Roboto Bold Italic'), local('Roboto-BoldItalic'), url('/css/fonts/Roboto-BoldItalic.woff') format('woff');
+  src: local('Roboto Bold Italic'), local('Roboto-BoldItalic'), url('{%KU_WEBPATH}/css/fonts/Roboto-BoldItalic.woff') format('woff');
 }
 
 .scroll
@@ -199,24 +199,24 @@ function scrolling(elem, direction) {
 	<div id="overlay_menu" class="content-background overlay-menu">
 		<span class="olm-link">[<a href="#" onclick="$('#overlay_menu').slideToggle();return false;"> &lt; </a>]</span>
 		{if !$skipheader}
-			<a href="{%KU_CGIPATH}/{$board.name}/">/{$board.name}/</a> - <strong>{$board.desc}</strong>
-			&nbsp;[<a href="/{$board.name}/catalog.html">Каталог</a>]
+			<a href="{%KU_BOARDSPATH}/{$board.name}/">/{$board.name}/</a> - <strong>{$board.desc}</strong>
+			&nbsp;[<a href="{%KU_BOARDSPATH}/{$board.name}/catalog.html">Каталог</a>]
 		{else}
 			<strong>Однопоток постов</strong><span class="isfeed" style="display: none;"></span>
 		{/if}
 
 		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 		
-		<span class="olm-link">[<a target="_top" href="{%KU_BOARDSFOLDER}">Главная</a>]</span>
+		<span class="olm-link">[<a target="_top" href="{%KU_WEBPATH}">Главная</a>]</span>
 		{if %KU_MAINPAGE ne 'kusaba.php'}
 			[<a href="{%KU_WEBPATH}/kusaba.php" target="_top">{t}Фрейм{/t}</a>]
 		{/if}
 		[<a href="{%KU_WEBPATH}/single.php" class="feedlink">Однопоток</a>]
 		{if $faq_enabled}
-			[<a href="{%KU_WEBPATH}/faq/">FAQ</a>]
+			[<a href="{%KU_BOARDSPATH}/faq/">FAQ</a>]
 		{/if}
 		<span class="mobile-nav-disabled" id="mn-normalboards" style="display:none"> 
-			<select onchange="javascript:if(selectedIndex != 0) location.href='{%KU_WEBPATH}/' + this.options[this.selectedIndex].value;">
+			<select onchange="javascript:if(selectedIndex != 0) location.href='{%KU_BOARDSPATH}/' + this.options[this.selectedIndex].value;">
 				<option><strong>{t}Boards{/t}</strong></option>
 				{foreach name=sections item=sect from=$boardlist}
 					{foreach name=brds item=brd from=$sect}							
@@ -241,7 +241,7 @@ function scrolling(elem, direction) {
 			<div class="menu-sect" id="ms-{$sect.abbreviation}">
 				{foreach name=brds item=brd from=$sect}
 					{if isset($brd.desc) and is_array($brd)}
-					<a class="menu-item" title="{$brd.desc}" href="{%KU_BOARDSFOLDER}{$brd.name}/">/{$brd.name}/ - {$brd.desc}</a>
+					<a class="menu-item" title="{$brd.desc}" href="{%KU_BOARDSPATH}/{$brd.name}/">/{$brd.name}/ - {$brd.desc}</a>
 					{/if}
 				{/foreach}
 			</div>

@@ -34,8 +34,10 @@ if (!headers_sent()) {
 
 $cf = array();
 
+// Host and domain stuff
+$cf['KU_HOST'] = $_SERVER['HTTP_HOST'];
+$cf['KU_REMOTE_ADDR'] = (array_key_exists("HTTP_CF_CONNECTING_IP", $_SERVER)) ? $_SERVER["HTTP_CF_CONNECTING_IP"] : $_SERVER['REMOTE_ADDR'];
 $cf['KU_PROTO'] = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == "on") ? 'https://' : 'http://';
-$cf['KU_BASE_HOST'] = $_SERVER['HTTP_HOST'];
 
 function configure_database()
 {
@@ -62,12 +64,6 @@ function configure_database()
 if (!file_exists('config.php')) {
     configure_database();
 }
-include 'config.php';
-
-$cf['KU_MENUSTYLES'] = $cf['KU_STYLES'];
-$cf['KU_DEFAULTMENUSTYLE'] = $cf['KU_DEFAULTSTYLE'];
-
-putenv('TZ='.$cf['KU_TZ']);
 
 // Filesystem path to a directory where engine files are located. Write access is needed only for engine update and initial configuration. Should end with "/".
 $cf['KU_ENGINEDIR'] = realpath(dirname(__FILE__))."/";
@@ -75,21 +71,13 @@ $cf['KU_ENGINEDIR'] = realpath(dirname(__FILE__))."/";
 // Filesystem path to a directory where data files are located. Full read/write access is needed. Should end with "/".
 $cf['KU_STORAGEDIR']    = $cf['KU_ENGINEDIR'];
 
-
-// *** CHECK HERE: ***
-
-$cf['KU_WEBFOLDER'] = '/';
+// Full URL to be used when linking engine files. Should not end with "/".
 $cf['KU_WEBPATH'] = $cf['KU_PROTO'] . $cf['KU_HOST'];
-$cf['KU_BOARDSFOLDER'] = $cf['KU_WEBFOLDER'];
+
+// Full URL to be used when linking data files. Should not end with "/".
 $cf['KU_BOARDSPATH']   = $cf['KU_WEBPATH'];
-$cf['KU_CGIPATH']   = $cf['KU_BOARDSPATH'];
-if (substr($cf['KU_WEBFOLDER'], -2) == '//') { $cf['KU_WEBFOLDER'] = substr($cf['KU_WEBFOLDER'], 0, -1); }
-if (substr($cf['KU_BOARDSFOLDER'], -2) == '//') { $cf['KU_BOARDSFOLDER'] = substr($cf['KU_BOARDSFOLDER'], 0, -1); }
-$cf['KU_WEBPATH'] = trim($cf['KU_WEBPATH'], '/');
-$cf['KU_BOARDSPATH'] = trim($cf['KU_BOARDSPATH'], '/');
-$cf['KU_CGIPATH'] = trim($cf['KU_CGIPATH'], '/');
 
-
+include 'config.php';
 
 // Dwoo paths
 $cf['KU_TEMPLATEDIR'] = $cf['KU_ENGINEDIR'] . 'dwoo/templates';
@@ -108,10 +96,6 @@ $cf['KU_REACT_SRVTOKEN'] = 'ENTERRANDOMSHIT';
 
 // Версия курисабы
 $cf['KU_VERSION']    = '1.0 based on KusabaX-0.9.3/0chan';
-
-// Host and domain stuff
-$cf['KU_HOST'] = $_SERVER['HTTP_HOST'];
-$cf['KU_REMOTE_ADDR'] = (array_key_exists("HTTP_CF_CONNECTING_IP", $_SERVER)) ? $_SERVER["HTTP_CF_CONNECTING_IP"] : $_SERVER['REMOTE_ADDR'];
 
 class DatabaseProxy
 {
@@ -218,6 +202,11 @@ if (!isset($tc_db) && !isset($preconfig_db_unnecessary)) {
         }
     }
 }
+
+$cf['KU_MENUSTYLES'] = $cf['KU_STYLES'];
+$cf['KU_DEFAULTMENUSTYLE'] = $cf['KU_DEFAULTSTYLE'];
+
+putenv('TZ='.$cf['KU_TZ']);
 
 foreach ($cf as $key => $value) {
     define($key, $value);

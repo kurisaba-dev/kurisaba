@@ -20,7 +20,7 @@
 {$is_board_page = 0}
 
 {if not $isexpand and not $isread and not $iscatalog}
-	<form id="delform" class="delform-id" action="{%KU_CGIPATH}/board.php" method="post" enctype="multipart/form-data">
+	<form id="delform" class="delform-id" action="{%KU_WEBPATH}/board.php" method="post" enctype="multipart/form-data">
 		<input type="hidden" name="board" value="{$board.name}" />
 {/if}
 
@@ -31,10 +31,10 @@
 		{if not $isread}
 			<span id="unhidethread{$posts[0].id}{$board.name}" style="display: none;">
 				{t}Thread{/t}
-				<a href="{%KU_BOARDSFOLDER}{$board.name}/res/{$posts[0].id}.html">{$posts[0].id}</a>
+				<a href="{%KU_BOARDSPATH}/{$board.name}/res/{$posts[0].id}.html">{$posts[0].id}</a>
 				{t}hidden.{/t}
 				<a href="#" onclick="javascript:togglethread('{$board.name}','{$posts[0].id}');return false;" title="{t}Раскрыть тред{/t}">
-					<img src="{$cwebpath}css/icons/blank.gif" border="0" class="unhidethread spritebtn" alt="{t}Раскрыть тред{/t}" />
+					<img src="{%KU_WEBPATH}/css/icons/blank.gif" border="0" class="unhidethread spritebtn" alt="{t}Раскрыть тред{/t}" />
 				</a>
 			</span>
 			<div id="thread{$posts[0].id}{$board.name}" class="replies">
@@ -71,7 +71,7 @@
 					<td>
 						<div style="float:left">
 							<div id="newposts_get">
-								<a href="#" onclick="return getnewposts()"><img src="{$cwebpath}css/icons/blank.gif" border="0" class="getnewposts spritebtn" alt="refresh"> Получить новые посты (если есть)</a> <span id="newposts_seconds" style="display: none;">(off)</span>
+								<a href="#" onclick="return getnewposts()"><img src="{%KU_WEBPATH}/css/icons/blank.gif" border="0" class="getnewposts spritebtn" alt="refresh"> Получить новые посты (если есть)</a> <span id="newposts_seconds" style="display: none;">(off)</span>
 							</div>
 							<div id="newposts_load" style="display:none;">
 								<img src="{%KU_WEBPATH}/images/loading16x16.gif" style="vertical-align: text-bottom;"> Загрузка...

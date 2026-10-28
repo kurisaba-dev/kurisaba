@@ -14,7 +14,7 @@ class Parse
 
     public function urlcallback($matches)
     {
-        if (strstr($matches[2].$matches[3], KU_WEBPATH) != false) {
+        if (strstr($matches[2].$matches[3], KU_WEBPATH) || strstr($matches[2].$matches[3], KU_BOARDSPATH) ) {
             return $matches[1].'<a target="_self" href="'.$matches[2].$matches[3].'">'.$matches[2].htmlspecialchars(urldecode($matches[3]), ENT_QUOTES).'</a>';
         }
         return $matches[1].'<a target="_blank" href="'.$matches[2].$matches[3].'">'.$matches[2].htmlspecialchars(urldecode($matches[3]), ENT_QUOTES).'</a>';
@@ -60,8 +60,8 @@ class Parse
       '`\[cut\](.+?)\[/cut\]`is',
       '`\[cutline\](.+?)\[/cutline\]`is',
       '`\[lination_modified_by_homu_nyan\](.+?)\[/lination_modified_by_homu_nyan\]`is',
-      '`\[url=&quot;'.KU_WEBPATH.'(.+?)&quot;\](.+?)\[/url\]`is',
-      '`\[url='.KU_WEBPATH.'(.+?)\](.+?)\[/url\]`is',
+      '`\[url=&quot;'.KU_PROTO.KU_HOST.'(.+?)&quot;\](.+?)\[/url\]`is',
+      '`\[url='.KU_PROTO.KU_HOST.'(.+?)\](.+?)\[/url\]`is',
       '`\[url=&quot;https://(.+?)&quot;\](.+?)\[/url\]`is',
       '`\[url=https://(.+?)\](.+?)\[/url\]`is',
       '`\[url=&quot;http://(.+?)&quot;\](.+?)\[/url\]`is',
@@ -100,8 +100,8 @@ class Parse
           '<div class="cutspoiler" onclick="cutspoiler_cb(this)"><span>Развернуть</span><span style="display: none;">\\1</span></div>',
           '<span class="cutspoiler" onclick="cutspoiler_cb(this)"><span>Развернуть</span><span style="display: none;">\\1</span></span>',
           '<table class="lination"><tr><td><img src="/images/lina.png"/></td><td><div class="bubble">\\1</div></td></tr></table>',
-          '<a href="'.KU_WEBPATH.'\\1">\\2</a>',
-          '<a href="'.KU_WEBPATH.'\\1">\\2</a>',
+          '<a href="'.KU_PROTO.KU_HOST.'\\1">\\2</a>',
+          '<a href="'.KU_PROTO.KU_HOST.'\\1">\\2</a>',
           '<a target="_blank" href="https://\\1">\\2</a>',
           '<a target="_blank" href="https://\\1">\\2</a>',
           '<a target="_blank" href="http://\\1">\\2</a>',
@@ -270,7 +270,7 @@ class Parse
                 } else {
                     $realid = $result['parentid'];
                 }
-                return '<a href="'.KU_BOARDSFOLDER.$thread_board_return.'/res/'.$realid.'.html#'.$matches[1].'" onclick="return highlight(\'' . $matches[1] . '\', true);" class="ref|' . $thread_board_return . '|' .$realid . '|' . $matches[1] . ' prooflabel '.$proven.'">'.$matches[0].'</a>';
+                return '<a href="'.KU_BOARDSPATH.'/'.$thread_board_return.'/res/'.$realid.'.html#'.$matches[1].'" onclick="return highlight(\'' . $matches[1] . '\', true);" class="ref|' . $thread_board_return . '|' .$realid . '|' . $matches[1] . ' prooflabel '.$proven.'">'.$matches[0].'</a>';
             } else {
                 return $matches[0];
             }
@@ -291,7 +291,7 @@ class Parse
             } else {
                 $realid = $result2['parentid'];
             }
-            return '<a href="'.KU_BOARDSFOLDER.$matches[1].'/res/'.$realid.'.html#'.$matches[2].'" class="ref|' . $matches[1] . '|' . $realid . '|' . $matches[2] . ' prooflabel '.$proven.'">'.$matches[0].'</a>';
+            return '<a href="'.KU_BOARDSPATH.'/'.$matches[1].'/res/'.$realid.'.html#'.$matches[2].'" class="ref|' . $matches[1] . '|' . $realid . '|' . $matches[2] . ' prooflabel '.$proven.'">'.$matches[0].'</a>';
         } else {
             return $matches[0];
         }
@@ -320,7 +320,7 @@ class Parse
             } else {
                 return $matches[0];
             }
-            $return = '<a href="'.KU_BOARDSFOLDER.$thread_board_return.'/res/'.$realid.'.html#'.$matches[1].'" onclick="return highlight(\'' . $matches[1] . '\', true);" class="ref|' . $thread_board_return . '|' .$realid . '|' . $matches[1] . '">'.$matches[0].'</a>'.$lastchar;
+            $return = '<a href="'.KU_BOARDSPATH.'/'.$thread_board_return.'/res/'.$realid.'.html#'.$matches[1].'" onclick="return highlight(\'' . $matches[1] . '\', true);" class="ref|' . $thread_board_return . '|' .$realid . '|' . $matches[1] . '">'.$matches[0].'</a>'.$lastchar;
         } else {
             $return = $matches[0];
 
@@ -333,7 +333,7 @@ class Parse
                     }
                 }
                 if ($realid !== '') {
-                    $return = '<a href="' . KU_BOARDSFOLDER . 'read.php';
+                    $return = '<a href="' . KU_WEBPATH . '/read.php';
                     $return .= '?b=' . $thread_board_return . '&t=' . $realid.'&p=' . $matches[1];
                     $return .= '">' . $matches[0] . '</a>';
                 }
@@ -354,7 +354,7 @@ class Parse
             } else {
                 $realid = $result2[0]['parentid'];
             }
-            return '<a href="'.KU_BOARDSFOLDER.$matches[1].'/res/'.$realid.'.html#'.$matches[2].'" class="ref|' . $matches[1] . '|' . $realid . '|' . $matches[2] . '">'.$matches[0].'</a>';
+            return '<a href="'.KU_BOARDSPATH.'/'.$matches[1].'/res/'.$realid.'.html#'.$matches[2].'" class="ref|' . $matches[1] . '|' . $realid . '|' . $matches[2] . '">'.$matches[0].'</a>';
         }
         return $matches[0];
     }

@@ -34,7 +34,7 @@ require KU_ENGINEDIR . 'inc/functions.php';
 require KU_ENGINEDIR . 'inc/classes/bans.class.php';
 $bans_class = new Bans();
 if ($bans_class->BanCheckSilent(KU_REMOTE_ADDR, $board, true)) {
-    do_redirect(KU_BOARDSPATH . '/banned.php');
+    do_redirect(KU_WEBPATH . '/banned.php');
 }
 
 require KU_ENGINEDIR . 'inc/classes/board-post.class.php';
@@ -186,7 +186,7 @@ foreach ($results as $key => $post) {
                 $extname = $parent_subject;
             }
         }
-        $post['externalreference'] = '[<a href="' . KU_WEBPATH . '/' . $board . '/res/' . $thread . '.html#' . $post['id'] . '">'. $extname .'</a>]';
+        $post['externalreference'] = '[<a href="' . KU_BOARDSPATH . '/' . $board . '/res/' . $thread . '.html#' . $post['id'] . '">'. $extname .'</a>]';
         $results[$key] = $board_class->BuildPost($post, false, false, false, true);
     } else {
         $results[$key] = $board_class->BuildPost($post, false);

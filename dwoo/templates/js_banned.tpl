@@ -41,7 +41,7 @@
 				{if $ban.appealat < $.now}
 					{t}You may now appeal this ban.{/t}
 					<br />
-					<form action="{%KU_BOARDSPATH}/banned.php" method="post">
+					<form action="{%KU_WEBPATH}/banned.php" method="post">
 						<input type="hidden" name="banid" value="{$ban.id}" />
 						<label for="appealmessage">{t}Appeal Message{/t}:</label>
 						<br />

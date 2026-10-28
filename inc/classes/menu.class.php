@@ -31,8 +31,6 @@ class Menu
 
         $faq_enabled = false;
 
-        $dwoo_data->assign('boardpath', KU_BOARDSPATH . '/');
-
         $special_threads = $tc_db->GetOne("SELECT `value` FROM `" . KU_DBPREFIX . "kurisaba_ext_data` WHERE `name` = 'special_threads'");
         $special_threads = preg_replace('/ +/', ' ', $special_threads);
         $special_threads = explode("\n", $special_threads);
@@ -45,7 +43,7 @@ class Menu
                 $current_board = $special_thread[1];
             } elseif ($special_thread[0] == 'THREAD' || $special_thread[0] == 'HIDDEN') {
                 if ($special_thread[0] == 'THREAD') {
-                    $special_threads_html .= '<li><a href="/'.$current_board.'/res/'.$special_thread[1].'.html" class="boardlink">'.$special_thread[2].' - '.$special_thread[3].'</a></li>';
+                    $special_threads_html .= '<li><a href="'.KU_BOARDSPATH.'/'.$current_board.'/res/'.$special_thread[1].'.html" class="boardlink">'.$special_thread[2].' - '.$special_thread[3].'</a></li>';
                 }
                 if ($special_thread[2] == '/faq/') {
                     $faq_enabled = true;
@@ -61,9 +59,9 @@ class Menu
         }
 
         if ($savetofile) {
-            $files = array('menu.html', 'menu_dirs.html');
+            $files = array(KU_BOARDSPATH . '/menu.html', KU_BOARDSPATH . '/menu_dirs.html');
         } else {
-            $files = array('menu.php', 'menu.php');
+            $files = array(KU_WEBPATH . '/menu.php', KU_WEBPATH . '/menu.php');
         }
 
         $dwoo_data->assign('files', $files);
@@ -95,9 +93,9 @@ class Menu
 
             if ($savetofile) {
                 if ($i == 0) {
-                    file_put_contents(KU_STORAGEDIR . $files[0], $dwoo->get(KU_TEMPLATEDIR . '/menu.tpl', $dwoo_data));
+                    file_put_contents(KU_STORAGEDIR . '/menu.html', $dwoo->get(KU_TEMPLATEDIR . '/menu.tpl', $dwoo_data));
                 } else {
-                    file_put_contents(KU_STORAGEDIR . $files[1], $dwoo->get(KU_TEMPLATEDIR . '/menu.tpl', $dwoo_data));
+                    file_put_contents(KU_STORAGEDIR . '/menu_dirs.html', $dwoo->get(KU_TEMPLATEDIR . '/menu.tpl', $dwoo_data));
                 }
             } else {
                 if ($i == 0) {

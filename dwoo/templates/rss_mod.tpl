@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <rss version="2.0">
 <channel>
-<title>{%KU_NAME} - Modlog</title>
+<title>{%KU_HOST} - Modlog</title>
 <link>{%KU_WEBPATH}</link>
-<description>Live view of all moderative actions on {%KU_WEBPATH}</description>
+<description>Live view of all moderative actions on {%KU_HOST}</description>
 <language>{%KU_LOCALE}</language>
 {foreach from=$entries item=item}
 	<item>

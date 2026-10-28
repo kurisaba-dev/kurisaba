@@ -216,7 +216,7 @@ class Board
         $this->InitializeDwoo();
         $executiontime_start_catalog = microtime_float();
         $catalog_head = $this->PageHeader().
-        '&#91;<a href="' . KU_BOARDSFOLDER . $this->board['name'] . '/">'._gettext('Return').'</a>&#93; <div class="catalogmode">'._gettext('Catalog Mode').'</div>' . "\n" .
+        '&#91;<a href="' . KU_BOARDSPATH . '/' . $this->board['name'] . '/">'._gettext('Return').'</a>&#93; <div class="catalogmode">'._gettext('Catalog Mode').'</div>' . "\n" .
         '<table border="1" align="center">' . "\n" . '<tr>' . "\n";
         $catalog_page = '';
 
@@ -246,7 +246,7 @@ class Board
                 //{
                 $replies = $tc_db->GetOne("SELECT COUNT(*) FROM `".KU_DBPREFIX."posts` WHERE `boardid` = " . $this->board['id'] . " AND `IS_DELETED` = 0 AND `parentid` = " . $line['id']);
                 $catalog_page .= '<td class="catalogtd" align="center" valign="middle" style="max-width: 368px">' . "\n" .
-                '<a class="catalog-entry" href="' . KU_BOARDSFOLDER . $this->board['name'] . '/res/' . $line['id'] . '.html"';
+                '<a class="catalog-entry" href="' . KU_BOARDSPATH . '/' . $this->board['name'] . '/res/' . $line['id'] . '.html"';
                 if ($line['subject'] != '') {
                     $catalog_page .= ' title="' . $line['subject'] . '"';
                 }
@@ -257,10 +257,10 @@ class Board
                     $catalog_page .= 'Фейл удалён</a><br />';
                 } else {
                     if ($line['file_type'] == 'jpg' || $line['file_type'] == 'png' || $line['file_type'] == 'webp' || $line['file_type'] == 'gif') {
-                        $catalog_page .= '<img src="' . KU_BOARDSFOLDER . $this->board['name'] . '/thumb/' . $line['file'] . 's.' . $line['file_type'] . '" class="raw-thumb" alt="' . $line['id'] . '" border="0" /></a><br />';
+                        $catalog_page .= '<img src="' . KU_BOARDSPATH . '/' . $this->board['name'] . '/thumb/' . $line['file'] . 's.' . $line['file_type'] . '" class="raw-thumb" alt="' . $line['id'] . '" border="0" /></a><br />';
                     } elseif ($line['file_type'] == 'webm' || $line['file_type'] == 'mp4' || $line['file_type'] == 'm4v') {
                         $catalog_page .= '<video preload="metadata" controls="" class="raw-thumb" width="368">';
-                        $catalog_page .= '<source src="' . KU_BOARDSFOLDER . $this->board['name'] . '/src/' . $line['file'] . '.' . $line['file_type'] . "\" type='video/" . $line['file_type'] . "'>";
+                        $catalog_page .= '<source src="' . KU_BOARDSPATH . '/' . $this->board['name'] . '/src/' . $line['file'] . '.' . $line['file_type'] . "\" type='video/" . $line['file_type'] . "'>";
                         $catalog_page .= '</video></a><br />';
                     } else {
                         $catalog_page .= '</a><div style="max-width: 368px; overflow: hidden;">';
@@ -270,7 +270,7 @@ class Board
                     }
                 }
                 if ($line['subject'] != '') {
-                    $catalog_page .= '<a class="catalog-entry" href="' . KU_BOARDSFOLDER . $this->board['name'] . '/res/' . $line['id'] . '.html">' . $line['subject'] . '</a><br />';
+                    $catalog_page .= '<a class="catalog-entry" href="' . KU_BOARDSPATH . '/' . $this->board['name'] . '/res/' . $line['id'] . '.html">' . $line['subject'] . '</a><br />';
                 } else {
                     $textsrc = strip_tags($line['message']);
                     if(mb_strlen($textsrc) <= KU_CATALOGTEXTLIMIT) {
@@ -278,7 +278,7 @@ class Board
                     } else {
                         $text = substr($textsrc, 0, strpos(wordwrap($textsrc, KU_CATALOGTEXTLIMIT - 3, "\n", true), "\n")) . "...";
                     }
-                    $catalog_page .= '<a class="catalog-entry" href="' . KU_BOARDSFOLDER . $this->board['name'] . '/res/' . $line['id'] . '.html"><small><em>' . $text . '</em></small></a><br />';
+                    $catalog_page .= '<a class="catalog-entry" href="' . KU_BOARDSPATH . '/' . $this->board['name'] . '/res/' . $line['id'] . '.html"><small><em>' . $text . '</em></small></a><br />';
                 }
                 $catalog_page .= '<small>' . $replies . ' ответов</small>' . "\n" . '</td>' . "\n";
                 //}
@@ -487,13 +487,13 @@ class Board
             $post['nonstandard_file'] = KU_WEBPATH . '/inc/filetypes/' . $filetype_info[$post['file_type']][0];
             if ($post['thumb_w'] != 0 && $post['thumb_h'] != 0) {
                 if (file_exists(KU_STORAGEDIR.$this->board['name'].'/' . $thumbdir . '/'.$post['file'].'s.jpg')) {
-                    $post['nonstandard_file'] = KU_WEBPATH . '/' .$this->board['name'].'/' . $thumbdir . '/'.$post['file'].'s.jpg';
+                    $post['nonstandard_file'] = KU_BOARDSPATH . '/' .$this->board['name'].'/' . $thumbdir . '/'.$post['file'].'s.jpg';
                 } elseif (file_exists(KU_STORAGEDIR.$this->board['name'].'/' . $thumbdir . '/'.$post['file'].'s.png')) {
-                    $post['nonstandard_file'] = KU_WEBPATH . '/' .$this->board['name'].'/' . $thumbdir . '/'.$post['file'].'s.png';
+                    $post['nonstandard_file'] = KU_BOARDSPATH . '/' .$this->board['name'].'/' . $thumbdir . '/'.$post['file'].'s.png';
                 } elseif (file_exists(KU_STORAGEDIR.$this->board['name'].'/' . $thumbdir . '/'.$post['file'].'s.webp')) {
-                    $post['nonstandard_file'] = KU_WEBPATH . '/' .$this->board['name'].'/' . $thumbdir . '/'.$post['file'].'s.webp';
+                    $post['nonstandard_file'] = KU_BOARDSPATH . '/' .$this->board['name'].'/' . $thumbdir . '/'.$post['file'].'s.webp';
                 } elseif (file_exists(KU_STORAGEDIR.$this->board['name'].'/' . $thumbdir . '/'.$post['file'].'s.gif')) {
-                    $post['nonstandard_file'] = KU_WEBPATH . '/' .$this->board['name'].'/' . $thumbdir . '/'.$post['file'].'s.gif';
+                    $post['nonstandard_file'] = KU_BOARDSPATH . '/' .$this->board['name'].'/' . $thumbdir . '/'.$post['file'].'s.gif';
                 } else {
                     $post['thumb_w'] = $filetype_info[$post['file_type']][1];
                     $post['thumb_h'] = $filetype_info[$post['file_type']][2];
@@ -791,9 +791,6 @@ class Board
         require_once KU_ENGINEDIR . 'lib/dwoo.php';
         $this->dwoo = new Dwoo();
         $this->dwoo_data = new Dwoo_Data();
-
-        $this->dwoo_data->assign('cwebpath', KU_WEBPATH . '/');
-        $this->dwoo_data->assign('boardpath', KU_BOARDSPATH . '/');
     }
 }
 

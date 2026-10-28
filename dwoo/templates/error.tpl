@@ -3,9 +3,9 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html;charset={%KU_CHARSET}" />
 <title>{%KU_NAME}</title>
-<link rel="icon" type="image/ico" href="{%KU_WEBFOLDER}favicon.ico" sizes="32x32">
-<link rel="shortcut icon" href="{%KU_WEBFOLDER}favicon.ico" />
-<link rel="stylesheet" type="text/css" href="{%KU_BOARDSPATH}/css/menu_global.css?v={%KU_CSSVER}" />
+<link rel="icon" type="image/ico" href="{%KU_WEBPATH}/favicon.ico" sizes="32x32">
+<link rel="shortcut icon" href="{%KU_WEBPATH}/favicon.ico" />
+<link rel="stylesheet" type="text/css" href="{%KU_WEBPATH}/css/menu_global.css?v={%KU_CSSVER}" />
 
 <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0">
 <script type="text/javascript"><!--
@@ -14,7 +14,7 @@
 		var react_sitename = {if %KU_REACT_SITENAME}'{%KU_REACT_SITENAME}:'{else}''{/if};
 		var this_board_dir = '{$board.name}';
 		var ku_boardspath = '{%KU_BOARDSPATH}';
-		var ku_cgipath = '{%KU_CGIPATH}';
+		var ku_webpath = '{%KU_WEBPATH}';
 		var ku_defaultboard = '{%KU_DEFAULTBOARD}';
 		var ku_maxfilesize = 0;
 		var ku_cssver = {%KU_CSSVER};
@@ -26,12 +26,12 @@
 		var ispage = true;
 {/if}
 //--></script>
-<link rel="stylesheet" type="text/css" href="{$cwebpath}css/img_global.css?v={%KU_CSSVER}" />
+<link rel="stylesheet" type="text/css" href="{%KU_WEBPATH}/css/img_global.css?v={%KU_CSSVER}" />
 {loop $styles}
-	<link rel="{if $ neq %KU_DEFAULTSTYLE}alternate {/if}stylesheet" type="text/css" href="{%KU_WEBFOLDER}css/styles/menu_{$}.css?v={%KU_CSSVER}" title="{$|capitalize}" />
+	<link rel="{if $ neq %KU_DEFAULTSTYLE}alternate {/if}stylesheet" type="text/css" href="{%KU_WEBPATH}/css/styles/menu_{$}.css?v={%KU_CSSVER}" title="{$|capitalize}" />
 {/loop}
 {loop $ku_styles}
-	<link rel="{if $ neq $__.ku_defaultstyle}alternate {/if}stylesheet" type="text/css" href="{$__.cwebpath}css/styles/{$}.css?v={%KU_CSSVER}" title="{$|capitalize}" />
+	<link rel="{if $ neq $__.ku_defaultstyle}alternate {/if}stylesheet" type="text/css" href="{%KU_WEBPATH}/css/styles/{$}.css?v={%KU_CSSVER}" title="{$|capitalize}" />
 {/loop}
 {if $locale eq 'ja'}
 	{literal}
@@ -46,11 +46,11 @@
 
 <script>
 if (!window.jQuery) {
-	document.write('<script src="{$cwebpath}lib/javascript/jquery-1.11.1.min.js"><\/script>');
+	document.write('<script src="{%KU_WEBPATH}/lib/javascript/jquery-1.11.1.min.js"><\/script>');
 }
 </script>
 <script>
-	document.write('<script src="{$cwebpath}lib/javascript/kusaba.new.js?v={%KU_JSVER}"><\/script>');
+	document.write('<script src="{%KU_WEBPATH}/lib/javascript/kusaba.new.js?v={%KU_JSVER}"><\/script>');
 </script>	
 
 <!-- <script src="{%KU_WEBPATH}/lib/javascript/kusaba.new.js?v={%KU_JSVER}"></script> -->

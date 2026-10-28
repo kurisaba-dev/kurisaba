@@ -77,7 +77,7 @@
 										[&nbsp;
 											{foreach name=brds item=brd from=$sect}
 												{if isset($brd.desc) and is_array($brd)}
-													<a title="{$brd.desc}" href="{%KU_BOARDSFOLDER}{$brd.name}/">
+													<a title="{$brd.desc}" href="{%KU_BOARDSPATH}/{$brd.name}/">
 														{$brd.name}
 													</a>
 													{if $.foreach.brds.last}
@@ -92,7 +92,7 @@
 									<span style="float: right">
 										{strip}
 											[&nbsp;
-												<select onchange="javascript:if(selectedIndex != 0) location.href='{%KU_WEBPATH}/' + this.options[this.selectedIndex].value;">
+												<select onchange="javascript:if(selectedIndex != 0) location.href='{%KU_BOARDSPATH}/' + this.options[this.selectedIndex].value;">
 													<option>2.0</option>
 													{foreach name=brds item=brd from=$sect}
 														{if isset($brd.desc) and is_array($brd)}

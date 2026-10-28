@@ -20,11 +20,11 @@
 	var ku_cssver = {%KU_CSSVER};
 	var ku_captchaenabled = '{%KU_CAPTCHAENABLED}';
 </script>
-<link rel="shortcut icon" href="{%KU_WEBFOLDER}favicon.ico" />
-<script type="text/javascript" src="{%KU_WEBFOLDER}lib/javascript/gettext.js"></script>
-<!-- <script type="text/javascript" src="{%KU_WEBFOLDER}lib/javascript/menu.js"></script> -->
-<script src="{%KU_WEBFOLDER}lib/javascript/jquery-1.11.1.min.js"></script>
-<script type="text/javascript" src="{%KU_WEBFOLDER}lib/javascript/kusaba.new.js?v={%KU_JSVER}"></script>
+<link rel="shortcut icon" href="{%KU_WEBPATH}/favicon.ico" />
+<script type="text/javascript" src="{%KU_WEBPATH}/lib/javascript/gettext.js"></script>
+<!-- <script type="text/javascript" src="{%KU_WEBPATH}/lib/javascript/menu.js"></script> -->
+<script src="{%KU_WEBPATH}/lib/javascript/jquery-1.11.1.min.js"></script>
+<script type="text/javascript" src="{%KU_WEBPATH}/lib/javascript/kusaba.new.js?v={%KU_JSVER}"></script>
 <script type="text/javascript"><!--
 var _SITENAME = '{%KU_NAME}';
 //--></script>
@@ -33,7 +33,7 @@ var _SITENAME = '{%KU_NAME}';
 var ku_boardspath = '{%KU_BOARDSPATH}';
 {if $showdirs eq 0 && $files.0 neq $files.1 }
 	if (getCookie(tcshowdirs) == yes) {
-		window.location = '{%KU_BOARDSPATH}/{$files.1}';
+		window.location = '{$files.1}';
 	}
 {/if}
 
@@ -80,7 +80,7 @@ function hidedirs() {
 	{if $files.0 eq $files.1}
 		location.reload(true)
 	{else}
-		window.location = '{%KU_WEBFOLDER}{$files.0}';
+		window.location = '{$files.0}';
 	{/if}
 }
 function showdirs() {
@@ -88,7 +88,7 @@ function showdirs() {
 	{if $files.0 eq $files.1}
 		location.reload(true)
 	{else}
-		window.location = '{%KU_WEBFOLDER}{$files.1}';
+		window.location = '{$files.1}';
 	{/if}
 }
 {literal}
@@ -121,7 +121,7 @@ function iter_obj(object, callback) {
 <base target="main" />
 </head>
 <body style="overflow: auto; padding: 8px; margin: 0px; width: unset;">
-<h1><a href="{%KU_WEBFOLDER}" target="_top" title="{t}Front Page{/t}">{%KU_NAME}</a></h1>
+<h1><a href="{%KU_WEBPATH}" target="_top" title="{t}Front Page{/t}">{%KU_NAME}</a></h1>
 <ul>
 {if $faq_enabled}
     <li><a href="/faq/" class="boardlink">[ FAQ ]</a></li>
@@ -144,7 +144,7 @@ function iter_obj(object, callback) {
 	<li id="removeframes"><a href="#" onclick="removeframes(); return false;" target="_self">[{t}Remove Frames{/t}]</a></li>
 {/if *}
 <li id="refreshnewposts"><a href="#" onclick="updatenewpostscount(); return false;" target="_self">Обновить</a></li>
-<li><a href="{%KU_BOARDSPATH}/single.php" class="boardlink feedlink">[ Однопоток постов ]</a></li>
+<li><a href="{%KU_WEBPATH}/single.php" class="boardlink feedlink">[ Однопоток постов ]</a></li>
 </ul>
 {if empty($boards)}
 	<ul>
@@ -175,7 +175,7 @@ function iter_obj(object, callback) {
 				{/if}
 				{$brd.desc}
 				{if $brd.locked eq 1}
-					<img src="{%KU_BOARDSPATH}/css/images/locked.gif" border="0" alt="{t}Locked{/t}">
+					<img src="{%KU_WEBPATH}/css/images/locked.gif" border="0" alt="{t}Locked{/t}">
 				{/if}
 				<span id="newposts_{$brd.name}"></span>
 				</a></td><td style="padding: 0px;">				<a href="{%KU_BOARDSPATH}/{$brd.name}/catalog.html">[Каталог]</a>				</td></tr></table>				</li>

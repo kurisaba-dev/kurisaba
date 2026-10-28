@@ -45,7 +45,7 @@ if ($board_name != '') {
 require KU_ENGINEDIR . 'inc/classes/bans.class.php';
 $bans_class = new Bans();
 if ($bans_class->BanCheckSilent(KU_REMOTE_ADDR, $board_class->board, true)) {
-    do_redirect(KU_BOARDSPATH . '/banned.php');
+    do_redirect(KU_WEBPATH . '/banned.php');
 }
 
 $board_class->InitializeDwoo();

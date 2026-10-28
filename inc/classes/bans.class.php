@@ -65,7 +65,7 @@ class Bans
 
         if ($force_display) {
             /* Instructed to display a page whether banned or not, so we will inform them today is their rucky day */
-            echo '<title>'._gettext('YOU ARE NOT BANNED!').'</title><div align="center"><img src="'. KU_WEBFOLDER .'images/youarenotbanned.jpg"><br /><br />'._gettext('Unable to find record of your IP being banned.').'</div>';
+            echo '<title>' . _gettext('YOU ARE NOT BANNED!') . '</title><div align="center"><img src="' . KU_WEBPATH . '/images/youarenotbanned.jpg"><br /><br />' . _gettext('Unable to find record of your IP being banned.') . '</div>';
         } else {
             return true;
         }
@@ -182,7 +182,7 @@ class Bans
             }
             if ($htaccess_contents_bans_iplist != '') {
                 $htaccess_contents_bans_start = "<IfModule mod_rewrite.c>\nRewriteEngine On\n";
-                $htaccess_contents_bans_end = "RewriteRule !^(banned.php|images/youarebanned.jpg|favicon.ico|css/banned.css)$ " . KU_BOARDSFOLDER . "banned.php [L]\n</IfModule>";
+                $htaccess_contents_bans_end = "RewriteRule !^(banned.php|images/youarebanned.jpg|favicon.ico|css/banned.css)$ " . KU_WEBPATH . "/banned.php [L]\n</IfModule>";
             } else {
                 $htaccess_contents_bans_start = '';
                 $htaccess_contents_bans_end = '';

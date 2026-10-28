@@ -691,7 +691,7 @@ if ($operation_post) { // it's `noreturn`.
             }
 
             if ($user_authority > 0 && $user_authority != 3) {
-                $modpost_message = 'Modposted #<a href="' . KU_BOARDSFOLDER . $board_class->board['name'] . '/res/';
+                $modpost_message = 'Modposted #<a href="' . KU_BOARDSPATH . '/' . $board_class->board['name'] . '/res/';
                 if ($post_isreply) {
                     $modpost_message .= $thread_replyto;
                 } else {

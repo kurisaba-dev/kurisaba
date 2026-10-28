@@ -15,7 +15,7 @@
 
 {$is_board_page = 1}
 
-<form id="delform" class="delform-id" action="{%KU_CGIPATH}/board.php" method="post" enctype="multipart/form-data">
+<form id="delform" class="delform-id" action="{%KU_WEBPATH}/board.php" method="post" enctype="multipart/form-data">
 	<input type="hidden" name="board" value="{$board.name}" />
 	{foreach name=thread item=postsa from=$posts}
 		<hr />
@@ -24,10 +24,10 @@
 				{if $post.parentid eq 0}
 					<span id="unhidethread{$post.id}{$board.name}" style="display: none;">
 						{t}Thread{/t}
-						<a href="{%KU_BOARDSFOLDER}{$board.name}/res/{$post.id}.html">{$post.id}</a>
+						<a href="{%KU_BOARDSPATH}/{$board.name}/res/{$post.id}.html">{$post.id}</a>
 						{t}hidden.{/t}
 						<a href="#" onclick="javascript:togglethread('{$board.name}','{$post.id}');return false;" title="{t}Раскрыть тред{/t}">
-							<img src="{$cwebpath}css/icons/blank.gif" border="0" class="unhidethread spritebtn" alt="{t}Раскрыть тред{/t}" />
+							<img src="{%KU_WEBPATH}/css/icons/blank.gif" border="0" class="unhidethread spritebtn" alt="{t}Раскрыть тред{/t}" />
 						</a>
 					</span>
 					<div id="thread{$post.id}{$board.name}">
@@ -49,7 +49,7 @@
 								<div id="replies{$post.id}{$board.name}" class="replies">
 									{if $post.replies}
 										<span class="omittedposts">
-											{if %KU_EXPAND}<a href="{%KU_BOARDSFOLDER}{$board.name}/res/{if $post.parentid eq 0}{$post.id}{else}{$post.parentid}{/if}.html" onclick="javascript:expandthread('{if $post.parentid eq 0}{$post.id}{else}{$post.parentid}{/if}','{$board.name}');return false;" title="{t}Expand Thread{/t}">{/if}
+											{if %KU_EXPAND}<a href="{%KU_BOARDSPATH}/{$board.name}/res/{if $post.parentid eq 0}{$post.id}{else}{$post.parentid}{/if}.html" onclick="javascript:expandthread('{if $post.parentid eq 0}{$post.id}{else}{$post.parentid}{/if}','{$board.name}');return false;" title="{t}Expand Thread{/t}">{/if}
 											{if $locale == 'ru'}
 												{omitted_syntax($post.replies, $post.images)}
 											{else}

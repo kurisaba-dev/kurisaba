@@ -57,12 +57,12 @@ if (isset($_GET['info'])) {
 ?>
 <body style="overflow: hidden;">
 	<table style="width: 100%; height: 100%; border-collapse: collapse;"><tr><td style="width: 15%; min-width: 240px; padding: 0px;">
-	<iframe src="menu.php" name="menu" id="menu">
-		<a href="<?php echo KU_WEBPATH . '/menu.php'; ?>"><?php echo KU_NAME; ?></a>
+	<iframe src="<?php echo KU_WEBPATH; ?>/menu.php" name="menu" id="menu">
+		<a href="<?php echo KU_WEBPATH; ?>/menu.php"><?php echo KU_NAME; ?></a>
 	</iframe>
 	</td><td style="padding: 0px; height: 100%;">
-	<iframe src="/<?php echo KU_DEFAULTBOARD;?>/" name="main" id="main">
-		<a href="<?php echo KU_WEBPATH;?>/<?php echo KU_DEFAULTBOARD;?>/"><?php echo KU_NAME; ?><?php echo KU_DEFAULTBOARD;?></a>
+	<iframe src="<?php echo KU_BOARDSPATH; ?>/<?php echo KU_DEFAULTBOARD; ?>/" name="main" id="main">
+		<a href="<?php echo KU_BOARDSPATH; ?>/<?php echo KU_DEFAULTBOARD; ?>/"><?php echo KU_NAME; ?> &mdash; <?php echo KU_DEFAULTBOARD;?></a>
 	</iframe>
 	</td></tr></table>
 </body>

@@ -32,11 +32,11 @@ header("Expires: Mon, 1 Jan 2030 05:00:00 GMT");
 <!-- <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script> -->
 <script>
 if (!window.jQuery) {
-    document.write('<script src="{$cwebpath}/lib/javascript/jquery-1.11.1.min.js"><\/script>');
+    document.write('<script src="<?php echo KU_WEBPATH; ?>/lib/javascript/jquery-1.11.1.min.js"><\/script>');
 }
 </script>
 <title>Manage Boards</title>
-<link rel="shortcut icon" href="<?php echo KU_WEBPATH . '/'; ?>favicon.ico" />
+<link rel="shortcut icon" href="<?php echo KU_WEBPATH; ?>/favicon.ico" />
 <style type="text/css">
 body, html {
 	width: 100%;

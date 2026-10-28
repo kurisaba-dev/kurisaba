@@ -119,7 +119,7 @@ class Manage
                         $tc_db->Execute("DELETE FROM `" . KU_DBPREFIX . "loginattempts` WHERE `ip` < '" . KU_REMOTE_ADDR . "'");
                         $action = 'posting_rates';
                         management_addlogentry(_gettext('Logged in'), 1);
-                        die('<script type="text/javascript">top.location.href = \''. KU_CGIPATH .'/manage.php\';</script>');
+                        die('<script type="text/javascript">top.location.href = \''. KU_WEBPATH .'/manage.php\';</script>');
                     } else {
                         $tc_db->Execute("INSERT HIGH_PRIORITY INTO `" . KU_DBPREFIX . "loginattempts` ( `username` , `ip` , `timestamp` ) VALUES ( " . $tc_db->qstr($_POST['username']) . " , '" . KU_REMOTE_ADDR . "' , '" . (time() + KU_ADDTIME) . "' )");
                         exitWithErrorPage(_gettext('Incorrect username/password.'));
@@ -133,7 +133,7 @@ class Manage
                         $this->SetModerationCookies();
                         $action = 'posting_rates';
                         management_addlogentry(_gettext('Logged in'), 1);
-                        die('<script type="text/javascript">top.location.href = \''. KU_CGIPATH .'/manage.php\';</script>');
+                        die('<script type="text/javascript">top.location.href = \''. KU_WEBPATH .'/manage.php\';</script>');
                     } else {
                         $tc_db->Execute("INSERT HIGH_PRIORITY INTO `" . KU_DBPREFIX . "loginattempts` ( `username` , `ip` , `timestamp` ) VALUES ( " . $tc_db->qstr($_POST['username']) . " , '" . KU_REMOTE_ADDR . "' , '" . (time() + KU_ADDTIME) . "' )");
                         exitWithErrorPage(_gettext('Incorrect username/password.'));
@@ -188,7 +188,7 @@ class Manage
         unset($_SESSION['manageusername']);
         unset($_SESSION['managepassword']);
         unset($_SESSION['token']);
-        die('<script type="text/javascript">top.location.href = \''. KU_CGIPATH .'/manage.php\';</script>');
+        die('<script type="text/javascript">top.location.href = \''. KU_WEBPATH .'/manage.php\';</script>');
     }
 
     /* If the user logged in isn't an admin, kill the script */
@@ -373,7 +373,7 @@ class Manage
                 $threads_perminute = $rows_threads;
                 $replies_perminute = $rows_replies;
                 $posts_perminute = $rows_posts;
-                $tpl_page .= '<tr><td><strong><a href="'. KU_WEBFOLDER . $line['name'] . '">'. $line['name'] . '</a></strong></td><td>'. $threads_perminute . '</td><td>'. $replies_perminute . '</td><td>'. $posts_perminute . '</td></tr>';
+                $tpl_page .= '<tr><td><strong><a href="'. KU_BOARDSPATH . '/' . $line['name'] . '">'. $line['name'] . '</a></strong></td><td>'. $threads_perminute . '</td><td>'. $replies_perminute . '</td><td>'. $posts_perminute . '</td></tr>';
             }
             $tpl_page .= '</table>';
         } else {
@@ -840,7 +840,7 @@ class Manage
             management_addlogentry(sprintf(_gettext('Banned %d IP addresses using an IP address list.'), $successful), 8);
             $tpl_page .= $successful . ' of '. $ips . ' IP addresses banned.';
         } else {
-            $tpl_page .= '<form id="postform" action="'. KU_CGIPATH . '/manage_page.php?action=proxyban" method="post" enctype="multipart/form-data"> '. _gettext('Proxy list') .'<input type="file" name="imagefile" size="35" accesskey="f" /><br />
+            $tpl_page .= '<form id="postform" action="'. KU_WEBPATH . '/manage_page.php?action=proxyban" method="post" enctype="multipart/form-data"> '. _gettext('Proxy list') .'<input type="file" name="imagefile" size="35" accesskey="f" /><br />
             <input type="submit" value="'. _gettext('Submit') .'" />
             <br />'. _gettext('The proxy list is assumed to be in plaintext *.*.*.*:port or *.*.*.* format, one IP per line.') .'<br /><br /><hr />';
         }
@@ -1672,7 +1672,7 @@ class Manage
 
                     $real_parentid = ($line['parentid'] == 0) ? $line['id'] : $line['parentid'];
 
-                    $tpl_page .= '<tr><td><a href="'. KU_BOARDSPATH . '/'. $line['boardname'] . '/res/'. $real_parentid . '.html#'. $line['id'] . '">/'. $line['boardname'] . '/'. $line['id'] . '</td><td>'. (($line['file_type'] == 'jpg' || $line['file_type'] == 'gif' || $line['file_type'] == 'webp' || $line['file_type'] == 'png') ? ('<a href="'. KU_WEBPATH .'/'. $line['boardname'] . '/src/'. $line['file'] . '.'. $line['file_type'] . '"><img border=0 src="'. KU_WEBPATH .'/'. $line['boardname'] . '/thumb/'. $line['file'] . 's.'. $line['file_type'] . '"></a>') : ('')) . '</td><td>'. $line['message'] . '</td><td>'. md5_decrypt($line['ip'], KU_RANDOMSEED) . '</tr>';
+                    $tpl_page .= '<tr><td><a href="'. KU_BOARDSPATH . '/'. $line['boardname'] . '/res/'. $real_parentid . '.html#'. $line['id'] . '">/'. $line['boardname'] . '/'. $line['id'] . '</td><td>'. (($line['file_type'] == 'jpg' || $line['file_type'] == 'gif' || $line['file_type'] == 'webp' || $line['file_type'] == 'png') ? ('<a href="'. KU_BOARDSPATH .'/'. $line['boardname'] . '/src/'. $line['file'] . '.'. $line['file_type'] . '"><img border=0 src="'. KU_BOARDSPATH .'/'. $line['boardname'] . '/thumb/'. $line['file'] . 's.'. $line['file_type'] . '"></a>') : ('')) . '</td><td>'. $line['message'] . '</td><td>'. md5_decrypt($line['ip'], KU_RANDOMSEED) . '</tr>';
                 }
                 $tpl_page .= '</table>'. "\n";
             } else {
@@ -2013,7 +2013,7 @@ class Manage
             if ($filename != "") {
                 $tpl_page .= "
 					<tr>
-						<td colspan=\"2\" style=\"vertical-align: top;\">". _gettext('File') .": <a href=\"". KU_WEBPATH ."/$board/src/$filename.$filetype\" target=_new>$filename.$filetype</a> -( $filesize_formatted, {$image_w}x{$image_h}, $file_original.$filetype )</td>
+						<td colspan=\"2\" style=\"vertical-align: top;\">". _gettext('File') .": <a href=\"". KU_BOARDSPATH ."/$board/src/$filename.$filetype\" target=_new>$filename.$filetype</a> -( $filesize_formatted, {$image_w}x{$image_h}, $file_original.$filetype )</td>
 					</tr>
 				";
             }
@@ -2026,7 +2026,7 @@ class Manage
 
             if ($filename != "" && (!$deleted || (KU_KEEPFILES && KU_OFFLOAD))) {
                 $tpl_page .= "
-					<td style=\"vertical-align: top; width: 300px;\"><center><a href=\"". KU_WEBPATH ."/$board/src/$filename.$filetype\" target=\"_new\"><img src=\"". KU_WEBPATH ."/$board/thumb/{$filename}s.$filetype\" height=\"$thumb_h\" width=\"$thumb_w\" border=\"0\"></a></center></td>";
+					<td style=\"vertical-align: top; width: 300px;\"><center><a href=\"". KU_BOARDSPATH ."/$board/src/$filename.$filetype\" target=\"_new\"><img src=\"". KU_BOARDSPATH ."/$board/thumb/{$filename}s.$filetype\" height=\"$thumb_h\" width=\"$thumb_w\" border=\"0\"></a></center></td>";
             }
             if ($message == "") {
                 $message = "&nbsp;";
@@ -2077,8 +2077,8 @@ class Manage
                         $tpl_page .= '<div style="width: 75%; border: 1px solid #CCC; padding: 5px;">'. "\n";
                         $tpl_page .= $name . $line['tripcode'] . formatDate($line['postedat']) . ' | '. _gettext('No.') .' '. $line['id'] . ' | '. _gettext('IP') .': '. md5_decrypt($line['ip'], KU_RANDOMSEED) . '<br />'. "\n";
                         if (isset($line['filename'])) {
-                            $tpl_page .= '<a href="'. KU_WEBPATH . '/'. $_GET['board'] . '/src/'. $line['filename'] . '.'. $line['filetype'] . '" target="_blank">'. $line['filename'] . '.'. $line['filetype'] . '</a><br />'. "\n" .
-                                        '<a href="'. KU_WEBPATH . '/'. $_GET['board'] . '/src/'. $line['filename'] . '.'. $line['filetype'] . '" target="_blank"><img src="'. KU_WEBPATH . '/'. $_GET['board'] . '/thumb/'. $line['filename'] . 's.'. $line['filetype'] . '" border="0" alt="'. $line['filename'] . '.'. $line['filetype'] . '" /></a>'. "\n";
+                            $tpl_page .= '<a href="'. KU_BOARDSPATH . '/'. $_GET['board'] . '/src/'. $line['filename'] . '.'. $line['filetype'] . '" target="_blank">'. $line['filename'] . '.'. $line['filetype'] . '</a><br />'. "\n" .
+                                        '<a href="'. KU_BOARDSPATH . '/'. $_GET['board'] . '/src/'. $line['filename'] . '.'. $line['filetype'] . '" target="_blank"><img src="'. KU_BOARDSPATH . '/'. $_GET['board'] . '/thumb/'. $line['filename'] . 's.'. $line['filetype'] . '" border="0" alt="'. $line['filename'] . '.'. $line['filetype'] . '" /></a>'. "\n";
                         }
                         $tpl_page .= $line['message'];
                         $tpl_page .= '</div><br />';
@@ -2093,8 +2093,8 @@ class Manage
                         $tpl_page .= '<div style="width: 75%; border: 1px solid #CCC; padding: 5px;">'. "\n";
                         $tpl_page .= $name . $line['tripcode'] . formatDate($line['postedat']) . ' | No. '. $line['id'] . ' | IP: '. md5_decrypt($line['ip'], KU_RANDOMSEED) . '<br />'. "\n";
                         if ($line['filename'] != '') {
-                            $tpl_page .= '<a href="'. KU_WEBPATH . '/'. $_GET['board'] . '/src/'. $line['filename'] . '.'. $line['filetype'] . '" target="_blank">'. $line['filename'] . '.'. $line['filetype'] . '</a><br />'. "\n" .
-                                        '<a href="'. KU_WEBPATH . '/'. $_GET['board'] . '/src/'. $line['filename'] . '.'. $line['filetype'] . '" target="_blank"><img src="'. KU_WEBPATH . '/'. $_GET['board'] . '/thumb/'. $line['filename'] . 's.'. $line['filetype'] . '" border="0" alt="'. $line['filename'] . '.'. $line['filetype'] . '" /></a>'. "\n";
+                            $tpl_page .= '<a href="'. KU_BOARDSPATH . '/'. $_GET['board'] . '/src/'. $line['filename'] . '.'. $line['filetype'] . '" target="_blank">'. $line['filename'] . '.'. $line['filetype'] . '</a><br />'. "\n" .
+                                        '<a href="'. KU_BOARDSPATH . '/'. $_GET['board'] . '/src/'. $line['filename'] . '.'. $line['filetype'] . '" target="_blank"><img src="'. KU_BOARDSPATH . '/'. $_GET['board'] . '/thumb/'. $line['filename'] . 's.'. $line['filetype'] . '" border="0" alt="'. $line['filename'] . '.'. $line['filetype'] . '" /></a>'. "\n";
                         }
                         $tpl_page .= $line['message'];
                         $tpl_page .= '</div><br />';
@@ -3306,7 +3306,7 @@ class Manage
                                 }
 
                                 if (isset($_GET['do_ban'])) {
-                                    $tpl_page .= '<br /><br /><meta http-equiv="refresh" content="1;url='. KU_CGIPATH . '/manage_page.php?action=bans&banboard='. $_GET['boarddir'] . '&banpost='. $delpost_id .'"><a href="'. KU_CGIPATH . '/manage_page.php?action=bans&banboard='. $_GET['boarddir'] . '&banpost='. $delpost_id . '">'. _gettext('Redirecting') . '</a> to ban page...';
+                                    $tpl_page .= '<br /><br /><meta http-equiv="refresh" content="1;url='. KU_WEBPATH . '/manage_page.php?action=bans&banboard='. $_GET['boarddir'] . '&banpost='. $delpost_id .'"><a href="'. KU_WEBPATH . '/manage_page.php?action=bans&banboard='. $_GET['boarddir'] . '&banpost='. $delpost_id . '">'. _gettext('Redirecting') . '</a> to ban page...';
                                 } elseif ($isquickdel && !isset($_GET['noreturn'])) {
                                     if ($delpost_parentid > 0) {
                                         $tpl_page .= '<br /><br /><meta http-equiv="refresh" content="1;url='. KU_BOARDSPATH . '/'. $_GET['boarddir'] . '/res/'. $delpost_parentid . '.html"><a href="'. KU_BOARDSPATH . '/'. $_GET['boarddir'] . '/res/'. $delpost_parentid . '.html">'. _gettext('Redirecting') . '</a> back to thread...';
@@ -3415,7 +3415,7 @@ class Manage
                         } else {
                             $tpl_page .= '&nbsp;';
                         }
-                        $tpl_page .= '</td><td>'. md5_decrypt($linereport['ip'], KU_RANDOMSEED) . '</td><td><a href="?action=reports&clear='. $linereport['id'] . '">Clear</a>&nbsp;&#91;<a href="?action=delposts&boarddir='. $linereport['board'] . '&del'. $post_threadorpost . 'id='. $line['id'] . '" title="Delete" onclick="return confirm(\'Are you sure you want to delete this thread/post?\');">D</a>&nbsp;<a href="'. KU_CGIPATH . '/manage_page.php?action=delposts&boarddir='. $linereport['board'] . '&del'. $post_threadorpost . 'id='. $line['id'] . '&postid='. $line['id'] . '" title="Delete &amp; Ban" onclick="return confirm(\'Are you sure you want to delete and ban this poster?\');">&amp;</a>&nbsp;<a href="?action=bans&banboard='. $linereport['board'] . '&banpost='. $line['id'] . '" title="Ban">B</a>&#93;</td></tr>';
+                        $tpl_page .= '</td><td>'. md5_decrypt($linereport['ip'], KU_RANDOMSEED) . '</td><td><a href="?action=reports&clear='. $linereport['id'] . '">Clear</a>&nbsp;&#91;<a href="?action=delposts&boarddir='. $linereport['board'] . '&del'. $post_threadorpost . 'id='. $line['id'] . '" title="Delete" onclick="return confirm(\'Are you sure you want to delete this thread/post?\');">D</a>&nbsp;<a href="'. KU_WEBPATH . '/manage_page.php?action=delposts&boarddir='. $linereport['board'] . '&del'. $post_threadorpost . 'id='. $line['id'] . '&postid='. $line['id'] . '" title="Delete &amp; Ban" onclick="return confirm(\'Are you sure you want to delete and ban this poster?\');">&amp;</a>&nbsp;<a href="?action=bans&banboard='. $linereport['board'] . '&banpost='. $line['id'] . '" title="Ban">B</a>&#93;</td></tr>';
                     } else {
                         $tc_db->Execute("UPDATE `" . KU_DBPREFIX . "reports` SET `cleared` = 1 WHERE id = " . $linereport['id'] . "");
                     }
