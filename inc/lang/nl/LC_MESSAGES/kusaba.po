@@ -513,9 +513,6 @@ msgstr "Module-instellingen"
 msgid "Modules"
 msgstr "Modules"
 
-msgid "NOTICE: You are using the default administrator account.  Anyone can log in to this account, so a second administrator account needs to be created.  Create another, log in to it, and delete this one."
-msgstr "ATTENTIE: Je gebruikt momenteel het standaard beheerdersaccount. Iedereen kan met dit account inloggen. Maak dus een ander beheerdersaccount aan, log daarmee in en verwijder dit standaardaccount."
-
 msgid "Name"
 msgstr "Naam"
 

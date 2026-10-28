@@ -1249,9 +1249,6 @@ msgstr "Imageboard normal"
 msgid "Not Displayed"
 msgstr "Neafişată"
 
-msgid "NOTICE: You are using the default administrator account. Anyone can log in to this account, so a second administrator account needs to be created. Create another, log in to it, and delete this one."
-msgstr "ATENŢIE: Foloseşti contul de administrator implicit. Oricine se poate loga pe acest cont, deci e necesară crearea unui nou cont de administrator. Crează-l, loghează-te pe el, şi şterge contul acesta."
-
 msgid "Number of images to show per page"
 msgstr "Numărul de imagini pe pagină"
 

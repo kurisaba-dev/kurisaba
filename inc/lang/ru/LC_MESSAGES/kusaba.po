@@ -721,8 +721,8 @@ msgstr "Перемещение завершено."
 msgid "Move thread"
 msgstr "Переместить тред"
 
-msgid "NOTICE: You are using the default administrator account.  Anyone can log in to this account, so a second administrator account needs to be created.  Create another, log in to it, and delete this one."
-msgstr "Внимание: используется изначальный аккаунт администратора. Создайте нового, войдите через него и удалите старого."
+msgid "NOTICE: You are using the default administrator account password. Change password as soon as possible!"
+msgstr "Внимание: используется аккаунт администратора с паролем по умолчанию. Измените пароль как можно скорее!"
 
 msgid "Name"
 msgstr "Имя"
@@ -1761,9 +1761,6 @@ msgstr "Мамка в комнате"
 	
 msgid "Expand images to full size"
 msgstr "Разворачивать картинки до исходного размера"
-
-msgid "Board Owner"
-msgstr "Владелец 2.0 досок"
 
 msgid "Board limit exceeded. Delete the unused boards."
 msgstr "Превышен лимит 2.0 досок. Удалите неиспользуемые доски."

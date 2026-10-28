@@ -666,9 +666,6 @@ msgstr "Siirto suoritettu."
 msgid "Move thread"
 msgstr "Siirrä keskustelu"
 
-msgid "NOTICE: You are using the default administrator account.  Anyone can log in to this account, so a second administrator account needs to be created.  Create another, log in to it, and delete this one."
-msgstr "HUOMIO: Jos käytät vielä vakioasetuksella ollutta admin accounttia, kuka vain voi kirjautua sisään. Luo siis itse uusi ja poista vanha."
-
 msgid "Name"
 msgstr "Nimi"
 

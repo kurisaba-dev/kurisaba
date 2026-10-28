@@ -43,7 +43,7 @@ class Manage
         $dwoo->output(KU_TEMPLATEDIR . '/manage.tpl', $dwoo_data);
     }
 
-    // Creates a salt to be used for passwords
+    /* Creates a salt to be used for passwords */
     public function CreateSalt()
     {
         $chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
@@ -165,6 +165,7 @@ class Manage
         }
     }
 
+    /* Check if session is intact */
     public function CheckToken($posttoken)
     {
         if (!isset($_SESSION['token']) || !is_string($posttoken) || !hash_equals($_SESSION['token'], $posttoken)) {
@@ -216,15 +217,6 @@ class Manage
         }
     }
 
-    public function BoardOwnersOnly() // This is now equal to administrators
-    {global $tc_db, $tpl_page;
-
-        if (!$this->CurrentUserIsAdministrator()) {
-            exitWithErrorPage('That page is for admins only.');
-        }
-        return true;
-    }
-
     /* See if the user logged in is an admin */
     public function CurrentUserIsAdministrator()
     {
@@ -257,27 +249,12 @@ class Manage
         exitWithErrorPage(_gettext('Invalid session, please log in again.'));
     }
 
-    public function CurrentUserIsBoardOwner() // This is now equal to administrator
-    {
-        global $tc_db, $tpl_page;
-        $usermode = getUserMode();
-        if ($usermode == 1) {
-            return true;
-        }
-        if ($usermode >= 0) {
-            return false;
-        }
-        /* If the function reaches this point, something is fishy. Kill their session */
-        session_destroy();
-        exitWithErrorPage(_gettext('Invalid session, please log in again.'));
-    }
-
     /* See if the user logged in is a moderator of a specified board */
-    public function CurrentUserIsModeratorOfBoard($board, $username)
+    public function CurrentUserIsModeratorOfBoard($board)
     {
         global $tc_db, $tpl_page;
 
-        $results = $tc_db->GetAll("SELECT HIGH_PRIORITY `type`, `boards` FROM `" . KU_DBPREFIX . "staff` WHERE `username` = " . $tc_db->qstr($username) . " LIMIT 1");
+        $results = $tc_db->GetAll("SELECT HIGH_PRIORITY `type`, `boards` FROM `" . KU_DBPREFIX . "staff` WHERE `username` = " . $tc_db->qstr($_SESSION['manageusername']) . " LIMIT 1");
         if (count($results) > 0) {
             foreach ($results as $line) {
                 if ($line['boards'] == 'allboards') {
@@ -300,6 +277,87 @@ class Manage
         }
     }
 
+    /* Generate a list of boards a moderator controls */
+    public function BoardList($username)
+    {
+        global $tc_db, $tpl_page;
+
+        $staff_boardsmoderated = array();
+        $results = $tc_db->GetAll("SELECT HIGH_PRIORITY `boards` FROM `" . KU_DBPREFIX . "staff` WHERE `username` = " . $tc_db->qstr($username) . " LIMIT 1");
+        if ($this->CurrentUserIsAdministrator() || $results[0][0] == 'allboards') {
+            $resultsboard = $tc_db->GetAll("SELECT HIGH_PRIORITY `id`, `name` FROM `" . KU_DBPREFIX . "boards` ORDER BY `name` ASC");
+            foreach ($resultsboard as $lineboard) {
+                $staff_boardsmoderated = array_merge($staff_boardsmoderated, array(array( 'name' => $lineboard['name'], 'id' => $lineboard['id'])));
+            }
+        } else {
+            if ($results[0][0] != '') {
+                foreach ($results as $line) {
+                    $array_boards = explode('|', $line['boards']);
+                }
+                foreach ($array_boards as $this_board_name) {
+                    $this_board_id = $tc_db->GetOne("SELECT HIGH_PRIORITY `id` FROM `" . KU_DBPREFIX . "boards` WHERE `name` = " . $tc_db->qstr($this_board_name) . "");
+                    $staff_boardsmoderated = array_merge($staff_boardsmoderated, array(array('name' => $this_board_name, 'id' => $this_board_id)));
+                }
+            }
+        }
+
+        return $staff_boardsmoderated;
+    }
+
+    /* Generate a dropdown box from a supplied array of boards */
+    public function MakeBoardListDropdown($name, $boards, $all = false)
+    {
+        $output = '<select name="'. $name . '"><option value="">'. _gettext('Select a Board') .'</option>';
+        if (!empty($boards)) {
+            if ($all) {
+                $output .= '<option value="all">'. _gettext('All Boards') .'</option>';
+            }
+            foreach ($boards as $board) {
+                $output .= '<option value="'. $board['name'] . '">/'. $board['name'] . '/</option>';
+            }
+        }
+        $output .= '</select>';
+
+        return $output;
+    }
+
+    /* Generate a series of checkboxes from a supplied array of boards */
+    public function MakeBoardListCheckboxes($boxname, $boards)
+    {
+        $output = '';
+
+        if (!empty($boards)) {
+            foreach ($boards as $board) {
+                $output .= '<label for="'. $boxname .'" >'. $board['name'] . '</label><input type="checkbox" name="'. $boxname . '[]" value="'. $board['name'] . '" /> '."<br>";
+            }
+        }
+
+        return $output;
+    }
+
+    /* Generate a dropdown box for all sections */
+    public function MakeSectionListDropDown($name, $selected)
+    {
+        global $tc_db;
+
+        $output = '<select name="'. $name . '"><option value="">'. _gettext('Select a Section') .'</option>'. "\n";
+        $results = $tc_db->GetAll("SELECT `id`, `name` FROM `" . KU_DBPREFIX . "sections` ORDER BY `order` ASC");
+        if (count($results) > 0) {
+            foreach ($results as $section) {
+                if ($section['id'] == $selected) {
+                    $select = ' selected="selected"';
+                } else {
+                    $select = '';
+                }
+                $output .= '<option value="'. $section['id'] . '"'. $select . '>'. $section['name'] . '</option>'. "\n";
+            }
+        }
+        $output .= '</select><br />'. "\n";
+
+        return $output;
+    }
+
+    /* Count posting users */
     public function CountOkarins($seconds = 3600)
     {
         global $tc_db;
@@ -307,6 +365,7 @@ class Manage
         return count($result);
     }
 
+    /* Count viewing users */
     public function CountAgents($seconds = 3600)
     {
         $count = 0;
@@ -366,6 +425,7 @@ class Manage
     public function verbosestats()
     {
         global $tc_db, $tpl_page;
+        $this->AdministratorsOnly();
 
         $boards = $tc_db->GetAll("SELECT `id`, `name` FROM `" . KU_DBPREFIX . "boards` ORDER BY `name` ASC");
 
@@ -400,6 +460,8 @@ class Manage
     public function captchastats()
     {
         global $tc_db, $tpl_page;
+        $this->AdministratorsOnly();
+
         $tpl_page .= '<h2>' . _gettext('Captcha statistics') . ':</h2><table style="border-spacing: 1px;text-align: center;" border="1" align="center"><tr><th style="padding: 5px;">' . _gettext('Language') . '</th><th style="padding: 5px;">' . _gettext('Generated') . '</th><th style="padding: 5px;">' . _gettext('Solved') . '</th><th style="padding: 5px;">' . _gettext('Unsolved') . '</th><th style="padding: 5px;">' . _gettext('No attempt') . '</th></tr>';
         $posts = array();
         $data = $tc_db->GetAll("SELECT `lang1` as `lang`, `okays`, `fails` FROM (SELECT `lang` as `lang1`, count(*) as `okays` FROM `" . KU_DBPREFIX . "captcha_solve` WHERE `solved` GROUP BY `lang`) `req1` INNER JOIN (SELECT `lang` as `lang2`, count(*) as `fails` FROM `" . KU_DBPREFIX . "captcha_solve` WHERE NOT `solved` GROUP BY `lang`) `req2` ON `lang1` = `lang2`");
@@ -413,6 +475,8 @@ class Manage
     public function statistics()
     {
         global $tpl_page;
+        $this->AdministratorsOnly();
+
         $tpl_page .= '<h2>'. _gettext('Statistics') .'</h2><br />';
         $tpl_page .= '<img src="manage_page.php?graph&type=day" /><img src="manage_page.php?graph&type=week" /><img src="manage_page.php?graph&type=postnum" /><img src="manage_page.php?graph&type=unique" /><img src="manage_page.php?graph&type=posttime" />';
     }
@@ -511,8 +575,9 @@ class Manage
         management_addlogentry(_gettext('Viewed disk space used'), 0);
     }
 
-    public function staff() //183 lines
-    {global $tc_db, $tpl_page;
+    public function staff()
+    {
+        global $tc_db, $tpl_page;
         $this->AdministratorsOnly();
 
         $tpl_page .= '<h2>' ._gettext('Staff'). '</h2><br />';
@@ -779,38 +844,6 @@ class Manage
 		</form>';
     }
 
-    public function cleanup()
-    {
-        global $tc_db, $tpl_page;
-        $this->AdministratorsOnly();
-        $tpl_page .= '<h2>'. _gettext('Cleanup') . '</h2><br />';
-
-        if (isset($_POST['run'])) {
-            $tpl_page .= '<hr />'. _gettext('Deleting non-deleted replies which belong to deleted threads.') .'<hr />';
-            $this->delorphanreplies(true);
-            $tpl_page .= '<hr />'. _gettext('Deleting unused images.') .'<hr />';
-            $this->delunusedimages(true);
-            $tpl_page .= '<hr />'. _gettext('Removing posts deleted more than one week ago from the database.') .'<hr />';
-            $results = $tc_db->GetAll("SELECT `name`, `id` FROM `" . KU_DBPREFIX . "boards`");
-            foreach ($results as $line) {
-                $tc_db->Execute("DELETE FROM `" . KU_DBPREFIX . "posts` WHERE `boardid` = " . $line['id'] . " AND `IS_DELETED` = 1 AND `deleted_timestamp` < " . ((time() + KU_ADDTIME) - 604800) . "");
-            }
-            $tpl_page .= _gettext('Optimizing all tables in database.') .'<hr />';
-            $tpl_page .= _gettext('Cleanup finished.');
-            management_addlogentry(_gettext('Ran cleanup'), 2);
-        } else {
-            $tpl_page .= '<form action="manage_page.php?action=cleanup" method="post">'. "\n" .
-                        '	<input name="run" id="run" type="submit" value="'. _gettext('Run Cleanup') . '" />'. "\n" .
-                        '</form>';
-        }
-    }
-
-    /*
-    * +------------------------------------------------------------------------------+
-    * Boards Administration Pages
-    * +------------------------------------------------------------------------------+
-    */
-
     public function adddelboard()
     {
         global $tc_db, $tpl_page, $board_class;
@@ -852,54 +885,6 @@ class Manage
 
 		<form action="manage_page.php?action=adddelboard" method="post">
     <input type="hidden" name="token" value="' . $_SESSION['token'] . '" />
-		<input type="hidden" name="del" id="del" value="del" />
-		<label for="directory">'. _gettext('Directory') .':</label>' .
-        $this->MakeBoardListDropdown('directory', $this->BoardList($_SESSION['manageusername'])) .
-        '<br />
-
-		<input type="submit" value="'. _gettext('Delete board') .'" />
-
-		</form>';
-    }
-
-    public function adddelboard_mod()
-    {
-        global $tc_db, $tpl_page, $board_class;
-        $this->BoardOwnersOnly();
-
-        if (isset($_POST['directory'])) {
-            $this->CheckToken($_POST['token']);
-            if (isset($_POST['add'])) {
-                $tpl_page .= $this->addBoard_mod($_POST['directory'], $_POST['desc']);
-            } elseif (isset($_POST['del'])) {
-                if (isset($_POST['confirmation'])) {
-                    $tpl_page .= $this->delBoard_mod($_POST['directory'], $_POST['confirmation']);
-                } else {
-                    $tpl_page .= $this->delBoard_mod($_POST['directory']);
-                }
-            }
-        }
-
-        $tpl_page .= '<h2>'. _gettext('Add board') . '</h2><br />
-		<form action="manage_page.php?action=adddelboard_mod" method="post">
-    	<input type="hidden" name="token" value="' . $_SESSION['token'] . '" />
-		<input type="hidden" name="add" id="add" value="add" />
-		<label for="directory">'. _gettext('Directory') . ': /_</label>
-		<input type="text" name="directory" id="directory" />
-		<div class="desc">'. _gettext('The directory of the board.') . ' <strong>'. _gettext('Only put in the lowercase letter(s) of the board directory. All other characters will be removed (and uppercase letters will be made lowercase).') . '</strong></div><br />
-
-		<label for="desc">'. _gettext('Description') . ':</label>
-		<input type="text" name="desc" id="desc" />
-		<div class="desc">'. _gettext('The name of the board.') . '</div><br />
-
-		<input type="submit" value="'. _gettext('Add Board') .'" />
-
-		</form><br /><hr />
-
-		<h2>'. _gettext('Delete board') .'</h2><br />
-
-		<form action="manage_page.php?action=adddelboard_mod" method="post">
-    	<input type="hidden" name="token" value="' . $_SESSION['token'] . '" />
 		<input type="hidden" name="del" id="del" value="del" />
 		<label for="directory">'. _gettext('Directory') .':</label>' .
         $this->MakeBoardListDropdown('directory', $this->BoardList($_SESSION['manageusername'])) .
@@ -965,61 +950,6 @@ class Manage
                 }
             } else {
                 $output .= _gettext('That name is for internal use. Please pick another.');
-            }
-        } else {
-            $output .= _gettext('Please fill in all required fields.');
-        }
-        return $output;
-    }
-
-    public function addBoard_mod($dir, $desc)
-    {
-        global $tc_db;
-        $this->BoardOwnersOnly();
-
-        $desc = htmlspecialchars($desc);
-
-        $output = '';
-        $output .= '<h2>'. _gettext('Add Results') .'</h2><br />';
-        $dir = '_'.cleanBoardName($dir);
-        if ($dir != '' && $desc != '') {
-            $results = $tc_db->GetAll("SELECT HIGH_PRIORITY * FROM `" . KU_DBPREFIX . "boards` WHERE `name` = " . $tc_db->qstr($dir) . "");
-            if (count($results) == 0) {
-                $moderating = array_filter(explode('|', $tc_db->GetOne("SELECT HIGH_PRIORITY `boards` FROM `" . KU_DBPREFIX . "staff` WHERE `username` = " . $tc_db->qstr($_SESSION['manageusername']) . "")));
-                $existingboards = $tc_db->GetAll("SELECT HIGH_PRIORITY `name` from `" . KU_DBPREFIX . "boards`");
-                foreach ($existingboards as &$exb) {
-                    $xba[] = $exb['name'];
-                }
-                $moderating = array_intersect($moderating, $xba);
-                unset($exb);
-                if (mkdir(KU_STORAGEDIR . $dir, 0777) && mkdir(KU_STORAGEDIR . $dir . '/res', 0777) && mkdir(KU_STORAGEDIR . $dir . '/src', 0777) && mkdir(KU_STORAGEDIR . $dir . '/thumb', 0777) && mkdir(KU_STORAGEDIR . $dir . '/tmp', 0777) && mkdir(KU_STORAGEDIR . $dir . '/tmp/thumb', 0777)) {
-                    /* Add mod rights */
-                    $moderating[] = $dir;
-                    $tc_db->Execute("UPDATE `" . KU_DBPREFIX . "staff` SET `boards` = " . $tc_db->qstr(implode('|', $moderating)) . " WHERE `username` = " . $tc_db->qstr($_SESSION['manageusername']) . "");
-                    file_put_contents(KU_STORAGEDIR . $dir . '/.htaccess', 'DirectoryIndex '. 'board.html' . '');
-                    if (KU_OFFLOAD) {
-                        file_put_contents(KU_STORAGEDIR . $dir . '/src/.htaccess', "AddType text/plain .ASM .C .CPP .CSS .JAVA .JS .LSP .PHP .PL .PY .RAR .SCM .TXT\nSetHandler default-handler\nDeny from all\n");
-                        file_put_contents(KU_STORAGEDIR . $dir . '/thumb/.htaccess', "Deny from all\n");
-                    } else {
-                        file_put_contents(KU_STORAGEDIR . $dir . '/src/.htaccess', "AddType text/plain .ASM .C .CPP .CSS .JAVA .JS .LSP .PHP .PL .PY .RAR .SCM .TXT\nSetHandler default-handler\n");
-                    }
-                    $_POST['firstpostid'] = 1;
-                    $sect20 = $tc_db->GetOne('SELECT `id` FROM `'. KU_DBPREFIX .'sections` WHERE `abbreviation`="20"');
-                    $tc_db->Execute("INSERT INTO `" . KU_DBPREFIX . "boards` ( `name` , `desc` , `createdon`, `start`, `image`, `includeheader`,`section` ) VALUES ( " . $tc_db->qstr($dir) . " , " . $tc_db->qstr($desc) . " , '" . (time() + KU_ADDTIME) . "', " . $_POST['firstpostid'] . ", '', '', ".$sect20." )");
-                    $boardid = $tc_db->Insert_Id();
-                    $filetypes = $tc_db->GetAll("SELECT " . KU_DBPREFIX . "filetypes.id FROM " . KU_DBPREFIX . "filetypes WHERE " . KU_DBPREFIX . "filetypes.filetype = 'JPG' OR " . KU_DBPREFIX . "filetypes.filetype = 'GIF' OR " . KU_DBPREFIX . "filetypes.filetype = 'PNG';");
-                    foreach ($filetypes as $filetype) {
-                        $tc_db->Execute("INSERT INTO `" . KU_DBPREFIX . "board_filetypes` ( `boardid` , `typeid` ) VALUES ( " . $boardid . " , " . $filetype['id'] . " );");
-                    }
-
-                    $output .= _gettext('Board successfully added.') . '<br /><br /><a href="'. KU_BOARDSPATH . '/'. $dir . '/">/'. $dir . '/</a>!<br />';
-                    $output .= '<form action="?action=boardopts_mod" method="post"><input type="hidden" name="board" value="'. $dir . '" /><input type="submit" style="border: 1px solid; background: none; text-align: center;" value="'. _gettext('Click to edit board options') .'" /><br /><hr /></form>';
-                    management_addlogentry(_gettext('Added board') . ': /'. $dir . '/', 3);
-                } else {
-                    $output .= '<br />'. _gettext('Unable to create directories.');
-                }
-            } else {
-                $output .= _gettext('A board with that name already exists.');
             }
         } else {
             $output .= _gettext('Please fill in all required fields.');
@@ -1099,87 +1029,10 @@ class Manage
         return $output;
     }
 
-    public function delboard_mod($dir, $confirm = '')
-    {
-        global $tc_db, $tpl_page;
-        $this->BoardOwnersOnly();
-
-        $output = '';
-        $output .= '<h2>'. _gettext('Delete Results') .'</h2><br />';
-        if (!empty($dir)) {
-            $results = $tc_db->GetAll("SELECT HIGH_PRIORITY * FROM `" . KU_DBPREFIX . "boards` WHERE `name` = " . $tc_db->qstr($dir) . "");
-            foreach ($results as $line) {
-                $board_id = $line['id'];
-                $board_dir = $line['name'];
-            }
-            if (count($results) > 0) {
-                if (!empty($confirm)) {
-                    if (!$this->CurrentUserIsModeratorOfBoard($dir, $_SESSION['manageusername'])) {
-                        exitWithErrorPage(_gettext('You are not a moderator of this board.'));
-                    }
-                    if (removeBoard($board_dir)) {
-                        $tc_db->Execute("DELETE FROM `" . KU_DBPREFIX . "posts` WHERE `boardid` = '" . $board_id . "'");
-                        $tc_db->Execute("DELETE FROM `" . KU_DBPREFIX . "boards` WHERE `id` = '" . $board_id . "'");
-                        $tc_db->Execute("DELETE FROM `" . KU_DBPREFIX . "board_filetypes` WHERE `boardid` = '" . $board_id . "'");
-
-                        /*     Remove rights for all mods     */
-                        $staffresults = $tc_db->GetAll("SELECT `id`, `boards` FROM `" .KU_DBPREFIX. "staff` WHERE `boards` != 'allboards'");
-                        foreach ($staffresults as $moder) {
-                            $set = explode('|', $moder['boards']);
-                            $moderating = array_diff(array_filter($set), array($dir));
-                            if (count($set) != count($moderating)) {
-                                $tc_db->Execute("UPDATE `" . KU_DBPREFIX . "staff` SET `boards` = " . $tc_db->qstr(implode('|', $moderating)) . " WHERE `id` = '" . $moder['id'] . "'");
-                            }
-                        }
-                        /*     Remove board entries from wordfilter     */
-                        $wfresults = $tc_db->GetAll("SELECT `id`, `boards` FROM `" .KU_DBPREFIX. "wordfilter`");
-                        if (count($wfresults) > 0) {
-                            foreach ($wfresults as $line) {
-                                $set = explode('|', $line['boards']);
-                                $filtered = array_diff(array_filter($set), array($dir));
-                                if (count($set) != count($filtered)) {
-                                    $tc_db->Execute("UPDATE `" . KU_DBPREFIX . "wordfilter` SET `boards` = " . $tc_db->qstr(implode('|', $filtered)) . " WHERE `id` = '" . $line['id'] . "'");
-                                }
-                            }
-                        }
-
-                        unset($moder);
-                        require_once KU_ENGINEDIR . 'inc/classes/menu.class.php';
-                        $menu_class = new Menu();
-                        $menu_class->Generate();
-                        $output .= _gettext('Board successfully deleted.');
-                        management_addlogentry(_gettext('Deleted board') .': /'. $dir . '/', 3);
-                    } else {
-                        // Error
-                        $output .= _gettext('Unable to delete board.');
-                    }
-                } else {
-                    $output .= sprintf(_gettext('Are you absolutely sure you want to delete %s?'), '/'. $board_dir . '/') .
-                    '<br />
-					<form action="manage_page.php?action=adddelboard_mod" method="post">
-          			<input type="hidden" name="token" value="' . $_SESSION['token'] . '" />
-					<input type="hidden" name="del" id="del" value="del" />
-					<input type="hidden" name="directory" id="directory" value="'. $dir . '" />
-					<input type="hidden" name="confirmation" id="confirmation" value="yes" />
-
-					<input type="submit" value="'. _gettext('Continue') .'" />
-
-					</form><br />';
-                }
-            } else {
-                $output .= _gettext('A board with that name does not exist.');
-            }
-        }
-        $output .= '<br />';
-
-        return $output;
-    }
-
-    /* Replace words in posts with something else */
     public function wordfilter()
     {
         global $tc_db, $tpl_page;
-        $this->BoardOwnersOnly();
+        $this->ModeratorsOnly();
 
         $tpl_page .= '<h2>'. _gettext('Wordfilter') . '</h2><br />';
 
@@ -1365,7 +1218,6 @@ class Manage
         }
     }
 
-    /* Add or delete Embed Entries */
     public function embeds()
     {
         global $tc_db, $tpl_page;
@@ -1549,7 +1401,6 @@ class Manage
 		<input type="submit" value="'. _gettext('Move thread') . '" />';
     }
 
-    /* Search for posts by IP */
     public function ipsearch()
     {
         global $tc_db, $tpl_page;
@@ -1589,12 +1440,6 @@ class Manage
         }
     }
 
-    public function remove_spaces($str)
-    {
-        return str_replace(" ", "", $str);
-    }
-
-    /* Search for posts by IP */
     public function specialthreads()
     {
         global $tc_db, $tpl_page;
@@ -1615,7 +1460,6 @@ class Manage
         }
     }
 
-    /* Search for posts by IP */
     public function updateengine()
     {
         global $tc_db, $tpl_page;
@@ -1629,11 +1473,10 @@ class Manage
         $tpl_page .= '<textarea cols="80" rows="25">'. join("\n", $output) . '</textarea>';
     }
 
-
-    /* Search for text in posts */
     public function search()
     {
         global $tc_db, $tpl_page;
+        $this->AdministratorsOnly();
 
         if (isset($_GET['query'])) {
             $search_query = $_GET['query'];
@@ -1698,7 +1541,6 @@ class Manage
                         $regexp .= preg_quote($search_word) . '|';
                     }
                     $regexp = substr($regexp, 0, -1) . ')/';
-                    //$line['message'] = preg_replace_callback($regexp, array(&$this, 'search_callback'), stripslashes($line['message']));
                     $line['message'] = stripslashes($line['message']);
                     $tpl_page .= '<fieldset>'. $line['message'] . '</fieldset><br />';
                     $count++;
@@ -1724,7 +1566,7 @@ class Manage
                 }
                 $b = $s + 1;
 
-                $tpl_page .= $this->search_results_display($a, $b, $numrows);
+                $tpl_page .= '<p>'. _gettext('Results') . ' <strong>'. $b . '</strong> to <strong>'. $a . '</strong> of <strong>'. $numrows . '</strong></p><hr />';
             }
         }
 
@@ -1760,25 +1602,18 @@ class Manage
 
 		</form>';
     }
-    public function search_callback($matches)
-    {
-        print_r($matches);
-        return '<strong>'. $matches[0] . '</strong>';
-    }
-
-    public function search_results_display($a, $b, $numrows)
-    {
-        return '<p>'. _gettext('Results') . ' <strong>'. $b . '</strong> to <strong>'. $a . '</strong> of <strong>'. $numrows . '</strong></p>'. "\n" .
-        '<hr />';
-    }
 
     public function restorethread()
     {
         global $tc_db, $tpl_page;
+        $this->ModeratorsOnly();
+
         $tpl_page .= '<h2>Восстановить пост/тред</h2>';
         $board = isset($_GET['board']) ? $_GET['board'] : '';
         $thread = isset($_GET['thread']) ? $_GET['thread'] : '';
-
+        if (!$this->CurrentUserIsModeratorOfBoard($board)) {
+            exitWithErrorPage(_gettext('You are not a moderator of this board.'));
+        }
         $boardid = $tc_db->GetOne("SELECT HIGH_PRIORITY `id` FROM `" . KU_DBPREFIX . "boards` WHERE `name` = " . $tc_db->qstr($board));
 
 
@@ -1800,9 +1635,14 @@ class Manage
     public function viewthread()
     {
         global $tc_db, $tpl_page;
+        $this->ModeratorsOnly();
+
         $tpl_page .= '<h2>'. _gettext('View Threads (including deleted)') .'</h2>';
         $board = isset($_GET['board']) ? $_GET['board'] : '';
         $thread = isset($_GET['thread']) ? $_GET['thread'] : '';
+        if (!$this->CurrentUserIsModeratorOfBoard($board)) {
+            exitWithErrorPage(_gettext('You are not a moderator of this board.'));
+        }
         if (!$thread) {
             $thread = "0";
         }
@@ -1947,15 +1787,19 @@ class Manage
 		</form>';
     }
 
-    /* View a thread marked as deleted */
     public function viewdeletedthread()
     {
         global $tc_db, $tpl_page;
-        $this->AdministratorsOnly();
+        $this->ModeratorsOnly();
 
         $tpl_page .= '<h2>'. _gettext('View deleted thread') . '</h2><br />'. "\n";
 
         if (isset($_GET['board']) && isset($_GET['threadid']) && $_GET['threadid'] > 0) {
+
+            if (!$this->CurrentUserIsModeratorOfBoard($_GET['board'])) {
+                exitWithErrorPage(_gettext('You are not a moderator of this board.'));
+            }
+
             $results = $tc_db->GetAll("SELECT HIGH_PRIORITY * FROM `" . KU_DBPREFIX . "boards` WHERE `name` = " . $tc_db->qstr($_GET['board']) . "");
             foreach ($results as $line) {
                 $board_id = $line['id'];
@@ -2017,7 +1861,6 @@ class Manage
         }
     }
 
-    /* Add, view, and delete filetypes */
     public function editfiletypes()
     {
         global $tc_db, $tpl_page;
@@ -2123,7 +1966,6 @@ class Manage
         }
     }
 
-    /* Add, view, and delete sections */
     public function editsections()
     {
         global $tc_db, $tpl_page;
@@ -2260,17 +2102,6 @@ class Manage
         $tpl_page .= 'Готово. Записано '.$nrecords.' ответов для '.$nposts.' постов. Затрачено '.$ntime.' секунд.';
     }
 
-    /*
-    * +------------------------------------------------------------------------------+
-    * Boards Pages
-    * +------------------------------------------------------------------------------+
-    */
-
-    public function gentimestamp()
-    {
-        return preg_replace('/[.\ ]/', '', microtime());
-    }
-
     public function boardopts()
     {
         global $tc_db, $tpl_page;
@@ -2281,9 +2112,6 @@ class Manage
         $tpl_page .= '<h2>'. _gettext('Board options') . '</h2><br />';
         if (isset($_GET['updateboard']) && isset($_POST['order']) && isset($_POST['maxpages']) && isset($_POST['maxage']) && isset($_POST['messagelength'])) {
             $this->CheckToken($_POST['token']);
-            if (!$this->CurrentUserIsModeratorOfBoard($_GET['updateboard'], $_SESSION['manageusername'])) {
-                exitWithErrorPage(_gettext('You are not a moderator of this board.'));
-            }
             $boardid = $tc_db->GetOne("SELECT HIGH_PRIORITY `id` FROM `" . KU_DBPREFIX . "boards` WHERE `name` = " . $tc_db->qstr($_GET['updateboard']) . " LIMIT 1");
             if ($boardid != '') {
                 $available_styles = explode(':', KU_STYLES);
@@ -2344,9 +2172,6 @@ class Manage
                 $tpl_page .= _gettext('Unable to locate a board named') . ' <strong>'. $_GET['updateboard'] . '</strong>.';
             }
         } elseif (isset($_POST['board'])) {
-            if (!$this->CurrentUserIsModeratorOfBoard($_POST['board'], $_SESSION['manageusername'])) {
-                exitWithErrorPage(_gettext('You are not a moderator of this board.'));
-            }
             $resultsboard = $tc_db->GetAll("SELECT HIGH_PRIORITY * FROM `" . KU_DBPREFIX . "boards` WHERE `name` = " . $tc_db->qstr($_POST['board']) . "");
             if (count($resultsboard) > 0) {
                 foreach ($resultsboard as $lineboard) {
@@ -2653,267 +2478,6 @@ class Manage
         }
     }
 
-    public function boardopts_mod()
-    {
-        global $tc_db, $tpl_page;
-
-        $_POST['desc'] = htmlspecialchars($_POST['desc']);
-
-        $this->BoardOwnersOnly();
-
-        $tpl_page .= '<h2>'. _gettext('Board options') . '</h2><br />';
-        if (isset($_GET['updateboard'])) {
-            $this->CheckToken($_POST['token']);
-            if (!$this->CurrentUserIsModeratorOfBoard($_GET['updateboard'], $_SESSION['manageusername'])) {
-                exitWithErrorPage(_gettext('You are not a moderator of this board.'));
-            }
-            $boardid = $tc_db->GetOne("SELECT HIGH_PRIORITY `id` FROM `" . KU_DBPREFIX . "boards` WHERE `name` = " . $tc_db->qstr($_GET['updateboard']) . " LIMIT 1");
-            if ($boardid != '') {
-                $available_styles = explode(':', KU_STYLES);
-                if ($_POST['defaultstyle'] == '' || in_array($_POST['defaultstyle'], $available_styles)) {
-                    $filetypes = array();
-                    while (list($postkey, $postvalue) = each($_POST)) {
-                        if (substr($postkey, 0, 9) == 'filetype_') {
-                            $filetypes[] = substr($postkey, 9);
-                        }
-                    }
-                    $updateboard_enablenofile = isset($_POST['enablenofile']) ? '1' : '0';
-                    $updateboard_forcedanon = isset($_POST['forcedanon']) ? '1' : '0';
-                    $updateboard_showid = isset($_POST['showid']) ? '1' : '0';
-                    $updateboard_locked = isset($_POST['locked']) ? '1' : '0';
-                    $updateboard_balls = isset($_POST['balls']) ? '1' : '0';
-                    $updateboard_dice = isset($_POST['dice']) ? '1' : '0';
-                    $updateboard_useragent = isset($_POST['useragent']) ? '1' : '0';
-
-                    if (in_array($_POST['locale'], explode('|', KU_SUPPORTED_LOCALES))) {
-                        if (count($_POST['allowedembeds']) > 0) {
-                            $updateboard_allowedembeds = '';
-
-                            $results = $tc_db->GetAll("SELECT `filetype` FROM `" . KU_DBPREFIX . "embeds`");
-                            foreach ($results as $line) {
-                                if (in_array($line['filetype'], $_POST['allowedembeds'])) {
-                                    $updateboard_allowedembeds .= $line['filetype'].',';
-                                }
-                            }
-                            if ($updateboard_allowedembeds != '') {
-                                $updateboard_allowedembeds = substr($updateboard_allowedembeds, 0, -1);
-                            }
-                        }
-                        $tc_db->Execute("UPDATE `" . KU_DBPREFIX . "boards` SET `desc` = " . $tc_db->qstr($_POST['desc']) . " , `showid` = '" . $updateboard_showid . "' , `locked` = '" . $updateboard_locked . "' , `anonymous` = " . $tc_db->qstr($_POST['anonymous']) . " , `balls` = '" . $updateboard_balls . "' , `dice` = '" . $updateboard_dice . "' , `useragent` = '" . $updateboard_useragent . "' , `forcedanon` = '" . $updateboard_forcedanon . "' , `embeds_allowed` = " . $tc_db->qstr($updateboard_allowedembeds) . " , `locale` = " . $tc_db->qstr($_POST['locale']) . " , `defaultstyle` = " . $tc_db->qstr($_POST['defaultstyle']) . " , `enablenofile` = '" . $updateboard_enablenofile . "' WHERE `name` = " . $tc_db->qstr($_GET['updateboard']) . "");
-                        $tc_db->Execute("DELETE FROM `" . KU_DBPREFIX . "board_filetypes` WHERE `boardid` = '" . $boardid . "'");
-                        foreach ($filetypes as $filetype) {
-                            $tc_db->Execute("INSERT INTO `" . KU_DBPREFIX . "board_filetypes` ( `boardid`, `typeid` ) VALUES ( '" . $boardid . "', " . $tc_db->qstr($filetype) . " )");
-                        }
-                        require_once KU_ENGINEDIR . 'inc/classes/menu.class.php';
-                        $menu_class = new Menu();
-                        $menu_class->Generate();
-                        $tpl_page .= _gettext('Update successful.');
-                        //$tpl_page .= '<br><h2>Не забудь пересобрать все доски!</h2><br>';
-
-                        management_addlogentry(_gettext('Updated board configuration') . " - /" . $_GET['updateboard'] . "/", 4);
-                    } else {
-                        $tpl_page .= _gettext('Sorry, a generic error has occurred.');
-                    }
-                } else {
-                    $tpl_page .= _gettext('Integer values must be entered correctly.');
-                }
-            } else {
-                $tpl_page .= _gettext('Unable to locate a board named') . ' <strong>'. $_GET['updateboard'] . '</strong>.';
-            }
-        } elseif (isset($_POST['board'])) {
-            if (!$this->CurrentUserIsModeratorOfBoard($_POST['board'], $_SESSION['manageusername'])) {
-                exitWithErrorPage(_gettext('You are not a moderator of this board.'));
-            }
-            $resultsboard = $tc_db->GetAll("SELECT HIGH_PRIORITY * FROM `" . KU_DBPREFIX . "boards` WHERE `name` = " . $tc_db->qstr($_POST['board']) . "");
-            if (count($resultsboard) > 0) {
-                foreach ($resultsboard as $lineboard) {
-                    $tpl_page .= '<div class="container">
-					<form action="?action=boardopts_mod&updateboard='.urlencode($_POST['board']).'" method="post">
-          <input type="hidden" name="token" value="' . $_SESSION['token'] . '" />';
-                    /* Directory */
-                    $tpl_page .= '<label for="board">'. _gettext('Directory') .':</label>
-					<input type="text" name="board" value="'.$_POST['board'].'" disabled />
-					<div class="desc">'. _gettext('The directory of the board.') .'</div><br />';
-
-                    /* Description */
-                    $tpl_page .= '<label for="desc">'. _gettext('Description') .':</label>
-					<input type="text" name="desc" value="'.$lineboard['desc'].'" />
-					<div class="desc">'. _gettext('The name of the board.') .'</div><br />';
-
-                    /* Allowed filetypes */
-                    $tpl_page .= '<label>'. _gettext('Allowed filetypes') .':</label>
-					<div class="desc">'. _gettext('What filetypes users are allowed to upload.') .'</div><br />';
-                    $filetypes = $tc_db->GetAll("SELECT HIGH_PRIORITY `id`, `filetype` FROM `" . KU_DBPREFIX . "filetypes` ORDER BY `filetype` ASC");
-                    foreach ($filetypes as $filetype) {
-                        $tpl_page .= '<label for="filetype_'. $filetype['id'] . '">'. strtoupper($filetype['filetype']) . '</label><input type="checkbox" name="filetype_'. $filetype['id'] . '"';
-                        $filetype_isenabled = $tc_db->GetOne("SELECT HIGH_PRIORITY COUNT(*) FROM `" . KU_DBPREFIX . "board_filetypes` WHERE `boardid` = '" . $lineboard['id'] . "' AND `typeid` = '" . $filetype['id'] . "' LIMIT 1");
-                        if ($filetype_isenabled == 1) {
-                            $tpl_page .= ' checked';
-                        }
-                        $tpl_page .= ' /><br />';
-                    }
-
-                    /* Allowed embeds */
-                    $tpl_page .= '<label>'. _gettext('Allowed embeds') .':</label>
-					<div class="desc">'. _gettext('What embed sites are allowed on this board. Only useful on board with embedding enabled.') .'</div><br />';
-                    $embeds = $tc_db->GetAll("SELECT HIGH_PRIORITY `id`, `filetype`, `name` FROM `" . KU_DBPREFIX . "embeds` ORDER BY `filetype` ASC");
-                    foreach ($embeds as $embed) {
-                        $tpl_page .= '<label for="allowedembeds[]">'. $embed['name'] . '</label><input type="checkbox" name="allowedembeds[]" value="'. $embed['filetype'] . '"';
-                        if (in_array($embed['filetype'], explode(',', $lineboard['embeds_allowed']))) {
-                            $tpl_page .= ' checked';
-                        }
-                        $tpl_page .= ' /><br />';
-                    }
-
-                    /* Anonymous */
-                    $tpl_page .= '<label for="anonymous">'. _gettext('Anonymous') .':</label>
-					<input type="text" name="anonymous" value="'. $lineboard['anonymous'] . '" />
-					<div class="desc">'. _gettext('Name to display when a name is not attached to a post.') . ' '. _gettext('Default') .': <strong>'. _gettext('Anonymous') .'</strong></div><br />';
-
-                    /* Locked */
-                    $tpl_page .= '<label for="locked">'. _gettext('Locked') .':</label>
-					<input type="checkbox" name="locked" ';
-                    if ($lineboard['locked'] == '1') {
-                        $tpl_page .= 'checked ';
-                    }
-                    $tpl_page .= ' />
-					<div class="desc">'. _gettext('Only moderators of the board and admins can make new posts/replies') .'</div><br />';
-
-                    /* Show ID */
-                    $tpl_page .= '<label for="showid">'. _gettext('Show ID') .':</label>
-					<input type="checkbox" name="showid" ';
-                    if ($lineboard['showid'] == '1') {
-                        $tpl_page .= 'checked ';
-                    }
-                    $tpl_page .= ' />
-					<div class="desc">'. _gettext('If enabled, each post will display the poster\'s ID, which is a representation of their IP address.') .'</div><br />';
-
-                    /* Enable "no file" posting */
-                    $tpl_page .= '<label for="enablenofile">'. _gettext('Enable \'no file\' posting') .':</label>
-					<input type="checkbox" name="enablenofile"';
-                    if ($lineboard['enablenofile'] == '1') {
-                        $tpl_page .= ' checked';
-                    }
-                    $tpl_page .= ' />
-					<div class="desc">'. _gettext('If set to yes, new threads will not require an image to be posted.') . ' '. _gettext('Default') .': <strong>'. _gettext('No') .'</strong></div><br />';
-
-                    /* Locale */;
-                    $locales = explode('|', KU_SUPPORTED_LOCALES);
-                    $tpl_page .= '<label for="locale">'. _gettext('Locale') .':</label><select name="locale">';
-                    foreach ($locales as $loc) {
-                        $tpl_page .= '<option value="'.$loc.'"';
-                        if ($loc == $lineboard['locale']) {
-                            $tpl_page .= ' selected="selected"';
-                        }
-                        $tpl_page .= '>'.$loc.'</option>';
-                    }
-                    $tpl_page .= '</select><br />';
-
-                    /* Countryballs */
-                    $tpl_page .= '<label for="balls">'. _gettext('Countryballs') .':</label>
-					<input type="checkbox" name="balls"';
-                    if ($lineboard['balls'] == '1') {
-                        $tpl_page .= ' checked';
-                    }
-                    $tpl_page .= ' />'. "\n" .
-                    '<div class="desc">'. _gettext('Add countryballs to posts corresponding to poster\'s country (provided by Cloudflare).') .'</div><br />';
-
-                    /* Dice */
-                    $tpl_page .= '<label for="dice">'. _gettext('Dice') .':</label>
-					<input type="checkbox" name="dice"';
-                    if ($lineboard['dice'] == '1') {
-                        $tpl_page .= ' checked';
-                    }
-                    $tpl_page .= ' />'. "\n" .
-                    '<div class="desc">'. _gettext('Add ##dice## feature.') .'</div><br />';
-
-                    /* Useragent */
-                    $tpl_page .= '<label for="useragent">'. _gettext('Useragent') .':</label>
-					<input type="checkbox" name="useragent"';
-                    if ($lineboard['useragent'] == '1') {
-                        $tpl_page .= ' checked';
-                    }
-                    $tpl_page .= ' />'. "\n" .
-                    '<div class="desc">'. _gettext('Add ##Useragent## feature') .'</div><br />';
-
-                    /* Forced anonymous */
-                    $tpl_page .= '<label for="forcedanon">'. _gettext('Forced anonymous') .':</label>
-					<input type="checkbox" name="forcedanon"';
-                    if ($lineboard['forcedanon'] == '1') {
-                        $tpl_page .= ' checked';
-                    }
-                    $tpl_page .= ' />
-					<div class="desc">'. _gettext('If set to yes, users will not be allowed to enter a name, making everyone appear as Anonymous') . ' '. _gettext('Default') .': <strong>'. _gettext('No') .'</strong></div><br />';
-
-                    /* Default style */
-                    $tpl_page .= '<label for="defaultstyle">'. _gettext('Default style') .':</label>
-					<select name="defaultstyle">
-
-					<option value=""';
-                    $tpl_page .= ($lineboard['defaultstyle'] == '') ? ' selected="selected"' : '';
-                    $tpl_page .= '>'._gettext('Use Default').'</option>';
-
-                    $styles = explode(':', KU_STYLES);
-                    $tpl_page .= '<optgroup label="'._gettext('Default Styles').'">';
-                    foreach ($styles as $stylesheet) {
-                        $tpl_page .= '<option value="'. $stylesheet . '"';
-                        $tpl_page .= ($lineboard['defaultstyle'] == $stylesheet) ? ' selected="selected"' : '';
-                        $tpl_page .= '>'. ucfirst($stylesheet) . '</option>';
-                    }
-                    $tpl_page .= '</optgroup>';
-
-                    $tpl_page .= '</select><div class="desc">'. _gettext('The style which will be set when the user first visits the board.').'<br>'._gettext('For custom styles, the custom style will be set until user choose otherwise.').'<br />';
-
-                    /* Submit form */
-                    $tpl_page .= '<br><input type="submit" value="'. _gettext('Update') .'" />
-
-					</form>
-					</div><br />';
-                }
-            } else {
-                $tpl_page .= _gettext('Unable to locate a board named') . ' <strong>'. $_POST['board'] . '</strong>.';
-            }
-        } else {
-            $tpl_page .= '<form action="?action=boardopts_mod" method="post">
-			<label for="board">'. _gettext('Board') .':</label>' .
-            $this->MakeBoardListDropdown('board', $this->BoardList($_SESSION['manageusername'])) .
-            '<input type="submit" value="'. _gettext('Go') .'" />
-			</form>';
-        }
-    }
-
-    //Checks if file is 100x300 gif png or jpg
-    public function CheckValidBanner($file)
-    {
-        //first we check the file extension
-        if ($file['error'] === UPLOAD_ERR_OK) {
-            $path_parts = pathinfo($file["name"]);
-            $extension = strtolower($path_parts['extension']);
-            if (in_array($extension, array('jpg', 'jpeg', 'gif', 'png', 'webp'))) {
-                //then we check actual type
-                $size = getimagesize($file['tmp_name']);
-                if ($size[0] == 300 && $size[1] == 100) {
-                    if (($size[2] == IMAGETYPE_PNG && $extension == 'png') || ($size[2] == IMAGETYPE_WEBP && $extension == 'webp') || ($size[2] == IMAGETYPE_GIF && $extension == 'gif') || ($size[2] == IMAGETYPE_JPEG && ($extension == 'jpg' || $extension == 'jpeg'))) {
-                        return array('status' => 'success', 'extension' => '.'.$extension);
-                    } else {
-                        return array('status' => 'error', 'msg' => _gettext('A common cause for this is an incorrect extension when the file is actually of a different type.'));
-                    }
-                } else {
-                    return array('status' => 'error', 'msg' => _gettext('Wrong file dimensions. Must be ').'300 x 100');
-                }
-            } else {
-                return array('status' => 'error', 'msg' => _gettext('Wrong file type. Allowed file types').': JPG, PNG, GIF.');
-            }
-        } else {
-            return array('status' => 'error', 'msg' => _gettext('Internal error.'));
-        }
-    }
-
-    public function validurl($url)
-    {
-        return preg_match('#([^:]|^)(http://|https://|ftp://)([^(\s<|\[)]+(?:\([\w\d]+\)|([^[:punct:]\s]|/)))#u', $url);
-    }
-
     public function unstickypost()
     {
         global $tc_db, $tpl_page, $board_class;
@@ -2924,7 +2488,7 @@ class Manage
             if ($_GET['postid'] > 0 && $_GET['board'] != '') {
                 $results = $tc_db->GetAll("SELECT HIGH_PRIORITY `id`, `name` FROM `" . KU_DBPREFIX . "boards` WHERE `name` = " . $tc_db->qstr($_GET['board']) . "");
                 if (count($results) > 0) {
-                    if (!$this->CurrentUserIsModeratorOfBoard($_GET['board'], $_SESSION['manageusername'])) {
+                    if (!$this->CurrentUserIsModeratorOfBoard($_GET['board'])) {
                         exitWithErrorPage(_gettext('You are not a moderator of this board.'));
                     }
                     foreach ($results as $line) {
@@ -2949,11 +2513,6 @@ class Manage
         $tpl_page .= $this->stickyforms();
     }
 
-    public function ctype_alnum_($string)
-    {
-        return ctype_alnum(str_replace('_', '', $string));
-    }
-
     public function stickypost()
     {
         global $tc_db, $tpl_page, $board_class;
@@ -2964,7 +2523,7 @@ class Manage
             if ($_GET['postid'] > 0 && $_GET['board'] != '') {
                 $results = $tc_db->GetAll("SELECT HIGH_PRIORITY `id`, `name` FROM `" . KU_DBPREFIX . "boards` WHERE `name` = " . $tc_db->qstr($_GET['board']) . "");
                 if (count($results) > 0) {
-                    if (!$this->CurrentUserIsModeratorOfBoard($_GET['board'], $_SESSION['manageusername'])) {
+                    if (!$this->CurrentUserIsModeratorOfBoard($_GET['board'])) {
                         exitWithErrorPage(_gettext('You are not a moderator of this board.'));
                     }
                     foreach ($results as $line) {
@@ -2989,7 +2548,6 @@ class Manage
         $tpl_page .= $this->stickyforms();
     }
 
-    /* Create forms for stickying a post */
     public function stickyforms()
     {
         global $tc_db;
@@ -3037,7 +2595,7 @@ class Manage
             if ($_GET['postid'] > 0 && $_GET['board'] != '') {
                 $results = $tc_db->GetAll("SELECT HIGH_PRIORITY `id`, `name` FROM `" . KU_DBPREFIX . "boards` WHERE `name` = " . $tc_db->qstr($_GET['board']) . "");
                 if (count($results) > 0) {
-                    if (!$this->CurrentUserIsModeratorOfBoard($_GET['board'], $_SESSION['manageusername'])) {
+                    if (!$this->CurrentUserIsModeratorOfBoard($_GET['board'])) {
                         exitWithErrorPage(_gettext('You are not a moderator of this board.'));
                     }
                     foreach ($results as $line) {
@@ -3065,12 +2623,13 @@ class Manage
     public function unlockpost()
     {
         global $tc_db, $tpl_page, $board_class;
+        $this->ModeratorsOnly();
 
         $tpl_page .= '<h2>'. _gettext('Manage locked threads') . '</h2><br />';
         if ($_GET['postid'] > 0 && $_GET['board'] != '') {
             $results = $tc_db->GetAll("SELECT HIGH_PRIORITY `id`, `name` FROM `" . KU_DBPREFIX . "boards` WHERE `name` = " . $tc_db->qstr($_GET['board']) . "");
             if (count($results) > 0) {
-                if (!$this->CurrentUserIsModeratorOfBoard($_GET['board'], $_SESSION['manageusername'])) {
+                if (!$this->CurrentUserIsModeratorOfBoard($_GET['board'])) {
                     exitWithErrorPage(_gettext('You are not a moderator of this board.'));
                 }
                 foreach ($results as $line) {
@@ -3129,10 +2688,10 @@ class Manage
         return $output;
     }
 
-    /* Delete a post, or multiple posts */
     public function delposts($multidel = false)
     {
         global $tc_db, $tpl_page, $board_class;
+        $this->ModeratorsOnly();
 
         $isquickdel = false;
         if (isset($_POST['boarddir']) || isset($_GET['boarddir'])) {
@@ -3151,7 +2710,7 @@ class Manage
             }
             $results = $tc_db->GetAll("SELECT HIGH_PRIORITY * FROM `" . KU_DBPREFIX . "boards` WHERE `name` = " . $tc_db->qstr($_POST['boarddir']) . "");
             if (count($results) > 0) {
-                if (!$this->CurrentUserIsModeratorOfBoard($_POST['boarddir'], $_SESSION['manageusername'])) {
+                if (!$this->CurrentUserIsModeratorOfBoard($_POST['boarddir'])) {
                     exitWithErrorPage(_gettext('You are not a moderator of this board.'));
                 }
                 foreach ($results as $line) {
@@ -3244,13 +2803,6 @@ class Manage
         }
     }
 
-    /*
-    * +------------------------------------------------------------------------------+
-    * Moderation Pages
-    * +------------------------------------------------------------------------------+
-    */
-
-    /* View and delete reports */
     public function reports()
     {
         global $tc_db, $tpl_page;
@@ -3330,6 +2882,7 @@ class Manage
     public function settags()
     {
         global $tc_db, $tpl_page, $board_class;
+        $this->ModeratorsOnly();
 
         if (!isset($_GET['board']) || !isset($_GET['post']) || !isset($_GET['data'])) {
             http_response_code(400);
@@ -3338,8 +2891,7 @@ class Manage
 
         $results = $tc_db->GetAll("SELECT HIGH_PRIORITY `id` FROM `" . KU_DBPREFIX . "boards` WHERE `name` = " . $tc_db->qstr($_GET['board']) . "");
         if (count($results) > 0) {
-            if (!$this->CurrentUserIsModeratorOfBoard($_GET['board'], $_SESSION['manageusername'])) {
-                http_response_code(401);
+            if (!$this->CurrentUserIsModeratorOfBoard($_GET['board'])) {
                 exitWithErrorPage(_gettext('You are not a moderator of this board.'));
             }
             $board_id = $results[0]['id'];
@@ -3359,7 +2911,6 @@ class Manage
         }
     }
 
-    /* Modification of country-based blocking */
     public function geoblock()
     {
         global $tc_db, $tpl_page;
@@ -3415,7 +2966,6 @@ class Manage
         $tpl_page .= '<h2>'. _gettext('Geo Block') . '</h2><br />'. _gettext('Settings updated successfully.');
     }
 
-    /* Addition, modification, deletion, and viewing of bans */
     public function bans()
     {
         global $tc_db, $tpl_page, $bans_class;
@@ -3505,7 +3055,7 @@ class Manage
                 if (isset($_POST['banfromall']) || $instantban) {
                     $results = $tc_db->GetAll("SELECT HIGH_PRIORITY `name` FROM `" . KU_DBPREFIX . "boards`");
                     foreach ($results as $line) {
-                        if (!$this->CurrentUserIsModeratorOfBoard($line['name'], $_SESSION['manageusername'])) {
+                        if (!$this->CurrentUserIsModeratorOfBoard($line['name'])) {
                             exitWithErrorPage('/'. $line['name'] . '/: '. _gettext('You can only make bans applying to boards you moderate.'));
                         }
                     }
@@ -3517,7 +3067,7 @@ class Manage
                         $_POST['deletefrom'] = $_POST['bannedfrom'];
                     }
                     foreach ($_POST['bannedfrom'] as $board) {
-                        if (!$this->CurrentUserIsModeratorOfBoard($board, $_SESSION['manageusername'])) {
+                        if (!$this->CurrentUserIsModeratorOfBoard($board)) {
                             exitWithErrorPage('/'. $board . '/: '. _gettext('You can only make bans applying to boards you moderate.'));
                         }
                     }
@@ -3940,11 +3490,11 @@ class Manage
         }
     }
 
-    /* Search for all posts by a selected IP address and delete them */
     public function deletepostsbyip($from_ban = false)
     {
         global $tc_db, $tpl_page, $board_class;
-        $this->AdministratorsOnly();
+        $this->ModeratorsOnly();
+
         if (!$from_ban) {
             $tpl_page .= '<h2>'. _gettext('Delete all posts by IP') . '</h2><br />';
         }
@@ -3959,7 +3509,7 @@ class Manage
                 if (isset($_POST['banfromall'])) {
                     $results = $tc_db->GetAll("SELECT HIGH_PRIORITY `id`, `name` FROM `" . KU_DBPREFIX . "boards`");
                     foreach ($results as $line) {
-                        if (!$this->CurrentUserIsModeratorOfBoard($line['name'], $_SESSION['manageusername'])) {
+                        if (!$this->CurrentUserIsModeratorOfBoard($line['name'])) {
                             exitWithErrorPage('/'. $line['name'] . '/: '. _gettext('You can only delete posts from boards you moderate.'));
                         }
                         $delete_boards[$line['id']] = $line['name'];
@@ -3970,7 +3520,7 @@ class Manage
                         exitWithErrorPage(_gettext('Please select a board.'));
                     }
                     foreach ($_POST['deletefrom'] as $board) {
-                        if (!$this->CurrentUserIsModeratorOfBoard($board, $_SESSION['manageusername'])) {
+                        if (!$this->CurrentUserIsModeratorOfBoard($board)) {
                             exitWithErrorPage('/'. $board . '/: '. _gettext('You can only delete posts from boards you moderate.'));
                         }
                         $id = $tc_db->GetOne("SELECT `id` FROM `" . KU_DBPREFIX . "boards` WHERE `name` = " . $tc_db->qstr($board));
@@ -4030,7 +3580,6 @@ class Manage
         }
     }
 
-    /* View recently uploaded images */
     public function recentimages()
     {
         global $tc_db, $tpl_page;
@@ -4095,7 +3644,6 @@ class Manage
         }
     }
 
-    /* View recently posted posts */
     public function recentposts()
     {
         global $tc_db, $tpl_page;
@@ -4162,181 +3710,15 @@ class Manage
         }
     }
 
-    /*
-    * +------------------------------------------------------------------------------+
-    * Misc Functions
-    * +------------------------------------------------------------------------------+
-    */
-
-    /* Generate a list of boards a moderator controls */
-    public function BoardList($username)
-    {
-        global $tc_db, $tpl_page;
-
-        $staff_boardsmoderated = array();
-        $results = $tc_db->GetAll("SELECT HIGH_PRIORITY `boards` FROM `" . KU_DBPREFIX . "staff` WHERE `username` = " . $tc_db->qstr($username) . " LIMIT 1");
-        if ($this->CurrentUserIsAdministrator() || $results[0][0] == 'allboards') {
-            $resultsboard = $tc_db->GetAll("SELECT HIGH_PRIORITY `id`, `name` FROM `" . KU_DBPREFIX . "boards` ORDER BY `name` ASC");
-            foreach ($resultsboard as $lineboard) {
-                $staff_boardsmoderated = array_merge($staff_boardsmoderated, array(array( 'name' => $lineboard['name'], 'id' => $lineboard['id'])));
-            }
-        } else {
-            if ($results[0][0] != '') {
-                foreach ($results as $line) {
-                    $array_boards = explode('|', $line['boards']);
-                }
-                foreach ($array_boards as $this_board_name) {
-                    $this_board_id = $tc_db->GetOne("SELECT HIGH_PRIORITY `id` FROM `" . KU_DBPREFIX . "boards` WHERE `name` = " . $tc_db->qstr($this_board_name) . "");
-                    $staff_boardsmoderated = array_merge($staff_boardsmoderated, array(array('name' => $this_board_name, 'id' => $this_board_id)));
-                }
-            }
-        }
-
-        return $staff_boardsmoderated;
-    }
-
-    /* Generate a list of boards in query format */
-    public function sqlboardlist()
-    {
-        global $tc_db, $tpl_page;
-
-        $results = $tc_db->GetAll("SELECT HIGH_PRIORITY `id` FROM `" . KU_DBPREFIX . "boards` ORDER BY `name` ASC");
-        $sqlboards = '';
-        foreach ($results as $line) {
-            $sqlboards .= 'posts_'. $line['name'] . ', ';
-        }
-
-        return substr($sqlboards, 0, -2);
-    }
-
-    /* Generate a dropdown box from a supplied array of boards */
-    public function MakeBoardListDropdown($name, $boards, $all = false)
-    {
-        $output = '<select name="'. $name . '"><option value="">'. _gettext('Select a Board') .'</option>';
-        if (!empty($boards)) {
-            if ($all) {
-                $output .= '<option value="all">'. _gettext('All Boards') .'</option>';
-            }
-            foreach ($boards as $board) {
-                $output .= '<option value="'. $board['name'] . '">/'. $board['name'] . '/</option>';
-            }
-        }
-        $output .= '</select>';
-
-        return $output;
-    }
-
-    /* Generate a series of checkboxes from a supplied array of boards */
-    public function MakeBoardListCheckboxes($boxname, $boards)
-    {
-        $output = '';
-
-        if (!empty($boards)) {
-            foreach ($boards as $board) {
-                $output .= '<label for="'. $boxname .'" >'. $board['name'] . '</label><input type="checkbox" name="'. $boxname . '[]" value="'. $board['name'] . '" /> '."<br>";
-            }
-        }
-
-        return $output;
-    }
-
-    /* Generate a dropdown box for all sections */
-    public function MakeSectionListDropDown($name, $selected)
-    {
-        global $tc_db;
-
-        $output = '<select name="'. $name . '"><option value="">'. _gettext('Select a Section') .'</option>'. "\n";
-        $results = $tc_db->GetAll("SELECT `id`, `name` FROM `" . KU_DBPREFIX . "sections` ORDER BY `order` ASC");
-        if (count($results) > 0) {
-            foreach ($results as $section) {
-                if ($section['id'] == $selected) {
-                    $select = ' selected="selected"';
-                } else {
-                    $select = '';
-                }
-                $output .= '<option value="'. $section['id'] . '"'. $select . '>'. $section['name'] . '</option>'. "\n";
-            }
-        }
-        $output .= '</select><br />'. "\n";
-
-        return $output;
-    }
-
-    /* Delete files without their md5 stored in the database */
-    public function delunusedimages($verbose = false)
-    {
-        global $tc_db, $tpl_page;
-        $this->AdministratorsOnly();
-
-        $resultsboard = $tc_db->GetAll("SELECT HIGH_PRIORITY `id`, `name` FROM `" . KU_DBPREFIX . "boards`");
-        foreach ($resultsboard as $lineboard) {
-            if ($verbose) {
-                $tpl_page .= '<strong>'. _gettext('Looking for unused images in') .' /'. $lineboard['name'] . '/</strong><br />';
-            }
-            $file_md5list = array();
-            $results = $tc_db->GetAll("SELECT HIGH_PRIORITY `file_md5` FROM `" . KU_DBPREFIX . "posts` WHERE `boardid` = " . $lineboard['id'] . " AND `IS_DELETED` = 0 AND `file` != '' AND `file` != 'removed' AND `file_md5` != ''");
-            foreach ($results as $line) {
-                $file_md5list[] = $line['file_md5'];
-            }
-            $dir = './'. $lineboard['name'] . '/src';
-            $files = glob("$dir/{*.jpg, *.png, *.gif, *.webp, *.swf}", GLOB_BRACE);
-            if (is_array($files)) {
-                foreach ($files as $file) {
-                    if (in_array(md5_file(KU_STORAGEDIR . $lineboard['name'] . '/src/'. basename($file)), $file_md5list) == false) {
-                        if ((time() + KU_ADDTIME) - filemtime(KU_STORAGEDIR . $lineboard['name'] . '/src/'. basename($file)) > 120) {
-                            if ($verbose == true) {
-                                $tpl_page .= sprintf(_gettext('A live record for %s was not found; the file has been removed.'), $file).'<br />';
-                            }
-                            unlink(KU_STORAGEDIR . $lineboard['name'] . '/src/'. basename($file));
-                            @unlink(KU_STORAGEDIR . $lineboard['name'] . '/thumb/'. substr(basename($file), 0, -4) . 's'. substr(basename($file), strlen(basename($file)) - 4));
-                            @unlink(KU_STORAGEDIR . $lineboard['name'] . '/thumb/'. substr(basename($file), 0, -4) . 'c'. substr(basename($file), strlen(basename($file)) - 4));
-                        }
-                    }
-                }
-            }
-        }
-
-        return true;
-    }
-
-    /* Delete replies currently not marked as deleted who belong to a thread which is marked as deleted */
-    public function delorphanreplies($verbose = false)
-    {
-        global $tc_db, $tpl_page;
-        $this->AdministratorsOnly();
-
-        $resultsboard = $tc_db->GetAll("SELECT HIGH_PRIORITY `id`, `name` FROM `" . KU_DBPREFIX . "boards`");
-        foreach ($resultsboard as $lineboard) {
-            if ($verbose) {
-                $tpl_page .= '<strong>'. _gettext('Looking for orphans in') .' /'. $lineboard['name'] . '/</strong><br />';
-            }
-            $results = $tc_db->GetAll("SELECT HIGH_PRIORITY `id`, `parentid` FROM `" . KU_DBPREFIX . "posts` WHERE `boardid` = " . $lineboard['id'] . " AND `parentid` != '0' AND `IS_DELETED` = 0");
-            foreach ($results as $line) {
-                $exists_rows = $tc_db->GetAll("SELECT HIGH_PRIORITY COUNT(*) FROM `" . KU_DBPREFIX . "posts` WHERE `boardid` = " . $lineboard['id'] . " AND `id` = '" . $line['parentid'] . "' AND `IS_DELETED` = 0", 1);
-                if ($exists_rows[0] == 0) {
-                    $post_class = new Post($line['id'], $lineboard['name'], $lineboard['id']);
-                    $post_class->Delete;
-                    unset($post_class);
-
-                    if ($verbose) {
-                        $tpl_page .= sprintf(_gettext('Reply #%1$s\'s thread (#%2$s) does not exist! It has been deleted.'), $line['id'], $line['parentid']).'<br />';
-                    }
-                }
-            }
-        }
-
-        return true;
-    }
-
     public function spam()
     {
-        $this->BoardOwnersOnly();
+        $this->ModeratorsOnly();
         global $tc_db, $tpl_page;
         $tpl_page .= '<h2>'. _gettext('Spam.txt Management') .'</h2> <br />';
 
         if (isset($_GET['updateboard'])) {
             $this->CheckToken($_POST['token']);
-            if (!$this->CurrentUserIsModeratorOfBoard($_GET['updateboard'], $_SESSION['manageusername'])) {
+            if (!$this->CurrentUserIsModeratorOfBoard($_GET['updateboard'])) {
                 exitWithErrorPage(_gettext('You are not a moderator of this board.'));
             }
             $boardid = $tc_db->GetOne("SELECT HIGH_PRIORITY `id` FROM `" . KU_DBPREFIX . "boards` WHERE `name` = " . $tc_db->qstr($_GET['updateboard']) . " LIMIT 1");
@@ -4348,7 +3730,7 @@ class Manage
                 $tpl_page .= _gettext('Unable to locate a board named') . ' <strong>'. $_GET['updateboard'] . '</strong>.';
             }
         } elseif (isset($_POST['board'])) {
-            if (!$this->CurrentUserIsModeratorOfBoard($_POST['board'], $_SESSION['manageusername'])) {
+            if (!$this->CurrentUserIsModeratorOfBoard($_POST['board'])) {
                 exitWithErrorPage(_gettext('You are not a moderator of this board.'));
             }
             $resultsboard = $tc_db->GetAll("SELECT HIGH_PRIORITY * FROM `" . KU_DBPREFIX . "boards` WHERE `name` = " . $tc_db->qstr($_POST['board']) . "");
@@ -4374,24 +3756,6 @@ class Manage
             '<input type="submit" value="'. _gettext('Go') .'" />
 			</form>';
         }
-    }
-
-    /* Gets the IP address of a post */
-    public function getip()
-    {
-        global $tc_db, $smarty, $tpl_page;
-        if (!$this->CurrentUserIsModerator() && !$this->CurrentUserIsAdministrator()) {
-            die();
-        }
-        $results = $tc_db->GetAll("SELECT HIGH_PRIORITY * FROM `" . KU_DBPREFIX . "boards` WHERE `name` = " . $tc_db->qstr($_GET['boarddir']));
-        if (count($results) > 0) {
-            if (!$this->CurrentUserIsModeratorOfBoard($_GET['boarddir'], $_SESSION['manageusername'])) {
-                die();
-            }
-            $ip = $tc_db->GetAll("SELECT HIGH_PRIORITY * FROM `" . KU_DBPREFIX . "posts` WHERE `boardid` = " . $tc_db->qstr($results[0]['id']) . " AND `id` = " . $tc_db->qstr($_GET['id']));
-            die("dnb-".$_GET['boarddir']."-".$_GET['id']."-".(($ip[0]['parentid'] == 0) ? ("y") : ("n"))."=".md5_decrypt($ip[0]['ip'], KU_RANDOMSEED));
-        }
-        die();
     }
 
     public function edittrips()
@@ -4498,5 +3862,14 @@ class Manage
             $tpl_page .= '<tr><td colspan=2><input type="submit" value="'. _gettext('Submit') .'" /></td></tr>';
             $tpl_page .= '</form></table>';
         }
+    }
+
+    public function phpinfo()
+    {
+        global $tc_db, $tpl_page;
+        $this->AdministratorsOnly();
+        ob_start();
+        phpinfo();
+        $tpl_page .= ob_get_clean();
     }
 }

@@ -522,9 +522,6 @@ msgstr "Ustawienia modułów"
 msgid "Modules"
 msgstr "Moduły"
 
-msgid "NOTICE: You are using the default administrator account.  Anyone can log in to this account, so a second administrator account needs to be created.  Create another, log in to it, and delete this one."
-msgstr "UWAGA: Używasz domyślnego konta administratora - oznacza to, że każdy może się teraz na nie zalogować. Należy utworzyć nowe konto administratora, zalogować się na nie, a następnie to usunąć."
-
 msgid "Name"
 msgstr "Imię"
 

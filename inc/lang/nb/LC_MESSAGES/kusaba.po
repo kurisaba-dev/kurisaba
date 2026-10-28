@@ -489,9 +489,6 @@ msgstr "Modifiser ansatt"
 msgid "More"
 msgstr "Flere"
 
-msgid "NOTICE: You are using the default administrator account.  Anyone can log in to this account, so a second administrator account needs to be created.  Create another, log in to it, and delete this one."
-msgstr "MERK: Du bruker den standar administratorkontoen. Alle kan logge inn på denne, så en administratorkonto nummer to må lages. Lag en ny, logg inn, og slett denne."
-
 msgid "Name"
 msgstr "Navn"
 

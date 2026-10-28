@@ -666,9 +666,6 @@ msgstr "Verschiebung komplett."
 msgid "Move thread"
 msgstr "Thema verschieben"
 
-msgid "NOTICE: You are using the default administrator account.  Anyone can log in to this account, so a second administrator account needs to be created.  Create another, log in to it, and delete this one."
-msgstr "HINWEIS: Es wird das standardmäßige Administratorkonto benutzt. Jeder kann sich in dieses Konto einloggen, es wird deshalb ein zweites Administratorkonto benötigt. Erstelle ein neues, logge Dich damit ein, und lösche dieses hier."
-
 msgid "Name"
 msgstr "Name"
 

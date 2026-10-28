@@ -179,11 +179,6 @@ switch ($action) {
         $manage_class->ValidateSession();
         manage_page();
         break;
-    case 'getip':
-        if ($manage_class->ValidateSession(true)) {
-            manage_page($action);
-        }
-        break;
     default:
         /* Halts execution if not validated */
         if($action != 'modlog' || !KU_OPEN_MODLOG) {

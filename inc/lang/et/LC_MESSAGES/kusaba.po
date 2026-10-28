@@ -663,9 +663,6 @@ msgstr "Liigutamine lõpetatud."
 msgid "Move thread"
 msgstr "Liiguta lõnga"
 
-msgid "NOTICE: You are using the default administrator account.  Anyone can log in to this account, so a second administrator account needs to be created.  Create another, log in to it, and delete this one."
-msgstr "TÄHELEPANU: Sa kasutad vaikimisi loodud administraatori kontot. Igaüks saab siia sisse logida, seega on vajalik teise administraatori konto loomine. Loo teine, logi tollega sisse ja kustuta see konto."
-
 msgid "Name"
 msgstr "Nimi"
 

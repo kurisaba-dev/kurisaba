@@ -663,9 +663,6 @@ msgstr "Movimiento completado."
 msgid "Move thread"
 msgstr "Mover hilo"
 
-msgid "NOTICE: You are using the default administrator account.  Anyone can log in to this account, so a second administrator account needs to be created.  Create another, log in to it, and delete this one."
-msgstr "AVISO: Estás usando la cuenta de administrador que viene por defecto. Cualquiera puede iniciar sesíon en esta cuenta, por ello es necesario crear una segunda cuenta de administrador. Creala, inicia sesión en ella y elimina esta cuenta."
-
 msgid "Name"
 msgstr "Nombre"
 
