@@ -1465,6 +1465,9 @@ class Manage
         global $tc_db, $tpl_page;
         $this->AdministratorsOnly();
 
+        if (!is_dir(KU_ENGINEDIR . ".git")) {
+            exitWithErrorPage('Engine is running outside of Git environment.');
+        }
         $tpl_page .= '<h2>'. _gettext('Update engine') .'</h2><br />'. "\n";
 
         $command = 'git -C ' . escapeshellarg(KU_ENGINEDIR) . ' pull --ff-only origin master 2>&1';

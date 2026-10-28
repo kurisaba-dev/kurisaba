@@ -84,7 +84,9 @@ if (!$manage_class->ValidateSession(true)) {
     // Administration
     if ($manage_class->CurrentUserIsAdministrator()) {
         $tpl_links .= section_html(_gettext('Site Administration'), 'siteadministration') . '<ul>';
-        $tpl_links .= '<li><a style="color:green" href="manage_page.php?action=updateengine">' . _gettext('Update engine') . '</a></li>';
+        if (is_dir(KU_ENGINEDIR . ".git")) {
+            $tpl_links .= '<li><a style="color:green" href="manage_page.php?action=updateengine">' . _gettext('Update engine') . '</a></li>';
+        }
         $tpl_links .= '<li><a href="manage_page.php?action=enginesettings">' . _gettext('Engine settings') . '</a></li>';
         $tpl_links .= '<li><a href="manage_page.php?action=staff">' . _gettext('Staff') . '</a></li>';
         $tpl_links .= '<li><a style="color:blue" href="manage_page.php?action=sql">' . _gettext('SQL query') . '</a></li>';
