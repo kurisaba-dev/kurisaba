@@ -406,7 +406,7 @@ class Upload
                             return _gettext('A file by that name already exists');
                         }
                         if ($this->file_type == '.mp3' || $this->file_type == '.ogg' || $this->file_type == '.m4a') {
-                            require_once(KU_ENGINEDIR . 'lib/getid3/getid3.php');
+                            require_once(KU_ENGINEDIR . 'lib/getid3/getid3/getid3.php');
 
                             $getID3 = new getID3();
                             $getID3->analyze($file['tmp_name']);

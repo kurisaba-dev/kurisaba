@@ -467,7 +467,7 @@ class Board
             //Grab the ID3 info.
             // include getID3() library
 
-            require_once(KU_ENGINEDIR . 'lib/getid3/getid3.php');
+            require_once(KU_ENGINEDIR . 'lib/getid3/getid3/getid3.php');
 
             // Initialize getID3 engine
             $getID3 = new getID3();
