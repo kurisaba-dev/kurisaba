@@ -310,26 +310,17 @@ class Manage
     public function CountAgents($seconds = 3600)
     {
         $count = 0;
-        foreach (glob(session_save_path()."/sess*") as $filename) {
+        $sessions = glob(session_save_path() . "/sess*", GLOB_ERR);
+        if ($sessions === false) {
+            return false;
+        }
+        foreach ($sessions as $filename) {
             if (filectime($filename) > time() - $seconds) {
                 $count++;
             }
         }
         return $count;
     }
-
-    /*
-    * +------------------------------------------------------------------------------+
-    * Manage pages
-    * +------------------------------------------------------------------------------+
-    */
-
-
-    /*
-    * +------------------------------------------------------------------------------+
-    * Home Pages
-    * +------------------------------------------------------------------------------+
-    */
 
     public function welcome()
     {

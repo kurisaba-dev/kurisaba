@@ -63,14 +63,16 @@ if (!$manage_class->ValidateSession(true)) {
     $tpl_links .= "</strong>";
     $tpl_links .= '<li><a href="' . KU_WEBPATH . '" target="_top">' . _gettext('Home') . '</a></li>' . "\n";
     $tpl_links .= '<li><a href="manage_page.php?action=logout">'._gettext('Log out').'</a></li>';
-    /*$tpl_links .= '<li class="magic-link" data-help="showpwd"><span id="postingpassword"><a id="showpwd" href="#" onclick="javascript:document.getElementById(\'postingpassword\').innerHTML = \'<input type=text id=postingpasswordbox value=' . $manage_postpassword . '><br>\'; document.getElementById(\'postingpasswordbox\').select(); return false;">'._gettext('Show Posting Password').'</a></span></li></ul>';*/
-    // Home
+
     $tpl_links .= section_html(_gettext('Home'), 'home') . '<ul>';
     if ($manage_class->CurrentUserIsAdministrator() || $manage_class->CurrentUserIsModerator()) {
         $tpl_links .= '<li><a href="manage_page.php?action=changepwd">' . _gettext('Change account password') . '</a></li>';
     }
     $tpl_links .= '<li>Окаринов на борде (за последний час): ' . $manage_class->CountOkarins(3600) . '</li>';
-    $tpl_links .= '<li>Агентов Организации на борде: ' . $manage_class->CountAgents(3600) . '</li>';
+    $agents = $manage_class->CountAgents(3600);
+    if($agents !== false) {
+        $tpl_links .= '<li>Агентов Организации на борде: ' . $agents . '</li>';
+    }
     $tpl_links .= '</ul></div>';
 
     // Administration
