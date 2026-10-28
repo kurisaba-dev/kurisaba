@@ -236,7 +236,7 @@ function file_get_contents_remote($url, $checksize)
         }
 
         if ($checksize) {
-            if (preg_match('/^Content-Length:\s*(\d+)$/im', $headers, $matches)) {
+            if (preg_match('/^Content-Length:\s*(\d+)\r?$/im', $headers, $matches)) {
                 return array(true, (int) $matches[1]);
             }
             return array(false, 'Unable to determine content length when checking file size');
