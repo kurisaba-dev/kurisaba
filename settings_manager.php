@@ -156,7 +156,7 @@ function prepare_database()
 }
 
 // Connect to database and load config data
-if (!isset($tc_db) && !isset($preconfig_db_unnecessary)) {
+if (!isset($tc_db)) {
     if (!isset($cf['KU_DSN']) || empty($cf['KU_DSN'])) {
         configure_database();
     }

@@ -22,7 +22,6 @@
  *
  * @package kusaba
  */
-$preconfig_db_unnecessary = true;
 require 'settings_manager.php';
 header("Expires: Mon, 1 Jan 2030 05:00:00 GMT");
 ?>
