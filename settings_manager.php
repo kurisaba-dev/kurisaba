@@ -88,11 +88,6 @@ $maxtimestamp = max(array_map("filemtime", array_merge(...array_map(fn($x) => gl
 $cf['KU_CSSVER'] = $cf['KU_JSVER'] = $maxtimestamp;
 
 $cf['KU_SUPPORTED_LOCALES'] = 'ru|en';
-$cf['KU_REACT_ENA'] = false;
-$cf['KU_LOCAL_REACT_API'] = 'http://127.0.0.1:1337';
-$cf['KU_REACT_SITENAME'] = 'yourchanid';
-$cf['KU_CLI_REACT_API'] = 'http://example.com:1337';
-$cf['KU_REACT_SRVTOKEN'] = 'ENTERRANDOMSHIT';
 
 // Версия курисабы
 $cf['KU_VERSION']    = '1.0 based on KusabaX-0.9.3/0chan';

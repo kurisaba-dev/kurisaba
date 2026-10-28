@@ -1,8 +1,5 @@
 <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0">
 <script type="text/javascript"><!--
-		var react_api = '{%KU_CLI_REACT_API}';
-		var react_ena = '{%KU_REACT_ENA}';
-		var react_sitename = {if %KU_REACT_SITENAME}'{%KU_REACT_SITENAME}:'{else}''{/if};
 		var this_board_dir = '{$board.name}';
 		var ku_boardspath = '{%KU_BOARDSPATH}';
 		var ku_storagedir = '{%KU_STORAGEDIR}';
@@ -86,9 +83,6 @@ if (!window.prettyPrint) {
 <script>
 	document.write('<script src="{%KU_WEBPATH}/lib/javascript/kusaba.new.js?v={%KU_JSVER}"><\/script>');
 </script>
-{if %KU_REACT_ENA}
-<script src="{%KU_CLI_REACT_API}/socket.io/socket.io.js"></script>
-{/if}
 <!-- <script src="//cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.min.js"></script> -->
 <style>
 @font-face {

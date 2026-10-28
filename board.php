@@ -83,34 +83,6 @@ $parse_class = new Parse();
 $posting_class = new Posting();
 modules_load_all();
 
-// FUNCTIONS
-
-function notify($id = "?????", $newthreadid = '')
-{
-
-    if (KU_REACT_ENA) {
-        $data_string = json_encode(array('srvtoken' => KU_REACT_SRVTOKEN, 'room' => $id, 'clitoken' => $_POST['token'], 'timestamp' => time() + KU_ADDTIME, 'newthreadid' => $newthreadid ));
-        $suckTo = KU_REACT_SITENAME ? KU_LOCAL_REACT_API.'/qr/'.KU_REACT_SITENAME : KU_LOCAL_REACT_API;
-        $ch = curl_init($suckTo);
-        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
-        curl_setopt($ch, CURLOPT_PROXY, "");
-        curl_setopt($ch, CURLOPT_TIMEOUT, 0.5);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, $data_string);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt(
-            $ch,
-            CURLOPT_HTTPHEADER,
-            array(
-            'Content-Type: application/json',
-            'Content-Length: ' . strlen($data_string))
-        );
-        curl_exec($ch);
-        if (curl_errno($ch)) {
-            error_log('Curl error during Notify: ' . curl_error($ch).' (Error code: '.curl_errno($ch).')');
-        }
-    }
-}
-
 // STAGE 3: Check and setup parameters
 
 // 3.1. Set up board value.
@@ -739,12 +711,6 @@ if ($operation_post) { // it's `noreturn`.
 
         // Trim any threads which have been pushed past the limit, or exceed the maximum age limit
         TrimToPageLimit($board_class->board);
-
-        if ($thread_replyto == '0') {
-            notify($board_class->board['name'].':newthreads', $post_id);
-        } else {
-            notify($board_class->board['name'].':'.$thread_replyto);
-        }
     } else {
         kurisaba_exit(_gettext('Sorry, this board is locked and can not be posted in.'), '', $_POST['message']);
     }

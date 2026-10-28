@@ -9,9 +9,6 @@
 
 <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0">
 <script type="text/javascript"><!--
-		var react_api = '{%KU_CLI_REACT_API}';
-		var react_ena = '{%KU_REACT_ENA}';
-		var react_sitename = {if %KU_REACT_SITENAME}'{%KU_REACT_SITENAME}:'{else}''{/if};
 		var this_board_dir = '{$board.name}';
 		var ku_boardspath = '{%KU_BOARDSPATH}';
 		var ku_webpath = '{%KU_WEBPATH}';
