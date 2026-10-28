@@ -6,9 +6,9 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <title>{%KU_NAME} Navigation</title>
 {if %KU_MENUTYPE eq 'normal'}
-  <link rel="stylesheet" type="text/css" href="{%KU_WEBPATH}/css/menu_global.css?v={%KU_CSSVER}" />
+  <link rel="stylesheet" type="text/css" href="{%KU_WEBPATH}/css/menu_global.css?v={%KU_JS_CSS_VER}" />
   {loop $styles}
-    <link rel="{if $ neq %KU_DEFAULTSTYLE}alternate {/if}stylesheet" type="text/css" href="{%KU_WEBPATH}/css/styles/menu_{$}.css?v={%KU_CSSVER}" title="{$|capitalize}" />
+    <link rel="{if $ neq %KU_DEFAULTSTYLE}alternate {/if}stylesheet" type="text/css" href="{%KU_WEBPATH}/css/styles/menu_{$}.css?v={%KU_JS_CSS_VER}" title="{$|capitalize}" />
   {/loop}
 {else}
 	{literal}<style type="text/css">body { margin: 0px; } h1 { font-size: 1.25em; } h2 { font-size: 0.8em; font-weight: bold; color: #CC3300; } ul { list-style-type: none; padding: 0px; margin: 0px; } li { font-size: 0.8em; padding: 0px; margin: 0px; }</style>{/literal}
@@ -17,18 +17,18 @@
 <script type="text/javascript">
 	var ku_boardspath = '{%KU_BOARDSPATH}';
 	var ku_defaultboard = '{%KU_DEFAULTBOARD}';
-	var ku_cssver = {%KU_CSSVER};
+	var ku_js_css_ver = {%KU_JS_CSS_VER};
 	var ku_captchaenabled = '{%KU_CAPTCHAENABLED}';
 </script>
 <link rel="shortcut icon" href="{%KU_WEBPATH}/favicon.ico" />
 <script type="text/javascript" src="{%KU_WEBPATH}/lib/javascript/gettext.js"></script>
 <!-- <script type="text/javascript" src="{%KU_WEBPATH}/lib/javascript/menu.js"></script> -->
 <script src="{%KU_WEBPATH}/lib/javascript/jquery-1.11.1.min.js"></script>
-<script type="text/javascript" src="{%KU_WEBPATH}/lib/javascript/kusaba.new.js?v={%KU_JSVER}"></script>
+<script type="text/javascript" src="{%KU_WEBPATH}/lib/javascript/kusaba.new.js?v={%KU_JS_CSS_VER}"></script>
 <script type="text/javascript"><!--
 var _SITENAME = '{%KU_NAME}';
 //--></script>
-	<script src="lib/javascript/frame.js?v={%KU_JSVER}"></script>
+	<script src="lib/javascript/frame.js?v={%KU_JS_CSS_VER}"></script>
 <script type="text/javascript"><!--
 var ku_boardspath = '{%KU_BOARDSPATH}';
 {if $showdirs eq 0 && $files.0 neq $files.1 }

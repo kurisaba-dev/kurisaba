@@ -85,7 +85,7 @@ $cf['KU_CACHEDTEMPLATEDIR'] = $cf['KU_STORAGEDIR'] . 'tmp/dwoo';
 
 $css_js_files = array("css/*.css", "css/styles/*.css", "lib/javascript/*.js", "lib/javascript/prettify/*.js");
 $maxtimestamp = max(array_map("filemtime", array_merge(...array_map(fn($x) => glob($cf['KU_ENGINEDIR'] . $x), $css_js_files))));
-$cf['KU_CSSVER'] = $cf['KU_JSVER'] = $maxtimestamp;
+$cf['KU_JS_CSS_VER'] = $maxtimestamp;
 
 $cf['KU_SUPPORTED_LOCALES'] = 'ru|en';
 

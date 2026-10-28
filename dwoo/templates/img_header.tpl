@@ -6,7 +6,7 @@
 		var ku_webpath = '{%KU_WEBPATH}';
 		var ku_defaultboard = '{%KU_DEFAULTBOARD}';
 		var ku_maxfilesize = {$maxfilesize};
-		var ku_cssver = '{%KU_CSSVER}';
+		var ku_js_css_ver = '{%KU_JS_CSS_VER}';
 		var ku_offload = '{%KU_OFFLOAD}';
 		var ku_captchaenabled = '{%KU_CAPTCHAENABLED}';
 		var locale = '{$locale}';
@@ -43,9 +43,9 @@
 <link rel="canonical" href="{%KU_BOARDSPATH}/{$board.name}/res/{$replythread}.html" />
 {/if}
 <!-- <link href='https://fonts.googleapis.com/css?family=Roboto:400,700,400italic,700italic&subset=latin,cyrillic' rel='stylesheet' type='text/css'> -->
-<link rel="stylesheet" type="text/css" href="{%KU_WEBPATH}/css/img_global.css?v={%KU_CSSVER}" />
+<link rel="stylesheet" type="text/css" href="{%KU_WEBPATH}/css/img_global.css?v={%KU_JS_CSS_VER}" />
 {loop $ku_styles}
-	<link rel="{if $ neq $__.ku_defaultstyle}alternate {/if}stylesheet" type="text/css" href="{%KU_WEBPATH}/css/styles/{$}.css?v={%KU_CSSVER}" title="{$|capitalize}" />
+	<link rel="{if $ neq $__.ku_defaultstyle}alternate {/if}stylesheet" type="text/css" href="{%KU_WEBPATH}/css/styles/{$}.css?v={%KU_JS_CSS_VER}" title="{$|capitalize}" />
 {/loop}
 <link href="{%KU_WEBPATH}/css/prettify.css" type="text/css" rel="stylesheet" />
 {if $locale eq 'ja'}
@@ -79,9 +79,9 @@ if (!window.prettyPrint) {
 	document.write('<script src="{%KU_WEBPATH}/lib/javascript/prettify/prettify.js"><\/script>');
 }
 </script>
-<!-- <script src="{%KU_WEBPATH}/lib/javascript/kusaba.new.js?v={%KU_JSVER}"></script> -->
+<!-- <script src="{%KU_WEBPATH}/lib/javascript/kusaba.new.js?v={%KU_JS_CSS_VER}"></script> -->
 <script>
-	document.write('<script src="{%KU_WEBPATH}/lib/javascript/kusaba.new.js?v={%KU_JSVER}"><\/script>');
+	document.write('<script src="{%KU_WEBPATH}/lib/javascript/kusaba.new.js?v={%KU_JS_CSS_VER}"><\/script>');
 </script>
 <!-- <script src="//cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.min.js"></script> -->
 <style>
