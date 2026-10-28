@@ -117,7 +117,6 @@ class Manage
                         $_SESSION['token'] = ku_random_token();
                         $this->SetModerationCookies();
                         $tc_db->Execute("DELETE FROM `" . KU_DBPREFIX . "loginattempts` WHERE `ip` < '" . KU_REMOTE_ADDR . "'");
-                        $action = 'posting_rates';
                         management_addlogentry(_gettext('Logged in'), 1);
                         die('<script type="text/javascript">top.location.href = \''. KU_WEBPATH .'/manage.php\';</script>');
                     } else {
@@ -131,7 +130,6 @@ class Manage
                         $_SESSION['managepassword'] = md5($_POST['password'] . $results[0]['salt']);
                         $_SESSION['token'] = ku_random_token();
                         $this->SetModerationCookies();
-                        $action = 'posting_rates';
                         management_addlogentry(_gettext('Logged in'), 1);
                         die('<script type="text/javascript">top.location.href = \''. KU_WEBPATH .'/manage.php\';</script>');
                     } else {
@@ -339,25 +337,6 @@ class Manage
         $tpl_page .= '<h1><center>Добро пожаловать в админку!</center></h1>'. "\n";
     }
 
-    public function apachelog()
-    {
-        global $tpl_page;
-        $this->AdministratorsOnly();
-        $tpl_page .= '<h1><center>Лог Apache:</center></h1><br><table width="100%" border=1><tr><td><pre>';
-        $tpl_page .= shell_exec("get_error_log");
-        /*
-            The executable (not script!) 'get_error_log' should:
-            - execute command like 'cat /var/log/apache2/error.log';
-            - have suid bit;
-            - be executable as www-data user.
-            For example, it may be achieved with following file, say, get_error_log.c:
-                #include <stdlib.h>
-                int main() {return system("cat /var/log/apache2/error.log");}
-            Then you should compile it with 'gcc get_error_log.c -o get_error_log' and then do 'chmod u+s get_error_log'.
-        */
-        $tpl_page .= '</td></tr></table></pre>';
-    }
-
     public function posting_rates()
     {
         global $tc_db, $tpl_page;
@@ -492,75 +471,6 @@ class Manage
 		</form>';
     }
 
-    /*
-    * +------------------------------------------------------------------------------+
-    * Site Administration Pages
-    * +------------------------------------------------------------------------------+
-    */
-
-    /* Edit Dwoo templates */
-    public function templates()
-    {
-        global $tc_db, $tpl_page;
-        $this->AdministratorsOnly();
-
-        $files = array();
-
-        $tpl_page .= '<h2>'. _gettext('Template editor') .'</h2><br />';
-        if ($dh = opendir(KU_TEMPLATEDIR)) {
-            while (($file = readdir($dh)) !== false) {
-                if ($file != '.' && $file != '..') {
-                    $files[] = $file;
-                }
-            }
-            closedir($dh);
-        }
-        sort($files);
-
-        if (isset($_POST['templatedata']) && isset($_POST['template'])) {
-            $this->CheckToken($_POST['token']);
-            $file = basename($_POST['template']);
-            if (in_array($file, $files)) {
-                if (file_exists(KU_TEMPLATEDIR . '/'. $file)) {
-                    file_put_contents(KU_TEMPLATEDIR . '/'. $file, $_POST['templatedata']);
-                    $tpl_page .= '<hr /><h3>'. _gettext('Template edited') .'</h3><hr />';
-                    unset($_POST['template']);
-                    unset($_POST['templatedata']);
-                }
-            }
-        }
-
-        if (!isset($_POST['templatedata']) && !isset($_POST['template'])) {
-            $tpl_page .= '<form method="post" action="?action=templates">
-			<label for="template">' ._gettext('Template'). ':</label>
-			<select name="template" id="template">';
-            foreach ($files as $template) {
-                $tpl_page .= '<option name="'. $template .'">'. $template . '</option>';
-            }
-            $tpl_page .= '</select>';
-        }
-
-        if (!isset($_POST['templatedata']) && isset($_POST['template'])) {
-            $file = basename($_POST['template']);
-            if (in_array($file, $files)) {
-                if (file_exists(KU_TEMPLATEDIR . '/'. $file)) {
-                    $tpl_page .= '<form method="post" action="?action=templates">
-          <input type="hidden" name="token" value="' . $_SESSION['token'] . '" />
-					<input type="hidden" name="template" value="'. $file .'" />
-					<textarea wrap=off rows=40 cols=100 name="templatedata">'. htmlspecialchars(file_get_contents(KU_TEMPLATEDIR . '/'. $file)) . '</textarea>
-					<label for="rebuild">'. _gettext('Rebuild HTML after edit?') .'</label>
-					<input type="checkbox" name="rebuild" /><br /><br />
-					<div class="desc">'. _gettext('Visit <a href="http://wiki.dwoo.org/">http://wiki.dwoo.org/</a> for syntax information.') . '</div>
-					<div class="desc">'. sprintf(_gettext('To access Kusaba variables, use {%%KU_VARNAME}, for example {%%KU_BOARDSPATH} would be replaced with %s'), KU_BOARDSPATH) . '</div>
-					<div class="desc">'. _gettext('Enclose text in {t}{/t} blocks to allow them to be translated for different languages.') . '</div><br /><br />';
-                }
-            }
-        }
-
-        $tpl_page .= '<input type="submit" value="' ._gettext('Edit') . '" /></form>';
-    }
-
-    /* Display disk space used per board, and finally total in a large table */
     public function spaceused()
     {
         global $tc_db, $tpl_page;
@@ -798,7 +708,6 @@ class Manage
         $tpl_page .= '</table>';
     }
 
-    /* Display moderators and administrators actions which were logged */
     public function modlog()
     {
         global $tc_db, $tpl_page;

@@ -79,7 +79,6 @@ if (!$manage_class->ValidateSession(true)) {
         '<ul>' . "\n";
         $tpl_links .= '
 		<li><a style="color:green" href="manage_page.php?action=updateengine">' . _gettext('Update engine') . '</a></li>
-		<li><a style="color:red" href="manage_page.php?action=templates">' . _gettext('Edit templates') . '</a></li>
 		<li><a style="color:red" href="manage_page.php?action=specialthreads">' . _gettext('Special threads') . '</a></li>
 		<li><a href="manage_page.php?action=spaceused">' . _gettext('Disk space used') . '</a></li>
 		<li><a style="color:blue" href="manage_page.php?action=staff">' . _gettext('Staff') . '</a></li>
@@ -87,7 +86,7 @@ if (!$manage_class->ValidateSession(true)) {
 		<li><a href="manage_page.php?action=proxyban">' . _gettext('Ban proxy list') . '</a></li>
 		<li><a href="manage_page.php?action=sql">' . _gettext('SQL query') . '</a></li>
 		<li><a href="manage_page.php?action=rebuildanswerslist">' . _gettext('Rebuild static reply map') . '</a></li>
-		<li><a href="manage_page.php?action=apachelog">' . _gettext('Apache log') . '</a></li>' . "\n";
+		<li><a href="manage_page.php?action=posting_rates">' . _gettext('Posting rates') . '</a></li>' . "\n";
         $tpl_links .= '</ul></div>';
     }
     if ($manage_class->CurrentUserIsAdministrator()) {
