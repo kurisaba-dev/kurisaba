@@ -90,9 +90,14 @@ $cf['KU_TEMPLATEDIR'] = $cf['KU_ENGINEDIR'] . 'dwoo/templates';
 $cf['KU_CACHEDTEMPLATEDIR'] = $cf['KU_STORAGEDIR'] . 'tmp/dwoo';
 
 // CSS/JS caching stuff
-$css_js_files = array("static/css/*.css", "static/css/styles/*.css", "static/javascript/*.js", "static/javascript/prettify/*.js");
-$maxtimestamp = max(array_map("filemtime", array_merge(...array_map(fn($x) => glob($cf['KU_ENGINEDIR'] . $x), $css_js_files))));
-$cf['KU_JS_CSS_VER'] = $maxtimestamp;
+if (!is_dir($cf['KU_ENGINEDIR'] . "static"))
+{
+    $cf['KU_JS_CSS_VER'] = filemtime($cf['KU_ENGINEDIR']); // Docker case
+} else {
+    $css_js_files = array("static/css/*.css", "static/css/styles/*.css", "static/javascript/*.js", "static/javascript/prettify/*.js");
+    $maxtimestamp = max(array_map("filemtime", array_merge(...array_map(fn($x) => glob($cf['KU_ENGINEDIR'] . $x), $css_js_files))));
+    $cf['KU_JS_CSS_VER'] = $maxtimestamp;
+}
 
 // Kurisaba version (not meaningful yet)
 $cf['KU_VERSION']    = '1.0 based on KusabaX-0.9.3/0chan';
