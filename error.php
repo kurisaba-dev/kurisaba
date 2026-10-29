@@ -73,6 +73,11 @@ if (substr($address, 0, strlen(KU_WEBPATH)) == KU_WEBPATH) {
     $address = substr($address, strlen(KU_WEBPATH));
 }
 
+// Default page
+if($address == "/") {
+    do_redirect(KU_WEBPATH . '/' . KU_MAINPAGE);
+}
+
 // Board Page 0
 if (preg_match("/^\/([a-z]+)\/board\.html$/", $address, $matches)) {
     $board_class = CreateBoard($matches[1]);
