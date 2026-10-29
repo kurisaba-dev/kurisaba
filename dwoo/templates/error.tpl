@@ -5,7 +5,7 @@
 <title>{%KU_NAME}</title>
 <link rel="icon" type="image/ico" href="{%KU_WEBPATH}/favicon.ico" sizes="32x32">
 <link rel="shortcut icon" href="{%KU_WEBPATH}/favicon.ico" />
-<link rel="stylesheet" type="text/css" href="{%KU_WEBPATH}/css/menu_global.css?v={%KU_JS_CSS_VER}" />
+<link rel="stylesheet" type="text/css" href="{%KU_WEBPATH}/static/css/menu_global.css?v={%KU_JS_CSS_VER}" />
 
 <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0">
 <script type="text/javascript"><!--
@@ -23,12 +23,12 @@
 		var ispage = true;
 {/if}
 //--></script>
-<link rel="stylesheet" type="text/css" href="{%KU_WEBPATH}/css/img_global.css?v={%KU_JS_CSS_VER}" />
+<link rel="stylesheet" type="text/css" href="{%KU_WEBPATH}/static/css/img_global.css?v={%KU_JS_CSS_VER}" />
 {loop $styles}
-	<link rel="{if $ neq %KU_DEFAULTSTYLE}alternate {/if}stylesheet" type="text/css" href="{%KU_WEBPATH}/css/styles/menu_{$}.css?v={%KU_JS_CSS_VER}" title="{$|capitalize}" />
+	<link rel="{if $ neq %KU_DEFAULTSTYLE}alternate {/if}stylesheet" type="text/css" href="{%KU_WEBPATH}/static/css/styles/menu_{$}.css?v={%KU_JS_CSS_VER}" title="{$|capitalize}" />
 {/loop}
 {loop $ku_styles}
-	<link rel="{if $ neq $__.ku_defaultstyle}alternate {/if}stylesheet" type="text/css" href="{%KU_WEBPATH}/css/styles/{$}.css?v={%KU_JS_CSS_VER}" title="{$|capitalize}" />
+	<link rel="{if $ neq $__.ku_defaultstyle}alternate {/if}stylesheet" type="text/css" href="{%KU_WEBPATH}/static/css/styles/{$}.css?v={%KU_JS_CSS_VER}" title="{$|capitalize}" />
 {/loop}
 {if $locale eq 'ja'}
 	{literal}
@@ -43,14 +43,14 @@
 
 <script>
 if (!window.jQuery) {
-	document.write('<script src="{%KU_WEBPATH}/lib/javascript/jquery-1.11.1.min.js"><\/script>');
+	document.write('<script src="{%KU_WEBPATH}/static/javascript/jquery-1.11.1.min.js"><\/script>');
 }
 </script>
 <script>
-	document.write('<script src="{%KU_WEBPATH}/lib/javascript/kusaba.new.js?v={%KU_JS_CSS_VER}"><\/script>');
+	document.write('<script src="{%KU_WEBPATH}/static/javascript/kusaba.new.js?v={%KU_JS_CSS_VER}"><\/script>');
 </script>	
 
-<!-- <script src="{%KU_WEBPATH}/lib/javascript/kusaba.new.js?v={%KU_JS_CSS_VER}"></script> -->
+<!-- <script src="{%KU_WEBPATH}/static/javascript/kusaba.new.js?v={%KU_JS_CSS_VER}"></script> -->
 		
 <style type="text/css">{literal}
 body {
@@ -61,7 +61,7 @@ body {
 <body>
 <h1 style="font-size: 3em;">{t}Error{/t}</h1>
 <br />
-<img style="display: block; margin-left: auto; margin-right: auto;"  height="200" width="200" src="{%KU_WEBPATH}/images/error.png">
+<img style="display: block; margin-left: auto; margin-right: auto;"  height="200" width="200" src="{%KU_WEBPATH}/static/images/error.png">
 <br />
 <h2 style="font-size: 2em;font-weight: bold;text-align: center;">
 {$errormsg}

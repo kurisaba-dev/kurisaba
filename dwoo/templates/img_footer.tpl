@@ -31,7 +31,7 @@
 						<hr />
 						<div id="formup" style="position: relative; float: right; text-align: right; right: 0px; z-index: 10;">
 							<a href="#boardlist_header" onclick="if (!rswap.i) rswap.swap(); return true;" title="Вверх">
-								<img src="/css/icons/blank.gif" border="0" class="downscroll spritebtn" style="transform: scaleY(-1);">
+								<img src="/static/images/blank.gif" border="0" class="downscroll spritebtn" style="transform: scaleY(-1);">
 							</a>
 						</div>
 					</form>

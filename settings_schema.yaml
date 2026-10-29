@@ -265,7 +265,7 @@ config:
         type: int
 
   - styles:
-    name: 'Стили досок. Для каждого стиля обычной или upload-доски в каталоге css/styles должны быть файлы <имя_стиля>.css и menu_<имя_стиля>.css.'
+    name: 'Стили досок. Для каждого стиля обычной или upload-доски в каталоге static/css/styles должны быть файлы <имя_стиля>.css и menu_<имя_стиля>.css.'
     options:
       KU_STYLES:
         default: 'aobasu:myata:cdark:claire:claire.advance:cchaos:summer:winter:autumn:photon:modern:dark:tomorrow:urupchan:futaba:burichan:kusabax:gurochan:gentoochan:tuvik:suigintou'

@@ -29,8 +29,8 @@ require 'settings_manager.php';
 if (!KU_EXPAND) {
     die();
 }
-require KU_ENGINEDIR . 'inc/functions.php';
-require KU_ENGINEDIR . 'inc/classes/board-post.class.php';
+require KU_ENGINEDIR . 'lib/functions.php';
+require KU_ENGINEDIR . 'lib/classes/board-post.class.php';
 
 $board_name = $tc_db->GetOne("SELECT `name` FROM `" . KU_DBPREFIX . "boards` WHERE `name` = " . $tc_db->qstr($_GET['board']) . "");
 if ($board_name != '') {
@@ -42,7 +42,7 @@ if ($board_name != '') {
     die('<font color="red">Invalid board.</font>');
 }
 
-require KU_ENGINEDIR . 'inc/classes/bans.class.php';
+require KU_ENGINEDIR . 'lib/classes/bans.class.php';
 $bans_class = new Bans();
 if ($bans_class->BanCheckSilent(KU_REMOTE_ADDR, $board_class->board, true)) {
     do_redirect(KU_WEBPATH . '/banned.php');
@@ -53,7 +53,7 @@ $board_class->dwoo_data->assign('isexpand', true);
 $board_class->dwoo_data->assign('board', $board_class->board);
 $board_class->dwoo_data->assign('file_path', KU_BOARDSPATH . '/' . $board_class->board['name']);
 if (isset($_GET['preview'])) {
-    require KU_ENGINEDIR . 'inc/classes/parse.class.php';
+    require KU_ENGINEDIR . 'lib/classes/parse.class.php';
     $parse_class = new Parse();
 
     if (isset($_GET['board']) && isset($_GET['parentid']) && isset($_GET['message'])) {

@@ -30,7 +30,7 @@ require 'settings_manager.php';
 </head>
 <?php
 if (isset($_GET['info'])) {
-    require KU_ENGINEDIR . 'inc/functions.php';
+    require KU_ENGINEDIR . 'lib/functions.php';
     echo '<body>';
     echo '<h1>General info:</h1><ul>';
     echo '<li>Version: Kurisaba ' . KU_VERSION . '</li>';

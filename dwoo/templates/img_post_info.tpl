@@ -34,7 +34,7 @@
 		{if $post.name neq ''}
 			&nbsp;
 			<a class="extrabtns" href="#" onclick="hide_poster('{$post.name}');return false;" title="Скрыть этого неймфага">
-				<img src="{%KU_WEBPATH}/css/icons/blank.gif" border="0" class="hidethread spritebtn" alt="Скрыть этого неймфага" />
+				<img src="{%KU_WEBPATH}/static/images/blank.gif" border="0" class="hidethread spritebtn" alt="Скрыть этого неймфага" />
 			</a>
 		{/if}
 
@@ -58,12 +58,12 @@
 {strip}
 	{if $post.parentid neq 0}
 		<a class="extrabtns" href="#" onclick="hidepost_num('{$board.name}',{$post.id});return false;" title="Скрыть пост">
-			<img src="{%KU_WEBPATH}/css/icons/blank.gif" border="0" class="hidethread spritebtn" alt="Скрыть пост" />
+			<img src="{%KU_WEBPATH}/static/images/blank.gif" border="0" class="hidethread spritebtn" alt="Скрыть пост" />
 		</a>
 	{else}
 		<span id="hide{$post.id}">
 			<a href="#" onclick="javascript:{if !$isfeed}togglethread{else}hidethread_num{/if}('{$board.name}','{$post.id}');return false;" title="Скрыть тред">
-				<img src="{%KU_WEBPATH}/css/icons/blank.gif" border="0" class="hidethread spritebtn" alt="Скрыть тред" />
+				<img src="{%KU_WEBPATH}/static/images/blank.gif" border="0" class="hidethread spritebtn" alt="Скрыть тред" />
 			</a>
 		</span>
 	{/if}
@@ -79,17 +79,17 @@
 		{if %KU_QUICKREPLY}
 			{strip}
 				<a href="#" data-parent="{if $post.parentid eq 0}{$post.id}{else}{$post.parentid}{/if}" data-forceexternalboard="{if $forceexternalboard}yes{else}no{/if}" data-boardname="{$board.name}" data-maxfilesize="{$board.maximagesize}" data-postnum="{$post.id}" class="qr-btn qrl" title="{t}Quick Reply{/t}{if not $is_board_page}  в тред {if $post.parentid eq 0}{$post.id}{else}{$post.parentid}{/if}{/if}">
-					<img src="{%KU_WEBPATH}/css/icons/blank.gif" border="0" class="quickreply spritebtn" alt="quickreply">
+					<img src="{%KU_WEBPATH}/static/images/blank.gif" border="0" class="quickreply spritebtn" alt="quickreply">
 				</a>
 				<a href="#" data-parent="{if $post.parentid eq 0}{$post.id}{else}{$post.parentid}{/if}" data-forceexternalboard="{if $forceexternalboard}yes{else}no{/if}" data-boardname="{$board.name}" data-maxfilesize="{$board.maximagesize}" data-postnum="{$post.id}" class="qed" style="margin-left: 4px;" title="Переотправить пост {$post.id}">
-					<img src="{%KU_WEBPATH}/css/icons/blank.gif" border="0" class="quickedit spritebtn" alt="quickedit">
+					<img src="{%KU_WEBPATH}/static/images/blank.gif" border="0" class="quickedit spritebtn" alt="quickedit">
 				</a>
 			{/strip}
 		{/if}
 	{/if}
 
 	{if $board.balls}
-		<img class="_country_" src="{%KU_WEBPATH}/images/flags/{$post.country}.png">
+		<img class="_country_" src="{%KU_WEBPATH}/static/images/flags/{$post.country}.png">
 	{/if}
 	{if $post.parentid neq 0}
 		{if $board.showid}
@@ -97,10 +97,10 @@
 		{/if}
 	{/if}
 	{if $post.locked eq 1}
-		<img style="border: 0;" src="{%KU_WEBPATH}/css/images/locked.gif" alt="{t}Locked{/t}" />
+		<img style="border: 0;" src="{%KU_WEBPATH}/static/images/locked.gif" alt="{t}Locked{/t}" />
 	{/if}
 	{if $post.stickied eq 1}
-		<img style="border: 0;" src="{%KU_WEBPATH}/css/images/sticky.gif" alt="{t}Stickied{/t}" />
+		<img style="border: 0;" src="{%KU_WEBPATH}/static/images/sticky.gif" alt="{t}Stickied{/t}" />
 	{/if}
 </span>
 {if $post.tags}

@@ -66,13 +66,13 @@
 							{if $post.file_type eq 'jpg' or $post.file_type eq 'gif' or $post.file_type eq 'png' or $post.file_type eq 'webp'}
 								&nbsp;
 								<a class="extrabtns" target="_blank" href="https://www.google.com/searchbyimage?image_url={$file_path}/src/{$post.file}.{$post.file_type}" title="Искать картинку в гугле">
-									<img src="{%KU_WEBPATH}/css/icons/blank.gif" border="0" class="searchpicg spritebtn sb-l" alt="Искать картинку в гугле">
+									<img src="{%KU_WEBPATH}/static/images/blank.gif" border="0" class="searchpicg spritebtn sb-l" alt="Искать картинку в гугле">
 								</a>
 								<a class="extrabtns" target="_blank" href="https://iqdb.org/?url={$file_path}/src/{$post.file}.{$post.file_type}" title="Искать картинку в iqdb">
-									<img src="{%KU_WEBPATH}/css/icons/blank.gif" border="0" class="searchpici spritebtn sb-c" alt="Искать картинку в iqdb">
+									<img src="{%KU_WEBPATH}/static/images/blank.gif" border="0" class="searchpici spritebtn sb-c" alt="Искать картинку в iqdb">
 								</a>
 								<a class="extrabtns" target="_blank" href="https://www.tineye.com/search?url={$file_path}/src/{$post.file}.{$post.file_type}" title="Искать картинку в TinEye">
-									<img src="{%KU_WEBPATH}/css/icons/blank.gif" border="0" class="searchpict spritebtn sb-r" alt="Искать картинку в TinEye">
+									<img src="{%KU_WEBPATH}/static/images/blank.gif" border="0" class="searchpict spritebtn sb-r" alt="Искать картинку в TinEye">
 								</a>
 							{/if}
 							{if $post.id3.playtime_string neq ''}

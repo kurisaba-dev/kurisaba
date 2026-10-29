@@ -4,7 +4,7 @@
 <title>{$title}</title>
 <link rel="icon" type="image/ico" id="favicon" href="{%KU_WEBPATH}/favicon.ico" sizes="32x32">
 {if $locale != 'en'}
-	<link rel="gettext" type="application/x-po" href="{%KU_WEBPATH}/inc/lang/{$locale}/LC_MESSAGES/kusaba.po" />
+	<link rel="gettext" type="application/x-po" href="{%KU_WEBPATH}/lib/lang/{$locale}/LC_MESSAGES/kusaba.po" />
 {/if}
 <meta http-equiv="Pragma" content="no-cache" />
 <meta http-equiv="cache-control" content="no-cache" />

@@ -4,12 +4,12 @@ header('Content-type: text/html; charset=utf-8');
 
 require 'settings_manager.php';
 
-require KU_ENGINEDIR . 'inc/functions.php';
-require KU_ENGINEDIR . 'inc/classes/board-post.class.php';
+require KU_ENGINEDIR . 'lib/functions.php';
+require KU_ENGINEDIR . 'lib/classes/board-post.class.php';
 session_start(['cookie_samesite' => 'Strict']);
 
 // Users that banned at at least one board, can't read the feed.
-require KU_ENGINEDIR . 'inc/classes/bans.class.php';
+require KU_ENGINEDIR . 'lib/classes/bans.class.php';
 $bans_class = new Bans();
 if ($bans_class->BanCheckSilent(KU_REMOTE_ADDR, '', true)) {
     do_redirect(KU_WEBPATH . '/banned.php');

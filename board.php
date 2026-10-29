@@ -33,12 +33,12 @@
 
 session_start(['cookie_samesite' => 'Strict']);
 require 'settings_manager.php';
-require KU_ENGINEDIR . 'inc/functions.php';
-require KU_ENGINEDIR . 'inc/func/nrand.php';
-require KU_ENGINEDIR . 'inc/classes/board-post.class.php';
-require KU_ENGINEDIR . 'inc/classes/bans.class.php';
-require KU_ENGINEDIR . 'inc/classes/posting.class.php';
-require KU_ENGINEDIR . 'inc/classes/parse.class.php';
+require KU_ENGINEDIR . 'lib/functions.php';
+require KU_ENGINEDIR . 'lib/func/nrand.php';
+require KU_ENGINEDIR . 'lib/classes/board-post.class.php';
+require KU_ENGINEDIR . 'lib/classes/bans.class.php';
+require KU_ENGINEDIR . 'lib/classes/posting.class.php';
+require KU_ENGINEDIR . 'lib/classes/parse.class.php';
 
 // STAGE 1: Check type of operation and specifically format return actions.
 
@@ -166,7 +166,7 @@ if ($operation_delete) { // currently `noreturn`.
         }
 
         // 4.2. DELETE or MODDELETE
-        elseif (isset($_POST['postpassword']) || (isset($_POST['moddelete']) && (require_once KU_ENGINEDIR . 'inc/classes/manage.class.php') && Manage::CurrentUserIsModeratorOfBoard($board_class->board['name'], $_SESSION['manageusername']) && $ismod = true)) {
+        elseif (isset($_POST['postpassword']) || (isset($_POST['moddelete']) && (require_once KU_ENGINEDIR . 'lib/classes/manage.class.php') && Manage::CurrentUserIsModeratorOfBoard($board_class->board['name'], $_SESSION['manageusername']) && $ismod = true)) {
             // They clicked the Delete button
             if ($_POST['postpassword'] != '' || $ismod) {
                 if (md5($_POST['postpassword']) == $post_class->post['password'] || $ismod) {
@@ -410,7 +410,7 @@ if ($operation_post) { // it's `noreturn`.
     }
 
     if ($board_class->board['locked'] == 0 || ($user_authority > 0 && $user_authority != 3)) {
-        require_once KU_ENGINEDIR . 'inc/classes/upload.class.php';
+        require_once KU_ENGINEDIR . 'lib/classes/upload.class.php';
         $upload_class = new Upload();
         if ($post_isreply) {
             $upload_class->isreply = true;

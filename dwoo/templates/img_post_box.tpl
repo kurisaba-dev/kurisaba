@@ -2,7 +2,7 @@
 	<hr />
 	<div id="formdown" style="position: relative; float: right; text-align: right; right: 0px; z-index: 10;">
 		<a href="#boardlist_footer" onclick="if (rswap.i) rswap.swap(); return true;" title="Вниз">
-			<img src="/css/icons/blank.gif" border="0" class="downscroll spritebtn">
+			<img src="/static/images/blank.gif" border="0" class="downscroll spritebtn">
 		</a>
 	</div>
 {/if}
@@ -41,7 +41,7 @@
 					<td>
 						<input type="text" name="name" size="76" maxlength="{%KU_MAXNAMELENGTH}" accesskey="n" style="width: 455px;"/>
 						<a href="#" onclick="javascript:emgr_ui_onclick();return false;" title="История записей">
-							<img src="/css/icons/blank.gif" border="0" class="spritebtn editmgr">
+							<img src="/static/images/blank.gif" border="0" class="spritebtn editmgr">
 						</a>
 					</td>
 				</tr>
@@ -50,10 +50,10 @@
 			<span class="extrabtns postboxcontrol" style="display: none;">
 				<span class="qrpinner">
 					<a href="#" onclick="javascript:$('#postform').pin();return false;" title="Прикрепить / Открепить">
-						<img src="/css/icons/blank.gif" border="0" class="spritebtn pinner"></a>
+						<img src="/static/images/blank.gif" border="0" class="spritebtn pinner"></a>
 				</span>
 				<a href="#" onclick="javascript:quickreply_hide();return false;" title="Закрыть">
-					<img src="/css/icons/blank.gif" border="0" class="closebox spritebtn">
+					<img src="/static/images/blank.gif" border="0" class="closebox spritebtn">
 				</a>
 			</span>
 			
@@ -82,7 +82,7 @@
 				</td>
 				<td>
 					<textarea name="message" cols="58" rows="5" accesskey="m" id="message" style="width: 520px;"></textarea>
-					<div id="quickeditloading" style="display: none;"><img src="/images/loading.gif"></div>
+					<div id="quickeditloading" style="display: none;"><img src="/static/images/loading.gif"></div>
 					<div class="markupbtns">
 						<nobr style="font-size: 16px;">
 							<a title="{t}Bold{/t}" href="#" class="uibutton uib-mup" data-mups="**" data-mupe="**"><b>Жирный</b></a>

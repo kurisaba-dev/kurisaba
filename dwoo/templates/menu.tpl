@@ -6,9 +6,9 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <title>{%KU_NAME} Navigation</title>
 {if %KU_MENUTYPE eq 'normal'}
-  <link rel="stylesheet" type="text/css" href="{%KU_WEBPATH}/css/menu_global.css?v={%KU_JS_CSS_VER}" />
+  <link rel="stylesheet" type="text/css" href="{%KU_WEBPATH}/static/css/menu_global.css?v={%KU_JS_CSS_VER}" />
   {loop $styles}
-    <link rel="{if $ neq %KU_DEFAULTSTYLE}alternate {/if}stylesheet" type="text/css" href="{%KU_WEBPATH}/css/styles/menu_{$}.css?v={%KU_JS_CSS_VER}" title="{$|capitalize}" />
+    <link rel="{if $ neq %KU_DEFAULTSTYLE}alternate {/if}stylesheet" type="text/css" href="{%KU_WEBPATH}/static/css/styles/menu_{$}.css?v={%KU_JS_CSS_VER}" title="{$|capitalize}" />
   {/loop}
 {else}
 	{literal}<style type="text/css">body { margin: 0px; } h1 { font-size: 1.25em; } h2 { font-size: 0.8em; font-weight: bold; color: #CC3300; } ul { list-style-type: none; padding: 0px; margin: 0px; } li { font-size: 0.8em; padding: 0px; margin: 0px; }</style>{/literal}
@@ -21,14 +21,14 @@
 	var ku_captchaenabled = '{%KU_CAPTCHAENABLED}';
 </script>
 <link rel="shortcut icon" href="{%KU_WEBPATH}/favicon.ico" />
-<script type="text/javascript" src="{%KU_WEBPATH}/lib/javascript/gettext.js"></script>
-<!-- <script type="text/javascript" src="{%KU_WEBPATH}/lib/javascript/menu.js"></script> -->
-<script src="{%KU_WEBPATH}/lib/javascript/jquery-1.11.1.min.js"></script>
-<script type="text/javascript" src="{%KU_WEBPATH}/lib/javascript/kusaba.new.js?v={%KU_JS_CSS_VER}"></script>
+<script type="text/javascript" src="{%KU_WEBPATH}/static/javascript/gettext.js"></script>
+<!-- <script type="text/javascript" src="{%KU_WEBPATH}/static/javascript/menu.js"></script> -->
+<script src="{%KU_WEBPATH}/static/javascript/jquery-1.11.1.min.js"></script>
+<script type="text/javascript" src="{%KU_WEBPATH}/static/javascript/kusaba.new.js?v={%KU_JS_CSS_VER}"></script>
 <script type="text/javascript"><!--
 var _SITENAME = '{%KU_NAME}';
 //--></script>
-	<script src="lib/javascript/frame.js?v={%KU_JS_CSS_VER}"></script>
+	<script src="static/javascript/frame.js?v={%KU_JS_CSS_VER}"></script>
 <script type="text/javascript"><!--
 var ku_boardspath = '{%KU_BOARDSPATH}';
 {if $showdirs eq 0 && $files.0 neq $files.1 }
@@ -175,7 +175,7 @@ function iter_obj(object, callback) {
 				{/if}
 				{$brd.desc}
 				{if $brd.locked eq 1}
-					<img src="{%KU_WEBPATH}/css/images/locked.gif" border="0" alt="{t}Locked{/t}">
+					<img src="{%KU_WEBPATH}/static/images/locked.gif" border="0" alt="{t}Locked{/t}">
 				{/if}
 				<span id="newposts_{$brd.name}"></span>
 				</a></td><td style="padding: 0px;">				<a href="{%KU_BOARDSPATH}/{$brd.name}/catalog.html">[Каталог]</a>				</td></tr></table>				</li>

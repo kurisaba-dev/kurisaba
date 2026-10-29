@@ -90,7 +90,7 @@ $cf['KU_TEMPLATEDIR'] = $cf['KU_ENGINEDIR'] . 'dwoo/templates';
 $cf['KU_CACHEDTEMPLATEDIR'] = $cf['KU_STORAGEDIR'] . 'tmp/dwoo';
 
 // CSS/JS caching stuff
-$css_js_files = array("css/*.css", "css/styles/*.css", "lib/javascript/*.js", "lib/javascript/prettify/*.js");
+$css_js_files = array("static/css/*.css", "static/css/styles/*.css", "static/javascript/*.js", "static/javascript/prettify/*.js");
 $maxtimestamp = max(array_map("filemtime", array_merge(...array_map(fn($x) => glob($cf['KU_ENGINEDIR'] . $x), $css_js_files))));
 $cf['KU_JS_CSS_VER'] = $maxtimestamp;
 
@@ -142,7 +142,7 @@ class DatabaseProxy
 function prepare_database()
 {
     global $cf, $tc_db;
-    $sql = explode(";\n", file_get_contents($cf['KU_ENGINEDIR'] . "lib/deploy/database.sql"));
+    $sql = explode(";\n", file_get_contents($cf['KU_ENGINEDIR'] . "deploy/database.sql"));
     foreach ($sql as $statement) {
         $statement = trim(str_replace("\n", " ", str_replace("{{KU_DBPREFIX}}", $cf['KU_DBPREFIX'], $statement)));
         if(!empty($statement)) {
@@ -150,10 +150,14 @@ function prepare_database()
         }
     }
     if(!file_exists($cf['KU_ENGINEDIR'] . 'front.php')) {
-        copy($cf['KU_ENGINEDIR'] . 'lib/deploy/front.php', $cf['KU_ENGINEDIR'] . 'front.php');
+        copy($cf['KU_ENGINEDIR'] . 'deploy/front.php', $cf['KU_ENGINEDIR'] . 'front.php');
     }
     if(stristr("Apache", $_SERVER['SERVER_SOFTWARE']) && !file_exists($cf['KU_ENGINEDIR'] . '.htaccess')) {
-        copy($cf['KU_ENGINEDIR'] . 'lib/deploy/.htaccess.template', $cf['KU_ENGINEDIR'] . '.htaccess');
+        copy($cf['KU_ENGINEDIR'] . 'deploy/.htaccess.template', $cf['KU_ENGINEDIR'] . '.htaccess');
+    }
+    @mkdir($cf['KU_STORAGEDIR'] . "filetypes", 0755);
+    foreach (glob($cf['KU_ENGINEDIR'] . 'deploy/filetypes/*') as $filename) {
+        copy($filename, $cf['KU_STORAGEDIR'] . 'filetypes/' . basename($filename));
     }
     @mkdir($cf['KU_STORAGEDIR'] . "tmp", 0755);
     @mkdir($cf['KU_STORAGEDIR'] . "tmp/dwoo", 0755);
@@ -225,7 +229,7 @@ function captcha_color($color)
 // Gettext
 _textdomain('kusaba');
 _setlocale(LC_ALL, KU_LOCALE);
-_bindtextdomain('kusaba', KU_ENGINEDIR . 'inc/lang');
+_bindtextdomain('kusaba', KU_ENGINEDIR . 'lib/lang');
 _bind_textdomain_codeset('kusaba', KU_CHARSET);
 
 // Cookies

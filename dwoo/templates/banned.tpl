@@ -2,14 +2,14 @@
 <html>
 <head>
 <title>{t}YOU ARE BANNED{/t}!</title>
-<link rel="stylesheet" type="text/css" href="{%KU_WEBPATH}/css/banned.css?v={%KU_JS_CSS_VER}">
+<link rel="stylesheet" type="text/css" href="{%KU_WEBPATH}/static/css/banned.css?v={%KU_JS_CSS_VER}">
 <link rel="shortcut icon" href="{%KU_WEBPATH}/favicon.ico">
 </head>
 <body>
 <h1>{%KU_NAME}</h1>
 <div style="margin: 3em;">
 	<h2>&nbsp;{t}YOU ARE BANNED{/t}! :\</h2>
-	<img src="{%KU_WEBPATH}/images/youarebanned.jpg" style="float: right;" alt=":'(">
+	<img src="{%KU_WEBPATH}/static/images/youarebanned.jpg" style="float: right;" alt=":'(">
 	{foreach name=bans item=ban from=$bans}
 		{if not $.foreach.bans.first}
 			{t}Additionally{/t},

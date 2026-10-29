@@ -43,11 +43,11 @@
 <link rel="canonical" href="{%KU_BOARDSPATH}/{$board.name}/res/{$replythread}.html" />
 {/if}
 <!-- <link href='https://fonts.googleapis.com/css?family=Roboto:400,700,400italic,700italic&subset=latin,cyrillic' rel='stylesheet' type='text/css'> -->
-<link rel="stylesheet" type="text/css" href="{%KU_WEBPATH}/css/img_global.css?v={%KU_JS_CSS_VER}" />
+<link rel="stylesheet" type="text/css" href="{%KU_WEBPATH}/static/css/img_global.css?v={%KU_JS_CSS_VER}" />
 {loop $ku_styles}
-	<link rel="{if $ neq $__.ku_defaultstyle}alternate {/if}stylesheet" type="text/css" href="{%KU_WEBPATH}/css/styles/{$}.css?v={%KU_JS_CSS_VER}" title="{$|capitalize}" />
+	<link rel="{if $ neq $__.ku_defaultstyle}alternate {/if}stylesheet" type="text/css" href="{%KU_WEBPATH}/static/css/styles/{$}.css?v={%KU_JS_CSS_VER}" title="{$|capitalize}" />
 {/loop}
-<link href="{%KU_WEBPATH}/css/prettify.css" type="text/css" rel="stylesheet" />
+<link href="{%KU_WEBPATH}/static/css/prettify.css" type="text/css" rel="stylesheet" />
 {if $locale eq 'ja'}
 	{literal}
 	<style type="text/css">
@@ -58,30 +58,30 @@
 	</style>
 	{/literal}
 {/if}
-<script type="text/javascript" src="{%KU_WEBPATH}/lib/javascript/voice-recorder.js"></script>
+<script type="text/javascript" src="{%KU_WEBPATH}/static/javascript/voice-recorder.js"></script>
 <!-- <script src="//cdnjs.cloudflare.com/ajax/libs/headjs/1.0.3/head.load.min.js"></script> -->
-<script type="text/javascript" src="{%KU_WEBPATH}/lib/javascript/gettext.js"></script>
+<script type="text/javascript" src="{%KU_WEBPATH}/static/javascript/gettext.js"></script>
 <!-- <script src="//cdnjs.cloudflare.com/ajax/libs/headjs/1.0.3/head.load.min.js"></script> -->
 <script>
 if (!window.head) {
-	document.write('<script src="{%KU_WEBPATH}/lib/javascript/head.load.min.js"><\/script>');
+	document.write('<script src="{%KU_WEBPATH}/static/javascript/head.load.min.js"><\/script>');
 }
 </script>
 <!-- <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script> -->
 <script>
 if (!window.jQuery) {
-	document.write('<script src="{%KU_WEBPATH}/lib/javascript/jquery-1.11.1.min.js"><\/script>');
+	document.write('<script src="{%KU_WEBPATH}/static/javascript/jquery-1.11.1.min.js"><\/script>');
 }
 </script>
 <!-- <script src="//cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.min.js"></script> -->
 <script>
 if (!window.prettyPrint) {
-	document.write('<script src="{%KU_WEBPATH}/lib/javascript/prettify/prettify.js"><\/script>');
+	document.write('<script src="{%KU_WEBPATH}/static/javascript/prettify/prettify.js"><\/script>');
 }
 </script>
-<!-- <script src="{%KU_WEBPATH}/lib/javascript/kusaba.new.js?v={%KU_JS_CSS_VER}"></script> -->
+<!-- <script src="{%KU_WEBPATH}/static/javascript/kusaba.new.js?v={%KU_JS_CSS_VER}"></script> -->
 <script>
-	document.write('<script src="{%KU_WEBPATH}/lib/javascript/kusaba.new.js?v={%KU_JS_CSS_VER}"><\/script>');
+	document.write('<script src="{%KU_WEBPATH}/static/javascript/kusaba.new.js?v={%KU_JS_CSS_VER}"><\/script>');
 </script>
 <!-- <script src="//cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.min.js"></script> -->
 <style>
@@ -89,25 +89,25 @@ if (!window.prettyPrint) {
   font-family: 'Roboto';
   font-style: normal;
   font-weight: 400;
-  src: local('Roboto'), local('Roboto-Regular'), url('{%KU_WEBPATH}/css/fonts/Roboto-Regular.woff') format('woff');
+  src: local('Roboto'), local('Roboto-Regular'), url('{%KU_WEBPATH}/static/fonts/Roboto-Regular.woff') format('woff');
 }
 @font-face {
   font-family: 'Roboto';
   font-style: normal;
   font-weight: 700;
-  src: local('Roboto Bold'), local('Roboto-Bold'), url('{%KU_WEBPATH}/css/fonts/Roboto-Bold.woff') format('woff');
+  src: local('Roboto Bold'), local('Roboto-Bold'), url('{%KU_WEBPATH}/static/fonts/Roboto-Bold.woff') format('woff');
 }
 @font-face {
   font-family: 'Roboto';
   font-style: italic;
   font-weight: 400;
-  src: local('Roboto Italic'), local('Roboto-Italic'), url('{%KU_WEBPATH}/css/fonts/Roboto-Italic.woff') format('woff');
+  src: local('Roboto Italic'), local('Roboto-Italic'), url('{%KU_WEBPATH}/static/fonts/Roboto-Italic.woff') format('woff');
 }
 @font-face {
   font-family: 'Roboto';
   font-style: italic;
   font-weight: 700;
-  src: local('Roboto Bold Italic'), local('Roboto-BoldItalic'), url('{%KU_WEBPATH}/css/fonts/Roboto-BoldItalic.woff') format('woff');
+  src: local('Roboto Bold Italic'), local('Roboto-BoldItalic'), url('{%KU_WEBPATH}/static/fonts/Roboto-BoldItalic.woff') format('woff');
 }
 
 .scroll

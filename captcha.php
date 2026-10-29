@@ -2,7 +2,7 @@
 
 require 'settings_manager.php';
 define('DOCUMENT_ROOT', dirname(__FILE__));
-include("inc/func/nrand.php");
+include("lib/func/nrand.php");
 $ltrs = rand(KU_CAPTCHAMINLENGTH, KU_CAPTCHAMAXLENGTH);
 if (!isset($_COOKIE['captchalang']) || !in_array($_COOKIE['captchalang'], explode(',', KU_CAPTCHAENABLED))) {
     $_COOKIE['captchalang'] = explode(',', KU_CAPTCHAENABLED)[0];
@@ -46,7 +46,7 @@ function img_code($code)
         $z = 24;
         $x += 20;
         $letter = mb_substr($code, $i, 1);
-        imagettftext($im, $font_arr[$n]["size"], $y, $x, $z, $color, dirname(__FILE__).'/css/fonts/'.$font_arr[$n]["fname"], $letter);
+        imagettftext($im, $font_arr[$n]["size"], $y, $x, $z, $color, dirname(__FILE__).'/static/fonts/'.$font_arr[$n]["fname"], $letter);
 
         if (!isset($_GET['captchaid'])) {
             $_GET['captchaid'] = '';
