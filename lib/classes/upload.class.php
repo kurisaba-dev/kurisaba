@@ -247,7 +247,7 @@ class Upload
                     return _gettext('The uploaded file is banned.');
                 }
                 if ($file['size'] > $board_class->board['maximagesize']) {
-                    return sprintf(_gettext('Please make sure your file is smaller than %dB'), $board_class->board['maximagesize']);
+                    return sprintf(_gettext('Please make sure your file is smaller than %d bytes'), $board_class->board['maximagesize']);
                 }
 
                 switch ($file['error']) {
@@ -257,7 +257,7 @@ class Upload
                         return sprintf(_gettext('The uploaded file exceeds the upload_max_filesize directive (%s) in php.ini.'), ini_get('upload_max_filesize'));
                         break;
                     case UPLOAD_ERR_FORM_SIZE:
-                        return sprintf(_gettext('Please make sure your file is smaller than %dB'), $board_class->board['maximagesize']);
+                        return sprintf(_gettext('Please make sure your file is smaller than %d bytes'), $board_class->board['maximagesize']);
                         break;
                     case UPLOAD_ERR_PARTIAL:
                         return _gettext('The uploaded file was only partially uploaded.');

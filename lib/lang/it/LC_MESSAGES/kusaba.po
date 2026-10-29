@@ -258,7 +258,7 @@ msgstr "Ordina"
 msgid "Password"
 msgstr "Password"
 
-msgid "Please make sure your file is smaller than %dB"
+msgid "Please make sure your file is smaller than %d bytes"
 msgstr "Perfavore assicurarsi che il file sia più piccolo di %dB"
 
 msgid "Please select a board."

@@ -594,7 +594,7 @@ msgstr "Voer aub een zoekopdracht in."
 msgid "Please fill in all required fields."
 msgstr "Vul aub alle vereiste velden in."
 
-msgid "Please make sure your file is smaller than %dB"
+msgid "Please make sure your file is smaller than %d bytes"
 msgstr "Zorg er aub voor dat je bestand kleiner is dan %dB."
 
 msgid "Please select a board."

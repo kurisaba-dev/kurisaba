@@ -768,7 +768,7 @@ msgstr "Inserta la consulta."
 msgid "Please fill in all required fields."
 msgstr "Por favor, llena todos los campos requeridos."
 
-msgid "Please make sure your file is smaller than %dB"
+msgid "Please make sure your file is smaller than %d bytes"
 msgstr "Asegúrate de que el archivo ocupe menos de %dB"
 
 msgid "Please select a board."

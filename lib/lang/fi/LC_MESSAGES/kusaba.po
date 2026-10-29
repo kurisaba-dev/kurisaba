@@ -768,7 +768,7 @@ msgstr "Käytä hakua"
 msgid "Please fill in all required fields."
 msgstr "Ole hyvä ja täytä kaikki vaaditut kentät"
 
-msgid "Please make sure your file is smaller than %dB"
+msgid "Please make sure your file is smaller than %d bytes"
 msgstr "Varmista että tiedostosi on pienempi kuin %dB"
 
 msgid "Please select a board."

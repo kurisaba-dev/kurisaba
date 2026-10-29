@@ -570,7 +570,7 @@ msgstr "Vennligst sett inn en søkestreng."
 msgid "Please fill in all required fields."
 msgstr "Vennligst fyll inn alle nødvendige felt."
 
-msgid "Please make sure your file is smaller than %dB"
+msgid "Please make sure your file is smaller than %d bytes"
 msgstr "Vennligst sjekk at filen din er mindre enn %dB"
 
 msgid "Please select a board."

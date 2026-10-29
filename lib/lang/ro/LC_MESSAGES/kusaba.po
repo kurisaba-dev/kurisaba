@@ -1318,7 +1318,7 @@ msgstr "Lăţimea / înălţimea trebuie să fie cel mult 750."
 msgid "Please fill in all required fields."
 msgstr "Umple toate câmpurile."
 
-msgid "Please make sure your file is smaller than %dB"
+msgid "Please make sure your file is smaller than %d bytes"
 msgstr "Fişierul trebuie să fie mai mic de %dB"
 
 msgid "Please select a board."

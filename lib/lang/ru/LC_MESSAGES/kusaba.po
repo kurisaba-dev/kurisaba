@@ -841,8 +841,8 @@ msgstr "Введите поисковый запрос."
 msgid "Please fill in all required fields."
 msgstr "Заполните все требуемые поля."
 
-msgid "Please make sure your file is smaller than %dB"
-msgstr "Убедитесь, что Ваш файл меньше %dB"
+msgid "Please make sure your file is smaller than %d bytes"
+msgstr "Убедитесь, что Ваш файл меньше %d байт"
 
 msgid "Please select a board."
 msgstr "Выберите доску."

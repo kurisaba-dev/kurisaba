@@ -768,7 +768,7 @@ msgstr "Por favor informe um termo para a busca"
 msgid "Please fill in all required fields."
 msgstr "Por favor preencha todos os dados necessários."
 
-msgid "Please make sure your file is smaller than %dB"
+msgid "Please make sure your file is smaller than %d bytes"
 msgstr "Por favor certifique-se de que seu arquivo é menor que %dB"
 
 msgid "Please select a board."
