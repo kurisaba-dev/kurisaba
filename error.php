@@ -64,15 +64,14 @@ function geoblocked($address, $filetype)
     return false;
 }
 
+// Construct meaningful address part
 $address = KU_PROTO . KU_HOST . explode('?', $_SERVER['REQUEST_URI'])[0]; // Remove request parameters since we're mimicking "static" html
-if (substr($address, 0, strlen(KU_BOARDSPATH)) != KU_BOARDSPATH) {
-    http_response_code(404);
-    request_log("Попытался обратиться к неверному URL ".$_SERVER['REQUEST_URI']);
-    header('Content-type: text/html; charset=utf-8');
-    exitWithErrorPage('404: Ничего такого на этой борде не обнаружено.', '<a href="' . KU_BOARDSPATH . '/' . KU_DEFAULTBOARD . '">Вернуться на главную</a>');
+if (substr($address, 0, strlen(KU_BOARDSPATH)) == KU_BOARDSPATH) {
+    $address = substr($address, strlen(KU_BOARDSPATH));
 }
-$address = substr($address, strlen(KU_BOARDSPATH));
-
+if (substr($address, 0, strlen(KU_WEBPATH)) == KU_WEBPATH) {
+    $address = substr($address, strlen(KU_WEBPATH));
+}
 
 // Board Page 0
 if (preg_match("/^\/([a-z]+)\/board\.html$/", $address, $matches)) {
