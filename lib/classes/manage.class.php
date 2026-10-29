@@ -3766,9 +3766,12 @@ class Manage
 
         if (isset($_GET['limit']) && is_numeric($_GET['limit'])) {
             $tpl_page .= '<table cellspacing="2" cellpadding="1" border="1" width="100%"><tr><th>'. _gettext('Time') .'</th><th>'. _gettext('IP') .'</th><th width="30%">'. _gettext('Request') .'</th><th width="100%">'. _gettext('Action') .'</th></tr>';
-            $requests = $tc_db->GetAll("SELECT * FROM `" . KU_DBPREFIX . "reqlog` ORDER BY `timestamp` DESC LIMIT " . $_GET['limit']);
-            foreach($requests as $request) {
-                $tpl_page .= "<tr><td>" . date("y/m/d(D)H:i:s", $request['timestamp']) . "</td><td>" . $request['ip'] . "</td><td>" . $request['request'] . "</td><td>" . $request['text'] . "</td></tr>";
+            $table = $tc_db->GetAll("SHOW TABLES LIKE '" . KU_DBPREFIX . "reqlog'");
+            if(!empty($table)) {
+                $requests = $tc_db->GetAll("SELECT * FROM `" . KU_DBPREFIX . "reqlog` ORDER BY `timestamp` DESC LIMIT " . $_GET['limit']);
+                foreach($requests as $request) {
+                    $tpl_page .= "<tr><td>" . date("y/m/d(D)H:i:s", $request['timestamp']) . "</td><td>" . $request['ip'] . "</td><td>" . $request['request'] . "</td><td>" . $request['text'] . "</td></tr>";
+                }
             }
             $tpl_page .= '</table>';
         } else {
