@@ -229,7 +229,7 @@ elseif (KU_OFFLOAD) {
                 http_response_code(451);
                 header('Expires: ' . date(DATE_RFC7231, time() + KU_OFFLOADCACHEDAYS * 86400));
                 header('Content-type: image/jpeg');
-                echo file_get_contents(KU_ENGINEDIR . 'static/images/451.jpg');
+                echo file_get_contents(KU_ENGINEDIR . 'lib/resources/451.jpg');
                 exit();
             }
             $content = file_get_contents(KU_STORAGEDIR . $address);
@@ -244,7 +244,7 @@ elseif (KU_OFFLOAD) {
                 http_response_code($errorcode);
                 header('Expires: ' . date(DATE_RFC7231, time() + KU_OFFLOADCACHEDAYS * 86400));
                 header('Content-type: image/jpeg');
-                echo file_get_contents(KU_ENGINEDIR . 'static/images/404.jpg');
+                echo file_get_contents(KU_ENGINEDIR . 'lib/resources/404.jpg');
                 exit();
             }
         }

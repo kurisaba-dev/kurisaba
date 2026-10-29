@@ -83,11 +83,8 @@ class Manage
     /* Show the login form and halt execution */
     public function LoginForm()
     {
-        global $tc_db, $tpl_page;
-
-        if (file_exists(KU_ENGINEDIR . 'static/pages/manage_login.html')) {
-            $tpl_page .= file_get_contents(KU_ENGINEDIR . 'static/pages/manage_login.html');
-        }
+        global $tpl_page;
+        $tpl_page .= file_get_contents(KU_ENGINEDIR . 'lib/resources/manage_login.html');
     }
 
     /* Check login names and create session if user/pass is correct */

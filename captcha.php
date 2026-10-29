@@ -46,7 +46,7 @@ function img_code($code)
         $z = 24;
         $x += 20;
         $letter = mb_substr($code, $i, 1);
-        imagettftext($im, $font_arr[$n]["size"], $y, $x, $z, $color, dirname(__FILE__).'/static/fonts/'.$font_arr[$n]["fname"], $letter);
+        imagettftext($im, $font_arr[$n]["size"], $y, $x, $z, $color, KU_ENGINEDIR . 'lib/resources/'.$font_arr[$n]["fname"], $letter);
 
         if (!isset($_GET['captchaid'])) {
             $_GET['captchaid'] = '';
