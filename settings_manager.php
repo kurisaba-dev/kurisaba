@@ -65,19 +65,25 @@ if (!file_exists('config.php')) {
     configure_database();
 }
 
-// Filesystem path to a directory where engine files are located. Write access is needed only for engine update and initial configuration. Should end with "/".
-$cf['KU_ENGINEDIR'] = realpath(dirname(__FILE__))."/";
+// Filesystem path to a directory where engine files are located. Write access is needed only for engine update and initial configuration.
+$cf['KU_ENGINEDIR'] = realpath(dirname(__FILE__));
 
-// Filesystem path to a directory where data files are located. Full read/write access is needed. Should end with "/".
+// Filesystem path to a directory where data files are located. Full read/write access is needed.
 $cf['KU_STORAGEDIR']    = $cf['KU_ENGINEDIR'];
 
-// Full URL to be used when linking engine files. Should not end with "/".
+// Full URL to be used when linking engine files.
 $cf['KU_WEBPATH'] = $cf['KU_PROTO'] . $cf['KU_HOST'];
 
-// Full URL to be used when linking data files. Should not end with "/".
+// Full URL to be used when linking data files.
 $cf['KU_BOARDSPATH']   = $cf['KU_WEBPATH'];
 
 include 'config.php';
+
+// *DIR should have trailing slash, *PATH should not
+if ($cf['KU_ENGINEDIR'][-1] != "/") $cf['KU_ENGINEDIR'] .= "/";
+if ($cf['KU_STORAGEDIR'][-1] != "/") $cf['KU_STORAGEDIR'] .= "/";
+$cf['KU_WEBPATH'] = rtrim($cf['KU_WEBPATH'], "/");
+$cf['KU_BOARDSPATH'] = rtrim($cf['KU_BOARDSPATH'], "/");
 
 // Dwoo paths
 $cf['KU_TEMPLATEDIR'] = $cf['KU_ENGINEDIR'] . 'dwoo/templates';
