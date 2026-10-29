@@ -12,7 +12,7 @@ A nullchan-kusabaX based imageboard engine with some modern features
     . /etc/os-release
     echo "deb [signed-by=/usr/share/keyrings/debsuryorg-archive-keyring.gpg] https://packages.sury.org/php/ ${VERSION_CODENAME} main" | sudo tee /etc/apt/sources.list.d/php.list
     sudo apt update
-    sudo apt install php7.4 php7.4-fpm php7.4-mbstring php7.4-curl php7.4-yaml php7.4-gd
+    sudo apt install php7.4 php7.4-fpm php7.4-mbstring php7.4-curl php7.4-yaml php7.4-gd php7.4-mysql
 ```
 - Поставить `imagemagick` и `gifsicle` (если нужна поддержка, например, анимированных превьюшек и т.п.). и `git` (чтобы работало обновление движка из админки):
 ```
