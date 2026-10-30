@@ -105,7 +105,7 @@ class Upload
 
                     if ($video_id != '' && strpos($video_id, '@') == false && strpos($video_id, '?') == false) {
 
-                        $embeds = $tc_db->GetAll("SELECT HIGH_PRIORITY * FROM `" . KU_DBPREFIX . "embeds`");
+                        $embeds = $tc_db->GetAll("SELECT HIGH_PRIORITY `name`, `filetype`, `videourl` FROM `" . KU_DBPREFIX . "embeds`");
                         $worked = false;
 
                         foreach ($embeds as $line) {

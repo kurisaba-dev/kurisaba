@@ -552,7 +552,7 @@ if ($operation_post) { // it's `noreturn`.
 
                 $page = '';
 
-                $embeds = $tc_db->GetAll("SELECT filetype FROM `" . KU_DBPREFIX . "embeds`");
+                $embeds = $tc_db->GetAll("SELECT `filetype` FROM `" . KU_DBPREFIX . "embeds`");
                 foreach ($embeds as $embed) {
                     $board_class->board['filetypes'][] .= $embed['filetype'];
                 }

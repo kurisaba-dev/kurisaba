@@ -84,16 +84,13 @@ CREATE TABLE IF NOT EXISTS `{{KU_DBPREFIX}}embeds` (
 `id` tinyint(5) unsigned NOT NULL,
   `filetype` varchar(3) NOT NULL,
   `name` varchar(255) NOT NULL,
-  `videourl` varchar(510) NOT NULL,
-  `width` tinyint(3) unsigned NOT NULL,
-  `height` tinyint(3) unsigned NOT NULL,
-  `code` text NOT NULL
+  `videourl` varchar(510) NOT NULL
 ) ENGINE=MyISAM AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
 
-INSERT INTO `{{KU_DBPREFIX}}embeds` (`id`, `filetype`, `name`, `videourl`, `width`, `height`, `code`) VALUES
-(1, 'you', 'Youtube', 'http://www.youtube.com/watch?v=', 255, 255, '<div class="thumb youtube embed wrapper" style="margin: 0px 20px 0px 0px; background-image:url(https://i.ytimg.com/vi/EMBED_ID_SHORT/0.jpg)" data-id="EMBED_ID" data-site="youtube" ONCLICK></div>'),
-(2, 'vim', 'Vimeo', 'http://vimeo.com/', 200, 164, '<div class="thumb vimeo embed wrapper" style="margin: 0px;" data-id="EMBED_ID" data-site="vimeo" ONCLICK></div>'),
-(3, 'cob', 'Coub', 'http://coub.com/view/', 200, 164, '<div class="thumb coub embed wrapper" style="margin: 0px;" data-id="EMBED_ID" data-site="coub" ONCLICK></div>');
+INSERT INTO `{{KU_DBPREFIX}}embeds` (`id`, `filetype`, `name`, `videourl`) VALUES
+(1, 'you', 'Youtube', 'http://www.youtube.com/watch?v='),
+(2, 'vim', 'Vimeo', 'http://vimeo.com/'),
+(3, 'cob', 'Coub', 'http://coub.com/view/');
 
 CREATE TABLE IF NOT EXISTS `{{KU_DBPREFIX}}filetypes` (
 `id` smallint(5) unsigned NOT NULL,

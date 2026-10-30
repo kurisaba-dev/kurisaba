@@ -184,7 +184,7 @@ class Board
         }
 
         if (!isset($embeds)) {
-            $embeds = $tc_db->GetAll("SELECT * FROM `" . KU_DBPREFIX . "embeds`");
+            $embeds = $tc_db->GetAll("SELECT `name`, `filetype` FROM `" . KU_DBPREFIX . "embeds`");
             $this->dwoo_data->assign('embeds', $embeds);
         }
         if (!isset($header)) {
@@ -308,7 +308,7 @@ class Board
         $embeds = array();
         $numimages = 0;
         if (!$embeds) {
-            $embeds = $tc_db->GetAll("SELECT * FROM `" . KU_DBPREFIX . "embeds`");
+            $embeds = $tc_db->GetAll("SELECT `name`, `filetype` FROM `" . KU_DBPREFIX . "embeds`");
             $this->dwoo_data->assign('embeds', $embeds);
             foreach ($embeds as $embed) {
                 $this->board['filetypes'][] .= $embed['filetype'];

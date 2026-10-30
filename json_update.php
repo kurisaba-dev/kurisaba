@@ -96,7 +96,7 @@ if (count($posts_to_print) > 0) {
     $board_class->dwoo_data->assign('isread', true);
     $board_class->dwoo_data->assign('file_path', KU_BOARDSPATH . '/' . $board_class->board['name']);
     $board_class->dwoo_data->assign('replythread', $thread);
-    $embeds = $tc_db->GetAll("SELECT filetype FROM `" . KU_DBPREFIX . "embeds`");
+    $embeds = $tc_db->GetAll("SELECT `filetype` FROM `" . KU_DBPREFIX . "embeds`");
     foreach ($embeds as $embed) {
         $board_class->board['filetypes'][] .= $embed['filetype'];
     }

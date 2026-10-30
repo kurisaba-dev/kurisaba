@@ -18,7 +18,7 @@ if ($bans_class->BanCheckSilent(KU_REMOTE_ADDR, '', true)) {
 $executiontime_start = microtime_float();
 
 // Do our work only for image-type boards
-$embeds = $tc_db->GetAll("SELECT filetype FROM `" . KU_DBPREFIX . "embeds`");
+$embeds = $tc_db->GetAll("SELECT `filetype` FROM `" . KU_DBPREFIX . "embeds`");
 $boards_data = $tc_db->GetAll("SELECT * FROM `".KU_DBPREFIX."boards`");
 $boards = array();
 
@@ -35,7 +35,7 @@ $board_class->dwoo_data->assign('isfeed', true);
 $board_class->dwoo_data->assign('issearch', true);
 $board_class->dwoo_data->assign('isread', true);
 $board_class->dwoo_data->assign('skipheader', true);
-$embeds = $tc_db->GetAll("SELECT * FROM `" . KU_DBPREFIX . "embeds`");
+$embeds = $tc_db->GetAll("SELECT `name`, `filetype` FROM `" . KU_DBPREFIX . "embeds`");
 $board_class->dwoo_data->assign('embeds', $embeds);
 $page = '';
 $page .= $board_class->PageHeader(-1, 0, -1, "Однопоток");

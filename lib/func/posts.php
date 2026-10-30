@@ -9,43 +9,13 @@
 function embeddedVideoBox($post, $nospan = false)
 {
     global $tc_db;
-
-    /* Old version. Now everything is performed by javascript.
-
-    $results = $tc_db->GetAll("SELECT HIGH_PRIORITY * FROM `" . KU_DBPREFIX . "embeds`");
-
-    if (!$nospan) $output = '<span style="float: left;">' . "\n";
-
+    $results = $tc_db->GetAll("SELECT HIGH_PRIORITY `filetype`, `videourl` FROM `" . KU_DBPREFIX . "embeds`");
     foreach ($results as $line) {
         if ($post['file_type'] == $line['filetype']) {
-            $code = $line['code'];
-            //$width = $line['width'];
-            //$height = $line['height'];
-            $onclick = ($post['id'] == '?????')? 'onclick="skip_close_preview = 2;"' : '';
-            $replace = array('SET_HEIGHT', 'SET_WIDTH', 'EMBED_ID', 'EMBED_ID_SHORT' 'ONCLICK');
-            $trueval = array($line['height'], $line['width'], $post['file'], preg_replace('#&.*#','',$post['file']), $onclick);
-
-            $code = str_replace($replace, $trueval, $code);
-            $output .= $code;
+            return '<a target="_new" class="' . ($nospan ? 'nospan ' : '') . 'alwaysvisible" href="' . $line['videourl'] . '/' . $post['file'] . '">https://' . $line['videourl'] . '/' . $post['file'] . '</a>';
         }
-
     }
-
-    if (!$nospan) $output .= '</span>&nbsp;' . "\n"; */
-
-    $class = ($nospan ? 'nospan ' : '');
-
-    if ($post['file_type'] == 'you') {
-        $site = 'youtu.be';
-    } elseif ($post['file_type'] == 'vim') {
-        $site = 'vimeo.com';
-    } elseif ($post['file_type'] == 'cob') {
-        $site = 'coub.com/view';
-    } else {
-        return '';
-    }
-
-    return '<a target="_new" class="'.$class.'alwaysvisible" href="https://'.$site.'/'.$post['file'].'">https://'.$site.'/'.$post['file'].'</a>';
+    return '';
 }
 
 /**
