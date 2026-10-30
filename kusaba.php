@@ -5,7 +5,7 @@ require 'settings_manager.php';
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
 	<title><?php echo KU_NAME; ?></title>
-	<link rel="shortcut icon" href="<?php echo KU_WEBPATH; ?>/favicon.ico" />
+	<link rel="shortcut icon" href="<?php echo KU_WEBPATH; ?>/static/images/favicon.ico" />
 	<style type="text/css">
 		body, html {
 			width: 100%;

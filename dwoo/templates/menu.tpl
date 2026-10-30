@@ -20,7 +20,7 @@
 	var ku_js_css_ver = {%KU_JS_CSS_VER};
 	var ku_captchaenabled = '{%KU_CAPTCHAENABLED}';
 </script>
-<link rel="shortcut icon" href="{%KU_WEBPATH}/favicon.ico" />
+<link rel="shortcut icon" href="{%KU_WEBPATH}/static/images/favicon.ico" />
 <script type="text/javascript" src="{%KU_WEBPATH}/static/javascript/gettext.js"></script>
 <!-- <script type="text/javascript" src="{%KU_WEBPATH}/static/javascript/menu.js"></script> -->
 <script src="{%KU_WEBPATH}/static/javascript/jquery-1.11.1.min.js"></script>

@@ -3,7 +3,7 @@
 <head>
 <title>{t}YOU ARE BANNED{/t}!</title>
 <link rel="stylesheet" type="text/css" href="{%KU_WEBPATH}/static/css/banned.css?v={%KU_JS_CSS_VER}">
-<link rel="shortcut icon" href="{%KU_WEBPATH}/favicon.ico">
+<link rel="shortcut icon" href="{%KU_WEBPATH}/static/images/favicon.ico">
 </head>
 <body>
 <h1>{%KU_NAME}</h1>

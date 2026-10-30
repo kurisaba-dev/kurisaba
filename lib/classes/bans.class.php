@@ -182,7 +182,7 @@ class Bans
             }
             if ($htaccess_contents_bans_iplist != '') {
                 $htaccess_contents_bans_start = "<IfModule mod_rewrite.c>\nRewriteEngine On\n";
-                $htaccess_contents_bans_end = "RewriteRule !^(banned.php|static/images/youarebanned.jpg|favicon.ico|static/css/banned.css)$ " . KU_WEBPATH . "/banned.php [L]\n</IfModule>";
+                $htaccess_contents_bans_end = "RewriteRule !^(banned.php|static/images/youarebanned.jpg|static/images/favicon.ico|static/css/banned.css)$ " . KU_WEBPATH . "/banned.php [L]\n</IfModule>";
             } else {
                 $htaccess_contents_bans_start = '';
                 $htaccess_contents_bans_end = '';

@@ -71,7 +71,7 @@ Satisfy all
 #RewriteEngine On
 #RewriteCond %{REMOTE_ADDR} 1.2.3.4               # Если без клауды
 #RewriteCond %{HTTP:CF-Connecting-IP} 1.2.3.4     # Если с клаудой
-#RewriteRule !^(banned.php|static/images/youarebanned.jpg|favicon.ico|static/css/banned.css)$ /banned.php [L]
+#RewriteRule !^(banned.php|static/images/youarebanned.jpg|static/images/favicon.ico|static/css/banned.css)$ /banned.php [L]
 #</IfModule>
 
 # Warning: Contents below this line may be erased, please place all .htaccess rules above this line

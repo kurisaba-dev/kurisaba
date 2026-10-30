@@ -5,7 +5,7 @@
 <title>{t}Manage Boards{/t}</title>
 	<link rel="stylesheet" type="text/css" href="{%KU_WEBPATH}/static/css/manage_page.css?v={%KU_JS_CSS_VER}" />
 	<link rel="stylesheet" type="text/css" href="{%KU_WEBPATH}/static/css/manage_menu.css?v={%KU_JS_CSS_VER}" />
-<link rel="shortcut icon" href="{%KU_WEBPATH}/favicon.ico" />
+<link rel="shortcut icon" href="{%KU_WEBPATH}/static/images/favicon.ico" />
 {literal}
 <script type="text/javascript">
 function toggle(button, area) {

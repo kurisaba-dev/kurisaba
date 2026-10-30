@@ -35,7 +35,7 @@ if (!window.jQuery) {
 }
 </script>
 <title>Manage Boards</title>
-<link rel="shortcut icon" href="<?php echo KU_WEBPATH; ?>/favicon.ico" />
+<link rel="shortcut icon" href="<?php echo KU_WEBPATH; ?>/static/images/favicon.ico" />
 <style type="text/css">
 body, html {
 	width: 100%;

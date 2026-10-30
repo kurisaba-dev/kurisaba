@@ -5342,7 +5342,7 @@ window.addEventListener('DOMContentLoaded', shrinker_init, false);
 
 /* Blinker module */
 
-var favicon_normal = ku_webpath + "/favicon.ico";
+var favicon_normal = ku_webpath + "/static/images/favicon.ico";
 var favicon_blinked = ku_webpath + "/static/images/favicon_marked.ico";
 
 var blinker_enabled = false;

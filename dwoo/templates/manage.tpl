@@ -3,7 +3,7 @@
 <head>
 <title>{t}Manage Boards{/t}</title>
 <link rel="stylesheet" type="text/css" href="{%KU_WEBPATH}/static/css/manage_page.css?v={%KU_JS_CSS_VER}" />
-<link rel="shortcut icon" href="{%KU_WEBPATH}/favicon.ico" />
+<link rel="shortcut icon" href="{%KU_WEBPATH}/static/images/favicon.ico" />
 </head>
 <body style="min-width: 900px; padding: 1em 20px 3em 20px;">
 {$includeheader}
