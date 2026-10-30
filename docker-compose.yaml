@@ -1,0 +1,64 @@
+services:
+  frontend:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.frontend
+    restart: always
+    volumes:
+      - boards:/var/www/kurisaba/data:ro
+    ports:
+      - "${FRONTEND_PORT}:80"
+    depends_on:
+      - db
+      - backend
+    networks:
+      - kurisaba
+
+  backend:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.backend
+      args:
+        KU_DSN: mysql:host=db;dbname=${MARIADB_DATABASE}
+        KU_DBUSERNAME: ${MARIADB_USER}
+        KU_DBPASSWORD: ${MARIADB_PASSWORD}
+    restart: always
+    volumes:
+      - boards:/var/www/kurisaba/data:rw
+    networks:
+      - kurisaba
+
+  db:
+    image: mariadb:latest
+    env_file:
+      - .env
+    restart: always
+    volumes:
+      - db:/var/lib/mysql
+    networks:
+      - kurisaba
+
+  pma:
+    image: phpmyadmin/phpmyadmin
+    restart: always
+    profiles:
+      - development
+    env_file:
+      - .env
+    environment:
+      PMA_HOST: db
+      PMA_USER: root
+      PMA_PASSWORD: ${MARIADB_ROOT_PASSWORD}
+    ports:
+      - "${PMA_PORT}:80"
+    depends_on:
+      - db
+    networks:
+      - kurisaba
+
+volumes:
+  db:
+  boards:
+
+networks:
+  kurisaba:

@@ -1,0 +1,4 @@
+FROM nginx:latest
+ADD docker/nginx-kurisaba.conf /etc/nginx/conf.d/default.conf
+ADD static /var/www/kurisaba/static/
+ADD lib/lang /var/www/kurisaba/lib/lang/

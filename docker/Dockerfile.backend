@@ -1,0 +1,42 @@
+FROM debian:13.7
+
+ARG KU_DSN
+ARG KU_DBUSERNAME
+ARG KU_DBPASSWORD
+ARG KU_DBPREFIX
+
+ADD https://packages.sury.org/debsuryorg-archive-keyring.deb /
+RUN dpkg -i /debsuryorg-archive-keyring.deb
+RUN rm /debsuryorg-archive-keyring.deb
+RUN apt-get update
+RUN apt-get install -y ca-certificates
+RUN echo deb [signed-by=/usr/share/keyrings/debsuryorg-archive-keyring.gpg] https://packages.sury.org/php/ $(. /etc/os-release; echo $VERSION_CODENAME) main | tee /etc/apt/sources.list.d/php.list
+RUN apt-get update
+RUN apt-get install -y php7.4-fpm php7.4-mbstring php7.4-curl php7.4-yaml php7.4-gd php7.4-mysql imagemagick gifsicle
+
+ADD *.php settings_schema.yaml /var/www/kurisaba/
+ADD dwoo /var/www/kurisaba/dwoo/
+ADD lib /var/www/kurisaba/lib/
+ADD deploy/database.sql /var/www/kurisaba/deploy/database.sql
+ADD deploy/front.php /var/www/kurisaba/front.php
+ADD deploy/filetypes /var/www/kurisaba/data/filetypes/
+
+RUN sed -i 's/^listen =.*$/listen = 9000/' /etc/php/7.4/fpm/pool.d/www.conf
+RUN sed -i 's/^upload_max_filesize =.*$/upload_max_filesize = 100M/' /etc/php/7.4/fpm/php.ini
+RUN sed -i 's/^post_max_size =.*$/post_max_size = 100M/' /etc/php/7.4/fpm/php.ini
+
+RUN mkdir -p /var/www/kurisaba/data/tmp/dwoo
+RUN mkdir -p /var/www/kurisaba/data/tmp/xhrupload
+RUN chown -R www-data:www-data /var/www/kurisaba/data
+
+RUN echo '<?php' > /var/www/kurisaba/config.php
+RUN echo "\$cf['KU_STORAGEDIR'] = \"/var/www/kurisaba/data/\";" >> /var/www/kurisaba/config.php
+RUN echo "\$cf['KU_BOARDSPATH'] = \$cf['KU_WEBPATH'] . '/data';" >> /var/www/kurisaba/config.php
+RUN echo "\$cf['KU_DSN'] = \"${KU_DSN}\";" >> /var/www/kurisaba/config.php
+RUN echo "\$cf['KU_DBUSERNAME'] = \"${KU_DBUSERNAME}\";" >> /var/www/kurisaba/config.php
+RUN echo "\$cf['KU_DBPASSWORD'] = \"${KU_DBPASSWORD}\";" >> /var/www/kurisaba/config.php
+RUN echo "\$cf['KU_DBPREFIX'] = \"${KU_DBPREFIX}\";" >> /var/www/kurisaba/config.php
+
+EXPOSE 9000
+
+ENTRYPOINT [ "php-fpm7.4", "-F", "-O" ]
