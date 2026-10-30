@@ -11,6 +11,17 @@
 		var ku_captchaenabled = '{%KU_CAPTCHAENABLED}';
 		var locale = '{$locale}';
 		var search_phrases = Array('{$search_phrases}');
+		{if $board.embeds_allowed neq ''}
+			var embeds = Array(
+				{foreach name=embed from=$embeds item=embed}
+					{if in_array($embed.filetype,explode(',' $board.embeds_allowed))}
+						{"{"} name: "{$embed.name}", filetype: "{$embed.filetype}" {"}"},
+					{/if}
+				{/foreach}
+			);
+		{else}
+			var embeds = Array();
+		{/if}
 {if $replythread != 0}
 		var ispage = false;
 {else}
