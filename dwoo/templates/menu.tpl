@@ -19,6 +19,7 @@
 	var ku_defaultboard = '{%KU_DEFAULTBOARD}';
 	var ku_js_css_ver = {%KU_JS_CSS_VER};
 	var ku_captchaenabled = '{%KU_CAPTCHAENABLED}';
+	var embeds = Array();
 </script>
 <link rel="shortcut icon" href="{%KU_WEBPATH}/static/images/favicon.ico" />
 <script type="text/javascript" src="{%KU_WEBPATH}/static/javascript/gettext.js"></script>

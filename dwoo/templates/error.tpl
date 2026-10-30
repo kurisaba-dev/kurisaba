@@ -17,6 +17,7 @@
 		var ku_js_css_ver = {%KU_JS_CSS_VER};
 		var ku_captchaenabled = '{%KU_CAPTCHAENABLED}';
 		var locale = '{$locale}';
+		var embeds = Array();
 {if $replythread > 0}
 		var ispage = false;
 {else}

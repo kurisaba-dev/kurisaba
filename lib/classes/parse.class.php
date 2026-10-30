@@ -32,7 +32,6 @@ class Parse
     }
     public function BBCode($string)
     {
-        //$string = preg_replace('#\[yt1\](.+?)\[/yt1\]#','<iframe width="640" height="360" src="https://www.youtube.com/embed/\\1" frameborder="0" allowfullscreen></iframe>', $string);
         $string = preg_replace_callback('`\\\\\\\\\\\\(.+?)\\\\\\\\\\\\`is', array(&$this, 'notags_callback'), $string);
         $string = preg_replace_callback('`\[code\](.+?)\[/code\]`is', array(&$this, 'code_callback'), $string);
         $string = preg_replace_callback('#`(.+?)`#is', array(&$this, 'inline_code_callback'), $string);

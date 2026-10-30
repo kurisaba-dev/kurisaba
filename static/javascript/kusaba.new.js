@@ -15,81 +15,120 @@ window.addEventListener("error", function(e) {
     kuTrace(e.error);
 });
 
-var embed_class = {
-    link_templates: [{
-        src: 'youtube\\.com/watch\\?v=',
-        tgt: 'youtube.com/watch?v=',
-        code: '<div class="thumb youtube embed wrapper" style="margin: 0px 20px 0px 0px; background-image:url(https://i.ytimg.com/vi/$3/0.jpg)" data-id="$3" data-site="youtube"></div>'
-    }, {
-        src: 'youtu\\.be/',
-        tgt: 'youtu.be/',
-        code: '<div class="thumb youtube embed wrapper" style="margin: 0px 20px 0px 0px; background-image:url(https://i.ytimg.com/vi/$3/0.jpg)" data-id="$3" data-site="youtube"></div>'
-    }, {
-        src: 'vimeo\\.com/',
-        tgt: 'vimeo.com/',
-        code: '<div style="margin: 0px 20px 0px 0px;"><iframe src="https://player.vimeo.com/video/$3" width="368" height="237" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe></div>'
-    }, {
-        src: 'coub\\.com/view/',
-        tgt: 'coub.com/view/',
-        code: '<div style="margin: 0px 20px 0px 0px;"><iframe src="//coub.com/embed/$3?muted=false&autostart=false&originalSize=false&startWithHD=false" allowfullscreen="true" frameborder="0" width="368" height="207"></iframe></div>'
-    }],
+var embedProcessor = {
 
-    link_replacements: new Array,
+    // var embeds = Array({"{"} name: "{$embed.name}", filetype: "{$embed.filetype}" {"}"})
+    // a.videobox is a thing that should be replaced by embed videobox
+    // unwrap: ".embed", "data-site" = one of embedHTMLs index
 
-    init: function() {
-        embed_class.link_templates.forEach(function(item) {
-            // Four different cases. I don't know how to simplify it more.
-
-            embed_class.link_replacements.push // !alwaysvisible + !nospan
-            ({
-                regexp: new RegExp('<a target="_new" href="http(s)?://(www\\.)?' + item.src + '(.*?)">(.*?)</a>', 'gm'),
-                data: '<span class="newvideolink"><a target="_new" href="http$1://$2' + item.tgt + '$3">$4</a></span><span class="newvideobox"><span style="float: left;">' + item.code + '</span></span>'
-            });
-            embed_class.link_replacements.push // !alwaysvisible + nospan
-            ({
-                regexp: new RegExp('<a target="_new" class="nospan" href="http(s)?://(www\\.)?' + item.src + '(.*?)">(.*?)</a>', 'gm'),
-                data: '<span class="newvideolink"><a target="_new" href="http$1://$2' + item.tgt + '$3">$4</a></span><span class="newvideobox">' + item.code + '</span>'
-            });
-            embed_class.link_replacements.push // alwaysvisible + !nospan
-            ({
-                regexp: new RegExp('<a target="_new" class="alwaysvisible" href="http(s)?://(www\\.)?' + item.src + '(.*?)">(.*?)</a>', 'gm'),
-                data: '<span style="float: left;">' + item.code + '</span>'
-            });
-            embed_class.link_replacements.push // alwaysvisible + nospan
-            ({
-                regexp: new RegExp('<a target="_new" class="nospan alwaysvisible" href="http(s)?://(www\\.)?' + item.src + '(.*?)">(.*?)</a>', 'gm'),
-                data: item.code
-            });
-        });
+    var embedDefinitions = {
+        youtube = {
+            idToIframe: function(vid, tcode) {return '<iframe style="display:none" class="embedded-content" width="368" height="237" src="//www.youtube.com/embed/' + vid + '?wmode=transparent' + (tcode === null ? '' : processhms(tcode)) + '" frameborder="0" allowfullscreen></iframe>';},
+            rx: /[\w\W]*(?:youtu\.be\/|youtube\.com\/watch\?v=)(.*)?/,
+            replacements: [{src: 'youtube\\.com/watch\\?v=', tgt: 'youtube.com/watch?v='}, {src: 'youtu\\.be/', tgt: 'youtu.be/'}]
+            replacement_code: '<div class="thumb youtube embed wrapper" style="margin: 0px 20px 0px 0px; background-image:url(https://i.ytimg.com/vi/$3/0.jpg)" data-id="$3" data-site="youtube"></div>',
+        },
+        vimeo = {
+            idToIframe: function(vid, tcode) {return '<iframe style="display:none" src="//player.vimeo.com/video/' + vid + '?badge=0" width="368" height="210" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>';},
+            rx: /[\w\W]*vimeo\.com\/(?:.*?)([0-9]+)(?:.*)?/,
+            replacements: [{src: 'vimeo\\.com/', tgt: 'vimeo.com/'}],
+            replacement_code: '<div style="margin: 0px 20px 0px 0px;"><iframe src="https://player.vimeo.com/video/$3" width="368" height="237" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe></div>',
+        },
+        coub = {
+            idToIframe: function(vid, tcode) {return '<iframe src="http://coub.com/embed/' + vid + '?muted=false&autostart=false&originalSize=false&hideTopBar=false&noSiteButtons=false&startWithHD=false" allowfullscreen="true" frameborder="0" width="368" height="207"></iframe>';},
+            rx: /[\w\W]*coub\.com\/view\/([\w\W]*)[\w\W]*/,
+            replacements: [{src: 'coub\\.com/view/', tgt: 'coub.com/view/'}],
+            replacement_code: '<div style="margin: 0px 20px 0px 0px;"><iframe src="//coub.com/embed/$3?muted=false&autostart=false&originalSize=false&startWithHD=false" allowfullscreen="true" frameborder="0" width="368" height="207"></iframe></div>',
+        },
+        nicovideo = {
+            idToIframe: function(vid, tcode) {return '<script type="text/javascript" src="http://ext.nicovideo.jp/thumb_watch/' + vid + '"></script>';},
+            rx: /[\w\W]*nicovideo\.jp\/watch\/([\w\W]*)[\w\W]*/,
+            replacements: [],
+            replacement_code: '',
+        },
     },
 
-    /** whereArr is array of elements or queryselectorAlls.
-    pass '' to process all page */
-    process_links: function(whereArr) {
-        var element = null; /* warn: element should be visible in linkFunc */
-        var linkFunc = function(link) {
-            var txt = element.innerHTML;
-            var txt_new = txt.replace(link.regexp, link.data).replace(/https:\/\/i.ytimg.com\/vi\/([^&]*)&.*\/0.jpg/, 'https://i.ytimg.com/vi/$1/0.jpg');
-            if (txt != txt_new)
-                element.innerHTML = txt_new;
-        };
+    // Calls when checkbox is set to state "enabled"
+    processEmbeds: function(enabled)
+    {
+        if (enabled) {
+            delCSSRules("videoboxesOff");
+            addCSSRules(".newvideolink { display: none; }", "videoboxesOn");
+        } else {
+            delCSSRules("videoboxesOn");
+            addCSSRules(".newvideobox { display: none; }", "videoboxesOff");
+        }
+    },
 
+    // Processes text put into input field "obj" of video attachment
+    processInput: function(obj)
+    {
+        for(site in this.embedDefinitions) {
+            var fruit = this.embedDefinitions[site].rx.exec(obj.val());
+            if (fruit != null) {
+                obj.val(fruit[1].replace('?', '&')).parents('.postform').find('[name=embedtype]').val(site);
+            }
+        })
+    },
+
+    // Processes youtube timecode
+    processhms: function(tcode) {
+        data = tcode[0].split('&');
+        elems = [];
+        for (elem of data) {
+            pars = elem.split('=');
+            if (pars.length == 2 && pars[0] == 't') {
+                var u = pars[1],
+                    h = 0,
+                    m = 0,
+                    s = 0;
+                if (u.match('h')) {
+                    h = u.split('h')[0];
+                    u = u.split('h')[1];
+                }
+                if (u.match('m')) {
+                    m = u.split('m')[0];
+                    u = u.split('m')[1];
+                }
+                s = u.replace('s', '');
+                elems.push('start=' + (h * 3600 + m * 60 + s * 1))
+            } else elems.push(elem);
+        }
+        return elems.join('&');
+    },
+
+    // Returns HTML which should replace video wrapper
+    getHTML: function(obj)
+    {
+        return this.embedDefinitions[obj.data('site')].idToIframe(obj.data('id').match('[^&]*'), obj.data('id').match('&.*')) || false;
+    },
+
+    linkFunc: function(element, src, tgt, code) {
+        var regexp = new RegExp ('<a target="_new" (class="nospan")? href="http(s)?://(www\\.)?' + src + '(.*?)">(.*?)</a>', 'gm'),
+        var data = '<span class="newvideolink"><a target="_new" href="http$1://$2' + tgt + '$3">$4</a></span><span class="newvideobox">' + code + '</span>'
+        var txt = element.innerHTML;
+        var txt_new = txt.replace(regexp, data).replace(/https:\/\/i.ytimg.com\/vi\/([^&]*)&.*\/0.jpg/, 'https://i.ytimg.com/vi/$1/0.jpg');
+        if (txt != txt_new) element.innerHTML = txt_new;
+    },
+
+    // Changes every embed video link to videobox
+    processLinks: function(whereArr = '') {
+        /* whereArr is array of elements or querySelectorAll()s. Default: process all page */
         if (whereArr === '') whereArr = new Array("body");
-        for (var i = 0; i < whereArr.length; i++) {
-            var where = whereArr[i];
-            $(where).find('blockquote').each(function(index, el) {
-                element = el;
-                embed_class.link_replacements.forEach(linkFunc);
-            });
-            $('.catalogtd').each(function(index, el) {
-                element = el;
-                embed_class.link_replacements.forEach(linkFunc);
+
+        for (site in this.embedDefinitions) {
+            site.replacements.forEach((rep) => {
+                for (var i = 0; i < whereArr.length; i++) {
+                    var where = whereArr[i];
+                    $(where).find('blockquote').each((index, el) => linkFunc(el, rep.src, rep.tgt, site.replacement_code));
+                }
+                $('.catalogtd').each((index, el) => linkFunc(el, rep.src, rep.tgt, site.replacement_code));
             });
         }
-    }
+    },
 }
 
-embed_class.init();
+window.addEventListener("DOMContentLoaded", embedProcessor.processLinks);
 
 var touhou = false;
 
@@ -816,6 +855,7 @@ function tasksAfterModify(newly_added) {
     Settings.qreplynum(false);
     Settings.showyou(false);
     Settings.animatedPreviews(false);
+    embedProcessor.processLinks(newly_added);
 
     if (newly_added === false)
         return; /* we've done all non-complex processing */
@@ -826,7 +866,6 @@ function tasksAfterModify(newly_added) {
     try {
         if (newly_added == '')
             hide_unwanted_posts();
-        embed_class.process_links(newly_added);
         setLocalYou(newly_added);
         DoubleQuote(newly_added);
     } catch (er) {};
@@ -2153,12 +2192,6 @@ function quickedit(ev) {
                 } else {
                     result = result.result[current];
 
-                    embed = '';
-                    // Option values from selection box
-                    if (result.filetype == 'you') embed = 'youtube';
-                    if (result.filetype == 'vim') embed = 'vimeo';
-                    if (result.filetype == 'cob') embed = 'coub';
-
                     dst.value = result.text;
                     if (document.forms.postform.elements['name'] && document.forms.postform.elements['name'].value == '') {
                         // Rewrite name only if not saved; tripcode saving issue
@@ -2168,6 +2201,10 @@ function quickedit(ev) {
                     document.forms.postform.elements['em'].checked = (result.email == 'sage');
                     document.forms.postform.elements['deletepostb'].value = board;
                     document.forms.postform.elements['deletepostp'].value = current;
+
+                    // Option values from selection box
+                    embed = '';
+                    embeds.forEach((u) => {if(u.filetype == result.filetype) embed = u.name.toLowerCase()});
                     if (embed != '') {
                         document.forms.postform.elements['attach_type'][2].checked = true; // Video
                         document.forms.postform.elements['attach_type'][2].onchange();
@@ -3457,13 +3494,7 @@ var Settings = {
 
     videoboxes: function(changed) {
         var enabled = Settings._checkbox(changed, 'videoboxes', false);
-        if (enabled) {
-            delCSSRules("videoboxesOff");
-            addCSSRules(".newvideolink { display: none; }", "videoboxesOn");
-        } else {
-            delCSSRules("videoboxesOn");
-            addCSSRules(".newvideobox { display: none; }", "videoboxesOff");
-        }
+        embedProcessor.processEmbeds(enabled);
         return enabled;
     },
 
@@ -3766,13 +3797,7 @@ function readyset() {
         }
     });
 
-    $('input[name=embed]').on('input', function() {
-        var match = embedLinks.process($(this).val());
-        if (match) {
-            $(this).val(match.code)
-                .parents('.postform').find('[name=embedtype]').val(match.site);
-        }
-    });
+    $('input[name=embed]').on('input', embedProcessor.processInput($(this)));
     delandbanlinks();
 }
 
@@ -4261,53 +4286,11 @@ function prettyprint_mod() {
     }
     $.fn.unwrap = function() {
         // Fix by Reimu
-        //$(this).off().removeClass('wrapper').addClass('unwrapping').empty().css({'background-image': 'none'});
-        $(this).off().removeClass('wrapper').empty().css({
-            'background-image': 'none'
-        });
-        var vid = $(this).data('id').match('[^&]*'),
-            tcode = $(this).data('id').match('&.*'),
-            htm = '';
-
-        function processhms(tcode) {
-            data = tcode[0].split('&');
-            elems = [];
-            for (elem of data) {
-                pars = elem.split('=');
-                if (pars.length == 2 && pars[0] == 't') {
-                    var u = pars[1],
-                        h = 0,
-                        m = 0,
-                        s = 0;
-                    if (u.match('h')) {
-                        h = u.split('h')[0];
-                        u = u.split('h')[1];
-                    }
-                    if (u.match('m')) {
-                        m = u.split('m')[0];
-                        u = u.split('m')[1];
-                    }
-                    s = u.replace('s', '');
-                    elems.push('start=' + (h * 3600 + m * 60 + s * 1))
-                } else elems.push(elem);
-            }
-            return elems.join('&');
-        }
-        var embedHTMLs = {
-            youtube: '<iframe style="display:none" class="embedded-content" width="368" height="237" src="//www.youtube.com/embed/' + vid + '?wmode=transparent' + (tcode === null ? '' : processhms(tcode)) + '" frameborder="0" allowfullscreen></iframe>',
-            vimeo: '<iframe style="display:none" src="//player.vimeo.com/video/' + vid + '?badge=0" width="368" height="210" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>',
-            coub: '<iframe src="http://coub.com/embed/' + vid + '?muted=false&autostart=false&originalSize=false&hideTopBar=false&noSiteButtons=false&startWithHD=false" allowfullscreen="true" frameborder="0" width="368" height="207"></iframe>',
-            nicovideo: '<script type="text/javascript" src="http://ext.nicovideo.jp/thumb_watch/' + vid + '"></script>'
-        }
-        var htm = embedHTMLs[$(this).data('site')] || false;
+        $(this).off().removeClass('wrapper').empty().css({'background-image': 'none'});
+        var htm = embedProcessor.getHTML($(this));
         if (!htm) return false;
         var container = $(this);
-        var content = $(htm)
-            .appendTo(container)
-            .load(function() {
-                $(this).show();
-                container.removeClass('unwrapping');
-            });
+        var content = $(htm).appendTo(container).load(function() {$(this).show(); container.removeClass('unwrapping');});
     };
     $.fn.triggerNative = function(eventName) {
         return this.each(function() {
@@ -6340,35 +6323,6 @@ var ffdata = {
             localStorage.removeItem(key);
             console.log('Unable to load form data', e);
         }
-    }
-}
-
-var embedLinks = {
-    sites: [{
-        id: 'youtube',
-        rx: /[\w\W]*(?:youtu\.be\/|youtube\.com\/watch\?v=)(.*)?/
-    }, {
-        id: 'vimeo',
-        rx: /[\w\W]*vimeo\.com\/(?:.*?)([0-9]+)(?:.*)?/
-    }, {
-        id: 'coub',
-        rx: /[\w\W]*coub\.com\/view\/([\w\W]*)[\w\W]*/
-    }, {
-        id: 'nicovideo',
-        rx: /[\w\W]*nicovideo\.jp\/watch\/([\w\W]*)[\w\W]*/
-    }],
-    process: function(val) {
-        var result = null;
-        iter(this.sites, function(site) {
-            var fruit = site.rx.exec(val);
-            if (fruit != null) {
-                result = {
-                    site: site.id,
-                    code: fruit[1].replace('?', '&')
-                }
-            }
-        })
-        return result;
     }
 }
 
