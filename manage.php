@@ -78,33 +78,7 @@ background: -ms-linear-gradient(top, #bebebe 0px,#ffffff 253px);
 <script type="text/javascript">
 	var $frames = {
 		fired: false,
-		readyset: function() {
-			this.fired = true;
-			this.over = false;
-			this.menu.find('.magic-link').on('mouseenter', function(ev) {
-				if(halp.hasOwnProperty($(this).data('help'))) {
-					$frames.over = true;
-					var helpEntry = halp[$(this).data('help')];
-					var offset = ev.pageY - $frames.menu.scrollTop();
-					var newhtml = '<h2>'+helpEntry.title+'</h2><br /><div class="halp">'+helpEntry.contents+'</div>';
-					var helpWindow = $frames.page.find('#help');
-					helpWindow.html(newhtml);
-					offset = offset - (helpWindow.height() / 2);
-					helpWindow.css({'top': offset+'px'});
-					if($frames.off) helpWindow.fadeTo('fast',1);
-				}
-			})
-			.on('mouseleave', function() {
-				$frames.over = false;
-				setTimeout(function() {
-					if(!$frames.over) {
-						$frames.page.find('#help').fadeTo('fast',0).promise().done(function() {
-							$frames.off=true;
-						});
-					}
-				}, 600);
-			});
-		}
+		readyset: function() { this.fired = true; }
 	};
 	$('#menu').load(function() {
 		$frames.menu = $(frames['menu'].document);
