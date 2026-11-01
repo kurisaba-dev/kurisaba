@@ -73,13 +73,6 @@ h3 {
     display: block;
 }
 
-.sitelogo {
-    background: url(/static/images/0chan-modern.png);
-    width: 420px;
-    height: 150px;
-    margin-top: 8px;
-}
-
 body {
     margin: 8px;
 }
