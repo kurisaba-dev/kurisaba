@@ -16,11 +16,22 @@ window.addEventListener("error", function(e) {
 });
 
 var embedProcessor = {
+
+    // Only these video links will be converted to actual video boxes. Others, which are not supported in kusaba.php, will be left untouched and appearing as links only:
+    // we can't figure out how to transform a video link to embed code.
+    // To have more supported video types, add an entry to this object:
+    // - entry name should represent the corresponding `name` column from `embeds` table in lowercase
+    // - inputFieldRegex: a regex by which we can determine that value put into the corresponding input box in a post form is a link to a video of that type (link->videoid conversion).
+    //                    note: it's different from `videourl` column, which is used to create the link from video id at the server side (videoid->link conversion).
+    //                    also it is used to determine that value of an inline video link is a link to a video of that type, too.
+    // - idToWrapper:     a function that receives vid (part of videoid before '&') and tcode (part of videoid after '&') and constructs a code to be put into the page (a wrapper, or a final iframe)
+    // - idToIframe:      a function that receives vid (part of videoid before '&') and tcode (part of videoid after '&') and constructs a final iframe code to be put into the page instead of wrapper, if wrapper is used.
+    //                    if so, a wrapper should have .wrapper class.
+
     embedDefinitions: {
         youtube: {
             inputFieldRegex: /[\w\W]*(?:youtu\.be\/|youtube\.com\/shorts\/|youtube\.com\/watch\?v=)(.*)?/,
             idToWrapper: function(vid, tcode) {return '<div class="thumb youtube embed wrapper" style="margin: 0px 20px 0px 0px; background-image:url(https://i.ytimg.com/vi/' + vid + '/0.jpg)" data-id="' + vid + '&' + tcode + '" data-site="youtube"></div>';},
-            // idToIframe() is needed only when 'wrapper' class is added
             idToIframe: function(vid, tcode) {return '<iframe style="display:none" class="embedded-content" width="368" height="237" src="//www.youtube.com/embed/' + vid + '?wmode=transparent' + (tcode === null ? '' : embedProcessor.processhms(tcode)) + '" frameborder="0" allowfullscreen></iframe>';},
         },
         vimeo: {
@@ -109,8 +120,6 @@ var embedProcessor = {
                 fruit = embedProcessor.processInput(element.href)
                 if(fruit)
                 {
-console.log(fruit);
-console.log(element);
                     element.classList.add("newvideolink");
                     var newvideobox = document.createElement('div');
                     newvideobox.classList.add("newvideobox");
