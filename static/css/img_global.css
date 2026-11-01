@@ -862,6 +862,11 @@ object.latex {
     border: none;
 }
 
+.newvideobox {
+    display: inline-block;
+    height: 237px;
+}
+
 .bubble {
     position: relative;
     background: #ADB400;

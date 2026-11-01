@@ -162,7 +162,7 @@
 				{if $board.embeds_allowed neq ''}
 					<tr id="attachembed_tr" style="height: 26px; display: none;">
 						<td class="postblock">
-							<select name="embedtype" style="margin-top: -2px; margin-bottom: -2px;">
+							<select name="embedtype" class="videotype" style="margin-top: -2px; margin-bottom: -2px;">
 								{foreach name=embed from=$embeds item=embed}
 									{if in_array($embed.filetype,explode(',' $board.embeds_allowed))}
 										<option value="{$embed.name|lower}">{$embed.name}</option>
@@ -171,7 +171,7 @@
 							</select>
 						</td>
 						<td>
-							<input type="text" name="embed" size="76" maxlength="76" accesskey="e" style="width: 520px;" />
+							<input type="text" class="videocode" name="embed" size="76" maxlength="76" accesskey="e" style="width: 520px;" />
 						</td>
 					</tr>
 				{/if}

@@ -1219,49 +1219,56 @@ class Manage
     {
         global $tc_db, $tpl_page;
         $this->AdministratorsOnly();
-        $disptable = true;
-        $formval = 'add';
         $title = _gettext('Embed Management');
-        if (isset($_GET['act'])) {
-            if ($_GET['act'] == 'edit') {
-                if (isset($_POST['embeds'])) {
-                    $this->CheckToken($_POST['token']);
-                    $tc_db->Execute("UPDATE `" . KU_DBPREFIX . "embeds` SET `filetype` = " . $tc_db->qstr(trim($_POST['filetype'])) . ", `videourl` = " . $tc_db->qstr(trim($_POST['videourl'])) . ", `name` = " . $tc_db->qstr(trim($_POST['name'])) . " WHERE `id` = " . $tc_db->qstr($_GET['id']));
-                    $tpl_page .= '<hr /><h3>'. _gettext('Embed Edited') .'</h3><hr />';
-                    management_addlogentry(_gettext('Edited an embed'), 9);
+        if (isset($_POST['act'])) {
+            if ($_POST['act'] == 'edit') {
+                if (!isset($_POST['id']) || !isset($_POST['name']) || !isset($_POST['filetype']) || !isset($_POST['videourl'])) {
+                    exitWithErrorPage('Malformed request.');
                 }
-                $formval = 'edit&amp;id='. $_GET['id'];
-                $title .= ' - Edit';
-                $results = $tc_db->GetAll("SELECT HIGH_PRIORITY * FROM `" . KU_DBPREFIX . "embeds` WHERE `id` = " . $tc_db->qstr($_GET['id']) . "");
-                $values = $results[0];
-                $disptable = false;
-            } elseif ($_GET['act'] == 'del') {
-                $results = $tc_db->Execute("DELETE FROM `" . KU_DBPREFIX . "embeds` WHERE `id` = " . $tc_db->qstr($_GET['id']));
+                if (empty($_POST['id']) || empty($_POST['name']) || empty($_POST['filetype']) || empty($_POST['videourl'])) {
+                    exitWithErrorPage('Fill all required fields.');
+                }
+                $this->CheckToken($_POST['token']);
+                $tc_db->Execute("UPDATE `" . KU_DBPREFIX . "embeds` SET `filetype` = " . $tc_db->qstr(trim($_POST['filetype'])) . ", `videourl` = " . $tc_db->qstr(trim($_POST['videourl'])) . ", `name` = " . $tc_db->qstr(trim($_POST['name'])) . " WHERE `id` = " . $tc_db->qstr($_POST['id']));
+                $tpl_page .= '<hr /><h3>'. _gettext('Embed Edited') .'</h3><hr />';
+                management_addlogentry(_gettext('Edited an embed'), 9);
+            } elseif ($_POST['act'] == 'del') {
+                if (!isset($_POST['id'])) {
+                    exitWithErrorPage('Malformed request.');
+                }
+                if (empty($_POST['id'])) {
+                    exitWithErrorPage('Fill all required fields.');
+                }
+                $this->CheckToken($_POST['token']);
+                $results = $tc_db->Execute("DELETE FROM `" . KU_DBPREFIX . "embeds` WHERE `id` = " . $tc_db->qstr($_POST['id']));
                 $tpl_page .= '<hr /><h3>'. _gettext('Embed deleted') .'</h3><hr />';
                 management_addlogentry(_gettext('Deleted an Embed'), 9);
-            } elseif ($_GET['act'] == 'add') {
-                if (isset($_POST['name']) && isset($_POST['filetype']) && isset($_POST['videourl'])) {
-                    if ($_POST['embeds'] != '' && $_POST['width'] != '' && $_POST['height'] != '') {
-                        $this->CheckToken($_POST['token']);
-                        $width = $_POST['width'];
-                        $height = $_POST['height'];
-
-                        $tpl_page .= '<hr />';
-                        if ($_POST['embeds'] != '') {
-                            $tc_db->Execute("INSERT HIGH_PRIORITY INTO `" . KU_DBPREFIX . "embeds` ( `name` , `filetype` , `videourl` ) VALUES ( " . $tc_db->qstr(trim($_POST['name'])) . " , " . $tc_db->qstr(trim($_POST['filetype'])) . " , " . $tc_db->qstr(trim($_POST['videourl'])) . " )");
-                            $tpl_page .= '<h3>'. _gettext('Embed successfully added.') . '</h3>';
-                            management_addlogentry(_gettext('Added an Embed'), 9);
-                        } else {
-                            $tpl_page .= _gettext('You must enter code.');
-                        }
-                        $tpl_page .= '<hr />';
-                    }
+            } elseif ($_POST['act'] == 'add') {
+                if (!isset($_POST['name']) || !isset($_POST['filetype']) || !isset($_POST['videourl'])) {
+                    exitWithErrorPage('Malformed request.');
                 }
+                if (empty($_POST['name']) || empty($_POST['filetype']) || empty($_POST['videourl'])) {
+                    exitWithErrorPage('Fill all required fields.');
+                }
+                $this->CheckToken($_POST['token']);
+                $tc_db->Execute("INSERT HIGH_PRIORITY INTO `" . KU_DBPREFIX . "embeds` ( `name` , `filetype` , `videourl` ) VALUES ( " . $tc_db->qstr(trim($_POST['name'])) . " , " . $tc_db->qstr(trim($_POST['filetype'])) . " , " . $tc_db->qstr(trim($_POST['videourl'])) . " )");
+                $tpl_page .= '<h3>'. _gettext('Embed successfully added.') . '</h3>';
+                management_addlogentry(_gettext('Added an Embed'), 9);
             }
         }
+        $tpl_page .= '<script>function setEmbedForm(act, id, name, filetype, videourl, submit) {';
+        $tpl_page .= '    document.querySelector("#act").value = act;';
+        $tpl_page .= '    document.querySelector("#id").value = id;';
+        $tpl_page .= '    document.querySelector("#name").value = name;';
+        $tpl_page .= '    document.querySelector("#filetype").value = filetype;';
+        $tpl_page .= '    document.querySelector("#videourl").value = videourl;';
+        $tpl_page .= '    document.querySelector("#submit").value = submit;';
+        $tpl_page .= '} </script>';
         $tpl_page .= '<h2>'. $title . '</h2><br />';
-        $tpl_page .= '<form method="post" action="?action=embeds&amp;act='. $formval . '">';
+        $tpl_page .= '<form method="post" action="?action=embeds">';
         $tpl_page .= '<input type="hidden" name="token" value="' . $_SESSION['token'] . '" />';
+        $tpl_page .= '<input type="hidden" id="act" name="act" value="add" />';
+        $tpl_page .= '<input type="hidden" id="id" name="id" value="" />';
         $tpl_page .= '<label for="name">'. _gettext('Site Name') . ':</label>';
         $tpl_page .= '<input type="text" id="name" name="name" value="'. (isset($values['name']) ? $values['name'] : ''). '" />';
         $tpl_page .= '<div class="desc">'. _gettext('Can not be left blank.') . '</div><br />';
@@ -1271,19 +1278,19 @@ class Manage
         $tpl_page .= '<label for="videourl">'. _gettext('Video URL Start') . ':</label>';
         $tpl_page .= '<input type="text" id="videourl" name="videourl" value="'. (isset($values['videourl']) ? $values['videourl'] : '') . '" />';
         $tpl_page .= '<div class="desc">'. _gettext('Can not be left blank. This is what comes before the embed ID. Example: \'http://www.youtube.com/watch?v=\'') . '</div><br />';
-        $tpl_page .= '<input type="submit" value="'. _gettext('Edit') .'" /></form>';
-        if ($disptable) {
-            $tpl_page .= '<br /><hr /><h1>'. _gettext('Edit/Delete Embeds') .'</h1>';
-            $results = $tc_db->GetAll("SELECT HIGH_PRIORITY * FROM `" . KU_DBPREFIX . "embeds` ORDER BY `id` ASC");
-            if (count($results) > 0) {
-                $tpl_page .= '<table border="1" width="100%"><tr><th>'. _gettext('Site Name') .'</th><th>'. _gettext('Filetype') .'</th><th>'. _gettext('Video URL Start') .'</th><th>'. _gettext('Actions') .'</th></tr>';
-                foreach ($results as $line) {
-                    $tpl_page .= '<tr><td>'. $line['name'] . '</td><td>'. $line['filetype'] . '</td><td>'. $line['videourl'] . '</td><td>[<a href="?action=embeds&amp;act=edit&amp;id='. $line['id'] . '">'. _gettext('Edit') .'</a>] [<a href="?action=embeds&amp;act=del&amp;id='. $line['id'] . '">'. _gettext('Delete') .'</a>]</td></tr>';
-                }
-                $tpl_page .= '</table>';
-            } else {
-                $tpl_page .= _gettext('No Embeds yet.');
+        $tpl_page .= '<input type="submit" id="submit" value="'. _gettext('Add') .'" /></form>';
+        $tpl_page .= '<br /><hr /><h1>'. _gettext('Edit/Delete Embeds') .'</h1>';
+        $results = $tc_db->GetAll("SELECT HIGH_PRIORITY * FROM `" . KU_DBPREFIX . "embeds` ORDER BY `id` ASC");
+        if (count($results) > 0) {
+            $tpl_page .= '<table border="1" width="100%"><tr><th>'. _gettext('Site Name') .'</th><th>'. _gettext('Filetype') .'</th><th>'. _gettext('Video URL Start') .'</th><th>'. _gettext('Actions') .'</th></tr>';
+            foreach ($results as $line) {
+                $tpl_page .= '<tr><td>'. $line['name'] . '</td><td>'. $line['filetype'] . '</td><td>'. $line['videourl'] . '</td><td>';
+                $tpl_page .= '[<a href="#" onclick='."'".'setEmbedForm("edit", "'. $line['id'] . '", "' . $line['name'] . '", "' . $line['filetype'] . '", "' . $line['videourl'] . '", "'. _gettext('Edit') . '");'."'".'>'. _gettext('Edit') .'</a>] ';
+                $tpl_page .= '[<a href="#" onclick='."'".'setEmbedForm("del", "'. $line['id'] . '", "' . $line['name'] . '", "' . $line['filetype'] . '", "' . $line['videourl'] . '", "' . _gettext('Delete') . '");'."'".'>'. _gettext('Delete') .'</a>]</td></tr>';
             }
+            $tpl_page .= '</table>';
+        } else {
+            $tpl_page .= _gettext('No Embeds yet.');
         }
     }
 

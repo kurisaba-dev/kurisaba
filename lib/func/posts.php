@@ -9,10 +9,10 @@
 function embeddedVideoBox($post, $nospan = false)
 {
     global $tc_db;
-    $results = $tc_db->GetAll("SELECT HIGH_PRIORITY `filetype`, `videourl` FROM `" . KU_DBPREFIX . "embeds`");
+    $results = $tc_db->GetAll("SELECT HIGH_PRIORITY `name`, `filetype`, `videourl` FROM `" . KU_DBPREFIX . "embeds`");
     foreach ($results as $line) {
         if ($post['file_type'] == $line['filetype']) {
-            return '<a target="_new" class="' . ($nospan ? 'nospan ' : '') . 'videobox" href="' . $line['videourl'] . '/' . $post['file'] . '">https://' . $line['videourl'] . '/' . $post['file'] . '</a>';
+            return '<a target="_new" class="' . ($nospan ? 'nospan ' : '') . 'videobox" data-videoid="' . $post['file'] . '" data-videotype="' . strtolower($line['name']) . '" href="' . $line['videourl'] . $post['file'] . '">' . $line['videourl'] . $post['file'] . '</a>';
         }
     }
     return '';
