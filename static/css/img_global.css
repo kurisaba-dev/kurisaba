@@ -35,6 +35,10 @@ form {
     margin-bottom: 8px;
 }
 
+.hiddensetting {
+    display: none;
+}
+
 .hiddenbythreadid {
     display: none;
 }

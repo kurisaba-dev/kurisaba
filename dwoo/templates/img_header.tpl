@@ -36,7 +36,7 @@
       "rendered-callback": "recordMTCaptcha"
     };
     function focusToSubmitButton() {
-      $('#postform-submit').focus();
+      if(Settings.captchaFocus(false)) $('#top-textarea').focus(); else $('#postform-submit').focus();
     }
     (function () {
       var mt_service = document.createElement('script');

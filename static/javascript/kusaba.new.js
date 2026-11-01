@@ -206,6 +206,7 @@ var _messages = {
         settings_sendThroughJS: "Send posts through javascript",
         settings_sendCtrlEnter: "Send post by Ctrl+Enter",
         settings_expandImgFull: "Expand images to full size",
+        settings_captchaFocus: "MTCaptcha: focus to postbox after solve",
         settings_animatedPreviews: "Show animated previews",
         settings_navCtrlArrows: "Navigate board pages with Ctrl+arrows",
         settings_oldSearch: "Show search at right rather than in menu",
@@ -294,6 +295,7 @@ var _messages = {
         settings_sendThroughJS: "Отправлять посты через javascript",
         settings_sendCtrlEnter: "Отправка поста по Ctrl+Enter",
         settings_expandImgFull: "Разворачивать картинки до исходного размера",
+        settings_captchaFocus: "MTCaptcha: переходить к постбоксу после решения",
         settings_animatedPreviews: "Анимированный предпросмотр картинок",
         settings_navCtrlArrows: "Переключать страницы борды по Ctrl+стрелкам",
         settings_oldSearch: "Показывать поиск справа, а не в меню",
@@ -3360,6 +3362,10 @@ var Settings = {
         return Settings._checkbox(changed, 'expandImgFull', false);
     },
 
+    captchaFocus: function(changed) {
+        return Settings._checkbox(changed, 'captchaFocus', false);
+    },
+
     autoRefresh: function(changed) {
         var enabled = Settings._checkbox(changed, 'autoRefresh', true);
         if (changed == null)
@@ -3744,7 +3750,7 @@ function readyset() {
     if (localStorage) {
         for (var s in Settings) {
             if (s.substring(0, 1) == "_") continue;
-            $("#js_settings").append('<label><input type="checkbox" class="stchkbox" onchange="javascript:Settings.' + s + '(true)" name="settings_' + s + '" id="settings_' + s + '" value="true"><span> ' + _['settings_' + s] + '</span></label><br />');
+            $("#js_settings").append('<label' + ((getCookie('captchalang') != 'mt' && s == 'captchaFocus') ? ' class="hiddensetting"' : '') + '><input type="checkbox" class="stchkbox" onchange="javascript:Settings.' + s + '(true)" name="settings_' + s + '" id="settings_' + s + '" value="true"><span> ' + _['settings_' + s] + '</span></label>' + ((getCookie('captchalang') != 'mt' && s == 'captchaFocus') ? '' : '<br />'));
             Settings[s](false);
         }
     } else {
