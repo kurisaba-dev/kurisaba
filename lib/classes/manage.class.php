@@ -2732,7 +2732,7 @@ class Manage
                                     }
 
                                     if (isset($_GET['do_ban'])) {
-                                        $tpl_page .= '<br /><br /><meta http-equiv="refresh" content="1;url='. KU_WEBPATH . '/manage_page.php?action=bans&ishashban=1&banhash=' . $line['file_md5'] . '&banboard='. $_GET['boarddir'] . '&banpost='. $delpost_id .'"><a href="'. KU_WEBPATH . '/manage_page.php?action=bans&ishashban=1&banhash=' . $line['file_md5'] . '&banboard='. $_GET['boarddir'] . '&banpost='. $delpost_id . '">'. _gettext('Redirecting') . '</a> to ban page...';
+                                        $tpl_page .= '<br /><br /><meta http-equiv="refresh" content="1;url='. KU_WEBPATH . '/manage_page.php?action=bans&ban_img_by_post=true&banboard='. $_GET['boarddir'] . '&banpost='. $_POST['delpostid'] .'"><a href="'. KU_WEBPATH . '/manage_page.php?action=bans&ban_img_by_post=true&banboard='. $_GET['boarddir'] . '&banpost='. $_POST['delpostid'] . '">'. _gettext('Redirecting') . '</a> to ban page...';
                                     } elseif ($isquickdel && !isset($_GET['noreturn'])) {
                                         if ($delpost_parentid > 0) {
                                             $tpl_page .= '<br /><br /><meta http-equiv="refresh" content="1;url='. KU_BOARDSPATH . '/'. $_GET['boarddir'] . '/res/'. $delpost_parentid . '.html"><a href="'. KU_BOARDSPATH . '/'. $_GET['boarddir'] . '/res/'. $delpost_parentid . '.html">'. _gettext('Redirecting') . '</a> back to thread...';
