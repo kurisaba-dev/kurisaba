@@ -191,6 +191,7 @@ var _messages = {
         noNewPosts: "No new posts",
         replies: "Replies",
         settings_fxEnabled: "Animation effects",
+        settings_nokoEnabled: "Show noko checkbox",
         settings_scrollMode: "Show scrolling controls",
         settings_showReplies: "Show replies inside posts",
         settings_sfwMode: "NSFW mode",
@@ -284,6 +285,7 @@ var _messages = {
         noNewPosts: "Нет новых постов",
         replies: "Ответы",
         settings_fxEnabled: "Анимированные эффекты",
+        settings_nokoEnabled: "Показывать галочку noko",
         settings_scrollMode: "Показывать кнопки прокрутки",
         settings_showReplies: "Показывать ответы внутри поста",
         settings_sfwMode: "Мамка в комнате",
@@ -867,6 +869,7 @@ function tasksAfterModify(newly_added) {
     if (typeof newly_added === "undefined") newly_added = '';
 
     Settings.sfwMode(false);
+    Settings.nokoEnabled(false);
     Settings.showReplies(false);
     Settings.smiliesMode(true);
     cloudflare_emails();
@@ -3325,6 +3328,22 @@ var Settings = {
         var enabled = Settings._checkbox(changed, 'fxEnabled', true);
         if (changed != null) {
             $.fx.off = !enabled;
+        }
+        return enabled;
+    },
+
+    nokoEnabled: function(changed) {
+        var enabled = Settings._checkbox(changed, 'nokoEnabled', false);
+        if (changed != null) {
+            if(enabled) {
+                document.querySelector('#gotothread').name = 'redirecttothread';
+                document.querySelector('#gotothread_fixed').name = 'redirecttothread_inactive';
+                document.querySelector('#gotothread_label').style = '';
+            } else {
+                document.querySelector('#gotothread').name = 'redirecttothread_inactive';
+                document.querySelector('#gotothread_fixed').name = 'redirecttothread';
+                document.querySelector('#gotothread_label').style = 'display: none;';
+            }
         }
         return enabled;
     },

@@ -52,7 +52,6 @@ CREATE TABLE IF NOT EXISTS `{{KU_DBPREFIX}}boards` (
   `createdon` int(20) NOT NULL,
   `locked` tinyint(1) NOT NULL DEFAULT '0',
   `includeheader` text COLLATE utf8_unicode_ci NOT NULL,
-  `redirecttothread` tinyint(1) NOT NULL DEFAULT '0',
   `anonymous` varchar(255) COLLATE utf8_unicode_ci NOT NULL DEFAULT 'Аноним',
   `forcedanon` tinyint(1) NOT NULL DEFAULT '0',
   `embeds_allowed` varchar(255) COLLATE utf8_unicode_ci NOT NULL DEFAULT 'you,vim,cob',
