@@ -1382,7 +1382,7 @@ class Manage
             $tc_db->Execute("COMMIT");
 
             $tpl_page .= _gettext('Move complete.'); // . '<br><h2>Не забудь пересобрать все доски!</h2><br><hr />';
-            $msg = 'Thread that was at &gt;&gt;' . create_logentry_link($board_from, $id, $id) . ' was moved to &gt;&gt;' . create_logentry_link($board_to, $new_id, $new_id);
+            $msg = 'Thread that was at &gt;&gt;' . create_logentry_link($board_from, $_POST['id'], $_POST['id']) . ' was moved to &gt;&gt;' . create_logentry_link($board_to, $new_id, $new_id);
             management_addlogentry($msg, 4, '', $msg);
         }
 
@@ -2747,9 +2747,9 @@ class Manage
                                             $delpost_parentid = $line['parentid'];
 
                                             if ($delpost_parentid == 0) {
-                                                management_addlogentry('Удалён файл из ОП-поста треда' . ' #<a href="?action=viewthread&thread='. $delpost_id . '&board='. $_POST['boarddir'] . '#'. $delpost_id . '">'. $delpost_id . '</a> - /'. $board_dir . '/', 7, '', 'File <a href="' . KU_BOARDSPATH . '/' . $_POST['boarddir'] . '/res/' . $line['file'] . '.' . $line['file_type'] . '">' . KU_BOARDSPATH . '/' . $_POST['boarddir'] . '/res/' . $line['file'] . '.' . $line['file_type'] . '</a> that was attached to &gt;&gt;' . create_logentry_link($board_dir, $delpost_id, $delpost_id) . ' was removed');
+                                                management_addlogentry('Удалён файл из ОП-поста треда' . ' #<a href="?action=viewthread&thread='. $delpost_id . '&board='. $_POST['boarddir'] . '#'. $delpost_id . '">'. $delpost_id . '</a> - /'. $board_dir . '/', 7, '', 'File <a href="' . KU_BOARDSPATH . '/' . $_POST['boarddir'] . '/src/' . $line['file'] . '.' . $line['file_type'] . '">' . KU_BOARDSPATH . '/' . $_POST['boarddir'] . '/src/' . $line['file'] . '.' . $line['file_type'] . '</a> that was attached to &gt;&gt;' . create_logentry_link($board_dir, $delpost_id, $delpost_id) . ' was removed');
                                             } else {
-                                                management_addlogentry('Удалён файл из поста' . ' #<a href="?action=viewthread&thread='. $delpost_parentid . '&board='. $_POST['boarddir'] . '#'. $delpost_id . '">'. $delpost_id . '</a> - /'. $board_dir . '/', 7, '', 'File <a href="' . KU_BOARDSPATH . '/' . $_POST['boarddir'] . '/res/' . $line['file'] . '.' . $line['file_type'] . '">' . KU_BOARDSPATH . '/' . $_POST['boarddir'] . '/res/' . $line['file'] . '.' . $line['file_type'] . '</a> that was attached to &gt;&gt;' . create_logentry_link($board_dir, $delpost_parentid, $delpost_id) . ' was removed');
+                                                management_addlogentry('Удалён файл из поста' . ' #<a href="?action=viewthread&thread='. $delpost_parentid . '&board='. $_POST['boarddir'] . '#'. $delpost_id . '">'. $delpost_id . '</a> - /'. $board_dir . '/', 7, '', 'File <a href="' . KU_BOARDSPATH . '/' . $_POST['boarddir'] . '/src/' . $line['file'] . '.' . $line['file_type'] . '">' . KU_BOARDSPATH . '/' . $_POST['boarddir'] . '/src/' . $line['file'] . '.' . $line['file_type'] . '</a> that was attached to &gt;&gt;' . create_logentry_link($board_dir, $delpost_parentid, $delpost_id) . ' was removed');
                                             }
 
                                         } else {
@@ -3073,14 +3073,14 @@ class Manage
                     $tc_db->Execute("INSERT INTO `".KU_DBPREFIX."bannedhashes` ( `md5` , `bantime` , `description` ) VALUES ( ".$tc_db->qstr($banhash)." , ".$tc_db->qstr($_POST['banhashtime'])." , ".$tc_db->qstr($_POST['banhashdesc'])." )");
 
                     $pubmsg = 'File '. $banhash;
-                    $results = $tc_db->GetAll("SELECT HIGH_PRIORITY `boardid`, `id, `parentid`, `IS_DELETED` FROM `" . KU_DBPREFIX . "posts` WHERE `file_md5` = " . $tc_db->qstr($banhash) . " OR `banimage_md5` = " . $tc_db->qstr($banhash) . " LIMIT 1");
+                    $results = $tc_db->GetAll("SELECT HIGH_PRIORITY `boardid`, `id`, `parentid`, `IS_DELETED` FROM `" . KU_DBPREFIX . "posts` WHERE `file_md5` = " . $tc_db->qstr($banhash) . " OR `banimage_md5` = " . $tc_db->qstr($banhash) . " LIMIT 1");
                     if (!empty($results)) {
                         $board = $tc_db->GetOne("SELECT HIGH_PRIORITY `name` FROM `" . KU_DBPREFIX . "boards` WHERE `id` = " . $tc_db->qstr($results[0]['boardid']) . " LIMIT 1");
                         if (!empty($board)) {
                             $pubmsg .= ' that ' . ($results[0]['IS_DELETED'] ? 'was' : 'is') . ' attached to &gt;&gt;' . create_logentry_link($board, ($results[0]['parentid'] != 0 ? $results[0]['parentid'] : $results[0]['id']), $results[0]['id']);
                         }
                     }
-                    $pubmsg .= ' was forbidden ' . ($_POST['banhashtime'] == 0) ? 'forever' : 'until '. date('F j, Y, g:i a', (time() + KU_ADDTIME) + $_POST['banhashtime']) . ', reason is ' . $_POST['banhashdesc'];
+                    $pubmsg .= ' was forbidden ' . (($_POST['banhashtime'] == 0) ? 'forever' : 'until '. date('F j, Y, g:i a', (time() + KU_ADDTIME) + $_POST['banhashtime'])) . ', reason is ' . $_POST['banhashdesc'];
 
                     management_addlogentry('Banned md5 hash '. $banhash . ' with a description of '. $_POST['banhashdesc'], 8, '', $pubmsg);
                 }

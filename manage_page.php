@@ -181,7 +181,7 @@ switch ($action) {
         break;
     default:
         /* Halts execution if not validated */
-        if($action != 'openmodlog' || !KU_OPEN_MODLOG) {
+        if($action != 'pubmodlog' || !KU_OPEN_MODLOG) {
             $manage_class->ValidateSession();
         }
         manage_page($action);
