@@ -663,14 +663,9 @@ if ($operation_post) { // it's `noreturn`.
             }
 
             if ($user_authority > 0 && $user_authority != 3) {
-                $modpost_message = 'Modposted #<a href="' . KU_BOARDSPATH . '/' . $board_class->board['name'] . '/res/';
-                if ($post_isreply) {
-                    $modpost_message .= $thread_replyto;
-                } else {
-                    $modpost_message .= $post_id;
-                }
-                $modpost_message .= '.html#' . $post_id . '">' . $post_id . '</a> in /'.$_POST['board'].'/.';
-                management_addlogentry($modpost_message, 1, md5_decrypt($_POST['modpassword'], KU_RANDOMSEED));
+                $modpost_message = 'Modposted #' . create_logentry_link($board_class->board['name'], $post_isreply ? $thread_replyto : $post_id, $post_id) . '.';
+                $pub_message = 'Message &gt;&gt;' . create_logentry_link($board_class->board['name'], $post_isreply ? $thread_replyto : $post_id, $post_id) . ' was posted officially';
+                management_addlogentry($modpost_message, 1, md5_decrypt($_POST['modpassword'], KU_RANDOMSEED), $pub_message);
             }
 
             if ($post['name_save'] && isset($_POST['name'])) {

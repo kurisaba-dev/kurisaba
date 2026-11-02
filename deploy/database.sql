@@ -141,6 +141,12 @@ CREATE TABLE IF NOT EXISTS `{{KU_DBPREFIX}}modlog` (
   `timestamp` int(20) NOT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
+CREATE TABLE IF NOT EXISTS `{{KU_DBPREFIX}}pubmodlog` (
+  `entry` text NOT NULL,
+  `user` varchar(255) NOT NULL,
+  `timestamp` int(20) NOT NULL
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
 CREATE TABLE IF NOT EXISTS `{{KU_DBPREFIX}}module_settings` (
   `module` varchar(255) NOT NULL,
   `key` varchar(255) NOT NULL,

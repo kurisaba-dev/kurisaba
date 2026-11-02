@@ -141,7 +141,7 @@ config:
         type: bool
       KU_OPEN_MODLOG:
         default: true
-        comment: 'Давать ли доступ к модлогу обычным пользователям.'
+        comment: 'Иметь ли публичный модлог для обычных пользователей.'
         type: bool
       KU_NOMESSAGETHREAD:
         default: ''

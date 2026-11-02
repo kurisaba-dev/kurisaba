@@ -764,15 +764,31 @@ class Manage
     public function modlog()
     {
         global $tc_db, $tpl_page;
-        if(!KU_OPEN_MODLOG) {
-            $this->AdministratorsOnly();
-        }
+        $this->AdministratorsOnly();
 
         $tc_db->Execute("DELETE FROM `" . KU_DBPREFIX . "modlog` WHERE `timestamp` < '" . ((time() + KU_ADDTIME) - KU_MODLOGDAYS * 86400) . "'");
 
         $tpl_page .= '<h2>'. ('ModLog') . '</h2><br />
         <table cellspacing="2" cellpadding="1" border="1" width="100%"><tr><th>'. _gettext('Time') .'</th><th>'. _gettext('User') .'</th><th width="100%">'. _gettext('Action') .'</th></tr>';
         $results = $tc_db->GetAll("SELECT HIGH_PRIORITY * FROM `" . KU_DBPREFIX . "modlog` ORDER BY `timestamp` DESC");
+        foreach ($results as $line) {
+            $tpl_page .= "<tr><td>" . date("y/m/d(D)H:i:s", $line['timestamp']) . "</td><td>" . $line['user'] . "</td><td>" . $line['entry'] . "</td></tr>";
+        }
+        $tpl_page .= '</table>';
+    }
+
+    public function pubmodlog()
+    {
+        global $tc_db, $tpl_page;
+        if(!KU_OPEN_MODLOG) {
+            $this->AdministratorsOnly();
+        }
+
+        $tc_db->Execute("DELETE FROM `" . KU_DBPREFIX . "pubmodlog` WHERE `timestamp` < '" . ((time() + KU_ADDTIME) - KU_MODLOGDAYS * 86400) . "'");
+
+        $tpl_page .= '<h2>'. ('Public ModLog') . '</h2><br />
+        <table cellspacing="2" cellpadding="1" border="1" width="100%"><tr><th>'. _gettext('Time') .'</th><th>'. _gettext('User') .'</th><th width="100%">'. _gettext('Action') .'</th></tr>';
+        $results = $tc_db->GetAll("SELECT HIGH_PRIORITY * FROM `" . KU_DBPREFIX . "pubmodlog` ORDER BY `timestamp` DESC");
         foreach ($results as $line) {
             $tpl_page .= "<tr><td>" . date("y/m/d(D)H:i:s", $line['timestamp']) . "</td><td>" . $line['user'] . "</td><td>" . $line['entry'] . "</td></tr>";
         }
@@ -1366,6 +1382,8 @@ class Manage
             $tc_db->Execute("COMMIT");
 
             $tpl_page .= _gettext('Move complete.'); // . '<br><h2>Не забудь пересобрать все доски!</h2><br><hr />';
+            $msg = 'Thread that was at &gt;&gt;' . create_logentry_link($board_from, $id, $id) . ' was moved to &gt;&gt;' . create_logentry_link($board_to, $new_id, $new_id);
+            management_addlogentry($msg, 4, '', $msg);
         }
 
         $tpl_page .= '<form action="?action=movethread" method="post">
@@ -2724,6 +2742,16 @@ class Manage
                                             delete_file_wrapper($_POST['boarddir'], $line['file'], $line['file_type']);
                                             $tc_db->Execute("UPDATE `".KU_DBPREFIX."posts` SET `file` = 'removed', `file_md5` = '' WHERE `boardid` = " . $board_id . " AND `id` = ".$_POST['delpostid']." LIMIT 1");
                                             $tpl_page .= '<hr />File successfully deleted<hr />';
+
+                                            $delpost_id = $line['id'];
+                                            $delpost_parentid = $line['parentid'];
+
+                                            if ($delpost_parentid == 0) {
+                                                management_addlogentry('Удалён файл из ОП-поста треда' . ' #<a href="?action=viewthread&thread='. $delpost_id . '&board='. $_POST['boarddir'] . '#'. $delpost_id . '">'. $delpost_id . '</a> - /'. $board_dir . '/', 7, '', 'File <a href="' . KU_BOARDSPATH . '/' . $_POST['boarddir'] . '/res/' . $line['file'] . '.' . $line['file_type'] . '">' . KU_BOARDSPATH . '/' . $_POST['boarddir'] . '/res/' . $line['file'] . '.' . $line['file_type'] . '</a> that was attached to &gt;&gt;' . create_logentry_link($board_dir, $delpost_id, $delpost_id) . ' was removed');
+                                            } else {
+                                                management_addlogentry('Удалён файл из поста' . ' #<a href="?action=viewthread&thread='. $delpost_parentid . '&board='. $_POST['boarddir'] . '#'. $delpost_id . '">'. $delpost_id . '</a> - /'. $board_dir . '/', 7, '', 'File <a href="' . KU_BOARDSPATH . '/' . $_POST['boarddir'] . '/res/' . $line['file'] . '.' . $line['file_type'] . '">' . KU_BOARDSPATH . '/' . $_POST['boarddir'] . '/res/' . $line['file'] . '.' . $line['file_type'] . '</a> that was attached to &gt;&gt;' . create_logentry_link($board_dir, $delpost_parentid, $delpost_id) . ' was removed');
+                                            }
+
                                         } else {
                                             $tpl_page .= '<hr />That file has already been deleted.<hr />';
                                         }
@@ -2755,15 +2783,17 @@ class Manage
                                     } else {
                                         $tpl_page .= 'Пост '.$delpost_id.' успешно удалён.';
                                     }
+
+                                    if ($delpost_parentid == 0) {
+                                        management_addlogentry('Удалён тред' . ' #<a href="?action=viewthread&thread='. $delpost_id . '&board='. $_POST['boarddir'] . '#'. $delpost_id . '">'. $delpost_id . '</a> - /'. $board_dir . '/', 7, '', 'Message &gt;&gt;' . create_logentry_link($board_dir, $delpost_id, $delpost_id) . ' was removed');
+                                    } else {
+                                        management_addlogentry('Удалён пост' . ' #<a href="?action=viewthread&thread='. $delpost_parentid . '&board='. $_POST['boarddir'] . '#'. $delpost_id . '">'. $delpost_id . '</a> - /'. $board_dir . '/', 7, '', 'Message &gt;&gt;' . create_logentry_link($board_dir, $delpost_parentid, $delpost_id) . ' was removed');
+                                    }
+
                                 } else {
                                     $tpl_page = 'Невозможно удалить пост '.$delpost_id.': ' . $result;
                                 }
 
-                                if ($delpost_parentid == 0) {
-                                    management_addlogentry('Удалён тред' . ' #<a href="?action=viewthread&thread='. $delpost_parentid . '&board='. $_POST['boarddir'] . '#'. $delpost_id . '">'. $delpost_id . '</a> - /'. $board_dir . '/', 7);
-                                } else {
-                                    management_addlogentry('Удалён пост' . ' #<a href="?action=viewthread&thread='. $delpost_parentid . '&board='. $_POST['boarddir'] . '#'. $delpost_id . '">'. $delpost_id . '</a> - /'. $board_dir . '/', 7);
-                                }
 
                                 if (isset($_GET['do_ban'])) {
                                     $tpl_page .= '<br /><br /><meta http-equiv="refresh" content="1;url='. KU_WEBPATH . '/manage_page.php?action=bans&banboard='. $_GET['boarddir'] . '&banpost='. $delpost_id .'"><a href="'. KU_WEBPATH . '/manage_page.php?action=bans&banboard='. $_GET['boarddir'] . '&banpost='. $delpost_id . '">'. _gettext('Redirecting') . '</a> to ban page...';
@@ -3041,7 +3071,18 @@ class Manage
                 if ($results == 0) {
                     $bannedhashes++;
                     $tc_db->Execute("INSERT INTO `".KU_DBPREFIX."bannedhashes` ( `md5` , `bantime` , `description` ) VALUES ( ".$tc_db->qstr($banhash)." , ".$tc_db->qstr($_POST['banhashtime'])." , ".$tc_db->qstr($_POST['banhashdesc'])." )");
-                    management_addlogentry('Banned md5 hash '. $banhash . ' with a description of '. $_POST['banhashdesc'], 8);
+
+                    $pubmsg = 'File '. $banhash;
+                    $results = $tc_db->GetAll("SELECT HIGH_PRIORITY `boardid`, `id, `parentid`, `IS_DELETED` FROM `" . KU_DBPREFIX . "posts` WHERE `file_md5` = " . $tc_db->qstr($banhash) . " OR `banimage_md5` = " . $tc_db->qstr($banhash) . " LIMIT 1");
+                    if (!empty($results)) {
+                        $board = $tc_db->GetOne("SELECT HIGH_PRIORITY `name` FROM `" . KU_DBPREFIX . "boards` WHERE `id` = " . $tc_db->qstr($results[0]['boardid']) . " LIMIT 1");
+                        if (!empty($board)) {
+                            $pubmsg .= ' that ' . ($results[0]['IS_DELETED'] ? 'was' : 'is') . ' attached to &gt;&gt;' . create_logentry_link($board, ($results[0]['parentid'] != 0 ? $results[0]['parentid'] : $results[0]['id']), $results[0]['id']);
+                        }
+                    }
+                    $pubmsg .= ' was forbidden ' . ($_POST['banhashtime'] == 0) ? 'forever' : 'until '. date('F j, Y, g:i a', (time() + KU_ADDTIME) + $_POST['banhashtime']) . ', reason is ' . $_POST['banhashdesc'];
+
+                    management_addlogentry('Banned md5 hash '. $banhash . ' with a description of '. $_POST['banhashdesc'], 8, '', $pubmsg);
                 }
             }
             if ($bannedhashes > 0) {
@@ -3157,7 +3198,19 @@ class Manage
                     $logentry .= ($ban_duration == 0) ? ' '. _gettext('without expiration') : ' '. _gettext('until') . ' '. date('F j, Y, g:i a', (time() + KU_ADDTIME) + $ban_duration);
                     $logentry .= ' - '. _gettext('Reason') . ': '. $ban_reason . (($ban_note) ? (" (".$ban_note.")") : ("")). ' - '. _gettext('Banned from') . ': ';
                     $logentry .= ($ban_globalban == 1) ? _gettext('All boards') . ' ' : '/'. implode('/, /', explode('|', $ban_boards)) . '/ ';
-                    management_addlogentry($logentry, 8);
+
+                    $pubmsg = '';
+                    if (isset($ban_board_id) && isset($ban_board) && isset($ban_post_id)) {
+                        $parentid = $tc_db->GetOne("SELECT HIGH_PRIORITY `parentid` FROM `".KU_DBPREFIX."posts` WHERE `boardid` = " . $tc_db->qstr($ban_board_id) . " AND `id` = " . $tc_db->qstr($ban_post_id) . " LIMIT 1");
+                        $pubmsg .= 'Author of &gt;&gt;'. create_logentry_link($ban_board, ($parentid ? $parentid : $ban_post_id), $ban_post_id);
+                    } else {
+                        $pubmsg .= 'Some weirdo';
+                    }
+                    $pubmsg .= ' was banned ' . (($ban_duration == 0) ? 'forever' : 'until ' . date('F j, Y, g:i a', (time() + KU_ADDTIME) + $ban_duration));
+                    $pubmsg .= ' from ' . (($ban_globalban == 1) ? 'all boards' : '/'. implode('/, /', explode('|', $ban_boards)) . '/');
+                    $pubmsg .= ', reason is '. $ban_reason;
+
+                    management_addlogentry($logentry, 8, '', $pubmsg);
                     $ban_ip = '';
                     $i++;
                 }

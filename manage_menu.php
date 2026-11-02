@@ -64,7 +64,10 @@ if (!$manage_class->ValidateSession(true)) {
 
     // Statistics
     $tpl_links .= section_html(_gettext('Statistics'), 'home') . '<ul>';
-    if (KU_OPEN_MODLOG || $manage_class->CurrentUserIsAdministrator()) {
+    if (KU_OPEN_MODLOG) {
+        $tpl_links .= '<li><a style="color:red" href="manage_page.php?action=pubmodlog">' . _gettext('Public ModLog') . '</a></li>';
+    }
+    if ($manage_class->CurrentUserIsAdministrator()) {
         $tpl_links .= '<li><a style="color:red" href="manage_page.php?action=modlog">' . _gettext('ModLog') . '</a></li>';
     }
     $tpl_links .= '<li><a href="manage_page.php?action=posting_rates">' . _gettext('Posting rates') . '</a></li>';
