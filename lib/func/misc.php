@@ -355,6 +355,30 @@ function array_in_array($some, $all)
     }
 }
 
+function unlink_wrapper($file)
+{
+    if(KU_HALFPERM_DELETE) {
+        @chmod($file, 0);
+    } else {
+        @unlink($file);
+    }
+}
+
+function delete_file_wrapper($board, $file, $type)
+{
+    unlink_wrapper(KU_STORAGEDIR.$board.'/src/'.$file.'.'.$type);
+    unlink_wrapper(KU_STORAGEDIR.$board.'/src/'.$file.'.pch');
+    unlink_wrapper(KU_STORAGEDIR.$board.'/thumb/'.$file.'s.'.$type);
+    unlink_wrapper(KU_STORAGEDIR.$board.'/thumb/'.$file.'a.'.$type);
+    unlink_wrapper(KU_STORAGEDIR.$board.'/thumb/'.$file.'c.'.$type);
+    if ($type == 'mp3' || $type == 'ogg' || $type == 'm4a') {
+        unlink_wrapper(KU_STORAGEDIR.$board.'/thumb/'.$file.'s.jpg');
+        unlink_wrapper(KU_STORAGEDIR.$board.'/thumb/'.$file.'s.webp');
+        unlink_wrapper(KU_STORAGEDIR.$board.'/thumb/'.$file.'s.png');
+        unlink_wrapper(KU_STORAGEDIR.$board.'/thumb/'.$file.'s.gif');
+    }
+}
+
 function exitWithErrorPage($errormsg, $extended = '', $posttext = '', $template = '/error.tpl', $boardname = '')
 {
     global $dwoo, $dwoo_data, $board_class;

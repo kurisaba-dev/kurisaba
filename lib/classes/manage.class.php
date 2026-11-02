@@ -2717,9 +2717,8 @@ class Manage
                             if (isset($_POST['fileonly'])) {
                                 foreach ($results as $line) {
                                     if (!empty($line['file'])) {
-                                        $del = @unlink(KU_STORAGEDIR . $_POST['boarddir'] . '/src/'. $line['file'] . '.'. $line['file_type']);
-                                        if ($del) {
-                                            @unlink(KU_STORAGEDIR . $_POST['boarddir'] . '/thumb/'. $line['file'] . 's.'. $line['file_type']);
+                                        if (!$line['file'] != 'removed') {
+                                            delete_file_wrapper($_POST['boarddir'], $line['file'], $line['file_type']);
                                             $tc_db->Execute("UPDATE `".KU_DBPREFIX."posts` SET `file` = 'removed', `file_md5` = '' WHERE `boardid` = " . $board_id . " AND `id` = ".$_POST['delpostid']." LIMIT 1");
                                             $tpl_page .= '<hr />File successfully deleted<hr />';
                                         } else {

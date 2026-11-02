@@ -873,6 +873,7 @@ class Post extends Board
         }
     }
 
+    // $update_to_removed must be set to false if deleting post (so post with the picture can be recovered), and true if deleting just a file from post (so post won't have unloadable attachment; but admin can't then recover it unless $skip_delete or KU_HALFPERMDELETE is set).
     public function DeleteFile($update_to_removed = true, $whole_thread = false, $save_picture = false, $skip_delete = false)
     {
         global $tc_db;
@@ -883,17 +884,7 @@ class Post extends Board
                 foreach ($results as $line) {
                     if ($line['file'] != '' && $line['file'] != 'removed') {
                         if (!$skip_delete) {
-                            @unlink(KU_STORAGEDIR.$this->board['name'].'/src/'.$line['file'].'.'.$line['file_type']);
-                            @unlink(KU_STORAGEDIR.$this->board['name'].'/src/'.$line['file'].'.pch');
-                            @unlink(KU_STORAGEDIR.$this->board['name'].'/thumb/'.$line['file'].'s.'.$line['file_type']);
-                            @unlink(KU_STORAGEDIR.$this->board['name'].'/thumb/'.$line['file'].'a.'.$line['file_type']);
-                            @unlink(KU_STORAGEDIR.$this->board['name'].'/thumb/'.$line['file'].'c.'.$line['file_type']);
-                            if ($line['file_type'] == 'mp3' || $line['file_type'] == 'ogg' || $line['file_type'] == 'm4a') {
-                                @unlink(KU_STORAGEDIR.$this->board['name'].'/thumb/'.$line['file'].'s.jpg');
-                                @unlink(KU_STORAGEDIR.$this->board['name'].'/thumb/'.$line['file'].'s.webp');
-                                @unlink(KU_STORAGEDIR.$this->board['name'].'/thumb/'.$line['file'].'s.png');
-                                @unlink(KU_STORAGEDIR.$this->board['name'].'/thumb/'.$line['file'].'s.gif');
-                            }
+                            delete_file_wrapper($this->board['name'], $line['file'], $line['file_type']);
                             if ($update_to_removed) {
                                 $tc_db->Execute("UPDATE `".KU_DBPREFIX."posts` SET `file` = 'removed', `file_md5` = '' WHERE `boardid` = '" . $this->board['id'] . "' AND `id` = ".$line['id']);
                                 clearPostCache($line['id'], $this->board['name']);
@@ -912,17 +903,7 @@ class Post extends Board
                     );
                 }
                 if (!$skip_delete) {
-                    @unlink(KU_STORAGEDIR.$this->board['name'].'/src/'.$this->post['file'].'.'.$this->post['file_type']);
-                    @unlink(KU_STORAGEDIR.$this->board['name'].'/src/'.$this->post['file'].'.pch');
-                    @unlink(KU_STORAGEDIR.$this->board['name'].'/thumb/'.$this->post['file'].'s.'.$this->post['file_type']);
-                    @unlink(KU_STORAGEDIR.$this->board['name'].'/thumb/'.$this->post['file'].'a.'.$this->post['file_type']);
-                    @unlink(KU_STORAGEDIR.$this->board['name'].'/thumb/'.$this->post['file'].'c.'.$this->post['file_type']);
-                    if ($this->post['file_type'] == 'mp3' || $this->post['file_type'] == 'ogg' || $this->post['file_type'] == 'm4a') {
-                        @unlink(KU_STORAGEDIR.$this->board['name'].'/thumb/'.$this->post['file'].'s.jpg');
-                        @unlink(KU_STORAGEDIR.$this->board['name'].'/thumb/'.$this->post['file'].'s.webp');
-                        @unlink(KU_STORAGEDIR.$this->board['name'].'/thumb/'.$this->post['file'].'s.png');
-                        @unlink(KU_STORAGEDIR.$this->board['name'].'/thumb/'.$this->post['file'].'s.gif');
-                    }
+                    delete_file_wrapper($this->board['name'], $this->post['file'], $line['file_type']);
                     if ($update_to_removed) {
                         $tc_db->Execute("UPDATE `".KU_DBPREFIX."posts` SET `file` = 'removed', `file_md5` = '' WHERE `boardid` = '" . $this->board['id'] . "' AND `id` = ".$tc_db->qstr($this->post['id']));
                         clearPostCache($this->post['id'], $this->board['name']);
