@@ -318,6 +318,14 @@ pre {
     background-position: -16px -64px;
 }
 
+.deletefile {
+    background-position: -16px -80px;
+}
+
+.dandbfile {
+    background-position: -32px -80px;
+}
+
 .geoblock {
     background-position: -48px -64px;
 }

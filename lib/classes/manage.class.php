@@ -2696,6 +2696,9 @@ class Manage
                 if (isset($_GET['delpostid'])) {
                     $_POST['delpostid'] = $_GET['delpostid'];
                 }
+                if (isset($_GET['fileonly'])) {
+                    $_POST['fileonly'] = $_GET['fileonly'];
+                }
             }
             $results = $tc_db->GetAll("SELECT HIGH_PRIORITY * FROM `" . KU_DBPREFIX . "boards` WHERE `name` = " . $tc_db->qstr($_POST['boarddir']) . "");
             if (count($results) > 0) {
@@ -2726,6 +2729,16 @@ class Manage
                                         }
                                     } else {
                                         $tpl_page .= '<hr />Error: That thread doesn\'t have a file associated with it.<hr />';
+                                    }
+
+                                    if (isset($_GET['do_ban'])) {
+                                        $tpl_page .= '<br /><br /><meta http-equiv="refresh" content="1;url='. KU_WEBPATH . '/manage_page.php?action=bans&ishashban=1&banhash=' . $line['file_md5'] . '&banboard='. $_GET['boarddir'] . '&banpost='. $delpost_id .'"><a href="'. KU_WEBPATH . '/manage_page.php?action=bans&ishashban=1&banhash=' . $line['file_md5'] . '&banboard='. $_GET['boarddir'] . '&banpost='. $delpost_id . '">'. _gettext('Redirecting') . '</a> to ban page...';
+                                    } elseif ($isquickdel && !isset($_GET['noreturn'])) {
+                                        if ($delpost_parentid > 0) {
+                                            $tpl_page .= '<br /><br /><meta http-equiv="refresh" content="1;url='. KU_BOARDSPATH . '/'. $_GET['boarddir'] . '/res/'. $delpost_parentid . '.html"><a href="'. KU_BOARDSPATH . '/'. $_GET['boarddir'] . '/res/'. $delpost_parentid . '.html">'. _gettext('Redirecting') . '</a> back to thread...';
+                                        } else {
+                                            $tpl_page .= '<br /><br /><meta http-equiv="refresh" content="1;url='. KU_BOARDSPATH . '/'. $_GET['boarddir'] . '"><a href="'. KU_BOARDSPATH . '/'. $_GET['boarddir'] . '">'. _gettext('Redirecting') . '</a> back to board...';
+                                        }
                                     }
                                 }
                             } else {

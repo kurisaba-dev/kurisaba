@@ -216,6 +216,8 @@ var _messages = {
         settings_showyou: "Show (You) in posts",
         deletePost: "Delete post",
         deleteAndBan: "Delete post and ban poster",
+        deletePostFile: "Delete file",
+        deleteAndBanFile: "Delete and ban file",
         enterCaptcha: "Please enter captcha.",
         selectText: "Select some text",
         dcls: "Double click to show source",
@@ -224,6 +226,8 @@ var _messages = {
         threadUpdationAutomatically: "Tread is being updated automatically.",
         delete: "Delete",
         delandban: "Delete and ban",
+        deletefile: "Delete file",
+        delandbanfile: "Delete and ban file",
         ban: "Ban",
         banfile: "Ban by file",
         stickthread: "Stick thread",
@@ -305,6 +309,8 @@ var _messages = {
         settings_showyou: "Показывать (You) в постах",
         deletePost: "Удалить пост",
         deleteAndBan: "Удалить пост и забанить постера",
+        deletePostFile: "Удалить файл",
+        deleteAndBanFile: "Удалить и забанить файл",
         enterCaptcha: "Пожалуйста, введите капчу.",
         selectText: "Текст не выделен",
         dcls: "Double click to show source",
@@ -314,6 +320,8 @@ var _messages = {
         threadUpdationAutomatically: "Тред обновляется автоматически",
         delete: "Удалить",
         delandban: "Удалить и забанить",
+        deletefile: "Удалить файл",
+        delandbanfile: "Удалить и забанить файл",
         ban: "Забанить",
         banfile: "Забанить по файлу",
         stickthread: "Прикрепить тред",
@@ -686,6 +694,8 @@ function delandbanlinks($scope, force) {
         }
         newhtml += '<a href="' + ku_webpath + '/manage_page.php?action=delposts&do_ban=true&boarddir=' + boardname + '&delpostid=' + postid + '" title="' + _.delandban + '" onclick="return confirm(\'' + _.deleteAndBan + '?\');"><img src="' + ku_webpath + '/static/images/blank.gif?v=' + ku_js_css_ver + '" class="dandb spritebtn sb-c"><\/a>';
         newhtml += '<a href="' + ku_webpath + '/manage_page.php?action=bans&banboard=' + boardname + '&banpost=' + postid + '" title="' + _.ban + '" onclick="return confirm(\'' + _.ban + '?\');"><img src="' + ku_webpath + '/static/images/blank.gif?v=' + ku_js_css_ver + '" class="ban spritebtn sb-c"><\/a>';
+        newhtml += '<a href="' + ku_webpath + '/manage_page.php?action=delposts&fileonly=1&boarddir=' + boardname + '&delpostid=' + postid + '" title="' + _.deletefile + '" onclick="return confirm(\'' + _.deletePostFile + '?\');"><img src="' + ku_webpath + '/static/images/blank.gif?v=' + ku_js_css_ver + '" class="deletefile spritebtn sb-c"><\/a>';
+        newhtml += '<a href="' + ku_webpath + '/manage_page.php?action=delposts&fileonly=1&do_ban=true&boarddir=' + boardname + '&delpostid=' + postid + '" title="' + _.delandbanfile + '" onclick="return confirm(\'' + _.deleteAndBanFile + '?\');"><img src="' + ku_webpath + '/static/images/blank.gif?v=' + ku_js_css_ver + '" class="dandbfile spritebtn sb-c"><\/a>';
         if (kuadm_set && ku_offload) {
             newhtml += '<a href="' + ku_webpath + '/manage_page.php?action=bans&ban_img_by_post=true&banboard=' + boardname + '&banpost=' + postid + '" title="' + _.banfile + '" onclick="return confirm(\'' + _.banfile + '?\');"><img src="' + ku_webpath + '/static/images/blank.gif?v=' + ku_js_css_ver + '" class="banfile spritebtn sb-c"><\/a>';
             newhtml += '<a href="#" onclick="geoBlock($(this), \'' + boardname + '\', ' + postid + ', ' + isthread + '); return false;" title="' + _.geobtn + '"><img src="' + ku_webpath + '/static/images/blank.gif?v=' + ku_js_css_ver + '" class="geoblock spritebtn sb-r"><\/a>';
