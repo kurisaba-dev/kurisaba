@@ -2760,8 +2760,6 @@ window.dropFormats = ["image", "audio", "video"];
 
 function dropHandler(ev) {
     hideDropZone();
-    clearDropZone();
-    $('#dropZone').addClass('error');
     if (ev.clipboardData) {
         var items = ev.clipboardData.items;
     } else if (ev.dataTransfer) {
@@ -2805,8 +2803,13 @@ function dropZoneFileSetPreview() {
 }
 
 function handleDropZoneFile(blob) {
+    clearDropZone();
     var maxFileSize = (typeof ku_maxfilesize === "undefined") ? 100000000 : ku_maxfilesize;
-    if (blob.size > maxFileSize) return;
+    if (blob.size > maxFileSize) {
+        $('#dropZone').addClass('error');
+        $('#dropZone').text('Картинка слишком большая!');
+        return;
+    }
     window.dropZoneFile = blob;
     dropZoneFileSetPreview();
     var form = document.forms.postform;
@@ -2822,6 +2825,7 @@ function handleDropZoneFileURL(url) {
     var form = document.forms.postform;
     form.elements['attach_type'][3].click();
     form.embedlink.value = url;
+    clearDropZone();
     $('#dropZone').removeClass('error');
 }
 
