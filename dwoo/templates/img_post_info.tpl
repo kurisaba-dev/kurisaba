@@ -15,14 +15,14 @@
 		{/if}
 
 		{if $post.name eq '' && $post.tripcode eq ''}
-			<span class="postername hideablename">{$board.anonymous}</span>
+			<span class="postername">{$board.anonymous}</span>
 		{elseif $post.name eq '' && $post.tripcode neq ''}
 		{else}
 			<span class="postername hideablename">{$post.name}</span>
 		{/if}
 
 		{if $post.tripcode neq ''}
-			<span class="postertrip">!{$post.tripcode}</span>
+			<span class="postertrip hideablename">!{$post.tripcode}</span>
 		{/if}
 		
 		{if $post.email neq ''}
@@ -35,6 +35,13 @@
 			&nbsp;
 			<a class="extrabtns" href="#" onclick="hide_poster('{$post.name}');return false;" title="Скрыть этого неймфага">
 				<img src="{%KU_WEBPATH}/static/images/blank.gif" border="0" class="hidethread spritebtn" alt="Скрыть этого неймфага" />
+			</a>
+		{/if}
+
+		{if $post.tripcode neq ''}
+			&nbsp;
+			<a class="extrabtns" href="#" onclick="hide_poster('!{$post.tripcode}');return false;" title="Скрыть этого трипфага">
+				<img src="{%KU_WEBPATH}/static/images/blank.gif" border="0" class="hidethread spritebtn" alt="Скрыть этого трипфага" />
 			</a>
 		{/if}
 

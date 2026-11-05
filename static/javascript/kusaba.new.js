@@ -994,23 +994,25 @@ function hide_unwanted_posts() {
         post.classList.forEach((cl) => {
             if (cl.includes("reply_board_")) b = cl.replace("reply_board_", "");
         })
-        var author = post.querySelector(".hideablename").innerHTML;
+        var nameNodes = Array.from(post.querySelectorAll(".hideablename"));
+        var display = (nameNodes.filter(nameNode => hiddenauthors.includes(nameNode.innerHTML)).length == 0);
         if (document.querySelectorAll('#' + post.id + "_" + b + "hiddenbyauthor").length > 0) {
-            if (!in_array(author, hiddenauthors)) {
+            if (display) {
                 post.classList.remove("hiddenbyauthor");
                 hider = document.querySelector('#' + post.id + "_" + b + 'hiddenbyauthor');
                 if (hider) hider.remove();
             }
         } else {
-            if (in_array(author, hiddenauthors)) {
+            if (!display) {
                 var p = post.querySelector("input.stchkbox").value;
+                var authorData = nameNodes.map(nameNode => nameNode.innerHTML);
                 post.classList.add("hiddenbyauthor");
                 patch = document.createElement("td");
                 patch.setAttribute("id", post.id + "_" + b + "hiddenbyauthor");
                 patch.classList.add("hider");
                 patch.classList.add("byauthor");
                 patch.classList.add("id_" + p + "_" + b);
-                patch.innerHTML = "Пост " + b + "/" + p + ", написанный " + author + ", скрыт по автору. Показать его посты вновь: <a class=\"extrabtns\" href=\"#\" onclick=\"unhidepost_author('" + author + "');return false;\" title=\"Показать посты\"><img src=\"/static/images/blank.gif?v=" + ku_js_css_ver + "\" border=\"0\" class=\"unhidethread spritebtn\" alt=\"Показать посты\" /></a>";
+                patch.innerHTML = "Пост " + b + "/" + p + ", написанный " + authorData.join('') + ", скрыт по автору/трипкоду. Показать его посты вновь: <a class=\"extrabtns\" href=\"#\" onclick=\"unhidepost_author('" + authorData.join("','") + "');return false;\" title=\"Показать посты\"><img src=\"/static/images/blank.gif?v=" + ku_js_css_ver + "\" border=\"0\" class=\"unhidethread spritebtn\" alt=\"Показать посты\" /></a>";
                 post.after(patch);
             }
         }
@@ -1175,13 +1177,16 @@ function unhidepost_text(text) {
     return false;
 }
 
-function unhidepost_author(author) {
+function unhidepost_author(author, tripcode = false) {
     if (!localStorage.getItem('hidden_authors')) localStorage['hidden_authors'] = '[]';
 
     var hiddenauthors = JSON.parse(localStorage['hidden_authors']);
     hiddenauthors.forEach(
         function(item, i, arr) {
             if (item == author) {
+                arr.splice(i, 1);
+            }
+            if (tripcode && item == tripcode) {
                 arr.splice(i, 1);
             }
         }
