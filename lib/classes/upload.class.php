@@ -121,7 +121,7 @@ class Upload
                         }
 
                         $results = $tc_db->GetOne("SELECT COUNT(*) FROM `" . KU_DBPREFIX . "posts` WHERE `boardid` = " . $board_class->board['id'] . " AND `file` = " . $tc_db->qstr($video_id) . " AND `IS_DELETED` = 0");
-                        if ($results[0] == 0) {
+                        if ($results[0] == 0 || $temporary) {
                             $video_check = check_link($videourl_start . $video_id);
                             switch ($video_check[1]) {
                                 case 404:
