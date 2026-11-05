@@ -254,7 +254,6 @@ function scrolling(elem, direction) {
 
 		<div class="menu-sect" style="max-width:600px" id="ms-_options">
 			<div>Опции:</div>
-			<a href="#" onclick="javascript:menu_pin();return false;">{t}Pin/Unpin{/t}</a>
 			<div id="js_settings"></div>
 			<div>Скрывать посты с текстом (через точку с запятой):<br><input id="wordstohide" type="text" size="30"> <input type="button" onclick="hide_by_words();" value="Применить"></div>
 			<div>Стили:</div>

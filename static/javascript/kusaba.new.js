@@ -190,6 +190,8 @@ var _messages = {
         couldntFetch: "Cold not fetch this post",
         noNewPosts: "No new posts",
         replies: "Replies",
+        settings_pin: "Pin the menu to the top of the page",
+        settings_touch: "Touchscreen interface",
         settings_fxEnabled: "Animation effects",
         settings_nokoEnabled: "Show noko checkbox",
         settings_scrollMode: "Show scrolling controls",
@@ -235,11 +237,6 @@ var _messages = {
         unstickthread: "Unstick thread",
         lockthread: "Lock thread",
         unlockthread: "Unlock thread",
-        returnDesktop: "Switch to desktop interface",
-        returnTouch: "Switch to touch interface",
-        impliedTouch: "Your device is recognized as touch device.",
-        impliedDesktop: "Your device is recognized as desktop device.",
-        forceDesktop: "Force Desktop interface",
         okay: "Okay",
         captchalang: "Captcha language",
         reply: "Reply",
@@ -284,6 +281,8 @@ var _messages = {
         couldntFetch: "Не удалось загрузить этот пост",
         noNewPosts: "Нет новых постов",
         replies: "Ответы",
+        settings_pin: "Прикрепить меню к верху страницы",
+        settings_touch: "Мобильный интерфейс",
         settings_fxEnabled: "Анимированные эффекты",
         settings_nokoEnabled: "Показывать галочку noko",
         settings_scrollMode: "Показывать кнопки прокрутки",
@@ -330,11 +329,6 @@ var _messages = {
         unstickthread: "Отлепить тред",
         lockthread: "Закрыть тред",
         unlockthread: "Открыть тред",
-        returnDesktop: "Switch to desktop interface",
-        returnTouch: "Switch to touch interface",
-        impliedTouch: "Your device is recognized as touch device.",
-        impliedDesktop: "Your device is recognized as desktop device.",
-        forceDesktop: "Force Desktop interface",
         okay: "Ясно",
         captchalang: "Язык капчи",
         reply: "Ответить",
@@ -596,7 +590,7 @@ function checkhighlight() {
 }
 
 function highlight(post, checknopage) {
-    if (isTouchDevice) return;
+    if (Settings.touch(false)) return;
     if (checknopage && ispage) return;
     closePostPreviews();
     var timer = setTimeout(function() {
@@ -868,6 +862,8 @@ function tasksAfterModify(newly_added) {
 
     if (typeof newly_added === "undefined") newly_added = '';
 
+    Settings.pin(false);
+    Settings.touch(false);
     Settings.sfwMode(false);
     Settings.nokoEnabled(false);
     Settings.showReplies(false);
@@ -3298,6 +3294,14 @@ function autoRefreshDisable() {
     autoRefreshSet(false);
 }
 
+function isTouchDevice()
+{
+    if(localStorage.getItem('interfaceType') == 'desktop') return false;
+    if(localStorage.getItem('interfaceType') == 'touch') return true;
+    if(Boolean(window.operamini)) return true;
+    return ('ontouchstart' in window) || (window.DocumentTouch && document instanceof DocumentTouch) || Boolean(navigator.userAgent.match(/Android|BlackBerry|Opera Mini|IEMobile|iPhone|iPad|iPod/i));
+}
+
 var Settings = {
     _checkbox: function(clicked, settingName, defaultValue) {
         if (window.localStorage == null) {
@@ -3322,6 +3326,24 @@ var Settings = {
             }
         }
         return (localStorage[settingName] == 'true') || (localStorage[settingName] == true);
+    },
+
+    pin: function(changed) {
+        var enabled = Settings._checkbox(changed, 'pin', getCookie('ku_menutype') == 'absolute');
+        if (changed) {
+            if (enabled) {
+                document.getElementById('overlay_menu').style.position = 'absolute';
+            } else {
+                document.getElementById('overlay_menu').style.position = 'fixed';
+            }
+        }
+        return enabled;
+    },
+
+    touch: function(changed) {
+        var enabled = Settings._checkbox(changed, 'touch', isTouchDevice());
+        if(changed) document.location.reload();
+        return enabled;
     },
 
     fxEnabled: function(changed) {
@@ -3583,11 +3605,6 @@ var rswap = {
     }
 }
 
-var isOperaMini = !(!(window.operamini));
-var isTouchDevice = (('ontouchstart' in window) || (window.DocumentTouch && document instanceof DocumentTouch) || navigator.userAgent.match(/Android|BlackBerry|Opera Mini|IEMobile|iPhone|iPad|iPod/i)) ? true : false;
-if (isOperaMini) isTouchDevice = true;
-var interfaceType = localStorage['interfaceType'] || false;
-
 var captchalang;
 
 function setCaptchaLang(lang) {
@@ -3666,7 +3683,8 @@ function onBodyClick(ev) {
             ev.preventDefault();
         }
 
-        if (isTouchDevice) {
+        // We won't call Settings.touch(false) here because of it is not reentrant
+        if (localStorage['touch'] == 'true' || (localStorage['touch'] == null && isTouchDevice())) {
             if (elem.className.split('ref').length > 1 || elem.classList.contains("catalog-entry")) {
                 if (!elem.classList.contains("reflinkpreview")) {
                     var e = elem;
@@ -3686,21 +3704,7 @@ function readyset() {
 
     constructDropZone();
 
-    if (interfaceType) {
-        if (interfaceType == 'touch') {
-            isTouchDevice = true;
-            $('#js_settings').prepend('<a href="javascript: localStorage.setItem(\'interfaceType\', \'desktop\'); location.reload();">' + _.returnDesktop + '</a><br>');
-        } else if (interfaceType == 'desktop') {
-            isTouchDevice = false;
-            $('#js_settings').prepend('<a href="javascript: localStorage.setItem(\'interfaceType\', \'touch\'); location.reload();">' + _.returnTouch + '</a><br>');
-        }
-    } else if (isTouchDevice) {
-        $('#boardlist_header').after('<div id="interface-notifier" class="content-background reflinkpreview"><div class="ifcn-text">' + _.impliedTouch + '</div><div class="incn-buttons">' +
-            '<button class="ifcnbtn" onclick="javascript: localStorage.setItem(\'interfaceType\', \'touch\'); $(\'#interface-notifier\').fadeOut(\'fast\');">' + _.okay + '</button>&nbsp;' +
-            '<button class="ifcnbtn" onclick="javascript: localStorage.setItem(\'interfaceType\', \'desktop\'); location.reload();">' + _.forceDesktop + '</button></div></div>');
-    } else {
-        $('#js_settings').prepend('<a title="' + _.impliedDesktop + '" href="javascript: localStorage[\'interfaceType\']=\'touch\'; location.reload();">' + _.returnTouch + '</a><br>');
-    }
+
 
     langlinks = Array();
     if (ku_captchaenabled.split(',').includes('jp')) langlinks.push('<a href="javascript:setCaptchaLang(\'jp\');">Japanese</a>');
@@ -3734,7 +3738,7 @@ function readyset() {
     //initial post-process
     processNodeInsertion();
 
-    if (!isTouchDevice) {
+    if (!Settings.touch(false)) {
         $('.mobile-nav').hide();
         addCSSRules('.mobile-nav {display: none;}', "mobileNav");
         $('.sect-exr').mouseenter(function() {
@@ -3761,7 +3765,7 @@ function readyset() {
     $('#postform textarea').attr('id', 'top-textarea');
     $('#postform .uib-tx').data('target', 'top-textarea');
 
-    if (isTouchDevice) $('.qrpinner').hide();
+    if (Settings.touch(false)) $('.qrpinner').hide();
 
     $('.postboxcontrol .pinner').removeClass('pinned');
     $('.postboxcontrol .pinner').removeClass('unpinned');
@@ -4191,15 +4195,6 @@ function menuClickExpandElem(elem) {
     return false;
 }
 
-function menu_pin() {
-    if (document.getElementById('overlay_menu').style.position == 'absolute') {
-        document.getElementById('overlay_menu').style.position = 'fixed';
-        Cookie('ku_menutype', 'fixed', 365);
-    } else {
-        document.getElementById('overlay_menu').style.position = 'absolute';
-        Cookie('ku_menutype', 'absolute', 365);
-    }
-}
 
 function set_oldmenu(cookie) {
     if (cookie) {
@@ -4563,7 +4558,7 @@ function window_pin_switch() {
 }
 
 function window_make_float() {
-    if (isTouchDevice !== false) return true;
+    if (Settings.touch(false)) return true;
     var e = window_elem_get();
     if (e == null) return false;
 
@@ -4586,7 +4581,7 @@ function window_make_float() {
 }
 
 function window_unmake_float() {
-    if (isTouchDevice !== false) return true;
+    if (Settings.touch(false)) return true;
     var e = window_elem_get();
     if (e == null) return false;
 

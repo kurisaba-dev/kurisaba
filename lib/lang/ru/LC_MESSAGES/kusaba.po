@@ -1921,9 +1921,6 @@ msgstr "К треду"
 msgid "return to thread after posting a message"
 msgstr "после отправки сообщения переместиться к треду"
 
-msgid "Pin/Unpin"
-msgstr "Прикрепить/Открепить"
-
 msgid "Simple list"
 msgstr "Обычный список"
 
