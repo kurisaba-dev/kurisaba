@@ -884,8 +884,7 @@ function tasksAfterModify(newly_added) {
         newly_added = new Array(newly_added);
 
     try {
-        if (newly_added == '')
-            hide_unwanted_posts();
+        hide_unwanted_posts();
         setLocalYou(newly_added);
         DoubleQuote(newly_added);
     } catch (er) {};
