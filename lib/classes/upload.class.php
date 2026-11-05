@@ -361,8 +361,8 @@ class Upload
                                     unlink($file['tmp_name']);
                                     return _gettext('Could not copy uploaded image.');
                                 }
-                                if (($_POST['attach_type'] != 'drop') || !isset($_POST['preview_mode'])) {
-                                    unlink($file['tmp_name']); // Don't unlink on dropped files preview!
+                                if ((($_POST['attach_type'] != 'drop') || !isset($_POST['preview_mode'])) && !((substr($_POST['embedlink'], 0, 2) == '>>') && $temporary)) {
+                                    unlink($file['tmp_name']); // Don't unlink on dropped or temporary files preview!
                                 }
                             }
 
