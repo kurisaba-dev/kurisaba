@@ -3338,7 +3338,7 @@ var Settings = {
 
     pin: function(changed) {
         var enabled = Settings._checkbox(changed, 'pin', getCookie('ku_menutype') == 'absolute');
-        if (changed) {
+        if (changed != null) {
             if (enabled) {
                 document.getElementById('overlay_menu').style.position = 'absolute';
             } else {
