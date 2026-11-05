@@ -45,11 +45,7 @@ config:
     options:
       KU_CURL_PROXY:
         default: 'none'
-        comment: 'Если нужен прокси для загрузки'
-        type: string
-      KU_CURL_INTERFACE:
-        default: ''
-        comment: 'Сетевой интерфейс для загрузки файла по ссылке (например, "tun0"). Чтобы при загрузке файла не палить IP, рекомендуется поднять VPN до какого-нибудь сервера, который не жалко подставлять под DDoS и указать здесь сетевой интерфейс VPN.'
+        comment: 'Прокси для загрузки файлов по ссылке. "none" - не использовать; "interface:ifname" (например, "interface:tun0") - скачивать файлы через указанный сетевой интерфейс; "vpnbook" - использовать VPNBook; "schema://user:pass@host:port" (например, "socks5h://me:mypassword@proxy.example.com:1080") - использовать указанный прокси. '
         type: string
 
   - locale:

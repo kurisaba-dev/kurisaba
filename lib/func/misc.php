@@ -182,10 +182,14 @@ function file_get_contents_remote($url, $checksize)
             curl_setopt($ch, CURLOPT_NOBODY, true);
         }
 
-        if (KU_CURL_PROXY == "interface") {
-            curl_setopt($ch, CURLOPT_INTERFACE, KU_CURL_INTERFACE);
+        $proxyinfo = explode(":", KU_CURL_PROXY, 2);
+        if ($proxyinfo[0] == "interface") {
+            if (count($proxyinfo) < 2) {
+                return array(false, 'curl_setopt(CURLOPT_INTERFACE): Please specify an interface');
+            }
+            curl_setopt($ch, CURLOPT_INTERFACE, $proxyinfo[1]);
             if (($err = curl_error($ch)) != '') {
-                return array(false, 'curl_setopt(CURLOPT_INTERFACE): ' . $err);
+                return array(false, 'curl_setopt(CURLOPT_INTERFACE, "' . $proxyinfo[1] . '"): ' . $err);
             }
         } elseif (KU_CURL_PROXY == "vpnbook") {
             curl_setopt($ch, CURLOPT_COOKIEJAR, "");
@@ -202,7 +206,36 @@ function file_get_contents_remote($url, $checksize)
                 return array(false, 'curl_setopt(CURLOPT_POSTFIELDS): ' . $err);
             }
         } elseif (KU_CURL_PROXY != "none") {
-            return array(false, "curl: insufficient KU_CURL_PROXY");
+            if (!strpos(KU_CURL_PROXY, "://")) {
+                return array(false, 'curl_setopt(CURLOPT_PROXY): Please specify proxy in a format like schema://user:pass@host:port');
+            }
+            [$schema, $urlpart] = explode("://", KU_CURL_PROXY);
+            switch($schema) {
+                case "http":    $schema = CURLPROXY_HTTP; break;
+                case "https":   $schema = CURLPROXY_HTTPS; break;
+                case "http1":   $schema = CURLPROXY_HTTP_1_0; break;
+                case "socks4":  $schema = CURLPROXY_SOCKS4; break;
+                case "socks4a": $schema = CURLPROXY_SOCKS4A; break;
+                case "socks5":  $schema = CURLPROXY_SOCKS5; break;
+                case "socks5h": $schema = CURLPROXY_SOCKS5_HOSTNAME; break;
+                default:
+                    return array(false, 'curl_setopt(CURLOPT_PROXYTYPE, "' . $schema . '"): Schema must be one of http, https, http1, socks4, socks4a, socks5, socks5h');
+            }
+            curl_setopt($ch, CURLOPT_PROXYTYPE, $schema);
+            if (($err = curl_error($ch)) != '') {
+                return array(false, 'curl_setopt(CURLOPT_PROXYTYPE, ' . $schema . '): ' . $err);
+            }
+            [$creds, $hostport] = (strpos($urlpart, "@") !== false) ? explode("@", $urlpart) : ['', $urlpart];
+            curl_setopt($ch, CURLOPT_PROXY, $hostport);
+            if (($err = curl_error($ch)) != '') {
+                return array(false, 'curl_setopt(CURLOPT_PROXY, "' . $hostport . '"): ' . $err);
+            }
+            if($creds != '') {
+                curl_setopt($ch, CURLOPT_PROXYUSERPWD, $creds);
+                if (($err = curl_error($ch)) != '') {
+                    return array(false, 'curl_setopt(CURLOPT_PROXYUSERPWD, "' . $creds . '"): ' . $err);
+                }
+            }
         }
 
         $ret = curl_exec($ch);
