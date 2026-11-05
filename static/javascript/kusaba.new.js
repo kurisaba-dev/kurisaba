@@ -809,7 +809,7 @@ function setLocalYou(elemArr) {
             var postnum = elem.innerHTML.substr(8); /* remove "&gt;&gt;" */
             if (!myPostsCheck(postnum))
                 continue;
-            elem.innerHTML += '<span class="youindicator"> (You)</span>';
+            elem.innerHTML += '<span class="youindicator jsadded"> (You)</span>';
         }
 
         elems = $(elemRoot).find("td.op, td.reply");
@@ -829,7 +829,7 @@ function setLocalYou(elemArr) {
             while (targetInstall.className == "extrabtns") targetInstall = targetInstall.previousElementSibling;
             targetInstall = targetInstall.nextSibling;
             var insElem = document.createElement("span");
-            insElem.className = "youindicator youpost";
+            insElem.className = "youindicator youpost jsadded";
             insElem.innerHTML = " <strong>(You)</strong>";
             targetInstall.parentNode.insertBefore(insElem, targetInstall);
         }
@@ -1595,7 +1595,7 @@ function generate_reply_map(item) {
     var you = '';
 
     for (var i = 0, n = item.length; i < n; i++) {
-        you = item[i].you || myPostsCheck(item[i].id) ? '<span class="youindicator"> (You)</span>' : '';
+        you = item[i].you || myPostsCheck(item[i].id) ? '<span class="youindicator jsadded"> (You)</span>' : '';
         map += '<a class="ref-reply" onclick="javascript:highlight(' + "'" +
             item[i].id + "'" + ', true);" href="/' + item[i].boardname +
             '/res/' + item[i].parentid + '.html#' + item[i].id +
