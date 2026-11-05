@@ -826,7 +826,7 @@ function setLocalYou(elemArr) {
             if (targetInstall.className == "mod") targetInstall = targetInstall.previousElementSibling;
             if (targetInstall.className == "mod") targetInstall = targetInstall.previousElementSibling;
             if (targetInstall.className == "admin") targetInstall = targetInstall.previousElementSibling;
-            if (targetInstall.className == "extrabtns") targetInstall = targetInstall.previousElementSibling;
+            while (targetInstall.className == "extrabtns") targetInstall = targetInstall.previousElementSibling;
             targetInstall = targetInstall.nextSibling;
             var insElem = document.createElement("span");
             insElem.className = "youindicator youpost";
