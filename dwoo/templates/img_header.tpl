@@ -94,6 +94,10 @@ if (!window.prettyPrint) {
 <script>
 	document.write('<script src="{%KU_WEBPATH}/static/javascript/kusaba.new.js?v={%KU_JS_CSS_VER}"><\/script>');
 </script>
+<!-- <script src="{%KU_WEBPATH}/static/javascript/aoba-media-picker.js?v={%KU_JS_CSS_VER}"></script> -->
+<script>
+	document.write('<script src="{%KU_WEBPATH}/static/javascript/aoba-media-picker.js?v={%KU_JS_CSS_VER}"><\/script>');
+</script>
 <!-- <script src="//cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.min.js"></script> -->
 <style>
 @font-face {
