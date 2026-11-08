@@ -269,7 +269,7 @@ class Parse
                 } else {
                     $realid = $result['parentid'];
                 }
-                return '<a href="'.KU_BOARDSPATH.'/'.$thread_board_return.'/res/'.$realid.'.html#'.$matches[1].'" onclick="return highlight(\'' . $matches[1] . '\', true);" class="ref|' . $thread_board_return . '|' .$realid . '|' . $matches[1] . ' prooflabel '.$proven.'">'.$matches[0].'</a>';
+                return '<a href="'.KU_BOARDSPATH.'/'.$thread_board_return.'/res/'.$realid.'.html#'.$matches[1].'" onclick="return highlight(\'' . $thread_board_return . '\', \'' . $matches[1] . '\', true);" class="ref|' . $thread_board_return . '|' .$realid . '|' . $matches[1] . ' prooflabel '.$proven.'">'.$matches[0].'</a>';
             } else {
                 return $matches[0];
             }
@@ -319,7 +319,7 @@ class Parse
             } else {
                 return $matches[0];
             }
-            $return = '<a href="'.KU_BOARDSPATH.'/'.$thread_board_return.'/res/'.$realid.'.html#'.$matches[1].'" onclick="return highlight(\'' . $matches[1] . '\', true);" class="ref|' . $thread_board_return . '|' .$realid . '|' . $matches[1] . '">'.$matches[0].'</a>'.$lastchar;
+            $return = '<a href="'.KU_BOARDSPATH.'/'.$thread_board_return.'/res/'.$realid.'.html#'.$matches[1].'" onclick="return highlight(\'' . $thread_board_return . '\', \'' . $matches[1] . '\', true);" class="ref|' . $thread_board_return . '|' .$realid . '|' . $matches[1] . '">'.$matches[0].'</a>'.$lastchar;
         } else {
             $return = $matches[0];
 

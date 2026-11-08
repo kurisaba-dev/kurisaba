@@ -582,23 +582,24 @@ function quote(b, a) {
 
 function checkhighlight() {
     var match;
-    if (match = /#i([0-9]+)/.exec(document.location.toString()))
+    if (match = /#i([0-9]+)/.exec(document.location.toString())) /* reply to post */
         if (!document.forms.postform.message.value)
             insert_postnum(match[1]);
-    if (match = /#([0-9]+)/.exec(document.location.toString()))
-        highlight(match[1]);
+    if (match = /#([0-9]+)/.exec(document.location.toString())) /* highlight post */
+        highlight(this_board_dir, match[1], false);
 }
 
-function highlight(post, checknopage) {
+function highlight(board, post, allowRedirect) {
     if (Settings.touch(false)) return;
-    if (checknopage && ispage) return;
     closePostPreviews();
-    var timer = setTimeout(function() {
-        $('.highlight').removeClass('highlight').addClass('reply');
-        $("#reply" + post).removeClass('reply').addClass('highlight');
-        var match = /^([^#]*)/.exec(document.location.toString());
-        document.location = match[1] + "#" + post;
-    }, 150);
+    $('.highlight').removeClass('highlight').addClass('reply');
+    var target = $("#reply" + post + ".reply_board_" + board);
+    if (target.length > 0)
+    {
+        target.removeClass('reply').addClass('highlight');
+        return false;
+    }
+    return allowRedirect;
 }
 
 function get_password(name) {
@@ -1596,7 +1597,8 @@ function generate_reply_map(item) {
 
     for (var i = 0, n = item.length; i < n; i++) {
         you = item[i].you || myPostsCheck(item[i].id) ? '<span class="youindicator jsadded"> (You)</span>' : '';
-        map += '<a class="ref-reply" onclick="javascript:highlight(' + "'" +
+        map += '<a class="ref-reply" onclick="return highlight(' + "'" +
+            item[i].boardname + "', '" +
             item[i].id + "'" + ', true);" href="/' + item[i].boardname +
             '/res/' + item[i].parentid + '.html#' + item[i].id +
             '">&gt;&gt;' + item[i].id + you + '</a>';
