@@ -3121,12 +3121,7 @@ var PostPreviews = {
 
 function closePostPreviews() {
     for (var preview_id in PostPreviews.shown) {
-        //console.log(preview_id + ' ' + PostPreviews.shown[preview_id]);
-        var preview = $('#' + PostPreviews.shown[preview_id]);
-        preview.fadeOut(100).queue('fx', function() {
-            delete PostPreviews.parent[$(this).attr('id')];
-            $(this).remove();
-        });
+        $('#' + PostPreviews.shown[preview_id]).remove();
     }
     PostPreviews.shown = [];
     PostPreviews.zIndex = 30;
