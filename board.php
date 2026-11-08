@@ -234,34 +234,34 @@ if ($operation_post) { // it's `noreturn`.
         $captcha_msg = $posting_class->CheckCaptcha($_POST['message']);
 
         if ($captcha_msg != '') {
-            kurisaba_exit($captcha_msg, '', $post_message);
+            kurisaba_exit($captcha_msg, '', $_POST['message']);
         }
     }
 
     if (!$preview) { // Don't apply posting time limits to a preview
         if ($posting_class->CheckReplyTime($_POST['message'])) {
-            kurisaba_exit(_gettext('Please wait a moment before posting again.'), _gettext('You are currently posting faster than the configured minimum post delay allows.'), $post_message);
+            kurisaba_exit(_gettext('Please wait a moment before posting again.'), _gettext('You are currently posting faster than the configured minimum post delay allows.'), $_POST['message']);
         }
 
         if ($_POST['replythread'] == 0) {
             if ($posting_class->CheckNewThreadTime($_POST['message'])) {
-                kurisaba_exit(_gettext('Please wait a moment before posting again.'), _gettext('You are currently posting faster than the configured minimum post delay allows.'), $post_message);
+                kurisaba_exit(_gettext('Please wait a moment before posting again.'), _gettext('You are currently posting faster than the configured minimum post delay allows.'), $_POST['message']);
             }
 
             if ($posting_class->HowManyThreadsToday() >= KU_MAXTHREADSADAY) {
-                kurisaba_exit('Похоже, борду флудят - слишком много новых тредов. Создание тредов временно отключено.', 'По всем вопросам — к админам.', $post_message);
+                kurisaba_exit('Похоже, борду флудят - слишком много новых тредов. Создание тредов временно отключено.', 'По всем вопросам — к админам.', $_POST['message']);
             }
         }
     }
 
     if ($posting_class->CheckMessageLength($_POST['message'])) {
-        kurisaba_exit(sprintf(_gettext('Sorry, your message is too long. Message length: %d, maximum allowed length: %d'), strlen($_POST['message']), $board_class->board['messagelength']), '', $post_message);
+        kurisaba_exit(sprintf(_gettext('Sorry, your message is too long. Message length: %d, maximum allowed length: %d'), strlen($_POST['message']), $board_class->board['messagelength']), '', $_POST['message']);
     }
 
     $post_isreply_prev = $posting_class->CheckIsReply();
 
     if ($post_isreply_prev == -1) {
-        kurisaba_exit(_gettext('Invalid thread ID.'), _gettext('That thread may have been recently deleted.'));
+        kurisaba_exit(_gettext('Invalid thread ID.'), _gettext('That thread may have been recently deleted.'), $_POST['message']);
     }
     $post_isreply = ($post_isreply_prev == 1) ? true : false;
 
@@ -270,7 +270,7 @@ if ($operation_post) { // it's `noreturn`.
     if ($post_isreply) {
         list($thread_replies, $thread_locked, $thread_replyto) = $posting_class->GetThreadInfo($_POST['replythread']);
         if ($thread_replies == -1) {
-            kurisaba_exit(_gettext('Invalid thread ID.'), _gettext('That thread may have been recently deleted.'));
+            kurisaba_exit(_gettext('Invalid thread ID.'), _gettext('That thread may have been recently deleted.'), $_POST['message']);
         }
     } else {
         if ($board_class->board['embeds_allowed'] != '') {
@@ -335,7 +335,7 @@ if ($operation_post) { // it's `noreturn`.
     $ipmd5 = md5(KU_REMOTE_ADDR);
 
     if ($parse_class->CountSmilies($_POST['message']) > KU_MAXSMILIES) {
-        kurisaba_exit('В посте слишком много смайлов. Можно не более '.KU_MAXSMILIES.'.');
+        kurisaba_exit('В посте слишком много смайлов. Можно не более '.KU_MAXSMILIES.'.', '', $_POST['message']);
     }
 
     // If they are just a normal user, or vip...
@@ -382,15 +382,15 @@ if ($operation_post) { // it's `noreturn`.
     $parse_result = $posting_class->postParseCheckText($post_message, $board_class->board['name'], $board_class->board['id']);
 
     if ($parse_result == 2) {
-        kurisaba_exit('Ссылка в посте находится в чёрном списке.');
+        kurisaba_exit('Ссылка в посте находится в чёрном списке.', '', $_POST['message']);
     }
 
     if ($parse_result == 1) {
-        kurisaba_exit(_gettext('Flood Detected'), _gettext('You are posting the same message again.'));
+        kurisaba_exit(_gettext('Flood Detected'), _gettext('You are posting the same message again.'), $_POST['message']);
     }
 
     if ($posting_class->CheckBadUnicode($post_name, $post_email, $post_subject, $post_message)) {
-        kurisaba_exit(_gettext('Your post contains one or more illegal characters.'));
+        kurisaba_exit(_gettext('Your post contains one or more illegal characters.'), '', $_POST['message']);
     }
 
     if ($post_isreply) {
@@ -423,7 +423,7 @@ if ($operation_post) { // it's `noreturn`.
                 kurisaba_exit($upload_log, $extra, $_POST['message']);
             }
             if (isset($upload_class->file_location) && $posting_class->CheckBannedHashNew($upload_class->file_location)) {
-                kurisaba_exit(_gettext('Этот файл забанен.'));
+                kurisaba_exit(_gettext('Этот файл забанен.'), '', $_POST['message']);
             }
         }
 
@@ -613,7 +613,7 @@ if ($operation_post) { // it's `noreturn`.
                     $post['country_restrict_file'] = $geoblocking[0]['country_restrict_file'];
                 }
                 if ($user_authority != 1 && $geoblocking[0]['cr_propagate'] && in_array(client_country(), explode(',', strtoupper(str_replace(' ', '', $geoblocking[0]['country_restrict']))))) {
-                    kurisaba_exit("You can't post here from your country.");
+                    kurisaba_exit("You can't post here from your country.", '', $_POST['message']);
                 }
             }
 
@@ -651,7 +651,7 @@ if ($operation_post) { // it's `noreturn`.
                 $post['country_restrict_file']
             );
             if (!$post_id) {
-                kurisaba_exit('Не получилось добавить пост в базу.');
+                kurisaba_exit('Не получилось добавить пост в базу.', '', $_POST['message']);
             }
             if ($post_id == -1) {
                 // Don't leave orphan files
