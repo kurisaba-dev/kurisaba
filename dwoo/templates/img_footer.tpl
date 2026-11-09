@@ -40,7 +40,7 @@
 					//--></script>
 				{/if}
 
-				{if not $iscatalog and $replythread eq 0}
+				{if (not $iscatalog and $replythread eq 0) or $isfeed}
 					<table border="1">
 						<tbody>
 							<tr>
@@ -48,7 +48,11 @@
 									{if $thispage eq 0}
 										&lt;&lt;
 									{else}
-										<a class="nav-prevpage" rel="prev" href="{%KU_BOARDSPATH}/{$board.name}/{if ($thispage-1) neq 0}{$thispage-1}.html{/if}">&lt;&lt;</a>
+										{if $isfeed}
+											<a class="nav-prevpage" rel="prev" href="{%KU_WEBPATH}/single.php{if ($thispage-1) neq 0}?p={$thispage-1}{/if}">&lt;&lt;</a>
+										{else}
+											<a class="nav-prevpage" rel="prev" href="{%KU_BOARDSPATH}/{$board.name}/{if ($thispage-1) neq 0}{$thispage-1}.html{/if}">&lt;&lt;</a>
+										{/if}
 									{/if}
 								</td>
 								<td>
@@ -58,7 +62,11 @@
 									{if $thispage eq $numpages}
 										&gt;&gt;
 									{else}
-										<a class="nav-nextpage" rel="next" href="{%KU_BOARDSPATH}/{$board.name}/{$thispage+1}.html">&gt;&gt;</a>
+										{if $isfeed}
+											<a class="nav-nextpage" rel="next" href="{%KU_WEBPATH}/single.php?p={$thispage+1}">&gt;&gt;</a>
+										{else}
+											<a class="nav-nextpage" rel="next" href="{%KU_BOARDSPATH}/{$board.name}/{$thispage+1}.html">&gt;&gt;</a>
+										{/if}
 									{/if}
 								</td>
 							</tr>

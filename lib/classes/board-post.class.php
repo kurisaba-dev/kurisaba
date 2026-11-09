@@ -137,16 +137,7 @@ class Board
             $pregen_replies_q = $tc_db->GetAll("SELECT * FROM `".KU_DBPREFIX."answers` WHERE `to_boardid` = '" . $this->board['id'] . "' AND `to_parentid` IN (" . $threads_string . ")");
         }
 
-        $pagination = array_map(fn($j) => "[" . (fn($k) => $i != $j ? "<a href=\"" . KU_BOARDSPATH . "/" . $this->board['name'] . "/" . ($j > 0 ? $j . ".html" : "") . "\">" . $k . "</a>" : $k)($j) . "]", range(0, $totalpages));
-        if($totalpages - $i > 2 * KU_PAGINATIONLENGTH + 1) {
-            $pagination[$i + KU_PAGINATIONLENGTH + 1] = "...";
-            array_splice($pagination, $i + KU_PAGINATIONLENGTH + 2, $totalpages - $i - 2 * KU_PAGINATIONLENGTH - 2);
-        }
-        if($i > 2 * KU_PAGINATIONLENGTH + 1) {
-            $pagination[KU_PAGINATIONLENGTH + 1] = "...";
-            array_splice($pagination, KU_PAGINATIONLENGTH + 2, $i - 2 * KU_PAGINATIONLENGTH - 2);
-        }
-        $this->dwoo_data->assign('pagination', implode(" ", $pagination));
+        $this->dwoo_data->assign('pagination', createPagination($i, $totalpages, KU_BOARDSPATH . "/" . $this->board['name'] . "/", "", ".html"));
 
         foreach ($threads as $k => $thread) {
             // If the thread is on the page set to mark, && hasn't been marked yet, mark it

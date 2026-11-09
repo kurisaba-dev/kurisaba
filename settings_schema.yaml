@@ -188,8 +188,8 @@ config:
         comment: 'Максимальное количество смайлов в посте.'
         type: int
       KU_FEEDLENGTH:
-        default: 100
-        comment: 'Длина однопотока (в постах).'
+        default: 50
+        comment: 'Длина страницы однопотока (в постах).'
         type: int
       KU_MAXTHREADSADAY:
         default: 10
