@@ -512,12 +512,12 @@ function isValidMd5($md5 = '')
     return preg_match('/^[a-f0-9]{32}$/', $md5);
 }
 
-function createPagination($i, $totalpages, $hrefBegin, $hrefNonZeroPageStart, $hrefNonZeroPageEnd)
+function createPagination($i, $lastpage, $hrefBegin, $hrefNonZeroPageStart, $hrefNonZeroPageEnd)
 {
-    $pagination = array_map(fn($j) => "[" . (fn($k) => $i != $j ? "<a href=\"" . $hrefBegin . ($j > 0 ? $hrefNonZeroPageStart . $j . $hrefNonZeroPageEnd : "") . "\">" . $k . "</a>" : $k)($j) . "]", range(0, $totalpages));
-    if($totalpages - $i > 2 * KU_PAGINATIONLENGTH + 1) {
+    $pagination = array_map(fn($j) => "[" . (fn($k) => $i != $j ? "<a href=\"" . $hrefBegin . ($j > 0 ? $hrefNonZeroPageStart . $j . $hrefNonZeroPageEnd : "") . "\">" . $k . "</a>" : $k)($j) . "]", range(0, $lastpage));
+    if($lastpage - $i > 2 * KU_PAGINATIONLENGTH + 1) {
         $pagination[$i + KU_PAGINATIONLENGTH + 1] = "...";
-        array_splice($pagination, $i + KU_PAGINATIONLENGTH + 2, $totalpages - $i - 2 * KU_PAGINATIONLENGTH - 2);
+        array_splice($pagination, $i + KU_PAGINATIONLENGTH + 2, $lastpage - $i - 2 * KU_PAGINATIONLENGTH - 2);
     }
     if($i > 2 * KU_PAGINATIONLENGTH + 1) {
         $pagination[KU_PAGINATIONLENGTH + 1] = "...";

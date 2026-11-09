@@ -114,11 +114,8 @@ class Board
         $numposts = $tc_db->GetAll("SELECT COUNT(*) FROM `" . KU_DBPREFIX . "posts` WHERE `boardid` = " . $this->board['id'] . $exclude . " AND `parentid` = 0 AND `IS_DELETED` = 0");
         $postsperpage = KU_THREADS;
         $liststooutput = 0;
-        $totalpages = calculatenumpages($numposts[0][0] - 1);
-        if ($totalpages == '-1') {
-            $totalpages = 0;
-        }
-        $this->dwoo_data->assign('numpages', $totalpages);
+        $lastpage = calculatelastpagenum($numposts[0][0]);
+        $this->dwoo_data->assign('lastpage', $lastpage);
 
         $executiontime_start_page = microtime_float();
         $newposts = array();
@@ -137,7 +134,7 @@ class Board
             $pregen_replies_q = $tc_db->GetAll("SELECT * FROM `".KU_DBPREFIX."answers` WHERE `to_boardid` = '" . $this->board['id'] . "' AND `to_parentid` IN (" . $threads_string . ")");
         }
 
-        $this->dwoo_data->assign('pagination', createPagination($i, $totalpages, KU_BOARDSPATH . "/" . $this->board['name'] . "/", "", ".html"));
+        $this->dwoo_data->assign('pagination', createPagination($i, $lastpage, KU_BOARDSPATH . "/" . $this->board['name'] . "/", "", ".html"));
 
         foreach ($threads as $k => $thread) {
             // If the thread is on the page set to mark, && hasn't been marked yet, mark it

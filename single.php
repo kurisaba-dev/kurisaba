@@ -47,13 +47,10 @@ $page .= $board_class->Postbox();
 $thispage = (isset($_REQUEST["p"]) && is_numeric($_REQUEST["p"])) ? intval($_REQUEST["p"]) : 0;
 $numposts = $tc_db->GetOne("SELECT COUNT(*) FROM (SELECT `boardid`, `parentid` FROM `" . KU_DBPREFIX . "posts` WHERE `IS_DELETED` = 0) as A JOIN `" . KU_DBPREFIX . "boards` AS C ON C.id = A.boardid " . (isset($_GET['fullfeed']) ? "" : "AND C.enablefeed = 1") . " LEFT JOIN `" . KU_DBPREFIX . "posts` AS B ON B.id = A.parentid AND A.parentid != 0 AND B.boardid = A.boardid");
 $results = $tc_db->GetAll("SELECT A.*, B.subject AS parent_subject FROM (SELECT * FROM `" . KU_DBPREFIX . "posts` WHERE `IS_DELETED` = 0 ORDER BY `timestamp` DESC) as A JOIN `" . KU_DBPREFIX . "boards` AS C ON C.id = A.boardid " . (isset($_GET['fullfeed']) ? "" : "AND C.enablefeed = 1") . " LEFT JOIN `" . KU_DBPREFIX . "posts` AS B ON B.id = A.parentid AND A.parentid != 0 AND B.boardid = A.boardid ORDER BY A.`timestamp` DESC LIMIT " . KU_FEEDLENGTH . " OFFSET " . ($thispage * KU_FEEDLENGTH));
-$totalpages = floor(($numposts - 1) / KU_FEEDLENGTH);
-if ($totalpages == '-1') {
-    $totalpages = 0;
-}
+$lastpage = calculatelastpagenum($numposts, KU_FEEDLENGTH);
 $board_class->dwoo_data->assign('thispage', $thispage);
-$board_class->dwoo_data->assign('numpages', $totalpages);
-$board_class->dwoo_data->assign('pagination', createPagination($thispage, $totalpages, KU_WEBPATH . "/single.php", "?p=", ""));
+$board_class->dwoo_data->assign('lastpage', $lastpage);
+$board_class->dwoo_data->assign('pagination', createPagination($thispage, $lastpage, KU_WEBPATH . "/single.php", "?p=", ""));
 
 if (count($results) == 0) {
     exitWithErrorPage('Постов в базе нет!');

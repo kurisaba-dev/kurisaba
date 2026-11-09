@@ -101,7 +101,9 @@ function cleanBoardName($board)
     return preg_replace('/[^a-z]/', '', strtolower($board));
 }
 
-function calculatenumpages($numposts)
+function calculatelastpagenum($numposts, $pagesize = KU_THREADS)
 {
-    return (floor($numposts / KU_THREADS));
+    $pages = ceil($numposts / $pagesize);
+    // Last page is one less than number of pages (because pages are counted from 0); but if no posts, then we have 0 pages instead of -1.
+    return ($pages == 0) ? 0 : ($pages - 1);
 }

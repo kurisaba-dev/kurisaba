@@ -59,7 +59,7 @@
 									{$pagination}
 								</td>
 								<td>
-									{if $thispage eq $numpages}
+									{if $thispage eq $lastpage}
 										&gt;&gt;
 									{else}
 										{if $isfeed}

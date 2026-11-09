@@ -190,7 +190,7 @@ function scrolling(elem, direction) {
 	{if $thispage neq 0}
 		<link rel="prev" href="{%KU_BOARDSPATH}/{$board.name}/{if ($thispage-1) neq 0}{$thispage-1}.html{/if}" />
 	{/if}
-	{if $thispage neq $numpages}
+	{if $thispage neq $lastpage}
 		<link rel="next" href="{%KU_BOARDSPATH}/{$board.name}/{$thispage+1}.html" />
 	{/if}
 {/if}
