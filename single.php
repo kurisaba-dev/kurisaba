@@ -32,25 +32,32 @@ $board_class = end($boards);
 
 $board_class->InitializeDwoo();
 $board_class->dwoo_data->assign('isfeed', true);
+$board_class->dwoo_data->assign('isall', isset($_REQUEST["all"]));
 $board_class->dwoo_data->assign('issearch', true);
 $board_class->dwoo_data->assign('isread', true);
 $board_class->dwoo_data->assign('skipheader', true);
 $embeds = $tc_db->GetAll("SELECT `name`, `filetype` FROM `" . KU_DBPREFIX . "embeds`");
 $board_class->dwoo_data->assign('embeds', $embeds);
 $page = '';
-$page .= $board_class->PageHeader(-1, 0, -1, "Однопоток");
+$page .= $board_class->PageHeader(-1, 0, -1, isset($_REQUEST["all"]) ? "Все треды" : "Однопоток");
 $page .= "<hr>";
 
 $board_class->dwoo_data->assign('onlyclone', true);
 $page .= $board_class->Postbox();
 
 $thispage = (isset($_REQUEST["p"]) && is_numeric($_REQUEST["p"])) ? intval($_REQUEST["p"]) : 0;
-$numposts = $tc_db->GetOne("SELECT COUNT(*) FROM (SELECT `boardid`, `parentid` FROM `" . KU_DBPREFIX . "posts` WHERE `IS_DELETED` = 0) as A JOIN `" . KU_DBPREFIX . "boards` AS C ON C.id = A.boardid " . (isset($_GET['fullfeed']) ? "" : "AND C.enablefeed = 1") . " LEFT JOIN `" . KU_DBPREFIX . "posts` AS B ON B.id = A.parentid AND A.parentid != 0 AND B.boardid = A.boardid");
-$results = $tc_db->GetAll("SELECT A.*, B.subject AS parent_subject FROM (SELECT * FROM `" . KU_DBPREFIX . "posts` WHERE `IS_DELETED` = 0 ORDER BY `timestamp` DESC) as A JOIN `" . KU_DBPREFIX . "boards` AS C ON C.id = A.boardid " . (isset($_GET['fullfeed']) ? "" : "AND C.enablefeed = 1") . " LEFT JOIN `" . KU_DBPREFIX . "posts` AS B ON B.id = A.parentid AND A.parentid != 0 AND B.boardid = A.boardid ORDER BY A.`timestamp` DESC LIMIT " . KU_FEEDLENGTH . " OFFSET " . ($thispage * KU_FEEDLENGTH));
-$lastpage = calculatelastpagenum($numposts, KU_FEEDLENGTH);
+
+if(isset($_REQUEST["all"])) {
+    $numposts = $tc_db->GetOne("SELECT COUNT(*) FROM `" . KU_DBPREFIX . "posts` WHERE `parentid` = 0 AND `IS_DELETED` = 0");
+    $results = $tc_db->GetAll("SELECT * FROM `" . KU_DBPREFIX . "posts` WHERE `parentid` = 0 AND `IS_DELETED` = 0 ORDER BY `bumped` DESC LIMIT ". KU_THREADS ." OFFSET ". ($thispage * KU_THREADS));
+} else {
+    $numposts = $tc_db->GetOne("SELECT COUNT(*) FROM (SELECT `boardid`, `parentid` FROM `" . KU_DBPREFIX . "posts` WHERE `IS_DELETED` = 0) as A JOIN `" . KU_DBPREFIX . "boards` AS C ON C.id = A.boardid " . (isset($_GET['fullfeed']) ? "" : "AND C.enablefeed = 1") . " LEFT JOIN `" . KU_DBPREFIX . "posts` AS B ON B.id = A.parentid AND A.parentid != 0 AND B.boardid = A.boardid");
+    $results = $tc_db->GetAll("SELECT A.*, B.subject AS parent_subject FROM (SELECT * FROM `" . KU_DBPREFIX . "posts` WHERE `IS_DELETED` = 0 ORDER BY `timestamp` DESC) as A JOIN `" . KU_DBPREFIX . "boards` AS C ON C.id = A.boardid " . (isset($_GET['fullfeed']) ? "" : "AND C.enablefeed = 1") . " LEFT JOIN `" . KU_DBPREFIX . "posts` AS B ON B.id = A.parentid AND A.parentid != 0 AND B.boardid = A.boardid ORDER BY A.`timestamp` DESC LIMIT " . KU_FEEDLENGTH . " OFFSET " . ($thispage * KU_FEEDLENGTH));
+}
+$lastpage = calculatelastpagenum($numposts, isset($_REQUEST["all"]) ? KU_THREADS : KU_FEEDLENGTH);
 $board_class->dwoo_data->assign('thispage', $thispage);
 $board_class->dwoo_data->assign('lastpage', $lastpage);
-$board_class->dwoo_data->assign('pagination', createPagination($thispage, $lastpage, KU_WEBPATH . "/single.php", "?p=", ""));
+$board_class->dwoo_data->assign('pagination', createPagination($thispage, $lastpage, KU_WEBPATH . "/single.php" . (isset($_REQUEST["all"]) ? "?all=1" : ""), (isset($_REQUEST["all"]) ? "&p=" : "?p="), ""));
 
 if (count($results) == 0) {
     exitWithErrorPage('Постов в базе нет!');
@@ -64,7 +71,7 @@ foreach ($results as $key => $post) {
             continue;
         }
     }
-    $post['n'] = ++$i;
+    $post['n'] = isset($_REQUEST["all"]) ? 1 : ++$i;
     $post_board_class = $boards[$post['boardid']];
     $post['filetypes'] = $post_board_class->board['filetypes'];
     $post['board'] = $post_board_class->board;
@@ -81,9 +88,35 @@ foreach ($results as $key => $post) {
     $post['externalreference'] = '[<a href="' . $post['file_path'] . '/res/' . $thread . '.html#' . $post['id'] . '">'. $extname .'</a>]';
 
     $results[$key] = $post_board_class->BuildPost($post, false, false, false, true);
+
+    if(isset($_REQUEST["all"])) {
+        $subposts_all = $tc_db->GetAll("SELECT * FROM `" . KU_DBPREFIX . "posts` WHERE `boardid` = " . $post_board_class->board['id'] . " AND `parentid` = ". $post['id'] ." AND `IS_DELETED` = 0 ORDER BY `id` ASC");
+        $n_stickied = ($post['stickied'] == 1) ? KU_REPLIESSTICKY : KU_REPLIES;
+        $subposts = array();
+        $nlast = count($subposts_all) + 1;
+        for ($j = 0; $j < $n_stickied; $j++) {
+            $subpost = array_pop($subposts_all);
+            if ($subpost == null) {
+                break;
+            }
+            $subpost['n'] = $nlast - $j;
+            array_unshift($subposts, $post_board_class->BuildPost($subpost, true, false));
+        }
+        array_unshift($subposts, $post);
+        $newposts[] = $subposts;
+        $replycount = count($subposts_all);
+        $imgcount = 0;
+        foreach ($subposts_all as $subpost_test) { // Ending posts are popped out already.
+            if ($subpost_test['file_md5'] != '') {
+                $imgcount++;
+            }
+        }
+        $subposts[$key][0]['replies'] = $replycount;
+        $subposts[$key][0]['images'] = $imgcount;
+    }
 }
 
-$board_class->dwoo_data->assign('posts', $results);
+$board_class->dwoo_data->assign('posts', isset($_REQUEST["all"]) ? $subposts : $results);
 $board_class->dwoo_data->assign('forceexternalboard', true);
 
 $page .= $board_class->dwoo->get(KU_TEMPLATEDIR . '/img_thread.tpl', $board_class->dwoo_data);

@@ -211,7 +211,12 @@ function scrolling(elem, direction) {
 			<a href="{%KU_BOARDSPATH}/{$board.name}/">/{$board.name}/</a> - <strong>{$board.desc}</strong>
 			&nbsp;[<a href="{%KU_BOARDSPATH}/{$board.name}/catalog.html">Каталог</a>]
 		{else}
-			<strong>Однопоток постов</strong><span class="isfeed" style="display: none;"></span>
+			{if $isall}
+				<strong>Все треды</strong>
+			{else}
+				<strong>Однопоток постов</strong>
+			{/if}
+			<span class="isfeed" style="display: none;"></span>
 		{/if}
 
 		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -220,6 +225,7 @@ function scrolling(elem, direction) {
 		{if %KU_MAINPAGE ne 'kusaba.php'}
 			[<a href="{%KU_WEBPATH}/kusaba.php" target="_top">{t}Фрейм{/t}</a>]
 		{/if}
+		[<a href="{%KU_WEBPATH}/single.php?all=1" class="feedlink">Все треды</a>]
 		[<a href="{%KU_WEBPATH}/single.php" class="feedlink">Однопоток</a>]
 		{if $faq_enabled}
 			[<a href="{%KU_BOARDSPATH}/faq/">FAQ</a>]

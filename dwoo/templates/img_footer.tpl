@@ -49,7 +49,7 @@
 										&lt;&lt;
 									{else}
 										{if $isfeed}
-											<a class="nav-prevpage" rel="prev" href="{%KU_WEBPATH}/single.php{if ($thispage-1) neq 0}?p={$thispage-1}{/if}">&lt;&lt;</a>
+											<a class="nav-prevpage" rel="prev" href="{%KU_WEBPATH}/single.php{if ($thispage-1) neq 0}?p={$thispage-1}{if $isall}&all=1{/if}{else}{if $isall}?all=1{/if}{/if}">&lt;&lt;</a>
 										{else}
 											<a class="nav-prevpage" rel="prev" href="{%KU_BOARDSPATH}/{$board.name}/{if ($thispage-1) neq 0}{$thispage-1}.html{/if}">&lt;&lt;</a>
 										{/if}
@@ -63,7 +63,7 @@
 										&gt;&gt;
 									{else}
 										{if $isfeed}
-											<a class="nav-nextpage" rel="next" href="{%KU_WEBPATH}/single.php?p={$thispage+1}">&gt;&gt;</a>
+											<a class="nav-nextpage" rel="next" href="{%KU_WEBPATH}/single.php?p={$thispage+1}{if $isall}&all=1{/if}">&gt;&gt;</a>
 										{else}
 											<a class="nav-nextpage" rel="next" href="{%KU_BOARDSPATH}/{$board.name}/{$thispage+1}.html">&gt;&gt;</a>
 										{/if}
