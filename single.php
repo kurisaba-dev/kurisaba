@@ -119,7 +119,7 @@ foreach ($results as $key => $post) {
 $board_class->dwoo_data->assign('posts', isset($_REQUEST["all"]) ? $subposts : $results);
 $board_class->dwoo_data->assign('forceexternalboard', true);
 
-$page .= $board_class->dwoo->get(KU_TEMPLATEDIR . '/img_thread.tpl', $board_class->dwoo_data);
+$page .= $board_class->dwoo->get(KU_TEMPLATEDIR . (isset($_REQUEST["all"]) ? '/img_board_page.tpl' : '/img_thread.tpl'), $board_class->dwoo_data);
 
 $page .= '<br clear="left">' . "\n";
 $page .= '<hr />' . "\n" . $board_class->Footer(microtime_float() - $executiontime_start);
