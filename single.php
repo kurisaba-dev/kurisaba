@@ -77,16 +77,18 @@ foreach ($results as $key => $post) {
     $post['filetypes'] = $post_board_class->board['filetypes'];
     $post['board'] = $post_board_class->board;
     $post['file_path'] = KU_BOARDSPATH . '/' . $post_board_class->board['name'];
-    $thread = ($post['parentid'] == 0) ? $post['id'] : $post['parentid'];
-    $extname = '/'.$post_board_class->board['name'].'/'.$thread;
-    if ($post['parentid'] == 0 && $post['subject'] != "") {
-        $extname = $post['subject'];
-    } elseif ($post['parent_subject'] !== null) {
-        if ($post['parent_subject'] != "") {
-            $extname = $post['parent_subject'];
+    if(!isset($_REQUEST["all"])) {
+        $thread = ($post['parentid'] == 0) ? $post['id'] : $post['parentid'];
+        $extname = '/'.$post_board_class->board['name'].'/'.$thread;
+        if ($post['parentid'] == 0 && $post['subject'] != "") {
+            $extname = $post['subject'];
+        } elseif ($post['parent_subject'] !== null) {
+            if ($post['parent_subject'] != "") {
+                $extname = $post['parent_subject'];
+            }
         }
+        $post['externalreference'] = '[<a href="' . $post['file_path'] . '/res/' . $thread . '.html#' . $post['id'] . '">'. $extname .'</a>]';
     }
-    $post['externalreference'] = '[<a href="' . $post['file_path'] . '/res/' . $thread . '.html#' . $post['id'] . '">'. $extname .'</a>]';
 
     $results[$key] = $post_board_class->BuildPost($post, false, false, false, true);
 
@@ -102,7 +104,7 @@ foreach ($results as $key => $post) {
             }
             $subpost['n'] = $nlast - $j;
             $subpost['file_path'] = KU_BOARDSPATH . '/' . $post_board_class->board['name'];
-            array_unshift($subposts, $post_board_class->BuildPost($subpost, true, false));
+            array_unshift($subposts, $post_board_class->BuildPost($subpost, true, false, false, true));
         }
         array_unshift($subposts, $results[$key]);
         $newposts[] = $subposts;
