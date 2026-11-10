@@ -48,8 +48,14 @@ $page .= $board_class->Postbox();
 $thispage = (isset($_REQUEST["p"]) && is_numeric($_REQUEST["p"])) ? intval($_REQUEST["p"]) : 0;
 
 if(isset($_REQUEST["all"])) {
-    $numposts = $tc_db->GetOne("SELECT COUNT(*) FROM `" . KU_DBPREFIX . "posts` WHERE `parentid` = 0 AND `IS_DELETED` = 0");
-    $results = $tc_db->GetAll("SELECT * FROM `" . KU_DBPREFIX . "posts` WHERE `parentid` = 0 AND `IS_DELETED` = 0 ORDER BY `bumped` DESC LIMIT ". KU_THREADS ." OFFSET ". ($thispage * KU_THREADS));
+    $exclude = '';
+    foreach ($boards as $board) {
+        if ($board->board['hiddenthreads'] !== '') {
+            $exclude = " AND NOT (`boardid` = " . $board->board['id'] . " AND `id` IN (" . $board->board['hiddenthreads'] . "))";
+        }
+    }
+    $numposts = $tc_db->GetOne("SELECT COUNT(*) FROM `" . KU_DBPREFIX . "posts` WHERE `parentid` = 0 AND `IS_DELETED` = 0 " . $exclude);
+    $results = $tc_db->GetAll("SELECT * FROM `" . KU_DBPREFIX . "posts` WHERE `parentid` = 0 AND `IS_DELETED` = 0 " . $exclude . " ORDER BY `bumped` DESC LIMIT ". KU_THREADS ." OFFSET ". ($thispage * KU_THREADS));
 } else {
     $numposts = $tc_db->GetOne("SELECT COUNT(*) FROM (SELECT `boardid`, `parentid` FROM `" . KU_DBPREFIX . "posts` WHERE `IS_DELETED` = 0) as A JOIN `" . KU_DBPREFIX . "boards` AS C ON C.id = A.boardid " . (isset($_GET['fullfeed']) ? "" : "AND C.enablefeed = 1") . " LEFT JOIN `" . KU_DBPREFIX . "posts` AS B ON B.id = A.parentid AND A.parentid != 0 AND B.boardid = A.boardid");
     $results = $tc_db->GetAll("SELECT A.*, B.subject AS parent_subject FROM (SELECT * FROM `" . KU_DBPREFIX . "posts` WHERE `IS_DELETED` = 0 ORDER BY `timestamp` DESC) as A JOIN `" . KU_DBPREFIX . "boards` AS C ON C.id = A.boardid " . (isset($_GET['fullfeed']) ? "" : "AND C.enablefeed = 1") . " LEFT JOIN `" . KU_DBPREFIX . "posts` AS B ON B.id = A.parentid AND A.parentid != 0 AND B.boardid = A.boardid ORDER BY A.`timestamp` DESC LIMIT " . KU_FEEDLENGTH . " OFFSET " . ($thispage * KU_FEEDLENGTH));
