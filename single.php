@@ -64,6 +64,7 @@ if (count($results) == 0) {
 }
 
 $i = 0;
+$newposts = array();
 foreach ($results as $key => $post) {
     $country_restrict = $boards[$post['boardid']]->board['country_restrict'];
     if ($country_restrict != '') {
@@ -91,7 +92,7 @@ foreach ($results as $key => $post) {
 
     if(isset($_REQUEST["all"])) {
         $subposts_all = $tc_db->GetAll("SELECT * FROM `" . KU_DBPREFIX . "posts` WHERE `boardid` = " . $post_board_class->board['id'] . " AND `parentid` = ". $post['id'] ." AND `IS_DELETED` = 0 ORDER BY `id` ASC");
-        $n_stickied = ($post['stickied'] == 1) ? KU_REPLIESSTICKY : KU_REPLIES;
+        $n_stickied = ($results[$key]['stickied'] == 1) ? KU_REPLIESSTICKY : KU_REPLIES;
         $subposts = array();
         $nlast = count($subposts_all) + 1;
         for ($j = 0; $j < $n_stickied; $j++) {
@@ -102,7 +103,7 @@ foreach ($results as $key => $post) {
             $subpost['n'] = $nlast - $j;
             array_unshift($subposts, $post_board_class->BuildPost($subpost, true, false));
         }
-        array_unshift($subposts, $post);
+        array_unshift($subposts, $results[$key]);
         $newposts[] = $subposts;
         $replycount = count($subposts_all);
         $imgcount = 0;
@@ -111,12 +112,12 @@ foreach ($results as $key => $post) {
                 $imgcount++;
             }
         }
-        $subposts[$key][0]['replies'] = $replycount;
-        $subposts[$key][0]['images'] = $imgcount;
+        $newposts[$key][0]['replies'] = $replycount;
+        $newposts[$key][0]['images'] = $imgcount;
     }
 }
 
-$board_class->dwoo_data->assign('posts', isset($_REQUEST["all"]) ? $subposts : $results);
+$board_class->dwoo_data->assign('posts', isset($_REQUEST["all"]) ? $newposts : $results);
 $board_class->dwoo_data->assign('forceexternalboard', true);
 
 $page .= $board_class->dwoo->get(KU_TEMPLATEDIR . (isset($_REQUEST["all"]) ? '/img_board_page.tpl' : '/img_thread.tpl'), $board_class->dwoo_data);
