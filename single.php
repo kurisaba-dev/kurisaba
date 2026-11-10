@@ -101,6 +101,7 @@ foreach ($results as $key => $post) {
                 break;
             }
             $subpost['n'] = $nlast - $j;
+            $subpost['file_path'] = KU_BOARDSPATH . '/' . $post_board_class->board['name'];
             array_unshift($subposts, $post_board_class->BuildPost($subpost, true, false));
         }
         array_unshift($subposts, $results[$key]);
