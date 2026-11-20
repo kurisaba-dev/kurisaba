@@ -30,16 +30,19 @@ foreach ($boards_data as $board_data) {
 }
 $board_class = end($boards);
 
+$all = isset($_REQUEST["all"]);
+$fullfeed = isset($_GET['fullfeed']) && $_GET['fullfeed'] == 1;
+
 $board_class->InitializeDwoo();
 $board_class->dwoo_data->assign('isfeed', true);
-$board_class->dwoo_data->assign('isall', isset($_REQUEST["all"]));
+$board_class->dwoo_data->assign('isall', $all);
 $board_class->dwoo_data->assign('issearch', true);
 $board_class->dwoo_data->assign('isread', true);
 $board_class->dwoo_data->assign('skipheader', true);
 $embeds = $tc_db->GetAll("SELECT `name`, `filetype` FROM `" . KU_DBPREFIX . "embeds`");
 $board_class->dwoo_data->assign('embeds', $embeds);
 $page = '';
-$page .= $board_class->PageHeader(-1, 0, -1, isset($_REQUEST["all"]) ? "Все треды" : "Однопоток");
+$page .= $board_class->PageHeader(-1, 0, -1, $all ? "Все треды" : "Однопоток");
 $page .= "<hr>";
 
 $board_class->dwoo_data->assign('onlyclone', true);
@@ -47,7 +50,7 @@ $page .= $board_class->Postbox();
 
 $thispage = (isset($_REQUEST["p"]) && is_numeric($_REQUEST["p"])) ? intval($_REQUEST["p"]) : 0;
 
-if(isset($_REQUEST["all"])) {
+if($all) {
     $exclude = '';
     foreach ($boards as $board) {
         if ($board->board['hiddenthreads'] !== '') {
@@ -57,13 +60,13 @@ if(isset($_REQUEST["all"])) {
     $numposts = $tc_db->GetOne("SELECT COUNT(*) FROM `" . KU_DBPREFIX . "posts` WHERE `parentid` = 0 AND `IS_DELETED` = 0 " . $exclude);
     $results = $tc_db->GetAll("SELECT * FROM `" . KU_DBPREFIX . "posts` WHERE `parentid` = 0 AND `IS_DELETED` = 0 " . $exclude . " ORDER BY `bumped` DESC LIMIT ". KU_THREADS ." OFFSET ". ($thispage * KU_THREADS));
 } else {
-    $numposts = $tc_db->GetOne("SELECT COUNT(*) FROM (SELECT `boardid`, `parentid` FROM `" . KU_DBPREFIX . "posts` WHERE `IS_DELETED` = 0) as A JOIN `" . KU_DBPREFIX . "boards` AS C ON C.id = A.boardid " . ((isset($_GET['fullfeed']) && $_GET['fullfeed'] == 1) ? "" : "AND C.enablefeed = 1") . " LEFT JOIN `" . KU_DBPREFIX . "posts` AS B ON B.id = A.parentid AND A.parentid != 0 AND B.boardid = A.boardid");
-    $results = $tc_db->GetAll("SELECT A.*, B.subject AS parent_subject FROM (SELECT * FROM `" . KU_DBPREFIX . "posts` WHERE `IS_DELETED` = 0 ORDER BY `timestamp` DESC) as A JOIN `" . KU_DBPREFIX . "boards` AS C ON C.id = A.boardid " . ((isset($_GET['fullfeed']) && $_GET['fullfeed'] == 1) ? "" : "AND C.enablefeed = 1") . " LEFT JOIN `" . KU_DBPREFIX . "posts` AS B ON B.id = A.parentid AND A.parentid != 0 AND B.boardid = A.boardid ORDER BY A.`timestamp` DESC LIMIT " . KU_FEEDLENGTH . " OFFSET " . ($thispage * KU_FEEDLENGTH));
+    $numposts = $tc_db->GetOne("SELECT COUNT(*) FROM (SELECT `boardid`, `parentid` FROM `" . KU_DBPREFIX . "posts` WHERE `IS_DELETED` = 0) as A JOIN `" . KU_DBPREFIX . "boards` AS C ON C.id = A.boardid " . ($fullfeed ? "" : "AND C.enablefeed = 1") . " LEFT JOIN `" . KU_DBPREFIX . "posts` AS B ON B.id = A.parentid AND A.parentid != 0 AND B.boardid = A.boardid");
+    $results = $tc_db->GetAll("SELECT A.*, B.subject AS parent_subject FROM (SELECT * FROM `" . KU_DBPREFIX . "posts` WHERE `IS_DELETED` = 0 ORDER BY `timestamp` DESC) as A JOIN `" . KU_DBPREFIX . "boards` AS C ON C.id = A.boardid " . ($fullfeed ? "" : "AND C.enablefeed = 1") . " LEFT JOIN `" . KU_DBPREFIX . "posts` AS B ON B.id = A.parentid AND A.parentid != 0 AND B.boardid = A.boardid ORDER BY A.`timestamp` DESC LIMIT " . KU_FEEDLENGTH . " OFFSET " . ($thispage * KU_FEEDLENGTH));
 }
-$lastpage = calculatelastpagenum($numposts, isset($_REQUEST["all"]) ? KU_THREADS : KU_FEEDLENGTH);
+$lastpage = calculatelastpagenum($numposts, $all ? KU_THREADS : KU_FEEDLENGTH);
 $board_class->dwoo_data->assign('thispage', $thispage);
 $board_class->dwoo_data->assign('lastpage', $lastpage);
-$board_class->dwoo_data->assign('pagination', createPagination($thispage, $lastpage, KU_WEBPATH . "/single.php" . (isset($_REQUEST["all"]) ? "?all=1" : ""), (isset($_REQUEST["all"]) ? "&p=" : "?p="), ""));
+$board_class->dwoo_data->assign('pagination', createPagination($thispage, $lastpage, KU_WEBPATH . "/single.php?fullfeed=" . ($fullfeed ? "1" : "0") . ($all ? "&all=1" : ""), "&p=", ""));
 
 if (count($results) == 0) {
     exitWithErrorPage('Постов в базе нет!');
@@ -78,12 +81,12 @@ foreach ($results as $key => $post) {
             continue;
         }
     }
-    $post['n'] = isset($_REQUEST["all"]) ? 1 : ++$i;
+    $post['n'] = $all ? 1 : ++$i;
     $post_board_class = $boards[$post['boardid']];
     $post['filetypes'] = $post_board_class->board['filetypes'];
     $post['board'] = $post_board_class->board;
     $post['file_path'] = KU_BOARDSPATH . '/' . $post_board_class->board['name'];
-    if(!isset($_REQUEST["all"])) {
+    if(!$all) {
         $thread = ($post['parentid'] == 0) ? $post['id'] : $post['parentid'];
         $extname = '/'.$post_board_class->board['name'].'/'.$thread;
         if ($post['parentid'] == 0 && $post['subject'] != "") {
@@ -98,7 +101,7 @@ foreach ($results as $key => $post) {
 
     $results[$key] = $post_board_class->BuildPost($post, false, false, false, true);
 
-    if(isset($_REQUEST["all"])) {
+    if($all) {
         $subposts_all = $tc_db->GetAll("SELECT * FROM `" . KU_DBPREFIX . "posts` WHERE `boardid` = " . $post_board_class->board['id'] . " AND `parentid` = ". $post['id'] ." AND `IS_DELETED` = 0 ORDER BY `id` ASC");
         $n_stickied = ($results[$key]['stickied'] == 1) ? KU_REPLIESSTICKY : KU_REPLIES;
         $subposts = array();
@@ -126,10 +129,10 @@ foreach ($results as $key => $post) {
     }
 }
 
-$board_class->dwoo_data->assign('posts', isset($_REQUEST["all"]) ? $newposts : $results);
+$board_class->dwoo_data->assign('posts', $all ? $newposts : $results);
 $board_class->dwoo_data->assign('forceexternalboard', true);
 
-$page .= $board_class->dwoo->get(KU_TEMPLATEDIR . (isset($_REQUEST["all"]) ? '/img_board_page.tpl' : '/img_thread.tpl'), $board_class->dwoo_data);
+$page .= $board_class->dwoo->get(KU_TEMPLATEDIR . ($all ? '/img_board_page.tpl' : '/img_thread.tpl'), $board_class->dwoo_data);
 
 $page .= '<br clear="left">' . "\n";
 $page .= '<hr />' . "\n" . $board_class->Footer(microtime_float() - $executiontime_start);
