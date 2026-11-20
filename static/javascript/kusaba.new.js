@@ -3336,10 +3336,13 @@ var Settings = {
     pin: function(changed) {
         var enabled = Settings._checkbox(changed, 'pin', getCookie('ku_menutype') == 'absolute');
         if (changed != null) {
-            if (enabled) {
-                document.getElementById('overlay_menu').style.position = 'absolute';
-            } else {
-                document.getElementById('overlay_menu').style.position = 'fixed';
+            overlay = document.getElementById('overlay_menu');
+            if (overlay) {
+                if (enabled) {
+                    overlay.style.position = 'absolute';
+                } else {
+                    overlay.style.position = 'fixed';
+                }
             }
         }
         return enabled;
@@ -3361,15 +3364,17 @@ var Settings = {
 
     nokoEnabled: function(changed) {
         var enabled = Settings._checkbox(changed, 'nokoEnabled', false);
-        if (changed != null) {
-            if(enabled) {
-                document.querySelector('#gotothread').name = 'redirecttothread';
-                document.querySelector('#gotothread_fixed').name = 'redirecttothread_inactive';
-                document.querySelector('#gotothread_label').style = '';
-            } else {
-                document.querySelector('#gotothread').name = 'redirecttothread_inactive';
-                document.querySelector('#gotothread_fixed').name = 'redirecttothread';
-                document.querySelector('#gotothread_label').style = 'display: none;';
+        if (typeof(is_menu_frame) === 'undefined') {
+            if (changed != null) {
+                if(enabled) {
+                    document.querySelector('#gotothread').name = 'redirecttothread';
+                    document.querySelector('#gotothread_fixed').name = 'redirecttothread_inactive';
+                    document.querySelector('#gotothread_label').style = '';
+                } else {
+                    document.querySelector('#gotothread').name = 'redirecttothread_inactive';
+                    document.querySelector('#gotothread_fixed').name = 'redirecttothread';
+                    document.querySelector('#gotothread_label').style = 'display: none;';
+                }
             }
         }
         return enabled;
@@ -3839,13 +3844,17 @@ function readyset() {
         }
     });
 
-    document.querySelector('input.videocode').addEventListener('input', () => {
-        var res = embedProcessor.processInput(this.activeElement.value);
-        if (res != false && embeds.map(x => x.name.toLowerCase()).includes(res[0])) {
-            this.activeElement.parentNode.parentNode.querySelector('select.videotype').value = res[0];
-            this.activeElement.value = res[1];
-        }
-    });
+    videocode = document.querySelector('input.videocode');
+    if(videocode)
+    {
+        videocode.addEventListener('input', () => {
+            var res = embedProcessor.processInput(this.activeElement.value);
+            if (res != false && embeds.map(x => x.name.toLowerCase()).includes(res[0])) {
+                this.activeElement.parentNode.parentNode.querySelector('select.videotype').value = res[0];
+                this.activeElement.value = res[1];
+            }
+        });
+    }
 
     delandbanlinks();
 }
