@@ -2149,8 +2149,9 @@ function quickreply_hide() {
 
 function quickreflink(ev) {
     var parent = $(this).data('parent'),
-        current = $(this).data('postnum') || parent;
-    insert_postnum(current);
+        current = $(this).data('postnum') || parent,
+        board = $(this).data('boardname');
+    insert_postnum(current, board);
     return false;
 }
 
@@ -2174,7 +2175,7 @@ function quickreply(ev) {
 
     quickedit_cleanup();
 
-    insert_postnum(current);
+    insert_postnum(current, externalBoard);
 
     return false;
 }
@@ -4810,7 +4811,7 @@ function sph_quote_selected() {
     return insert(to_insert);
 }
 
-function insert_postnum(postnum_src) {
+function insert_postnum(postnum_src, board = false) {
     var postnum = parseInt(postnum_src);
     var selection = sph_get_selected_text();
     var to_insert = "";
@@ -4820,6 +4821,9 @@ function insert_postnum(postnum_src) {
     if (postnum == sph_textarea_find_last_quotenum())
         return insert(to_insert);
     else
+        if (board && board != $('#postform input[name="board"]').val()) {
+            postnum = "/" + board + "/" + postnum;
+        }
         return insert(">>" + postnum + '\n' + to_insert);
 }
 
