@@ -57,7 +57,7 @@ if($all) {
         if ($board->board['hiddenthreads'] !== '') {
             $exclude .= " AND NOT (`boardid` = " . $board->board['id'] . " AND `id` IN (" . $board->board['hiddenthreads'] . "))";
         }
-        if (!$fullfeed && $board->board['enablefeed']) {
+        if (!$fullfeed && !$board->board['enablefeed']) {
             $excludeboards .= " AND NOT `boardid` = " . $board->board['id'];
         }
     }
