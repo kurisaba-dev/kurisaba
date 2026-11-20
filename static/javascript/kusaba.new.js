@@ -4583,6 +4583,8 @@ function window_make_float() {
 
     e.addEventListener('mousedown', window_mousedown, false);
 
+    if (typeof(isfeed) != "undefined" && isfeed) $('#postform').show();
+
     return true;
 }
 
@@ -4597,6 +4599,8 @@ function window_unmake_float() {
     e.style.left = '';
 
     e.removeEventListener('mousedown', window_mousedown, false);
+
+    if (typeof(isfeed) != "undefined" && isfeed) $('#postform').hide();
 
     return true;
 }
