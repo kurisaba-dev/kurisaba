@@ -43,7 +43,9 @@ $embeds = $tc_db->GetAll("SELECT `name`, `filetype` FROM `" . KU_DBPREFIX . "emb
 $board_class->dwoo_data->assign('embeds', $embeds);
 $page = '';
 $page .= $board_class->PageHeader(-1, 0, -1, $all ? "Все треды" : "Однопоток");
-$page .= "<hr>";
+if (!$all) {
+    $page .= "<hr>";
+}
 
 $board_class->dwoo_data->assign('onlyclone', true);
 $page .= $board_class->Postbox();
