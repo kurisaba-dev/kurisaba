@@ -20,6 +20,9 @@
 	{foreach name=thread item=postsa from=$posts}
 		<hr />
 			{foreach key=postkey item=post from=$postsa}
+				{if $post.board}
+					{$board = $post.board}
+				{/if}
 
 				{if $post.parentid eq 0}
 					<span id="unhidethread{$post.id}{$board.name}" style="display: none;">

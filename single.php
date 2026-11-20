@@ -118,6 +118,8 @@ foreach ($results as $key => $post) {
                 break;
             }
             $subpost['n'] = $nlast - $j;
+            $subpost['filetypes'] = $post_board_class->board['filetypes'];
+            $subpost['board'] = $post_board_class->board;
             $subpost['file_path'] = KU_BOARDSPATH . '/' . $post_board_class->board['name'];
             array_unshift($subposts, $post_board_class->BuildPost($subpost, true, false, false, true));
         }
