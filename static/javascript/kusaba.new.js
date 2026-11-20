@@ -3573,28 +3573,17 @@ var Settings = {
         var enabled = Settings._checkbox(changed, 'fullfeed', false);
 
         // First try to process iframes content, and if failed, do it in window
-        if (enabled) {
-            if ($("iframe", window.parent.document).each !== undefined) {
-                $("iframe", window.parent.document).each((x, f) => {
-                    var href = $(".feedlink", f.contentDocument).attr("href");
-                    if (href !== undefined) $(".feedlink", f.contentDocument).attr("href", href.replace(/(\?.*)*$/, "?fullfeed"));
-                });
-            }
-            $(".feedlink").attr("href", $(".feedlink").attr("href").replace(/(\?.*)*$/, "?fullfeed"));
-        } else {
-            if ($("iframe", window.parent.document).each !== undefined) {
-                $("iframe", window.parent.document).each((x, f) => {
-                    var href = $(".feedlink", f.contentDocument).attr("href");
-                    if (href !== undefined) $(".feedlink", f.contentDocument).attr("href", href.replaceAll("?fullfeed", ""));
-                });
-            }
-            $(".feedlink").attr("href", $(".feedlink").attr("href").replaceAll("?fullfeed", ""));
+        if ($("iframe", window.parent.document).each !== undefined) {
+            $("iframe", window.parent.document).each((x, f) => {
+                $(".feedlink", f.contentDocument).each((i, j) => {j.href = j.href.replace(/fullfeed=./, "fullfeed=" + (enabled ? "1" : "0"))})
+            });
         }
+        $(".feedlink").each((i, j) => {j.href = j.href.replace(/fullfeed=./, "fullfeed=" + (enabled ? "1" : "0"))})
 
         // Reload if we're currently on feed
         if (changed) {
             if (window.location.href.includes("single.php")) {
-                window.location.href = ku_webpath + "/single.php" + (enabled ? "?fullfeed" : "");
+                window.location.href = window.location.href.replace(/fullfeed=./, "fullfeed=" + (enabled ? "1" : "0"));
             }
         }
         return enabled;
