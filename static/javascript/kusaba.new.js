@@ -3773,7 +3773,10 @@ function readyset() {
     /* not losing floating form data */
     ffdata.load();
 
-    $('.delform-id').after('<div id="rswapper">[<a onclick="javascript:rswap.swap();return false;" href="#">' + (ispage ? _.NewThread : _.reply) + '</a>]</div><hr />');
+    if (typeof(isfeed) === "undefined" || !isfeed)
+    {
+        $('.delform-id').after('<div id="rswapper">[<a onclick="javascript:rswap.swap();return false;" href="#">' + (ispage ? _.NewThread : _.reply) + '</a>]</div><hr />');
+    }
 
     tasksAfterModify('');
 
