@@ -487,6 +487,11 @@ function setCookie(name, value, days) {
     return Cookie(name, value, days);
 }
 
+// Set the cookie immediately after clicking a checkbox, so board.php will react properly even when deleting
+function setNokoCookie() {
+    setCookie('tothread', ($('#postform').find('#gotothread').is(':checked') ? 'on' : 'off'), 365);
+}
+
 function replaceAll(str, from, to) {
     var idx = str.indexOf(from);
     while (idx > -1) {

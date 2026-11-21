@@ -226,7 +226,7 @@
 						<input id="sage" class="stchkbox" type="checkbox" name="em" value="sage"><span> sage</span>
 					</label>
 					<label id="gotothread_label">
-						<input id="gotothread" class="stchkbox" type="checkbox" checked name="redirecttothread" value="1"><span> noko</span>
+						<input id="gotothread" class="stchkbox" type="checkbox" checked name="redirecttothread" value="1" onclick="setNokoCookie();"><span> noko</span>
 						<input id="gotothread_fixed" class="stchkbox" type="checkbox" {if $replythread neq 0}checked{/if} name="redirecttothread_inactive" value="1" style="display:none;">
 					</label>
 					<label>
