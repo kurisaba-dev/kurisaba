@@ -882,7 +882,6 @@ function tasksAfterModify(newly_added) {
     // to process only selected Elements
 
     if (typeof newly_added === "undefined") newly_added = '';
-
     Settings.pin(false);
     Settings.touch(false);
     Settings.sfwMode(false);
@@ -3348,20 +3347,20 @@ var Settings = {
             return;
         }
         var elem = document.getElementById('settings_' + settingName);
-        if (!elem)
-            return;
         if (localStorage[settingName] == null) {
             localStorage[settingName] = defaultValue;
         }
-        if (clicked == true) {
-            // save it
-            localStorage[settingName] = elem.checked;
-        } else {
-            // update checkbox (called on load)
-            if (localStorage[settingName] == 'true' || localStorage[settingName] == true) {
-                elem.checked = true;
+        if(elem) {
+            if (clicked == true) {
+                // save it
+                localStorage[settingName] = elem.checked;
             } else {
-                elem.checked = false;
+                // update checkbox (called on load)
+                if (localStorage[settingName] == 'true' || localStorage[settingName] == true) {
+                    elem.checked = true;
+                } else {
+                    elem.checked = false;
+                }
             }
         }
         return (localStorage[settingName] == 'true') || (localStorage[settingName] == true);
