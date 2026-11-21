@@ -3408,6 +3408,7 @@ var Settings = {
                     document.querySelector('#gotothread').name = 'redirecttothread_inactive';
                     document.querySelector('#gotothread_fixed').name = 'redirecttothread';
                     document.querySelector('#gotothread_label').style = 'display: none;';
+                    setCookie('tothread', ($('#postform').find('#gotothread_fixed').is(':checked') ? 'on' : 'off'), 365);
                 }
             }
         }
@@ -4111,7 +4112,7 @@ function checkgotothread() {
         checkd = true;
     }
     var e = document.getElementById('gotothread')
-    if (e) e.checked = true;
+    if (e) e.checked = checkd;
 }
 
 function navigatepages(event) {

@@ -2136,7 +2136,6 @@ class Manage
                     $updateboard_enablecatalog = isset($_POST['enablecatalog']) ? '1' : '0';
                     $updateboard_enablefeed = isset($_POST['enablefeed']) ? '1' : '0';
                     $updateboard_enablenofile = isset($_POST['enablenofile']) ? '1' : '0';
-                    $updateboard_redirecttothread = isset($_POST['redirecttothread']) ? '1' : '0';
                     $updateboard_enablereporting = isset($_POST['enablereporting']) ? '1' : '0';
                     $updateboard_enablecaptcha = isset($_POST['enablecaptcha']) ? '1' : '0';
                     $updateboard_forcedanon = isset($_POST['forcedanon']) ? '1' : '0';
