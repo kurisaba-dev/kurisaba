@@ -3,7 +3,6 @@
 header('Content-type: text/html; charset=utf-8');
 
 require 'settings_manager.php';
-session_start(['cookie_samesite' => 'Strict']);
 
 if (isset($_GET['v'])) {
     $board  = $_GET['b'];

@@ -673,9 +673,8 @@ var Styles = {
 Styles.init();
 document.addEventListener("load", Styles.onload);
 
-function delandbanlinks($scope, force) {
-    if (typeof force === 'undefined') force = false;
-    if ((!kumod_set && !force) || typeof $scope === 'undefined') return;
+function delandbanlinks($scope) {
+    if (!kumod_set) return;
     $scope.find('span[id^=dnb]').each(function(index, element) {
         dnbinfo = $(this).attr('id').split('-');
         var boardname = dnbinfo[1];
@@ -3860,7 +3859,7 @@ function readyset() {
         });
     }
 
-    delandbanlinks();
+    delandbanlinks($('*'));
 }
 
 // this will be applied to every new inserted node (post) (removed for now)
@@ -3953,7 +3952,7 @@ function strip(html) {
 var kumod = getCookie('kumod');
 if (kumod !== '') {
     if (kumod === 'allboards') kumod_set = true;
-    else kumod_set = in_array(window.this_board_dir, kumod.split('|'));
+    else kumod_set = isfeed ? false : in_array(window.this_board_dir, kumod.split('|')); // Moderators (except admins) can't do moderation on feed pages.
 }
 var kuadm = getCookie('kuadm');
 if (kuadm !== '') {

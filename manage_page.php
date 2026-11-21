@@ -28,15 +28,12 @@
  * @package kusaba
  */
 
-session_set_cookie_params(60 * 60 * 24 * 100); /* 100 Days */
-session_start(['cookie_samesite' => 'Strict']);
-
 require 'settings_manager.php';
 require KU_ENGINEDIR . 'lib/dwoo.php';
 require KU_ENGINEDIR . 'lib/functions.php';
-require KU_ENGINEDIR . 'lib/classes/manage.class.php';
 require KU_ENGINEDIR . 'lib/classes/board-post.class.php';
 require KU_ENGINEDIR . 'lib/classes/bans.class.php';
+require_once KU_ENGINEDIR . 'lib/classes/manage.class.php';
 
 $dwoo_data->assign('styles', explode(':', KU_STYLES));
 
@@ -160,9 +157,6 @@ if (isset($_GET['graph'])) {
 
     die();
 }
-
-/* Does nothing if the user isn't logged in */
-$manage_class->SetModerationCookies();
 
 /* Decide what needs to be done */
 $action = isset($_REQUEST['action']) ? $_REQUEST['action'] : 'welcome';

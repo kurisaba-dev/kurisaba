@@ -31,7 +31,6 @@
  * @package kusaba
  */
 
-session_start(['cookie_samesite' => 'Strict']);
 require 'settings_manager.php';
 require KU_ENGINEDIR . 'lib/functions.php';
 require KU_ENGINEDIR . 'lib/func/nrand.php';
@@ -166,7 +165,7 @@ if ($operation_delete) { // currently `noreturn`.
         }
 
         // 4.2. DELETE or MODDELETE
-        elseif (isset($_POST['postpassword']) || (isset($_POST['moddelete']) && (require_once KU_ENGINEDIR . 'lib/classes/manage.class.php') && Manage::CurrentUserIsModeratorOfBoard($board_class->board['name'], $_SESSION['manageusername']) && $ismod = true)) {
+        elseif (isset($_POST['postpassword']) || (isset($_POST['moddelete']) && Manage::CurrentUserIsModeratorOfBoard($board_class->board['name'], $_SESSION['manageusername']) && $ismod = true)) {
             // They clicked the Delete button
             if ($_POST['postpassword'] != '' || $ismod) {
                 if (md5($_POST['postpassword']) == $post_class->post['password'] || $ismod) {

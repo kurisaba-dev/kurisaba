@@ -243,6 +243,27 @@ function setcookie_strict(string $name, string $value = "", int $expires_or_opti
     return setcookie($name, $value, [ 'expires' => $expires_or_options, 'path' => $path, 'domain' => $domain, 'secure' => $secure, 'httponly' => $httponly, 'samesite' => 'Strict' ]);
 }
 
+function getUserMode() // Returns 0 = user, 1 = admin, 2 = mod, 4 = skipcaptcha, -1 = missing user; obsolete: 3 = board_owner, 9 = claire_user
+{
+    global $tc_db;
+    if ($_SESSION['manageusername'] == '' || $_SESSION['managepassword'] == '' || $_SESSION['token'] == '') {
+        $_SESSION['manageusername'] = '';
+        $_SESSION['managepassword'] = '';
+        $_SESSION['token'] = '';
+        return 0;
+    }
+
+    $results = $tc_db->GetAll("SELECT HIGH_PRIORITY `type` FROM `" . KU_DBPREFIX . "staff` WHERE `username` = " . $tc_db->qstr($_SESSION['manageusername']) . " AND `password` = " . $tc_db->qstr($_SESSION['managepassword']) . " LIMIT 1");
+    if (count($results) < 1) {
+        return -1;
+    }
+    return $results[0]['type'];
+}
+
+session_set_cookie_params(60 * 60 * 24 * 100); /* 100 Days */
+session_start(['cookie_samesite' => 'Strict']);
+require KU_ENGINEDIR . 'lib/classes/manage.class.php';
+Manage::SetModerationCookies();
 
 function stripslashes_deep($value)
 {

@@ -20,7 +20,7 @@ if ($_COOKIE['captchalang'] == 'en') {
 } else {
     $captcha = ''; // We get here if captcha.php called when captcha of unsupported type is enabled, like MTCaptcha; so we just record generate call and leave.
 }
-session_start(['cookie_samesite' => 'Strict']);
+
 function img_code($code)
 {
     // Decide about font, number of lines, and image width

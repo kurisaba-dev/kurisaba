@@ -142,23 +142,26 @@ class Manage
     }
 
     /* Set mod cookies for boards */
-    public function SetModerationCookies()
+    public static function SetModerationCookies()
     {
         global $tc_db, $tpl_page;
         if (isset($_SESSION['manageusername'])) {
-            if ($this->CurrentUserIsAdministrator()) {
+            if (Manage::CurrentUserIsAdministrator()) {
                 setcookie_strict("kuadm", "admin", time() + KU_ADDTIME + 3600);
             } else {
                 setcookie_strict("kuadm", "", 1000000);
             }
-            $results = $tc_db->GetAll("SELECT HIGH_PRIORITY `boards` FROM `" . KU_DBPREFIX . "staff` WHERE `username` = " . $tc_db->qstr($_SESSION['manageusername']) . " LIMIT 1");
-            if ($this->CurrentUserIsAdministrator() || $results[0][0] == 'allboards') {
+            $boardslist = $tc_db->GetOne("SELECT HIGH_PRIORITY `boards` FROM `" . KU_DBPREFIX . "staff` WHERE `username` = " . $tc_db->qstr($_SESSION['manageusername']) . " LIMIT 1");
+            if (Manage::CurrentUserIsAdministrator() || $boardslist == 'allboards') {
                 setcookie_strict("kumod", "allboards", time() + KU_ADDTIME + 3600);
             } else {
-                if ($results[0][0] != '') {
-                    setcookie_strict("kumod", $results[0][0], time() + KU_ADDTIME + 3600);
+                if ($boardslist != '') {
+                    setcookie_strict("kumod", $boardslist, time() + KU_ADDTIME + 3600);
                 }
             }
+        } else {
+            setcookie_strict("kuadm", "", 1000000);
+            setcookie_strict("kumod", "", 1000000);
         }
     }
 
@@ -192,7 +195,7 @@ class Manage
     {
         global $tc_db, $tpl_page;
 
-        if (!$this->CurrentUserIsAdministrator()) {
+        if (!Manage::CurrentUserIsAdministrator()) {
             exitWithErrorPage('That page is for admins only.');
         }
     }
@@ -202,7 +205,7 @@ class Manage
     {
         global $tc_db, $tpl_page;
 
-        if ($this->CurrentUserIsAdministrator()) {
+        if (Manage::CurrentUserIsAdministrator()) {
             return true;
         } else {
             $results = $tc_db->GetAll("SELECT HIGH_PRIORITY `type` FROM `" . KU_DBPREFIX . "staff` WHERE `username` = " . $tc_db->qstr($_SESSION['manageusername']) . " AND `password` = " . $tc_db->qstr($_SESSION['managepassword']) . " LIMIT 1");
@@ -215,7 +218,7 @@ class Manage
     }
 
     /* See if the user logged in is an admin */
-    public function CurrentUserIsAdministrator()
+    public static function CurrentUserIsAdministrator()
     {
         global $tc_db, $tpl_page;
         $usermode = getUserMode();
@@ -231,7 +234,7 @@ class Manage
     }
 
     /* See if the user logged in is a moderator */
-    public function CurrentUserIsModerator()
+    public static function CurrentUserIsModerator()
     {
         global $tc_db, $tpl_page;
         $usermode = getUserMode();
@@ -247,7 +250,7 @@ class Manage
     }
 
     /* See if the user logged in is a moderator of a specified board */
-    public function CurrentUserIsModeratorOfBoard($board)
+    public static function CurrentUserIsModeratorOfBoard($board)
     {
         global $tc_db, $tpl_page;
 
@@ -281,7 +284,7 @@ class Manage
 
         $staff_boardsmoderated = array();
         $results = $tc_db->GetAll("SELECT HIGH_PRIORITY `boards` FROM `" . KU_DBPREFIX . "staff` WHERE `username` = " . $tc_db->qstr($username) . " LIMIT 1");
-        if ($this->CurrentUserIsAdministrator() || $results[0][0] == 'allboards') {
+        if (Manage::CurrentUserIsAdministrator() || $results[0][0] == 'allboards') {
             $resultsboard = $tc_db->GetAll("SELECT HIGH_PRIORITY `id`, `name` FROM `" . KU_DBPREFIX . "boards` ORDER BY `name` ASC");
             foreach ($resultsboard as $lineboard) {
                 $staff_boardsmoderated = array_merge($staff_boardsmoderated, array(array( 'name' => $lineboard['name'], 'id' => $lineboard['id'])));
@@ -1618,7 +1621,7 @@ class Manage
         $tpl_page .= '<h2>Восстановить пост/тред</h2>';
         $board = isset($_GET['board']) ? $_GET['board'] : '';
         $thread = isset($_GET['thread']) ? $_GET['thread'] : '';
-        if (!$this->CurrentUserIsModeratorOfBoard($board)) {
+        if (!Manage::CurrentUserIsModeratorOfBoard($board)) {
             exitWithErrorPage(_gettext('You are not a moderator of this board.'));
         }
         $boardid = $tc_db->GetOne("SELECT HIGH_PRIORITY `id` FROM `" . KU_DBPREFIX . "boards` WHERE `name` = " . $tc_db->qstr($board));
@@ -1647,7 +1650,7 @@ class Manage
         $tpl_page .= '<h2>'. _gettext('View Threads (including deleted)') .'</h2>';
         $board = isset($_GET['board']) ? $_GET['board'] : '';
         $thread = isset($_GET['thread']) ? $_GET['thread'] : '';
-        if (!$this->CurrentUserIsModeratorOfBoard($board)) {
+        if (!Manage::CurrentUserIsModeratorOfBoard($board)) {
             exitWithErrorPage(_gettext('You are not a moderator of this board.'));
         }
         if (!$thread) {
@@ -1803,7 +1806,7 @@ class Manage
 
         if (isset($_GET['board']) && isset($_GET['threadid']) && $_GET['threadid'] > 0) {
 
-            if (!$this->CurrentUserIsModeratorOfBoard($_GET['board'])) {
+            if (!Manage::CurrentUserIsModeratorOfBoard($_GET['board'])) {
                 exitWithErrorPage(_gettext('You are not a moderator of this board.'));
             }
 
@@ -2486,7 +2489,7 @@ class Manage
             if ($_GET['postid'] > 0 && $_GET['board'] != '') {
                 $results = $tc_db->GetAll("SELECT HIGH_PRIORITY `id`, `name` FROM `" . KU_DBPREFIX . "boards` WHERE `name` = " . $tc_db->qstr($_GET['board']) . "");
                 if (count($results) > 0) {
-                    if (!$this->CurrentUserIsModeratorOfBoard($_GET['board'])) {
+                    if (!Manage::CurrentUserIsModeratorOfBoard($_GET['board'])) {
                         exitWithErrorPage(_gettext('You are not a moderator of this board.'));
                     }
                     foreach ($results as $line) {
@@ -2521,7 +2524,7 @@ class Manage
             if ($_GET['postid'] > 0 && $_GET['board'] != '') {
                 $results = $tc_db->GetAll("SELECT HIGH_PRIORITY `id`, `name` FROM `" . KU_DBPREFIX . "boards` WHERE `name` = " . $tc_db->qstr($_GET['board']) . "");
                 if (count($results) > 0) {
-                    if (!$this->CurrentUserIsModeratorOfBoard($_GET['board'])) {
+                    if (!Manage::CurrentUserIsModeratorOfBoard($_GET['board'])) {
                         exitWithErrorPage(_gettext('You are not a moderator of this board.'));
                     }
                     foreach ($results as $line) {
@@ -2593,7 +2596,7 @@ class Manage
             if ($_GET['postid'] > 0 && $_GET['board'] != '') {
                 $results = $tc_db->GetAll("SELECT HIGH_PRIORITY `id`, `name` FROM `" . KU_DBPREFIX . "boards` WHERE `name` = " . $tc_db->qstr($_GET['board']) . "");
                 if (count($results) > 0) {
-                    if (!$this->CurrentUserIsModeratorOfBoard($_GET['board'])) {
+                    if (!Manage::CurrentUserIsModeratorOfBoard($_GET['board'])) {
                         exitWithErrorPage(_gettext('You are not a moderator of this board.'));
                     }
                     foreach ($results as $line) {
@@ -2627,7 +2630,7 @@ class Manage
         if ($_GET['postid'] > 0 && $_GET['board'] != '') {
             $results = $tc_db->GetAll("SELECT HIGH_PRIORITY `id`, `name` FROM `" . KU_DBPREFIX . "boards` WHERE `name` = " . $tc_db->qstr($_GET['board']) . "");
             if (count($results) > 0) {
-                if (!$this->CurrentUserIsModeratorOfBoard($_GET['board'])) {
+                if (!Manage::CurrentUserIsModeratorOfBoard($_GET['board'])) {
                     exitWithErrorPage(_gettext('You are not a moderator of this board.'));
                 }
                 foreach ($results as $line) {
@@ -2711,7 +2714,7 @@ class Manage
             }
             $results = $tc_db->GetAll("SELECT HIGH_PRIORITY * FROM `" . KU_DBPREFIX . "boards` WHERE `name` = " . $tc_db->qstr($_POST['boarddir']) . "");
             if (count($results) > 0) {
-                if (!$this->CurrentUserIsModeratorOfBoard($_POST['boarddir'])) {
+                if (!Manage::CurrentUserIsModeratorOfBoard($_POST['boarddir'])) {
                     exitWithErrorPage(_gettext('You are not a moderator of this board.'));
                 }
                 foreach ($results as $line) {
@@ -2839,7 +2842,7 @@ class Manage
             }
         }
         $query = "SELECT * FROM `" . KU_DBPREFIX . "reports` WHERE `cleared` = 0";
-        if (!$this->CurrentUserIsAdministrator()) {
+        if (!Manage::CurrentUserIsAdministrator()) {
             $boardlist = $this->BoardList($_SESSION['manageusername']);
             if (!empty($boardlist)) {
                 $query .= ' AND (';
@@ -2913,7 +2916,7 @@ class Manage
 
         $results = $tc_db->GetAll("SELECT HIGH_PRIORITY `id` FROM `" . KU_DBPREFIX . "boards` WHERE `name` = " . $tc_db->qstr($_GET['board']) . "");
         if (count($results) > 0) {
-            if (!$this->CurrentUserIsModeratorOfBoard($_GET['board'])) {
+            if (!Manage::CurrentUserIsModeratorOfBoard($_GET['board'])) {
                 exitWithErrorPage(_gettext('You are not a moderator of this board.'));
             }
             $board_id = $results[0]['id'];
@@ -3091,7 +3094,7 @@ class Manage
                 if (isset($_POST['banfromall']) || $instantban) {
                     $results = $tc_db->GetAll("SELECT HIGH_PRIORITY `name` FROM `" . KU_DBPREFIX . "boards`");
                     foreach ($results as $line) {
-                        if (!$this->CurrentUserIsModeratorOfBoard($line['name'])) {
+                        if (!Manage::CurrentUserIsModeratorOfBoard($line['name'])) {
                             exitWithErrorPage('/'. $line['name'] . '/: '. _gettext('You can only make bans applying to boards you moderate.'));
                         }
                     }
@@ -3103,16 +3106,16 @@ class Manage
                         $_POST['deletefrom'] = $_POST['bannedfrom'];
                     }
                     foreach ($_POST['bannedfrom'] as $board) {
-                        if (!$this->CurrentUserIsModeratorOfBoard($board)) {
+                        if (!Manage::CurrentUserIsModeratorOfBoard($board)) {
                             exitWithErrorPage('/'. $board . '/: '. _gettext('You can only make bans applying to boards you moderate.'));
                         }
                     }
                     $ban_boards = implode('|', $_POST['bannedfrom']);
                 }
-                if (!$this->CurrentUserIsAdministrator() && (isset($_POST['banfromall']) || isset($_POST['allowread']) || isset($_POST['type']))) {
+                if (!Manage::CurrentUserIsAdministrator() && (isset($_POST['banfromall']) || isset($_POST['allowread']) || isset($_POST['type']))) {
                     exitWithErrorPage(_gettext('Illegal action.'));
                 } else {
-                    if ($this->CurrentUserIsAdministrator()) {
+                    if (Manage::CurrentUserIsAdministrator()) {
                         $ban_globalban = (isset($_POST['banfromall']) || $instantban) ? 1 : 0;
                         $ban_allowread = ($_POST['allowread'] == 0 || $instantban) ? 0 : 1;
                         $ban_type = ($_POST['type'] <= 2 && $_POST['type'] >= 0) ? $_POST['type'] : 0;
@@ -3286,7 +3289,7 @@ class Manage
 			<br /><label for="deleteposts">'. _gettext('Delete all posts by these IPs') . ':</label>
 			<input type="checkbox" name="deleteposts" id="deleteposts" />';
         }
-        if ($this->CurrentUserIsAdministrator()) {
+        if (Manage::CurrentUserIsAdministrator()) {
             $tpl_page .= '<br />
 			<label for="allowread">'. _gettext('Allow read') . ':</label>
 			<select name="allowread" id="allowread"><option value="1">'._gettext('Yes').'</option><option value="0">'._gettext('No').'</option></select>
@@ -3308,7 +3311,7 @@ class Manage
         $tpl_page .= '</fieldset>
 		<fieldset>
 		<legend> '. _gettext('Ban from') . '</legend>';
-        if ($this->CurrentUserIsAdministrator()) {
+        if (Manage::CurrentUserIsAdministrator()) {
             $tpl_page .= '<label for="banfromall"><strong>'. _gettext('All boards') . '</strong></label>
 		<input type="checkbox" name="banfromall" id="banfromall" /><br /><hr /><br />';
         }
@@ -3569,7 +3572,7 @@ class Manage
                 if (isset($_POST['banfromall'])) {
                     $results = $tc_db->GetAll("SELECT HIGH_PRIORITY `id`, `name` FROM `" . KU_DBPREFIX . "boards`");
                     foreach ($results as $line) {
-                        if (!$this->CurrentUserIsModeratorOfBoard($line['name'])) {
+                        if (!Manage::CurrentUserIsModeratorOfBoard($line['name'])) {
                             exitWithErrorPage('/'. $line['name'] . '/: '. _gettext('You can only delete posts from boards you moderate.'));
                         }
                         $delete_boards[$line['id']] = $line['name'];
@@ -3580,7 +3583,7 @@ class Manage
                         exitWithErrorPage(_gettext('Please select a board.'));
                     }
                     foreach ($_POST['deletefrom'] as $board) {
-                        if (!$this->CurrentUserIsModeratorOfBoard($board)) {
+                        if (!Manage::CurrentUserIsModeratorOfBoard($board)) {
                             exitWithErrorPage('/'. $board . '/: '. _gettext('You can only delete posts from boards you moderate.'));
                         }
                         $id = $tc_db->GetOne("SELECT `id` FROM `" . KU_DBPREFIX . "boards` WHERE `name` = " . $tc_db->qstr($board));
@@ -3778,7 +3781,7 @@ class Manage
 
         if (isset($_GET['updateboard'])) {
             $this->CheckToken($_POST['token']);
-            if (!$this->CurrentUserIsModeratorOfBoard($_GET['updateboard'])) {
+            if (!Manage::CurrentUserIsModeratorOfBoard($_GET['updateboard'])) {
                 exitWithErrorPage(_gettext('You are not a moderator of this board.'));
             }
             $boardid = $tc_db->GetOne("SELECT HIGH_PRIORITY `id` FROM `" . KU_DBPREFIX . "boards` WHERE `name` = " . $tc_db->qstr($_GET['updateboard']) . " LIMIT 1");
@@ -3790,7 +3793,7 @@ class Manage
                 $tpl_page .= _gettext('Unable to locate a board named') . ' <strong>'. $_GET['updateboard'] . '</strong>.';
             }
         } elseif (isset($_POST['board'])) {
-            if (!$this->CurrentUserIsModeratorOfBoard($_POST['board'])) {
+            if (!Manage::CurrentUserIsModeratorOfBoard($_POST['board'])) {
                 exitWithErrorPage(_gettext('You are not a moderator of this board.'));
             }
             $resultsboard = $tc_db->GetAll("SELECT HIGH_PRIORITY * FROM `" . KU_DBPREFIX . "boards` WHERE `name` = " . $tc_db->qstr($_POST['board']) . "");

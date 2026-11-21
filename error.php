@@ -5,7 +5,6 @@ $errorcode = $_GET['p'];
 require 'settings_manager.php';
 require KU_ENGINEDIR . 'lib/functions.php';
 require KU_ENGINEDIR . 'lib/classes/board-post.class.php';
-session_start(['cookie_samesite' => 'Strict']);
 modules_load_all();
 
 require KU_ENGINEDIR . 'lib/classes/bans.class.php';

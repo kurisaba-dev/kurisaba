@@ -6,7 +6,6 @@ require 'settings_manager.php';
 
 require KU_ENGINEDIR . 'lib/functions.php';
 require KU_ENGINEDIR . 'lib/classes/board-post.class.php';
-session_start(['cookie_samesite' => 'Strict']);
 
 // Users that banned at at least one board, can't read the feed.
 require KU_ENGINEDIR . 'lib/classes/bans.class.php';

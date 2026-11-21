@@ -10,7 +10,6 @@ curl -s "https://kurisaba.lan/api.php" --data '{"version":"1.1","method":"get_po
 
 require 'settings_manager.php';
 require KU_ENGINEDIR . 'lib/functions.php';
-session_start(['cookie_samesite' => 'Strict']);
 
 // Users that banned at at least one board, can't use API.
 require KU_ENGINEDIR . 'lib/classes/bans.class.php';

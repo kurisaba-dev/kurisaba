@@ -421,7 +421,6 @@ class Board
         }
 
         if (!$temporary && $post['country_restrict'] != '') {
-            session_start(['cookie_samesite' => 'Strict']);
             if ((getUserMode() != 1) && in_array(client_country(), explode(',', strtoupper(str_replace(' ', '', $post['country_restrict']))))) {
                 $post['geobanned'] = true;
                 $post['message'] = '';
