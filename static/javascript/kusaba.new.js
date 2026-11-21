@@ -2091,8 +2091,10 @@ function quickreply_show() {
     quickreply_save_MAX_FILE_SIZE = $('#postform input[name="MAX_FILE_SIZE"]').val();
     quickreply_save_posttypeindicator = $('#postform #posttypeindicator').html();
 
-    // Coordinate magic should be performed when form is hidden
-    window.scrollBy(0, -(rswap.i ? $('#postform').height() + 7 : 17));
+    if(pageType() == 'boardpage' || pageType() == 'threadpage') { // Feeds have no form, so this isn't needed
+        // Coordinate magic should be performed when form is hidden
+        window.scrollBy(0, -(rswap.i ? $('#postform').height() + 7 : 17));
+    }
     window_make_float();
 
     $('#postform').addClass('reflinkpreview');
@@ -2140,7 +2142,9 @@ function quickedit_cleanup() {
 function quickreply_hide() {
     if (!quickreply_shown) return;
     window_unmake_float();
-    window.scrollBy(0, rswap.i ? $('#postform').height() + 7 : 17);
+    if(pageType() == 'boardpage' || pageType() == 'threadpage') { // Feeds have no form, so this isn't needed
+        window.scrollBy(0, rswap.i ? $('#postform').height() + 7 : 17);
+    }
     $('#postform').removeClass('reflinkpreview');
     $('#postform').removeClass('content-background');
     $('#postform').removeClass('qreplyform');
