@@ -5,6 +5,22 @@ var is_entering = false;
 var injectDestination = "img_global.css";
 var notificationIcon = ku_webpath + "/static/images/notification.png?v=" + ku_js_css_ver;
 
+function pageType() {
+    if (ispage)
+    {
+        return 'boardpage'; // Standard board page.
+    }
+    if (typeof(isfeed) === 'undefined' || isfeed == false)
+    {
+        return 'threadpage'; // Standard thread page.
+    }
+    if (typeof(boardid) === 'undefined' || boardid == false)
+    {
+        return 'postfeed'; // Post feed aka feed with thread view ("Однопоток").
+    }
+    return 'boardfeed'; // Thread feed aka feed with board view ("Все треды").
+}
+
 function kuTrace(error) {
     var elem = document.getElementsByClassName("bottom-center")[0];
     if (elem) elem.innerHTML =
@@ -215,7 +231,7 @@ var _messages = {
         settings_oldSearch: "Show search at right rather than in menu",
         settings_videoboxes: "Expand every video link",
         settings_fullfeed: "Show all boards in feed",
-        settings_qreplynum: "Exchange onclicks of post number and reply button",
+        settings_qreplynum: "Reply to thread on post number click at board pages",
         settings_showyou: "Show (You) in posts",
         deletePost: "Delete post",
         deleteAndBan: "Delete post and ban poster",
@@ -306,7 +322,7 @@ var _messages = {
         settings_oldSearch: "Показывать поиск справа, а не в меню",
         settings_videoboxes: "Разворачивать все ссылки на видео",
         settings_fullfeed: "Показывать все доски в однопотоке",
-        settings_qreplynum: "Поменять местами функциональность номера поста и кнопки ответа",
+        settings_qreplynum: "Ответ в тред по клику на номер поста на страницах досок",
         settings_showyou: "Показывать (You) в постах",
         deletePost: "Удалить пост",
         deleteAndBan: "Удалить пост и забанить постера",
@@ -3495,15 +3511,11 @@ var Settings = {
     qreplynum: function(changed) {
         var enabled = Settings._checkbox(changed, 'qreplynum', false);
         if (changed != null) {
-            if (enabled) {
-                $('.qr-btn').removeClass('qrl');
+            if (enabled && pageType() == 'boardpage') {
                 $('.qr-num').removeClass('qrf');
-                $('.qr-btn').addClass('qrf');
                 $('.qr-num').addClass('qrl');
             } else {
-                $('.qr-btn').removeClass('qrf');
                 $('.qr-num').removeClass('qrl');
-                $('.qr-btn').addClass('qrl');
                 $('.qr-num').addClass('qrf');
             }
         }
