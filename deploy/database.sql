@@ -24,6 +24,8 @@ CREATE TABLE IF NOT EXISTS `{{KU_DBPREFIX}}banlist` (
   `until` int(20) NOT NULL,
   `reason` text NOT NULL,
   `staffnote` text NOT NULL,
+  `boardid` smallint(5) unsigned NOT NULL DEFAULT '0',
+  `postid` int(10) unsigned NOT NULL DEFAULT '0',
   `appeal` text,
   `appealat` int(20) NOT NULL DEFAULT '0'
 ) ENGINE=MyISAM AUTO_INCREMENT=230 DEFAULT CHARSET=utf8;

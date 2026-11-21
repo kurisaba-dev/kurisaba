@@ -346,7 +346,7 @@ class Posting
         foreach ($badlinks as $badlink) {
             if (stripos($msg, mb_strtolower(str_replace($cyr, $lat, $badlink))) !== false) {
                 /* They included a blacklisted link in their post. Ban them for an hour */
-                $bans_class->BanUser((KU_SAVEIP ? KU_REMOTE_ADDR : md5(KU_REMOTE_ADDR)), 'board.php', 0, 3600, $board, _gettext('Posting a blacklisted link.') . ' (' . $badlink . ')', $_POST['message']);
+                $bans_class->BanUser((KU_SAVEIP ? KU_REMOTE_ADDR : md5(KU_REMOTE_ADDR)), 'board.php', 0, 3600, $board, _gettext('Posting a blacklisted link.') . ' (' . $badlink . ')', $_POST['message'], 0, 0, 1, false, $boardid, 0);
                 return 2; // Blacklisted link
             }
         }

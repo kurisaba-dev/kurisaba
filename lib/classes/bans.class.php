@@ -110,7 +110,7 @@ class Bans
     }
 
     /* Add a ip/ip range ban */
-    public function BanUser($ip, $modname, $globalban, $duration, $boards, $reason, $staffnote, $appealat = 0, $type = 0, $allowread = 1, $proxyban = false)
+    public function BanUser($ip, $modname, $globalban, $duration, $boards, $reason, $staffnote, $appealat = 0, $type = 0, $allowread = 1, $proxyban = false, $boardid = 0, $postid = 0)
     {
         global $tc_db;
 
@@ -140,7 +140,7 @@ class Bans
             $ban_until = '0';
         }
 
-        $tc_db->Execute("INSERT INTO `".KU_DBPREFIX."banlist` ( `ip` , `ipmd5` , `type` , `allowread` , `globalban` , `boards` , `by` , `at` , `until` , `reason`, `staffnote`, `appealat` ) VALUES ( ".$tc_db->qstr($encrypted_ip)." , ".$tc_db->qstr($hashed_ip)." , ".intval($type)." , ".intval($allowread)." , ".intval($globalban)." , ".$tc_db->qstr($boards)." , ".$tc_db->qstr($modname)." , ".(time() + KU_ADDTIME)." , ".intval($ban_until)." , ".$tc_db->qstr($reason)." , ".$tc_db->qstr($staffnote).", ".intval($appealat)." ) ");
+        $tc_db->Execute("INSERT INTO `".KU_DBPREFIX."banlist` ( `ip` , `ipmd5` , `type` , `allowread` , `globalban` , `boards` , `by` , `at` , `until` , `reason`, `staffnote`, `boardid`, `postid`, `appealat` ) VALUES ( ".$tc_db->qstr($encrypted_ip)." , ".$tc_db->qstr($hashed_ip)." , ".intval($type)." , ".intval($allowread)." , ".intval($globalban)." , ".$tc_db->qstr($boards)." , ".$tc_db->qstr($modname)." , ".(time() + KU_ADDTIME)." , ".intval($ban_until)." , ".$tc_db->qstr($reason)." , ".$tc_db->qstr($staffnote).", ".intval($boardid).", ".intval($postid).", ".intval($appealat)." ) ");
 
         if (!$proxyban && $type == 1) {
             $this->UpdateHtaccess();
