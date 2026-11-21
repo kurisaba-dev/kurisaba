@@ -710,7 +710,7 @@ if ($operation_post) { // it's `noreturn`.
     }
 
     if ($_POST['redirecttothread'] == 1 || $_POST['em'] == 'return' || $_POST['em'] == 'noko') {
-        setcookie_strict('tothread', 'on', time() + KU_ADDTIME + (365 * 24 * 3600), '/');
+        setcookie_strict('tothread', 'on', time() + KU_ADDTIME + (365 * 24 * 3600));
         $tothread_num = $thread_replyto;
         if ($tothread_num == "0") {
             $tothread_num = $post_id;
@@ -723,7 +723,7 @@ if ($operation_post) { // it's `noreturn`.
         }
         kurisaba_redirect(KU_BOARDSPATH . '/' . $board_class->board['name'] . '/res/' . $tothread_num . '.html#boardlist_footer', true, $imagefile_name, $post_id);
     } else {
-        setcookie_strict('tothread', 'off', time() + KU_ADDTIME + (365 * 24 * 3600), '/');
+        setcookie_strict('tothread', 'off', time() + KU_ADDTIME + (365 * 24 * 3600));
         kurisaba_redirect(KU_BOARDSPATH . '/' . $board_class->board['name'] . '/', true, $imagefile_name, $post_id);
     }
 }
