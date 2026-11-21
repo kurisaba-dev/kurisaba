@@ -1338,7 +1338,6 @@ function start_deletion(plural, postlist, delformd, errors) {
 
         if (Settings.postingMode(false)) {
             getnewposts(undefined, true, true, false, true);
-            window.location.replace(responseUrl);
         } else {
             window.location.replace(responseUrl);
             window.location.reload();
@@ -1631,12 +1630,22 @@ function getnewpostsRejectLast() {
 }
 
 function getnewposts(threadid, automatic, notutturu, noredirect, silent) {
-    var isfeed = ($('.isfeed').length > 0);
     if (dollchanEnabled)
         return false;
+
+    if (pageType() == 'boardfeed' || pageType() == 'boardpage') {
+        if(!noredirect) {
+            if (!silent) {
+                popupMessageWithLoading('Перезагрузка страницы...');
+            }
+            window.location.reload();
+        }
+        return false;
+    }
+
     autoRefreshTmpPrevent();
 
-    if (isfeed) {
+    if (pageType() == 'postfeed') {
         fetch(ku_webpath + '/single.php').then(response => {
             autoRefreshRestore();
 
