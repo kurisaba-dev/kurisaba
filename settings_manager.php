@@ -238,7 +238,7 @@ _bindtextdomain('kusaba', KU_ENGINEDIR . 'lib/lang');
 _bind_textdomain_codeset('kusaba', KU_CHARSET);
 
 // Cookies
-function setcookie_strict(string $name, string $value = "", int $expires_or_options = 0, string $path = "/", string $domain = "." . KU_HOST, bool $secure = false, bool $httponly = false): bool
+function setcookie_strict(string $name, string $value = "", int $expires_or_options = 0, string $path = "/", string $domain = KU_HOST, bool $secure = false, bool $httponly = false): bool
 {
     return setcookie($name, $value, [ 'expires' => $expires_or_options, 'path' => $path, 'domain' => $domain, 'secure' => $secure, 'httponly' => $httponly, 'samesite' => 'Strict' ]);
 }
