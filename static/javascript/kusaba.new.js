@@ -3511,7 +3511,7 @@ var Settings = {
     qreplynum: function(changed) {
         var enabled = Settings._checkbox(changed, 'qreplynum', false);
         if (changed != null) {
-            if (enabled && pageType() == 'boardpage') {
+            if (enabled && pageType() != 'threadpage') {
                 $('.qr-num').removeClass('qrf');
                 $('.qr-num').addClass('qrl');
             } else {
