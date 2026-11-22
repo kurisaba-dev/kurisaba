@@ -9,6 +9,7 @@ if (isset($_POST['board']) && isset($_POST['thread']) && isset($_POST['posts']))
 } elseif (isset($_POST['feed']) && isset($_POST['lasttimestamp']) && isset($_POST['full']) && isset($_POST['posts']) && $_POST['feed'] == '1') {
     $feed = true;
     $lasttimestamp = $_POST['lasttimestamp'];
+    $fullfeed = $_POST['full'];
 } else {
     die(json_encode(array('state' => 'неправильное использование json_get - его должна вызывать яваскриптовая часть курисабы')));
 }
@@ -86,6 +87,22 @@ if (count($pregen_replies_q) > 0) {
     }
 }
 
+$exclude = '';
+$excludeboards = '';
+if($feed) {
+    foreach ($boards as $board) {
+        if ($board->board['hiddenthreads'] !== '') {
+            $exclude .= " AND NOT (`boardid` = " . $board->board['id'] . " AND `id` IN (" . $board->board['hiddenthreads'] . "))";
+        }
+        if (!$fullfeed && !$board->board['enablefeed']) {
+            $excludeboards .= " AND NOT `boardid` = " . $board->board['id'];
+        }
+    }
+    $limthread = " AND `timestamp` >= " . $tc_db->qstr($lasttimestamp) . " ORDER BY `timestamp` DESC";
+} else {
+    $limthread = " AND `boardid` = '" . $board_class->board['id'] ."' AND `parentid` = " . $tc_db->qstr($thread) . " ORDER BY `id` ASC";
+}
+
 // Count added and deleted posts
 $n = ($feed ? 1 : 2); // First reply in thread is #2, and first post in feed is 1
 $return_posts = array();
@@ -93,8 +110,7 @@ $return_delposts = $posts;
 $posts_to_print = array();
 $return_notify = false;
 $return_addposts = '';
-$limthread = ($feed ? " AND `timestamp` >= " . $tc_db->qstr($lasttimestamp) . " ORDER BY `timestamp` DESC" : " AND `boardid` = '" . $board_class->board['id'] ."' AND `parentid` = " . $tc_db->qstr($thread) . " ORDER BY `id` ASC");
-$results = $tc_db->GetAll("SELECT * FROM `" . KU_DBPREFIX . "posts` WHERE `IS_DELETED` = 0" . $limthread);
+$results = $tc_db->GetAll("SELECT * FROM `" . KU_DBPREFIX . "posts` WHERE `IS_DELETED` = 0" . $exclude . $excludeboards . $limthread);
 
 if (count($results) > 0) {
     foreach ($results as $post) {
