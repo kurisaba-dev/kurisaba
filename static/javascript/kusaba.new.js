@@ -930,6 +930,16 @@ function DoubleQuote(elemArr) {
     }
 }
 
+/** Add hover handler to timestamps.
+@param elemArr is array of elements or queryselectorAlls.
+pass '' to process all page */
+function setTimeHover(elemArr) {
+    if (!elemArr) elemArr = new Array("body");
+    elemArr.forEach((e) => {
+        $(e).find(".datetime").on("mouseenter", (e) => timeHover(e));
+    });
+}
+
 function tasksAfterModify(newly_added) {
     // newly_added = false if no complex processing needed
     // newly_added = '' (or not specified) to process whole page
@@ -961,6 +971,7 @@ function tasksAfterModify(newly_added) {
     try {
         hide_unwanted_posts();
         setLocalYou(newly_added);
+        setTimeHover(newly_added);
         DoubleQuote(newly_added);
     } catch (er) {};
 }
@@ -3791,6 +3802,38 @@ function refreshCaptchaRainbow() {
     var remaining_part = 1 - ((Date.now() - captcha_start_time) / (ku_captchatime * 1000));
     rainbow.width = (remaining_part > 0 ? 80 * remaining_part : 0);
     if (remaining_part < 0) refreshCaptcha();
+}
+
+function timeHover(e)
+{
+    function ending(n, hour = false, day = false)
+    {
+        if(n < 11 || n > 14) {
+            if (n % 10 == 1) return day ? "ень ": hour ? " ": "у ";
+            if ((n - 2) % 10 < 3) return day ? "ня ": hour ? "а ": "ы ";
+        }
+        return day ? "ней ": hour ? "ов ": " ";
+    }
+    sec = (Date.now() / 1000 - e.target.dataset['timestamp']).toFixed(0);
+    if (sec < 60) {
+        title  = sec + " секунд" + ending(sec) + "назад";
+    } else if (sec < 3600) {
+        min = Math.floor(sec / 60);
+        title  = min + " минут" + ending(min) + (sec > 0 ? sec + " секунд" + ending(sec): "") + "назад";
+        sec = sec % 60;
+    } else if (sec < 84600) {
+        min = Math.floor(sec / 60) % 60;
+        hr  = Math.floor(sec / 3600);
+        sec = sec % 60;
+        title  = hr + " час" + ending(hr, true) + (min > 0 ? min + " минут" + ending(min) : "") + (sec > 0 ? sec + " секунд" + ending(sec): "") + "назад";
+    } else {
+        min = Math.floor(sec / 60) % 60;
+        hr  = Math.floor(sec / 3600) % 24;
+        day = Math.floor(sec / 84600);
+        sec = sec % 60;
+        title  = day + " д" + ending(day, false, true) + (hr > 0 ? hr + " час" + ending(hr, true): "") + (min > 0 ? min + " минут" + ending(min) : "") + (sec > 0 ? sec + " секунд" + ending(sec): "") + "назад";
+    }
+    e.target.title = title;
 }
 
 function readyset() {
