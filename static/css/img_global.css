@@ -88,7 +88,7 @@ form {
     display: inline-block;
     vertical-align: middle;
     width: 80px;
-    height: 19px;
+    height: 23px;
 }
 
 form .trap {
@@ -100,10 +100,11 @@ form .trap {
 }
 
 .captchaimage {
-    display: inline !important;
+    display: flex;
     box-shadow: none !important;
     width: 80px;
     height: 19px;
+    gap: 0px;
 }
 
 .postarea table {
