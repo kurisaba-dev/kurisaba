@@ -3792,8 +3792,8 @@ function timeHover(e)
         title  = sec + " секунд" + ending(sec) + "назад";
     } else if (sec < 3600) {
         min = Math.floor(sec / 60);
-        title  = min + " минут" + ending(min) + (sec > 0 ? sec + " секунд" + ending(sec): "") + "назад";
         sec = sec % 60;
+        title  = min + " минут" + ending(min) + (sec > 0 ? sec + " секунд" + ending(sec): "") + "назад";
     } else if (sec < 84600) {
         min = Math.floor(sec / 60) % 60;
         hr  = Math.floor(sec / 3600);
