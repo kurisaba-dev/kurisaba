@@ -1715,215 +1715,186 @@ function getnewposts(threadid, automatic, notutturu, noredirect, silent) {
 
     autoRefreshTmpPrevent();
 
-    if (pageType() == 'postfeed') {
-        fetch(ku_webpath + '/single.php').then(response => {
-            autoRefreshRestore();
-
-            if (response.status !== 200) {
-                if (!silent) {
-                    popupMessageHttpError(response.status, response.statusText);
-                }
-                return false;
-            }
-            return response.text();
-        }).then(responseText => {
-            newDocument = (new DOMParser()).parseFromString(responseText, "text/html");
-
-            // Count new posts
-            var res_count = 0;
-            newDocument.querySelectorAll('table.postnode').forEach(elem => {
-                elem.querySelectorAll('td.op,td.reply').forEach(td => {
-                    if (document.querySelectorAll('#' + td.id + '.' + td.classList.toString().replaceAll(' ', '.')).length == 0) ++res_count;
-                });
-            });
-
-            // We completely update the replies block with newly arrived data. It may not be most effective way, but feed usually is not so long, and this lets us avoid all this mess with reply maps.
-            document.querySelector('td.content-background').innerHTML = newDocument.querySelector('td.content-background').innerHTML;
-
-            // Notify on new posts if automatic refresh
-            if (res_count > 0 && automatic) {
-                blinker_add_unread(res_count);
-
-                if (Settings.soundRefresh(false) && !notutturu) {
-                    var tutturu = new Audio(ku_webpath + '/static/sounds/tutturu.ogg');
-                    tutturu.play();
-                    delete tutturu;
-                }
-
-                if (Settings.pushNotify(false)) {
-                    notificationSend("Однопоток", _.newReplies + ": " + res_count);
-                }
-            }
-
-            // No new posts: notify only if not automatic
-            if (res_count == 0 && !automatic)
-                if (!silent) {
-                    popupMessageTmp(_.noNewPosts);
-                }
-            else
+    if (typeof newupd_posts === 'undefined') {
+        if (!noredirect) {
             if (!silent) {
-                popupMessageOff();
+                popupMessageWithLoading('Перезагрузка страницы...');
             }
-
-            // Do specific tasks for newly added posts
-            if (res_count > 0) tasksAfterModify();
-
-            // Scroll to top of feed
-            if (!automatic) document.location = document.location.toString().split('#')[0] + '#boardlist_header';
-        });
-    } else {
-        if (typeof newupd_posts === 'undefined') {
-            if (!noredirect) {
-                if (!silent) {
-                    popupMessageWithLoading('Перезагрузка страницы...');
-                }
-                document.location.reload();
-            }
-            return false;
+            document.location.reload();
         }
+        return false;
+    }
+
+    var data = new FormData();
+    if (pageType() == 'threadpage') {
         if (typeof threadid === 'undefined')
             threadid = hrefParse(document.location.href)[1];
 
-        var xhr = new XMLHttpRequest();
-        var req = {
-            xhr: xhr,
-            reject: false
-        };
-        newposts_last_request = req;
-
-        xhr.open("POST", ku_webpath + '/json_update.php');
-        var data = new FormData();
         data.append("board", boardname);
         data.append("thread", threadid);
+    } else { /* pageType() == 'postfeed' */
+        data.append("feed", 1);
+        var fullfeed = new URLSearchParams(document.location.search).get("fullfeed");
+        data.append("full", fullfeed == 1 ? 1 : 0);
+        data.append("lasttimestamp", $("td.reply").last().find(".datetime").data('timestamp'));
+    }
 
-        var posts_json = JSON.stringify(newupd_posts);
-        data.append("posts", posts_json);
-        xhr.send(data);
+    var xhr = new XMLHttpRequest();
+    var req = {
+        xhr: xhr,
+        reject: false
+    };
+    newposts_last_request = req;
 
-        xhr.onreadystatechange = function() {
-            if (xhr.readyState != 4)
-                return;
-            if (req.reject)
-                return;
-            req.reject = true;
+    xhr.open("POST", ku_webpath + '/json_update.php');
 
-            autoRefreshRestore();
+    var posts_json = JSON.stringify(newupd_posts);
+    data.append("posts", posts_json);
+    xhr.send(data);
 
-            if (xhr.status != 200) {
-                if (!silent) {
-                    popupMessageHttpError(xhr.status, xhr.statusText);
-                }
-                return;
+    xhr.onreadystatechange = function() {
+        if (xhr.readyState != 4)
+            return;
+        if (req.reject)
+            return;
+        req.reject = true;
+
+        autoRefreshRestore();
+
+        if (xhr.status != 200) {
+            if (!silent) {
+                popupMessageHttpError(xhr.status, xhr.statusText);
             }
+            return;
+        }
 
-            var result = false;
-            try {
-                result = JSON.parse(xhr.response);
-            } catch (e) {}
-            if (result === false) {
-                if (!silent) {
-                    popupMessageTmp('Сервер вернул некорректные данные при обновлении!');
-                }
-                return;
+        var result = false;
+        try {
+            result = JSON.parse(xhr.response);
+        } catch (e) {}
+        if (result === false) {
+            if (!silent) {
+                popupMessageTmp('Сервер вернул некорректные данные при обновлении!');
             }
-            if (typeof result.state == 'undefined') {
-                if (!silent) {
-                    popupMessageTmp('Сервер вернул испорченные данные при обновлении!');
-                }
-                return;
+            return;
+        }
+        if (typeof result.state == 'undefined') {
+            if (!silent) {
+                popupMessageTmp('Сервер вернул испорченные данные при обновлении!');
             }
-            if (result.state != 'ok') {
-                if (!silent) {
-                    popupMessageTmp('Сервер вернул ошибку (' + result.state + ') при обновлении!');
-                }
-                return;
+            return;
+        }
+        if (result.state != 'ok') {
+            if (!silent) {
+                popupMessageTmp('Сервер вернул ошибку (' + result.state + ') при обновлении!');
             }
+            return;
+        }
 
-            // Server reply consists of the following fields:
-            //
-            // state    == (string) must be 'ok'; (additional results may be 'Тред удалён')
-            // posts    == (array)  new 'posts' variable
-            // notify   == (bool)   were there new posts;
-            // delposts == (array)  ids of posts to remove (can not be op-post)
-            // addposts == (html)   what to add after last reply
-            // replymap == (array)  new 'replymap' variable (raw);
+        // Server reply consists of the following fields:
+        //   state    == (string) must be 'ok'; (additional results may be 'Тред удалён');
+        //   posts    == (array)  new 'posts' variable;
+        //   notify   == (bool)   were there new posts;
+        //   delposts == (array)  ids of posts to remove (can not be op-post);
+        //   addposts == (html)   what to add after last reply;
+        //   replymap == (array)  new 'replymap' variable (raw).
+        // (in feed, keys for posts, delposts and replymap are like "/x/2131", and just like 2131 in thread)
 
-            var doTasksAfterModify;
-            var whereToDoTasksAfterModify = false;
+        var doTasksAfterModify;
+        var whereToDoTasksAfterModify = false;
 
-            // Delete deleted posts
-            doTasksAfterModify = (result.delposts.length > 0);
-            result.delposts.forEach(function(item, i, arr) {
+        // Delete deleted posts
+        doTasksAfterModify = (result.delposts.length > 0);
+        result.delposts.forEach(function(item, i, arr) {
+            if(pageType() == 'postfeed') {
+                [, board, post] = item.split("/");
+                $('#reply' + post + '.reply_board_' + board).remove();
+            } else {
                 $('#reply' + item).remove();
-                //console.log('Post '+item+' removed.');
-            });
+            }
+            //console.log('Post '+item+' removed.');
+        });
 
-            // Add new posts
-            if (result.notify) {
-                var $target = $('div.replies').last();
-                $target.append('<div class="newposts">' + result.addposts + '</div>');
+        // Add new posts
+        if (result.notify) {
+            if(pageType() == 'postfeed') {
+                $('div.postarea').append('<div class="newposts">' + result.addposts + '</div>');
+                $('.newposts').first().hide().fadeIn();
+                whereToDoTasksAfterModify = $('.newposts').first().get();
+            } else {
+                $('div.replies').last().append('<div class="newposts">' + result.addposts + '</div>');
                 $('.newposts').last().hide().fadeIn();
                 doTasksAfterModify = true;
                 whereToDoTasksAfterModify = $('.newposts').last().get();
             }
+        }
 
-            // Alter reply map
-            for (var i in result.replymap) {
-                var item = result.replymap[i];
-                var postselector = (i == threadid) ? '.op' : '#reply' + i;
-                // It's raw map; remove duplicates and sort here
-                item.sort(function(a, b) {
-                    return a['id'] - b['id'];
+        // Alter reply map
+        for (var i in result.replymap) {
+            var item = result.replymap[i];
+            var postselector = (typeof(i) == 'number' ? '#reply' + i : '#reply' + i.split("/")[1] + '.reply_board_' + i.split("/")[2]);
+            // It's raw map; remove duplicates and sort here
+            item.sort(function(a, b) {
+                return a['id'] - b['id'];
+            });
+            item = item.filter(function(ritem, ri) {
+                return !ri || ritem['boardname'] != item[ri - 1]['boardname'] || ritem['id'] != item[ri - 1]['id'];
+            });
+            result.replymap[i] = item;
+
+            // Compare with corresponding existing reply map entry; delete from newupd_replymap when ok
+            if (typeof newupd_replymap[i] !== 'undefined') {
+                // Check if reply maps are identical
+                var differences = newupd_replymap[i].length != item.length || item.some(function(ritem, ri) {
+                    return ritem.boardname != newupd_replymap[i][ri].boardname || ritem.id != newupd_replymap[i][ri].id;
                 });
-                item = item.filter(function(ritem, ri) {
-                    return !ri || ritem['boardname'] != item[ri - 1]['boardname'] || ritem['id'] != item[ri - 1]['id'];
-                });
-                result.replymap[i] = item;
 
-                // Compare with corresponding existing reply map entry; delete from newupd_replymap when ok
-                if (typeof newupd_replymap[i] !== 'undefined') {
-                    // Check if reply maps are identical
-                    var differences = newupd_replymap[i].length != item.length || item.some(function(ritem, ri) {
-                        return ritem.boardname != newupd_replymap[i][ri].boardname || ritem.id != newupd_replymap[i][ri].id;
-                    });
-
-                    if (!differences) {
-                        //console.log('Reply map for post '+i+' left intact.');
-                    } else {
-                        var replybox = $(postselector)[0];
-                        if (typeof replybox === 'undefined') {
-                            //console.log('ERROR: Post '+i+', for which reply map is about to alter, is not exist.');
-                        } else {
-                            var replyboxlist = replybox.getElementsByClassName('replieslist')[0];
-                            if (typeof replyboxlist === 'undefined') {
-                                //console.log('ERROR: Post '+i+', for which reply map is about to alter, does not contain a reply map.');
-                            } else {
-                                replyboxlist.innerHTML = generate_reply_map(item);
-                                //console.log('Reply map for post '+i+' altered.');
-                            }
-                        }
-                    }
-                    delete newupd_replymap[i];
+                if (!differences) {
+                    //console.log('Reply map for post '+i+' left intact.');
                 } else {
                     var replybox = $(postselector)[0];
                     if (typeof replybox === 'undefined') {
-                        //console.log('ERROR: Post '+i+', for which reply map is about to add, is not exist.');
+                        //console.log('ERROR: Post '+i+', for which reply map is about to alter, is not exist.');
                     } else {
                         var replyboxlist = replybox.getElementsByClassName('replieslist')[0];
-                        if (typeof replyboxlist !== 'undefined') {
-                            //console.log('ERROR: Post '+i+', for which reply map is about to add, does already contain a reply map.');
+                        if (typeof replyboxlist === 'undefined') {
+                            //console.log('ERROR: Post '+i+', for which reply map is about to alter, does not contain a reply map.');
                         } else {
-                            replyboxlist = $(postselector + ' blockquote').after('<div class="replieslist"></div>');
-                            $(postselector + ' .replieslist').html(generate_reply_map(item));
-                            //console.log('Reply map for post '+i+' added.');
+                            replyboxlist.innerHTML = generate_reply_map(item);
+                            //console.log('Reply map for post '+i+' altered.');
                         }
                     }
                 }
+                delete newupd_replymap[i];
+            } else {
+                var replybox = $(postselector)[0];
+                if (typeof replybox === 'undefined') {
+                    //console.log('ERROR: Post '+i+', for which reply map is about to add, is not exist.');
+                } else {
+                    var replyboxlist = replybox.getElementsByClassName('replieslist')[0];
+                    if (typeof replyboxlist !== 'undefined') {
+                        //console.log('ERROR: Post '+i+', for which reply map is about to add, does already contain a reply map.');
+                    } else {
+                        replyboxlist = $(postselector + ' blockquote').after('<div class="replieslist"></div>');
+                        $(postselector + ' .replieslist').html(generate_reply_map(item));
+                        //console.log('Reply map for post '+i+' added.');
+                    }
+                }
             }
+        }
 
-            // Delete reply maps from posts remained in newupd_replymap (where is no replies now)
-            for (var i in newupd_replymap) {
-                var postselector = (i == threadid) ? '.op' : '#reply' + i;
+        // Delete reply maps from posts remained in newupd_replymap (where is no replies now)
+        for (var i in newupd_replymap) {
+            if(pageType() == 'postfeed') {
+                [, board, post] = i.split("/");
+                var postselector = '#reply' + post + '.reply_board_' + board;
+                var replybox = $(postselector)[0];
+                if (typeof replybox !== 'undefined') {
+                    $(postselector + ' .replieslist').remove();
+                    //console.log('Reply map from post '+i+' removed.');
+                }
+            } else {
+                var postselector = '#reply' + i;
                 var replybox = $(postselector)[0];
                 var postinthread = $('#reply' + i + ' .reflink .shl');
                 if (postinthread.length > 0) {
@@ -1934,61 +1905,60 @@ function getnewposts(threadid, automatic, notutturu, noredirect, silent) {
                     }
                 }
             }
+        }
 
-            /* Notify on new posts if automatic refresh */
-            if (result.notify && automatic) {
-                /* OK here we are calculating how many posts were added */
-                var res_count = 0;
-                var i;
-                var tmp_posts = {};
-                var len = result.posts.length;
-                for (i = 0; i < len; i++)
-                    tmp_posts[result.posts[i]] = true;
+        /* Notify on new posts if automatic refresh */
+        if (result.notify && automatic) {
+            /* OK here we are calculating how many posts were added */
+            var res_count = 0;
+            var i;
+            var tmp_posts = {};
+            var len = result.posts.length;
+            for (i = 0; i < len; i++)
+                tmp_posts[result.posts[i]] = true;
 
-                var nlen = newupd_posts.length;
-                for (i = 0; i < nlen; i++)
-                    tmp_posts[newupd_posts[i]] = false;
+            var nlen = newupd_posts.length;
+            for (i = 0; i < nlen; i++)
+                tmp_posts[newupd_posts[i]] = false;
 
-                for (i = 0; i < len; i++)
-                    if (tmp_posts[result.posts[i]] == true)
-                        res_count++;
+            for (i = 0; i < len; i++)
+                if (tmp_posts[result.posts[i]] == true)
+                    res_count++;
 
-                blinker_add_unread(res_count);
+            blinker_add_unread(res_count);
 
-                if (Settings.soundRefresh(false) && !notutturu) {
-                    var tutturu = new Audio(ku_webpath + '/static/sounds/tutturu.ogg');
-                    tutturu.play();
-                    delete tutturu;
-                }
-
-                if (Settings.pushNotify(false)) {
-                    notificationSend("/" + boardname + "/", _.newReplies + ": " + res_count);
-                }
+            if (Settings.soundRefresh(false) && !notutturu) {
+                var tutturu = new Audio(ku_webpath + '/static/sounds/tutturu.ogg');
+                tutturu.play();
+                delete tutturu;
             }
 
-            // Modify variables
-            newupd_posts = result.posts;
-            newupd_replymap = result.replymap;
+            if (Settings.pushNotify(false)) {
+                notificationSend("/" + boardname + "/", _.newReplies + ": " + res_count);
+            }
+        }
 
-            // No new posts: notify only if not automatic
-            if (!result.notify && !automatic)
-                if (!silent) {
-                    popupMessageTmp(_.noNewPosts);
-                }
-            else
+        // Modify variables
+        newupd_posts = result.posts;
+        newupd_replymap = result.replymap;
+
+        // No new posts: notify only if not automatic
+        if (!result.notify && !automatic)
             if (!silent) {
-                popupMessageOff();
+                popupMessageTmp(_.noNewPosts);
             }
+        else
+        if (!silent) {
+            popupMessageOff();
+        }
 
-            // Do specific tasks for newly added posts
-            if (doTasksAfterModify)
-                tasksAfterModify(whereToDoTasksAfterModify);
+        // Do specific tasks for newly added posts
+        if (doTasksAfterModify)
+            tasksAfterModify(whereToDoTasksAfterModify);
 
-            // Scroll to bottom of page
-            if (!automatic) document.location = document.location.toString().split('#')[0] + '#boardlist_footer';
-        };
-
-    }
+        // Scroll to bottom of thread page or top of feed
+        if (!automatic) document.location = document.location.toString().split('#')[0] + '#boardlist_' + (pageType() == 'postfeed' ? 'header': 'footer');
+    };
     return false;
 }
 

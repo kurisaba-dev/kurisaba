@@ -19,6 +19,7 @@
 {if $isfeed}
 	<script type="text/javascript">
 		var newupd_posts = new Array({foreach key=postkey item=post from=$posts name=postsloop}"/{$post.board.name}/{$post.id}",{/foreach}0);
+		newupd_posts.pop(); // Discard trailing 0
 		var newupd_replymap = new Array();
 	</script>
 {/if}
