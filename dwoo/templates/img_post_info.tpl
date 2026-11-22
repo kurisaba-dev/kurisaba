@@ -56,7 +56,7 @@
 			&#35;&#35;&nbsp;{t}Mod{/t}&nbsp;&#35;&#35;
 		</span>
 	{/if}
-	<span class="datetime">{$post.timestamp_formatted}</span>
+	<span class="datetime" data-timestamp="{$post.timestamp}">{$post.timestamp_formatted}</span>
 </label>
 {$post.externalreference}
 <span class="reflink">
