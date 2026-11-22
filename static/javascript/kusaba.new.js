@@ -4,6 +4,7 @@ var ispage;
 var is_entering = false;
 var injectDestination = "img_global.css";
 var notificationIcon = ku_webpath + "/static/images/notification.png?v=" + ku_js_css_ver;
+var captcha_start_time = Date.now();
 
 function pageType() {
     if (ispage)
@@ -2510,6 +2511,7 @@ function refreshCaptcha() {
     $('.captchaimage').attr('src', ku_webpath + '/captcha.php?act=refresh&captchaid=' + captchaid);
     $('.captchaval').val('');
     $('.captchaid').attr('value', captchaid);
+    captcha_start_time = Date.now();
 }
 
 function checkcaptcha(formid) {
@@ -3782,12 +3784,21 @@ function onBodyClick(ev) {
     }
 }
 
+function refreshCaptchaRainbow() {
+    if (getCookie('captchalang') == 'mt') return;
+    var rainbow = document.querySelector(".captcharainbow");
+    if (rainbow == null) return;
+    var remaining_part = 1 - ((Date.now() - captcha_start_time) / (ku_captchatime * 1000));
+    rainbow.width = (remaining_part > 0 ? 80 * remaining_part : 0);
+    if (remaining_part < 0) refreshCaptcha();
+}
+
 function readyset() {
     if (!ispage) $('.mgoback').show();
 
     constructDropZone();
 
-
+    if(typeof(ku_captchatime) !== 'undefined') setInterval(refreshCaptchaRainbow, 100);
 
     langlinks = Array();
     if (ku_captchaenabled.split(',').includes('jp')) langlinks.push('<a href="javascript:setCaptchaLang(\'jp\');">Japanese</a>');

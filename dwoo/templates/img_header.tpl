@@ -4,6 +4,7 @@
 		var ku_boardspath = '{%KU_BOARDSPATH}';
 		var ku_storagedir = '{%KU_STORAGEDIR}';
 		var ku_webpath = '{%KU_WEBPATH}';
+		var ku_captchatime = '{%KU_CAPTCHATIME}';
 		var ku_defaultboard = '{%KU_DEFAULTBOARD}';
 		var ku_maxfilesize = {$maxfilesize};
 		var ku_js_css_ver = '{%KU_JS_CSS_VER}';
