@@ -1818,7 +1818,7 @@ function getnewposts(threadid, automatic, notutturu, noredirect, silent) {
         // Add new posts
         if (result.notify) {
             if(pageType() == 'postfeed') {
-                $('div.postarea').append('<div class="newposts">' + result.addposts + '</div>');
+                $('div.postarea').after('<div class="newposts">' + result.addposts + '</div>');
                 $('.newposts').first().hide().fadeIn();
                 whereToDoTasksAfterModify = $('.newposts').first().get();
             } else {
