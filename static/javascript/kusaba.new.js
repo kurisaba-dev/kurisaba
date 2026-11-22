@@ -1952,6 +1952,9 @@ function getnewposts(threadid, automatic, notutturu, noredirect, silent) {
             popupMessageOff();
         }
 
+        // Recalculate post numbers when new posts inserted or deleted
+        $(".postnumber_green").each((i, e) => {e.innerHTML = i + 1;});
+
         // Do specific tasks for newly added posts
         if (doTasksAfterModify)
             tasksAfterModify(whereToDoTasksAfterModify);
