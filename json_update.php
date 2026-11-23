@@ -87,22 +87,6 @@ if (count($pregen_replies_q) > 0) {
     }
 }
 
-$exclude = '';
-$excludeboards = '';
-if($feed) {
-    foreach ($boards as $board) {
-        if ($board->board['hiddenthreads'] !== '') {
-            $exclude .= " AND NOT (`boardid` = " . $board->board['id'] . " AND `id` IN (" . $board->board['hiddenthreads'] . "))";
-        }
-        if (!$fullfeed && !$board->board['enablefeed']) {
-            $excludeboards .= " AND NOT `boardid` = " . $board->board['id'];
-        }
-    }
-    $limthread = " AND `timestamp` >= " . $tc_db->qstr($lasttimestamp) . " ORDER BY `timestamp` DESC";
-} else {
-    $limthread = " AND `boardid` = '" . $board_class->board['id'] ."' AND `parentid` = " . $tc_db->qstr($thread) . " ORDER BY `id` ASC";
-}
-
 // Count added and deleted posts
 $n = ($feed ? 1 : 2); // First reply in thread is #2, and first post in feed is 1
 $return_posts = array();
@@ -110,7 +94,11 @@ $return_delposts = $posts;
 $posts_to_print = array();
 $return_notify = false;
 $return_addposts = '';
-$results = $tc_db->GetAll("SELECT * FROM `" . KU_DBPREFIX . "posts` WHERE `IS_DELETED` = 0" . $exclude . $excludeboards . $limthread);
+if($feed) {
+    $results = $tc_db->GetAll("SELECT A.*, B.subject AS parent_subject FROM (SELECT * FROM `" . KU_DBPREFIX . "posts` WHERE `IS_DELETED` = 0 ORDER BY `timestamp` DESC) as A JOIN `" . KU_DBPREFIX . "boards` AS C ON C.id = A.boardid " . ($fullfeed ? "" : "AND C.enablefeed = 1") . " LEFT JOIN `" . KU_DBPREFIX . "posts` AS B ON B.id = A.parentid AND A.parentid != 0 AND B.boardid = A.boardid ORDER BY A.`timestamp` DESC LIMIT " . KU_FEEDLENGTH);
+} else {
+    $results = $tc_db->GetAll("SELECT * FROM `" . KU_DBPREFIX . "posts` WHERE `IS_DELETED` = 0 AND `boardid` = '" . $board_class->board['id'] ."' AND `parentid` = " . $tc_db->qstr($thread) . " ORDER BY `id` ASC");
+}
 
 if (count($results) > 0) {
     foreach ($results as $post) {
@@ -141,7 +129,7 @@ if (count($results) > 0) {
                 }
             }
             if($feed) $post['externalreference'] = '[<a href="' . $post['file_path'] . '/res/' . $thread . '.html#' . $post['id'] . '">'. $extname .'</a>]';
-            $post = $boards[$post['boardid']]->BuildPost($post, false, $pregen_replies_q);
+            $post = $boards[$post['boardid']]->BuildPost($post, false, $pregen_replies_q, false, $feed);
             array_push($posts_to_print, $post);
         }
         ++$n;
