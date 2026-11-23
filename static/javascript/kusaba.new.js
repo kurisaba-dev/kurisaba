@@ -5513,7 +5513,7 @@ var blinker_enabled = false;
 var blinker_title = false;
 var blinker_last_count = 0;
 
-var window_focused = true;
+var window_focused = document.hasFocus();
 
 function blinker_set_unread(count_src, skip_flag) {
     var count = count_src;
