@@ -1953,7 +1953,17 @@ function getnewposts(threadid, automatic, notutturu, noredirect, silent) {
         }
 
         // Recalculate post numbers when new posts inserted or deleted
-        $(".postnumber_green").each((i, e) => {e.innerHTML = i + 1;});
+        if(pageType() == 'postfeed') {
+            $(".postnumber_green").each((i, e) => {e.innerHTML = i + 1;});
+        } else {
+            var num = 2;
+            $(".postnumber_green").each((i, e) => {
+                if (i == 1)
+                    num = e.innerHTML;
+                else if (i > 1)
+                    e.innerHTML = num - 1 + i;
+            });
+        }
 
         // Do specific tasks for newly added posts
         if (doTasksAfterModify)
