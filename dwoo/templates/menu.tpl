@@ -23,6 +23,7 @@
 	var embeds = Array();
 </script>
 <link rel="shortcut icon" href="{%KU_WEBPATH}/static/images/favicon.ico" />
+<link rel="prefetch" href="{%KU_WEBPATH}/static/images/favicon_marked.ico" as="icon"/>
 <script type="text/javascript" src="{%KU_WEBPATH}/static/javascript/gettext.js"></script>
 <!-- <script type="text/javascript" src="{%KU_WEBPATH}/static/javascript/menu.js"></script> -->
 <script src="{%KU_WEBPATH}/static/javascript/jquery-1.11.1.min.js"></script>

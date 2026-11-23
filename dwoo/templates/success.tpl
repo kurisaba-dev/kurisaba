@@ -5,6 +5,7 @@
 <title>{%KU_NAME}</title>
 <link rel="icon" type="image/ico" href="{%KU_WEBPATH}/static/images/favicon.ico" sizes="32x32">
 <link rel="shortcut icon" href="{%KU_WEBPATH}/static/images/favicon.ico" />
+<link rel="prefetch" href="{%KU_WEBPATH}/static/images/favicon_marked.ico" as="icon"/>
 <link rel="stylesheet" type="text/css" href="{%KU_WEBPATH}/static/css/menu_global.css?v={%KU_JS_CSS_VER}" />
 
 <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0">

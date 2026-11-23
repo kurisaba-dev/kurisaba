@@ -6,6 +6,7 @@ require 'settings_manager.php';
 <head>
 	<title><?php echo KU_NAME; ?></title>
 	<link rel="shortcut icon" href="<?php echo KU_WEBPATH; ?>/static/images/favicon.ico" />
+	<link rel="prefetch" href="<?php echo KU_WEBPATH; ?>/static/images/favicon_marked.ico" as="icon"/>
 	<style type="text/css">
 		body, html {
 			width: 100%;

@@ -3,6 +3,7 @@
 <meta http-equiv="Content-Type" content="text/html;charset={%KU_CHARSET}" />
 <title>{$title}</title>
 <link rel="icon" type="image/ico" id="favicon" href="{%KU_WEBPATH}/static/images/favicon.ico" sizes="32x32">
+<link rel="prefetch" href="{%KU_WEBPATH}/static/images/favicon_marked.ico" as="icon"/>
 {if $locale != 'en'}
 	<link rel="gettext" type="application/x-po" href="{%KU_WEBPATH}/lib/lang/{$locale}/LC_MESSAGES/kusaba.po" />
 {/if}
