@@ -76,14 +76,16 @@
 			<tbody>
 				<tr>
 					<td>
-						<div style="float:left">
-							<div id="newposts_get">
-								<a href="#" onclick="return getnewposts()"><img src="{%KU_WEBPATH}/static/images/blank.gif" border="0" class="getnewposts spritebtn" alt="refresh"> Получить новые посты (если есть)</a> <span id="newposts_seconds" style="display: none;">(off)</span>
+						{if $modifier neq 'first100'}
+							<div style="float:left">
+								<div id="newposts_get">
+									<a href="#" onclick="return getnewposts()"><img src="{%KU_WEBPATH}/static/images/blank.gif" border="0" class="getnewposts spritebtn" alt="refresh"> Получить новые посты (если есть)</a> <span id="newposts_seconds" style="display: none;">(off)</span>
+								</div>
+								<div id="newposts_load" style="display:none;">
+									<img src="{%KU_WEBPATH}/static/images/loading16x16.gif" style="vertical-align: text-bottom;"> Загрузка...
+								</div>
 							</div>
-							<div id="newposts_load" style="display:none;">
-								<img src="{%KU_WEBPATH}/static/images/loading16x16.gif" style="vertical-align: text-bottom;"> Загрузка...
-							</div>
-						</div>
+						{/if}
 					{*</td>*}
 				{*</tr>*}
 			{*</tbody>*}

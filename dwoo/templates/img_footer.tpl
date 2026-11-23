@@ -2,8 +2,8 @@
 	{*<tbody>*}
 		{*<tr>*}
 			{*<td>*}
-				{if not $isexpand and not $isread and not $iscatalog}
-					{*<form>*}
+				{*<form>*}
+					{if ($isfeed and $thispage eq 0 and not $isall) || (not $isexpand and not $isread and not $iscatalog)}
 						{*<table>*}
 							{*<tbody>*}
 								{*<tr>*}
@@ -34,12 +34,11 @@
 								<img src="/static/images/blank.gif" border="0" class="downscroll spritebtn" style="transform: scaleY(-1);">
 							</a>
 						</div>
-					</form>
-					<script type="text/javascript"><!--
-						set_delpass("delform");
-					//--></script>
-				{/if}
-
+						<script type="text/javascript"><!--
+							set_delpass("delform");
+						//--></script>
+					{/if}
+				</form>
 				{if (not $iscatalog and $replythread eq 0) or $isfeed}
 					<table border="1">
 						<tbody>
