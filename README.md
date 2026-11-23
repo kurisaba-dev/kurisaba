@@ -64,7 +64,7 @@ A nullchan-kusabaX based imageboard engine with some modern features
 
 Для примера, главная Курисача есть в отдельном [репозитории](https://github.com/makise-homura/kurisach-resources).
 
-Также можно положить фавиконку (`favicon.ico`) в каталог `static/images` в корне движка.
+Также можно положить фавиконку (обычную `favicon.ico` и, желательно, `favicon_marked.ico`, показывающую, что есть новые сообщения) в каталог `static/images` в корне движка.
 
 ### Docker
 
