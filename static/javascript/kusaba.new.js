@@ -1820,6 +1820,7 @@ function getnewposts(threadid, automatic, notutturu, noredirect, silent) {
             if(pageType() == 'postfeed') {
                 $('div.postarea').after('<div class="newposts">' + result.addposts + '</div>');
                 $('.newposts').first().hide().fadeIn();
+                doTasksAfterModify = true;
                 whereToDoTasksAfterModify = $('.newposts').first().get();
             } else {
                 $('div.replies').last().append('<div class="newposts">' + result.addposts + '</div>');
