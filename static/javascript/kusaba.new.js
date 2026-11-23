@@ -3196,7 +3196,6 @@ var PostPreviews = {
                 delete PostPreviews.parent[$(this).attr('id')];
                 PostPreviews.shown.splice(PostPreviews.shown.indexOf('preview_' + board + "_" + postid), 1);
                 $(this).remove();
-                tasksAfterModify(false);
             });
             preview = $('#' + PostPreviews.parent[preview.attr('id')]);
         }
