@@ -140,7 +140,7 @@ if (count($results) > 0) {
                     $extname = $post['parent_subject'];
                 }
             }
-            $post['externalreference'] = '[<a href="' . $post['file_path'] . '/res/' . $thread . '.html#' . $post['id'] . '">'. $extname .'</a>]';
+            if($feed) $post['externalreference'] = '[<a href="' . $post['file_path'] . '/res/' . $thread . '.html#' . $post['id'] . '">'. $extname .'</a>]';
             $post = $boards[$post['boardid']]->BuildPost($post, false, $pregen_replies_q);
             array_push($posts_to_print, $post);
         }
