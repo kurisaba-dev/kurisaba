@@ -1,3 +1,4 @@
+var ku_debug = false;
 var kumod_set = false;
 var kuadm_set = false;
 var ispage;
@@ -1815,7 +1816,7 @@ function getnewposts(threadid, automatic, notutturu, noredirect, silent) {
             } else {
                 $('#reply' + item).remove();
             }
-            //console.log('Post '+item+' removed.');
+            if (ku_debug) console.log('Post '+item+' removed.');
         });
 
         // Add new posts
@@ -1845,6 +1846,7 @@ function getnewposts(threadid, automatic, notutturu, noredirect, silent) {
                 return !ri || ritem['boardname'] != item[ri - 1]['boardname'] || ritem['id'] != item[ri - 1]['id'];
             });
             result.replymap[i] = item;
+            if (ku_debug) console.log('Reply map for post '+i+' looks like: ', result.replymap[i]);
 
             // Compare with corresponding existing reply map entry; delete from newupd_replymap when ok
             if (typeof newupd_replymap[i] !== 'undefined') {
@@ -1854,18 +1856,18 @@ function getnewposts(threadid, automatic, notutturu, noredirect, silent) {
                 });
 
                 if (!differences) {
-                    //console.log('Reply map for post '+i+' left intact.');
+                    if (ku_debug) console.log('Reply map for post '+i+' left intact.');
                 } else {
                     var replybox = $(postselector)[0];
                     if (typeof replybox === 'undefined') {
-                        //console.log('ERROR: Post '+i+', for which reply map is about to alter, is not exist.');
+                        if (ku_debug) console.log('ERROR: Post '+i+', for which reply map is about to alter, is not exist.');
                     } else {
                         var replyboxlist = replybox.getElementsByClassName('replieslist')[0];
                         if (typeof replyboxlist === 'undefined') {
-                            //console.log('ERROR: Post '+i+', for which reply map is about to alter, does not contain a reply map.');
+                            if (ku_debug) console.log('ERROR: Post '+i+', for which reply map is about to alter, does not contain a reply map.');
                         } else {
                             replyboxlist.innerHTML = generate_reply_map(item);
-                            //console.log('Reply map for post '+i+' altered.');
+                            if (ku_debug) console.log('Reply map for post '+i+' altered.');
                         }
                     }
                 }
@@ -1873,15 +1875,15 @@ function getnewposts(threadid, automatic, notutturu, noredirect, silent) {
             } else {
                 var replybox = $(postselector)[0];
                 if (typeof replybox === 'undefined') {
-                    //console.log('ERROR: Post '+i+', for which reply map is about to add, is not exist.');
+                    if (ku_debug) console.log('ERROR: Post '+i+', for which reply map is about to add, is not exist.');
                 } else {
                     var replyboxlist = replybox.getElementsByClassName('replieslist')[0];
                     if (typeof replyboxlist !== 'undefined') {
-                        //console.log('ERROR: Post '+i+', for which reply map is about to add, does already contain a reply map.');
+                        if (ku_debug) console.log('ERROR: Post '+i+', for which reply map is about to add, does already contain a reply map.');
                     } else {
                         replyboxlist = $(postselector + ' blockquote').after('<div class="replieslist"></div>');
                         $(postselector + ' .replieslist').html(generate_reply_map(item));
-                        //console.log('Reply map for post '+i+' added.');
+                        if (ku_debug) console.log('Reply map for post '+i+' added.');
                     }
                 }
             }
@@ -1895,7 +1897,7 @@ function getnewposts(threadid, automatic, notutturu, noredirect, silent) {
                 var replybox = $(postselector)[0];
                 if (typeof replybox !== 'undefined') {
                     $(postselector + ' .replieslist').remove();
-                    //console.log('Reply map from post '+i+' removed.');
+                    if (ku_debug) console.log('Reply map from post '+i+' removed.');
                 }
             } else {
                 var postselector = '#reply' + i;
@@ -1905,7 +1907,7 @@ function getnewposts(threadid, automatic, notutturu, noredirect, silent) {
                     var post_threadid = postinthread.attr('href').split('/').pop().split('.')[0];
                     if (typeof replybox !== 'undefined' && threadid == post_threadid) {
                         $(postselector + ' .replieslist').remove();
-                        //console.log('Reply map from post '+i+' removed.');
+                        if (ku_debug) console.log('Reply map from post '+i+' removed.');
                     }
                 }
             }
