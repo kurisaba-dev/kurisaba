@@ -1307,11 +1307,9 @@ function expand_post(element, board, threadid, postid) {
             popupMessageTexted(_.oops + ': ', retData.error);
             return;
         }
-        var textnode = replyblock.querySelector("blockquote.postmessage");
-        var saveVideoBox = textnode.querySelector("a.videobox");
-        var videoBoxText = (saveVideoBox != null) ? saveVideoBox.outerHTML : "";
-        textnode.innerHTML = videoBoxText + retData.result[postid].text.replace(new RegExp('\\\\\\\\', 'g'), '&#92;').replace(new RegExp('\\\\', 'g'), '');
-        tasksAfterModify(replyblock);
+        var textnode = replyblock.querySelector("blockquote.postmessage .message");
+        textnode.innerHTML = retData.result[postid].text.replace(new RegExp('\\\\\\\\', 'g'), '&#92;').replace(new RegExp('\\\\', 'g'), '');
+        tasksAfterModify(textnode);
     };
     return false;
 }

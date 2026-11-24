@@ -174,7 +174,7 @@
 					{if $post.videobox}
 						{$post.videobox}
 					{/if}
-					{$post.message}
+					<span class="message">{$post.message}</span>
 				</blockquote>
 
 				{if $post.do_repliesmap}
