@@ -201,7 +201,7 @@
 				</td>
 				<td>
 					<nobr>
-						<input type="text" name="captcha" class="captchaval" size="76" accesskey="c" style="width: 520px;">
+						<input type="text" name="captcha" class="captchaval" size="76" accesskey="c" style="width: 520px;" enterkeyhint="send">
 						<input type="hidden" class="captchaid" name="captchaid" value="{$captchaid}">
 					</nobr>
 				</td>
