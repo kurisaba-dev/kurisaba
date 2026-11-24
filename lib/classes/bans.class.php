@@ -31,6 +31,11 @@ class Bans
     {
         global $tc_db;
 
+        if (KU_BANUSERAGENT != "" && isset($_SERVER['HTTP_USER_AGENT']) && preg_match(KU_BANUSERAGENT, $_SERVER['HTTP_USER_AGENT'])) {
+            echo $this->DisplayBannedMessage([], '', $javascript_stub);
+            die();
+        }
+
         if (!isset($_COOKIE['tc_previousip'])) {
             $_COOKIE['tc_previousip'] = '';
         }
@@ -74,6 +79,10 @@ class Bans
     public function BanCheckSilent($ip, $board = '', $checkread = false)
     {
         global $tc_db;
+
+        if (KU_BANUSERAGENT != "" && isset($_SERVER['HTTP_USER_AGENT']) && preg_match(KU_BANUSERAGENT, $_SERVER['HTTP_USER_AGENT'])) {
+            return true;
+        }
 
         if (!isset($_COOKIE['tc_previousip'])) {
             $_COOKIE['tc_previousip'] = '';
