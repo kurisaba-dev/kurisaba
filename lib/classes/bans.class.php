@@ -32,6 +32,7 @@ class Bans
         global $tc_db;
 
         if (KU_BANUSERAGENT != "" && isset($_SERVER['HTTP_USER_AGENT']) && preg_match(KU_BANUSERAGENT, $_SERVER['HTTP_USER_AGENT'])) {
+            $this->BanUser((KU_SAVEIP ? KU_REMOTE_ADDR : md5(KU_REMOTE_ADDR)), 'SERVER', 1, 0, '', _gettext('Automatic ban'), _gettext('Ban by useragent') . ' (' . $_SERVER['HTTP_USER_AGENT'] . ')', 0, 0, 0);
             echo $this->DisplayBannedMessage([], '', $javascript_stub);
             die();
         }
@@ -81,6 +82,7 @@ class Bans
         global $tc_db;
 
         if (KU_BANUSERAGENT != "" && isset($_SERVER['HTTP_USER_AGENT']) && preg_match(KU_BANUSERAGENT, $_SERVER['HTTP_USER_AGENT'])) {
+            $this->BanUser((KU_SAVEIP ? KU_REMOTE_ADDR : md5(KU_REMOTE_ADDR)), 'SERVER', 1, 0, '', _gettext('Automatic ban'), _gettext('Ban by useragent') . ' (' . $_SERVER['HTTP_USER_AGENT'] . ')', 0, 0, 0);
             return true;
         }
 
