@@ -1801,6 +1801,7 @@ class Manage
     {
         global $tc_db, $tpl_page;
         $this->ModeratorsOnly();
+        $tpl_page .= '<h2>'. _gettext('View feed') . '</h2><br />';
         $results = $tc_db->GetAll("SELECT HIGH_PRIORITY `type`, `boards` FROM `" . KU_DBPREFIX . "staff` WHERE `username` = " . $tc_db->qstr($_SESSION['manageusername']) . " LIMIT 1");
         if($results[0]['type'] == 1) {
             $modifier="fullfeed=1";
@@ -1808,11 +1809,12 @@ class Manage
             if ($results[0]['boards'] == "allboards") {
                 $modifier="fullfeed=1";
             } else if ($results[0]['boards'] == "") {
-                $tpl_page .= '<h2>'. _gettext('View feed') . '</h2><br />' . _gettext('You have no boards to view.') . "\n";
+                $tpl_page .= _gettext('You have no boards to view.') . "\n";
             } else {
                 $modifier="boardlist=" . $results[0]['boards'];
             }
         }
+        $tpl_page .= _gettext('Loading your feed...') . "\n";
         $tpl_page .= '<meta http-equiv="refresh" content="1;url='. KU_WEBPATH . '/single.php?'. $modifier . '">';
     }
 
