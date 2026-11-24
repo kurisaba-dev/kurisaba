@@ -1800,6 +1800,9 @@ function getnewposts(threadid, automatic, notutturu, noredirect, silent) {
         //   replymap == (array)  new 'replymap' variable (raw).
         // (in feed, keys for posts, delposts and replymap are like "/x/2131", and just like 2131 in thread)
 
+        // Somehow it can be passed as object, not array
+        result.delposts = Object.values(result.delposts);
+
         var doTasksAfterModify;
         var whereToDoTasksAfterModify = false;
 
@@ -1833,7 +1836,7 @@ function getnewposts(threadid, automatic, notutturu, noredirect, silent) {
         // Alter reply map
         for (var i in result.replymap) {
             var item = result.replymap[i];
-            var postselector = (typeof(i) == 'number' ? '#reply' + i : '#reply' + i.split("/")[1] + '.reply_board_' + i.split("/")[2]);
+            var postselector = (isNaN(parseInt(i)) ? '#reply' + i.split("/")[2] + '.reply_board_' + i.split("/")[1] : '#reply' + i);
             // It's raw map; remove duplicates and sort here
             item.sort(function(a, b) {
                 return a['id'] - b['id'];
