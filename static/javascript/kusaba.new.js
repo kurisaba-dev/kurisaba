@@ -1682,7 +1682,7 @@ function generate_reply_map(item) {
 
     for (var i = 0, n = item.length; i < n; i++) {
         you = item[i].you || myPostsCheck(item[i].id) ? '<span class="youindicator jsadded"> (You)</span>' : '';
-        map += '<a class="ref-reply" onclick="return highlight(' + "'" +
+        map += '<a class="ref-reply" onclick="highlight(' + "'" +
             item[i].boardname + "', '" +
             item[i].id + "'" + ', true);" href="/' + item[i].boardname +
             '/res/' + item[i].parentid + '.html#' + item[i].id +
