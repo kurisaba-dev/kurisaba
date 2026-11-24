@@ -117,6 +117,7 @@ if (!$manage_class->ValidateSession(true)) {
     if ($manage_class->CurrentUserIsAdministrator() || $manage_class->CurrentUserIsModerator()) {
         $open_reports = $tc_db->GetAll("SELECT HIGH_PRIORITY COUNT(*) FROM `" . KU_DBPREFIX . "reports` WHERE `cleared` = '0'");
         $tpl_links .= section_html(_gettext('Moderation'), 'moderation') . '<ul>';
+        $tpl_links .= '<li><a href="manage_page.php?action=viewfeed">'._gettext('My feed').'</a></li>';
         $tpl_links .= '<li><a href="manage_page.php?action=viewthread">'._gettext('View thread (including deleted)').'</a></li>';
         $tpl_links .= '<li><a href="manage_page.php?action=viewdeletedthread">'._gettext('View thread by number').'</a></li>';
         $tpl_links .= '<li class="magic-link" data-help="spam"><a href="manage_page.php?action=spam">' . _gettext('Spamfilter') . '</a></li>';
