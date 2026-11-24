@@ -1308,7 +1308,9 @@ function expand_post(element, board, threadid, postid) {
             return;
         }
         var textnode = replyblock.querySelector("blockquote.postmessage");
-        textnode.innerHTML = retData.result[postid].text.replace(new RegExp('\\\\\\\\', 'g'), '&#92;').replace(new RegExp('\\\\', 'g'), '');
+        var saveVideoBox = textnode.querySelector("a.videobox");
+        var videoBoxText = (saveVideoBox != null) ? saveVideoBox.outerHTML : "";
+        textnode.innerHTML = videoBoxText + retData.result[postid].text.replace(new RegExp('\\\\\\\\', 'g'), '&#92;').replace(new RegExp('\\\\', 'g'), '');
         tasksAfterModify(replyblock);
     };
     return false;
