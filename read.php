@@ -4,9 +4,13 @@ header('Content-type: text/html; charset=utf-8');
 
 require 'settings_manager.php';
 
+$issearch = true;
 if (isset($_GET['v'])) {
-    $board  = $_GET['b'];
-    $textstr = '%' . $_GET['v'] . '%';
+    $query = "SELECT * FROM `" . KU_DBPREFIX . "posts` WHERE `message` LIKE " . $tc_db->qstr('%' . $_GET['v'] . '%') . " AND `IS_DELETED` = 0 ORDER BY `id` DESC";
+} elseif (isset($_GET['n'])) {
+    $query = "SELECT * FROM `" . KU_DBPREFIX . "posts` WHERE `name` = " . $tc_db->qstr($_GET['n']) . " AND `IS_DELETED` = 0 ORDER BY `id` DESC";
+} elseif (isset($_GET['r'])) {
+    $query = "SELECT * FROM `" . KU_DBPREFIX . "posts` AS F LEFT JOIN `" . KU_DBPREFIX . "answers` AS A ON F.boardid = A.from_boardid AND F.id = A.from_id LEFT JOIN `" . KU_DBPREFIX . "posts` AS T ON T.boardid = A.to_boardid AND T.id = A.to_id WHERE T.name = " . $tc_db->qstr($_GET['r']) . " AND F.IS_DELETED = 0 AND T.IS_DELETED = 0 ORDER BY F.id DESC";
 } elseif (!isset($_GET['b']) || !isset($_GET['t']) || !isset($_GET['p'])) {
     if (!isset($_SERVER['PATH_INFO'])) {
         die();
@@ -20,14 +24,15 @@ if (isset($_GET['v'])) {
     $board  = $pairs[1];
     $thread = $pairs[2];
     $posts  = $pairs[3];
+    $issearch = false;
 } else {
     $board  = $_GET['b'];
     $thread = $_GET['t'];
     $posts  = $_GET['p'];
+    $issearch = false;
 }
 
 $singlepost = (isset($_GET['single'])) ? true : false;
-$issearch = (isset($textstr)) ? true : false;
 
 require KU_ENGINEDIR . 'lib/functions.php';
 require KU_ENGINEDIR . 'lib/classes/bans.class.php';
@@ -40,17 +45,36 @@ require KU_ENGINEDIR . 'lib/classes/board-post.class.php';
 
 $executiontime_start = microtime_float();
 
-$results = $tc_db->GetOne("SELECT COUNT(*) FROM `".KU_DBPREFIX."boards` WHERE `name` = ".$tc_db->qstr($board)." LIMIT 1");
-if ($results == 0) {
-    die('Invalid board.');
-}
-$board_class = new Board($board);
-$country_restrict = $board_class->board['country_restrict'];
-if ($country_restrict != '') {
-    if ((getUserMode() != 1) && in_array(client_country(), explode(',', strtoupper(str_replace(' ', '', $country_restrict))))) {
-        http_response_code(451);
-        die('This material is unavailable in your country.');
+if(!$issearch)
+{
+    $results = $tc_db->GetOne("SELECT COUNT(*) FROM `".KU_DBPREFIX."boards` WHERE `name` = ".$tc_db->qstr($board)." LIMIT 1");
+    if ($results == 0) {
+        die('Invalid board.');
     }
+    $board_class = new Board($board);
+    $embeds = $tc_db->GetAll("SELECT `filetype` FROM `" . KU_DBPREFIX . "embeds`");
+    foreach ($embeds as $embed) {
+        $board_class->board['filetypes'][] .= $embed['filetype'];
+    }
+    $country_restrict = $board_class->board['country_restrict'];
+    if ($country_restrict != '') {
+        if ((getUserMode() != 1) && in_array(client_country(), explode(',', strtoupper(str_replace(' ', '', $country_restrict))))) {
+            http_response_code(451);
+            die('This material is unavailable in your country.');
+        }
+    }
+} else {
+    $embeds = $tc_db->GetAll("SELECT `filetype` FROM `" . KU_DBPREFIX . "embeds`");
+    $boards_data = $tc_db->GetAll("SELECT * FROM `".KU_DBPREFIX."boards`");
+    $boards = array();
+
+    foreach ($boards_data as $board_data) {
+        $boards[$board_data['id']] = new Board($board_data['name']);
+        foreach ($embeds as $embed) {
+            $boards[$board_data['id']]->board['filetypes'][] .= $embed['filetype'];
+        }
+    }
+    $board_class = end($boards);
 }
 
 if (!$issearch) {
@@ -112,8 +136,6 @@ if (!$issearch) {
     } else {
         $postidquery .= "`id` = ".intval($postids[0]);
     }
-} else {
-    $postidquery = "`message` LIKE " . $tc_db->qstr($textstr);
 }
 
 $board_class->InitializeDwoo();
@@ -133,7 +155,7 @@ if ($issearch) {
 }
 
 if ($issearch) {
-    $results = $tc_db->GetAll("SELECT * FROM `" . KU_DBPREFIX . "posts` WHERE `boardid` = " . $board_class->board['id'] ." AND (" . $postidquery . ") AND `IS_DELETED` = 0 ORDER BY `id` DESC");
+    $results = $tc_db->GetAll($query);
     if (count($results) == 0) {
         exitWithErrorPage('Ничего такого на этой борде не обнаружено.');
     }
@@ -159,11 +181,6 @@ if ($issearch) {
     }
 }
 
-$embeds = $tc_db->GetAll("SELECT `filetype` FROM `" . KU_DBPREFIX . "embeds`");
-foreach ($embeds as $embed) {
-    $board_class->board['filetypes'][] .= $embed['filetype'];
-}
-$board_class->dwoo_data->assign('filetypes', $board_class->board['filetypes']);
 $i = 0;
 foreach ($results as $key => $post) {
     if ($issearch || !$singlepost) {
@@ -193,6 +210,7 @@ foreach ($results as $key => $post) {
 }
 
 $board_class->dwoo_data->assign('posts', $results);
+$board_class->dwoo_data->assign('filetypes', $board_class->board['filetypes']);
 
 if (!$issearch && !$singlepost) {
     $page .= $board_class->PageHeader(($thread == 0) ? -1 : $thread, 0, -1, "Поиск постов");

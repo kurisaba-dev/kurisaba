@@ -1668,8 +1668,10 @@ function check_field(id, focused) {
             $('#' + id).addClass("defaultfield");
             if (id.substr(0, 10) == "searchtext") {
                 $('#' + id).val(search_phrases[Math.floor(Math.random() * search_phrases.length)]);
+            } else if (id.substr(0, 10) == "searchpost") {
+                $('#' + id).val(ku_search_thread);
             } else {
-                $('#' + id).val("206");
+                $('#' + id).val("Имя");
             }
         }
     }
