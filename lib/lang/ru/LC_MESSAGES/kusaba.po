@@ -2035,6 +2035,9 @@ msgstr "Код возврата: "
 msgid "My feed"
 msgstr "Мой однопоток"
 
+msgid "View feed"
+msgstr "Мой однопоток"
+
 msgid "You have no boards to view."
 msgstr "У тебя нет модерируемых досок."
 
