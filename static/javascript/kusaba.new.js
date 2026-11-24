@@ -667,7 +667,6 @@ function checkhighlight() {
 }
 
 function highlight(board, post, allowRedirect) {
-    if (Settings.touch(false)) return;
     closePostPreviews();
     $('.highlight').removeClass('highlight').addClass('reply');
     var target = $("#reply" + post + ".reply_board_" + board);
@@ -3766,7 +3765,11 @@ function onBodyClick(ev) {
             markup($(elem).parents('form'), $(elem).data('mups'), $(elem).data('mupe'), $(elem).data('imups'), $(elem).data('imupe'));
             ev.preventDefault();
         }
+    }
+}
 
+function onBodyContextMenu(ev) {
+    for (var elem = ev.target; elem; elem = elem.parentElement) {
         // We won't call Settings.touch(false) here because of it is not reentrant
         if (localStorage['touch'] == 'true' || (localStorage['touch'] == null && isTouchDevice())) {
             if (elem.className.split('ref').length > 1 || elem.classList.contains("catalog-entry")) {
@@ -3840,6 +3843,7 @@ function readyset() {
     $('#js_settings').prepend(_.captchalang + ': ' + langlinks.join(' | ') + '<br />');
 
     document.body.addEventListener("click", onBodyClick);
+    document.body.addEventListener("contextmenu", onBodyContextMenu);
 
     LatexIT.init();
 
