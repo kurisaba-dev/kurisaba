@@ -278,6 +278,7 @@ var _messages = {
         delandbanfile: "Delete and ban file",
         ban: "Ban",
         banfile: "Ban by file",
+        sage: "Sage this post",
         stickthread: "Stick thread",
         unstickthread: "Unstick thread",
         lockthread: "Lock thread",
@@ -397,6 +398,7 @@ var _messages = {
         delandbanfile: "Удалить и забанить файл",
         ban: "Забанить",
         banfile: "Забанить по файлу",
+        sage: "Поставить сажу на этот пост",
         stickthread: "Прикрепить тред",
         unstickthread: "Отлепить тред",
         lockthread: "Закрыть тред",
@@ -766,6 +768,7 @@ function delandbanlinks($scope) {
         }
         newhtml += '<a href="' + ku_webpath + '/manage_page.php?action=delposts&do_ban=true&boarddir=' + boardname + '&delpostid=' + postid + '" title="' + _.delandban + '" onclick="return confirm(\'' + _.deleteAndBan + '?\');"><img src="' + ku_webpath + '/static/images/blank.gif?v=' + ku_js_css_ver + '" class="dandb spritebtn sb-c"><\/a>';
         newhtml += '<a href="' + ku_webpath + '/manage_page.php?action=bans&banboard=' + boardname + '&banpost=' + postid + '" title="' + _.ban + '" onclick="return confirm(\'' + _.ban + '?\');"><img src="' + ku_webpath + '/static/images/blank.gif?v=' + ku_js_css_ver + '" class="ban spritebtn sb-c"><\/a>';
+        newhtml += '<a href="' + ku_webpath + '/manage_page.php?action=sagepost&quick=1&board=' + boardname + '&id=' + postid + '" title="' + _.sage + '" onclick="return confirm(\'' + _.sage + '?\');"><img src="' + ku_webpath + '/static/images/blank.gif?v=' + ku_js_css_ver + '" class="downscroll spritebtn sb-c"><\/a>';
         newhtml += '<a href="' + ku_webpath + '/manage_page.php?action=delposts&fileonly=1&boarddir=' + boardname + '&delpostid=' + postid + '" title="' + _.deletefile + '" onclick="return confirm(\'' + _.deletePostFile + '?\');"><img src="' + ku_webpath + '/static/images/blank.gif?v=' + ku_js_css_ver + '" class="deletefile spritebtn sb-c"><\/a>';
         newhtml += '<a href="' + ku_webpath + '/manage_page.php?action=delposts&fileonly=1&do_ban=true&boarddir=' + boardname + '&delpostid=' + postid + '" title="' + _.delandbanfile + '" onclick="return confirm(\'' + _.deleteAndBanFile + '?\');"><img src="' + ku_webpath + '/static/images/blank.gif?v=' + ku_js_css_ver + '" class="dandbfile spritebtn sb-c"><\/a>';
         if (kuadm_set && ku_offload) {
