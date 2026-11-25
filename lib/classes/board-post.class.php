@@ -861,10 +861,12 @@ class Post extends Board
         $results = $tc_db->GetAll("SELECT * FROM `" . KU_DBPREFIX . "posts` WHERE `boardid` = " . $this->board['id'] . " AND `parentid` = " . $tc_db->qstr($thread) . " AND `IS_DELETED` = 0 AND NOT `bumped` = 0 ORDER BY `stickied` DESC, `bumped` DESC LIMIT 1");
         if (count($results) == 0) {
             $results = $tc_db->GetAll("SELECT * FROM `" . KU_DBPREFIX . "posts` WHERE `boardid` = " . $this->board['id'] . " AND `id` = " . $tc_db->qstr($thread));
+            $newtimestamp = $results[0]['timestamp'];
         }
-        foreach ($results as $line) {
-            $tc_db->Execute("UPDATE `".KU_DBPREFIX."posts` SET `bumped` = '" . $line['bumped'] . "' WHERE `boardid` = '" . $this->board['id'] . "' AND `id` = ". $tc_db->qstr($thread));
+        else {
+            $newtimestamp = $results[0]['bumped'];
         }
+        $tc_db->Execute("UPDATE `".KU_DBPREFIX."posts` SET `bumped` = " . $tc_db->qstr($newtimestamp) . " WHERE `boardid` = '" . $this->board['id'] . "' AND `id` = ". $tc_db->qstr($thread));
     }
 
     // $update_to_removed must be set to false if deleting post (so post with the picture can be recovered), and true if deleting just a file from post (so post won't have unloadable attachment; but admin can't then recover it unless $skip_delete or KU_HALFPERMDELETE is set).
