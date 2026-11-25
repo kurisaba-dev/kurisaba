@@ -858,7 +858,7 @@ class Post extends Board
     {
         global $tc_db;
 
-        $results = $tc_db->GetAll("SELECT * FROM `" . KU_DBPREFIX . "posts` WHERE `boardid` = " . $this->board['id'] . " AND `parentid` = " . $tc_db->qstr($thread) . " AND `IS_DELETED` = 0 AND NOT `bumped` = 0 ORDER BY `stickied` DESC, `bumped` DESC LIMIT 1");
+        $results = $tc_db->GetAll("SELECT * FROM `" . KU_DBPREFIX . "posts` WHERE `boardid` = " . $this->board['id'] . " AND `parentid` = " . $tc_db->qstr($thread) . " AND `IS_DELETED` = 0 AND NOT `bumped` = 0 ORDER BY `bumped` DESC LIMIT 1");
         if (count($results) == 0) {
             $results = $tc_db->GetAll("SELECT * FROM `" . KU_DBPREFIX . "posts` WHERE `boardid` = " . $this->board['id'] . " AND `id` = " . $tc_db->qstr($thread));
             $newtimestamp = $results[0]['timestamp'];
