@@ -4,14 +4,7 @@ header('Content-type: text/html; charset=utf-8');
 
 require 'settings_manager.php';
 
-$issearch = true;
-if (isset($_GET['v'])) {
-    $query = "SELECT * FROM `" . KU_DBPREFIX . "posts` WHERE `message` LIKE " . $tc_db->qstr('%' . $_GET['v'] . '%') . " AND `IS_DELETED` = 0 ORDER BY `id` DESC";
-} elseif (isset($_GET['n'])) {
-    $query = "SELECT * FROM `" . KU_DBPREFIX . "posts` WHERE `name` = " . $tc_db->qstr($_GET['n']) . " AND `IS_DELETED` = 0 ORDER BY `id` DESC";
-} elseif (isset($_GET['r'])) {
-    $query = "SELECT * FROM `" . KU_DBPREFIX . "posts` AS F LEFT JOIN `" . KU_DBPREFIX . "answers` AS A ON F.boardid = A.from_boardid AND F.id = A.from_id LEFT JOIN `" . KU_DBPREFIX . "posts` AS T ON T.boardid = A.to_boardid AND T.id = A.to_id WHERE T.name = " . $tc_db->qstr($_GET['r']) . " AND F.IS_DELETED = 0 AND T.IS_DELETED = 0 ORDER BY F.id DESC";
-} elseif (!isset($_GET['b']) || !isset($_GET['t']) || !isset($_GET['p'])) {
+if (!isset($_GET['b']) || !isset($_GET['t']) || !isset($_GET['p'])) {
     if (!isset($_SERVER['PATH_INFO'])) {
         die();
     }
@@ -24,12 +17,10 @@ if (isset($_GET['v'])) {
     $board  = $pairs[1];
     $thread = $pairs[2];
     $posts  = $pairs[3];
-    $issearch = false;
 } else {
     $board  = $_GET['b'];
     $thread = $_GET['t'];
     $posts  = $_GET['p'];
-    $issearch = false;
 }
 
 $singlepost = (isset($_GET['single'])) ? true : false;
@@ -45,145 +36,101 @@ require KU_ENGINEDIR . 'lib/classes/board-post.class.php';
 
 $executiontime_start = microtime_float();
 
-if(!$issearch)
-{
-    $results = $tc_db->GetOne("SELECT COUNT(*) FROM `".KU_DBPREFIX."boards` WHERE `name` = ".$tc_db->qstr($board)." LIMIT 1");
-    if ($results == 0) {
-        die('Invalid board.');
-    }
-    $board_class = new Board($board);
-    $embeds = $tc_db->GetAll("SELECT `filetype` FROM `" . KU_DBPREFIX . "embeds`");
-    foreach ($embeds as $embed) {
-        $board_class->board['filetypes'][] .= $embed['filetype'];
-    }
-    $country_restrict = $board_class->board['country_restrict'];
-    if ($country_restrict != '') {
-        if ((getUserMode() != 1) && in_array(client_country(), explode(',', strtoupper(str_replace(' ', '', $country_restrict))))) {
-            http_response_code(451);
-            die('This material is unavailable in your country.');
-        }
-    }
-} else {
-    $embeds = $tc_db->GetAll("SELECT `filetype` FROM `" . KU_DBPREFIX . "embeds`");
-    $boards_data = $tc_db->GetAll("SELECT * FROM `".KU_DBPREFIX."boards`");
-    $boards = array();
-
-    foreach ($boards_data as $board_data) {
-        $boards[$board_data['id']] = new Board($board_data['name']);
-        foreach ($embeds as $embed) {
-            $boards[$board_data['id']]->board['filetypes'][] .= $embed['filetype'];
-        }
-    }
-    $board_class = end($boards);
+$results = $tc_db->GetOne("SELECT COUNT(*) FROM `".KU_DBPREFIX."boards` WHERE `name` = ".$tc_db->qstr($board)." LIMIT 1");
+if ($results == 0) {
+    die('Invalid board.');
 }
-
-if (!$issearch) {
-    $postids = getQuoteIds($posts, $replies);
-    if (count($postids) == 0) {
-        die('No valid posts specified.');
+$board_class = new Board($board);
+$embeds = $tc_db->GetAll("SELECT `filetype` FROM `" . KU_DBPREFIX . "embeds`");
+foreach ($embeds as $embed) {
+    $board_class->board['filetypes'][] .= $embed['filetype'];
+}
+$country_restrict = $board_class->board['country_restrict'];
+if ($country_restrict != '') {
+    if ((getUserMode() != 1) && in_array(client_country(), explode(',', strtoupper(str_replace(' ', '', $country_restrict))))) {
+        http_response_code(451);
+        die('This material is unavailable in your country.');
     }
 }
 
-if (!$issearch) {
-    $postidquery = '';
-    if (count($postids) > 1 && (!empty($postids[1]) || !empty($postids['BETWEEN']))) {
-        $i = 0;
-        foreach ($postids as $key => $postid) {
-            if (is_numeric($key)) {
-                if (intval($postid) < 0) {
-                    if ($singlepost) {
-                        die("invalid post id");
-                    } else {
-                        exitWithErrorPage("invalid post id");
-                    }
-                }
-                if ($i != 0) {
-                    $postidquery .= " OR ";
-                }
-                $postidquery .= "(`id` = ".intval($postid)." AND ";
-                if ($postids[$key] == $thread) {
-                    $postidquery .= "(`id` = ".$tc_db->qstr($thread)." AND `parentid` = 0))";
+$postids = getQuoteIds($posts, $replies);
+if (count($postids) == 0) {
+    die('No valid posts specified.');
+}
+
+$postidquery = '';
+if (count($postids) > 1 && (!empty($postids[1]) || !empty($postids['BETWEEN']))) {
+    $i = 0;
+    foreach ($postids as $key => $postid) {
+        if (is_numeric($key)) {
+            if (intval($postid) < 0) {
+                if ($singlepost) {
+                    die("invalid post id");
                 } else {
-                    $postidquery .= "`parentid` = " . $tc_db->qstr($thread) . " ) ";
+                    exitWithErrorPage("invalid post id");
                 }
-            } elseif ($key == 'BETWEEN') {
-                if (count($postids['BETWEEN'] > 0)) {
-                    foreach ($postids['BETWEEN'] as $key2 => $pid) {
-                        if ($key2 != 0 || $i != 0) {
-                            $postidquery .= " OR ";
-                        }
-                        if ($pid[0] == $thread) {
-                            $postidquery .= "(`id` = ".$tc_db->qstr($thread)." AND `parentid` = 0) OR (";
-                        } else {
-                            $postidquery .= "(`parentid` = " . $tc_db->qstr($thread) . " AND ";
-                        }
-                        $end = intval(array_pop($pid));
-                        if ($pid[0] < $end) {
-                            $postidquery .= "`id` BETWEEN ".(intval($pid[0]))." AND ".$end."";
-                        } else {
-                            $postidquery .= "`id` BETWEEN ".$end." AND ".(intval($pid[0]))."";
-                        }
-                        if ($pid[0] == $thread) {
-                            $postidquery .= " AND `parentid` = " . $tc_db->qstr($thread) . ")";
-                        } else {
-                            $postidquery .= ")";
-                        }
+            }
+            if ($i != 0) {
+                $postidquery .= " OR ";
+            }
+            $postidquery .= "(`id` = ".intval($postid)." AND ";
+            if ($postids[$key] == $thread) {
+                $postidquery .= "(`id` = ".$tc_db->qstr($thread)." AND `parentid` = 0))";
+            } else {
+                $postidquery .= "`parentid` = " . $tc_db->qstr($thread) . " ) ";
+            }
+        } elseif ($key == 'BETWEEN') {
+            if (count($postids['BETWEEN'] > 0)) {
+                foreach ($postids['BETWEEN'] as $key2 => $pid) {
+                    if ($key2 != 0 || $i != 0) {
+                        $postidquery .= " OR ";
+                    }
+                    if ($pid[0] == $thread) {
+                        $postidquery .= "(`id` = ".$tc_db->qstr($thread)." AND `parentid` = 0) OR (";
+                    } else {
+                        $postidquery .= "(`parentid` = " . $tc_db->qstr($thread) . " AND ";
+                    }
+                    $end = intval(array_pop($pid));
+                    if ($pid[0] < $end) {
+                        $postidquery .= "`id` BETWEEN ".(intval($pid[0]))." AND ".$end."";
+                    } else {
+                        $postidquery .= "`id` BETWEEN ".$end." AND ".(intval($pid[0]))."";
+                    }
+                    if ($pid[0] == $thread) {
+                        $postidquery .= " AND `parentid` = " . $tc_db->qstr($thread) . ")";
+                    } else {
+                        $postidquery .= ")";
                     }
                 }
             }
-            $i++;
         }
-    } else {
-        $postidquery .= "`id` = ".intval($postids[0]);
+        $i++;
     }
+} else {
+    $postidquery .= "`id` = ".intval($postids[0]);
 }
 
 $board_class->InitializeDwoo();
 $board_class->dwoo_data->assign('board', $board_class->board);
-if ($issearch) {
-    $board_class->dwoo_data->assign('issearch', true);
-}
 $board_class->dwoo_data->assign('isread', true);
 $board_class->dwoo_data->assign('file_path', KU_BOARDSPATH . '/' . $board_class->board['name']);
 
 $page = '';
 
-if ($issearch) {
-    $page .= $board_class->PageHeader(-1, 0, -1, "Поиск постов");
-    $board_class->dwoo_data->assign('replythread', -1);
-    $page .= $board_class->dwoo->get(KU_TEMPLATEDIR . '/img_reply_header.tpl', $board_class->dwoo_data);
-}
-
-if ($issearch) {
-    $results = $tc_db->GetAll($query);
-    if (count($results) == 0) {
-        exitWithErrorPage('Ничего такого на этой борде не обнаружено.');
-    }
-
-    if (count($results) > KU_MAXSEARCHRESULTS) {
-        $howmany = count($results) . ' постов найдено (показаны первые ' . KU_MAXSEARCHRESULTS . ')';
-        $results = array_slice($results, 0, KU_MAXSEARCHRESULTS, true);
-    } else {
-        $howmany = count($results) . ' постов найдено';
-    }
-
-    $page .= '<h3 style="text-align: center;">' . $howmany . ':</h2>' . "\n";
-} else {
-    $results = $tc_db->GetAll("SELECT * FROM `" . KU_DBPREFIX . "posts` WHERE `boardid` = " . $board_class->board['id'] ." AND (" . $postidquery . ") AND `IS_DELETED` = 0 ORDER BY `id` ASC");
-    if (count($results) == 0) {
-        if ($thread == 0) {
-            if (isset($_GET['issearch'])) {
-                exitWithErrorPage('Ничего такого на этой борде не обнаружено.');
-            } else {
-                die('&nbsp;Пост не существует или удалён.&nbsp;');
-            }
+$results = $tc_db->GetAll("SELECT * FROM `" . KU_DBPREFIX . "posts` WHERE `boardid` = " . $board_class->board['id'] ." AND (" . $postidquery . ") AND `IS_DELETED` = 0 ORDER BY `id` ASC");
+if (count($results) == 0) {
+    if ($thread == 0) {
+        if (!isset($_GET['single'])) {
+            exitWithErrorPage('Ничего такого на этой борде не обнаружено.');
+        } else {
+            die('&nbsp;Пост не существует или удалён.&nbsp;');
         }
     }
 }
 
 $i = 0;
 foreach ($results as $key => $post) {
-    if ($issearch || !$singlepost) {
+    if (!$singlepost) {
         $post['n'] = ++$i;
     } else {
         if ($post['parentid'] == 0) {
@@ -212,7 +159,7 @@ foreach ($results as $key => $post) {
 $board_class->dwoo_data->assign('posts', $results);
 $board_class->dwoo_data->assign('filetypes', $board_class->board['filetypes']);
 
-if (!$issearch && !$singlepost) {
+if (!$singlepost) {
     $page .= $board_class->PageHeader(($thread == 0) ? -1 : $thread, 0, -1, "Поиск постов");
     $board_class->dwoo_data->assign('replythread', $thread);
     if ($thread == 0) {
@@ -233,11 +180,11 @@ if (!$issearch && !$singlepost) {
 $board_class->dwoo_data->assign('replink', $_GET['replink']);
 $page .= $board_class->dwoo->get(KU_TEMPLATEDIR . '/img_thread.tpl', $board_class->dwoo_data);
 
-if ($issearch || !$singlepost) {
+if (!$singlepost) {
     $page .= '<br clear="left">' . "\n";
 }
 
-if ($issearch || !$singlepost) {
+if (!$singlepost) {
     $board_class->dwoo_data->assign('replythread', -1);
     $page .= '<hr />' . "\n" . $board_class->Footer(microtime_float() - $executiontime_start);
 }

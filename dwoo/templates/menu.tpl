@@ -209,20 +209,19 @@ function iter_obj(object, callback) {
 <input type="text" size="7" name="p" value="{%KU_SEARCH_THREAD}" class="defaultfield" id="searchpostmenu" onfocus="check_field('searchpostmenu',true);" onblur="check_field('searchpostmenu',false);"></input>
 <input type="submit" value="Go!"></input>
 <input type="hidden" name="t" value="0"></input>
-<input type="hidden" name="issearch" value="true"></input>
 </form>
 <span style="font-size: 8px">&nbsp;</span></li>
-<li>Поиск текста на борде:<form method="get" action="/read.php">
+<li>Поиск текста на борде:<form method="get" action="/single.php">
 <input type="text" size="15" name="v" value="{$search_phrase}" class="defaultfield" id="searchtextmenu" onfocus="check_field('searchtextmenu',true);" onblur="check_field('searchtextmenu',false);"></input>
 <input type="submit" value="Go!"></input>
 </form>
 <span style="font-size: 8px">&nbsp;</span></li>
-<li>Поиск постов одного автора:<form method="get" action="/read.php">
+<li>Поиск постов одного автора:<form method="get" action="/single.php">
 <input type="text" size="10" name="n" value="Имя" class="defaultfield" id="searchnamemenu" onfocus="check_field('searchnamemenu',true);" onblur="check_field('searchnamemenu',false);"></input>
 <input type="submit" value="Go!"></input>
 </form>
 <span style="font-size: 8px">&nbsp;</span></li>
-<li>Поиск ответов на посты автора:<form method="get" action="/read.php">
+<li>Поиск ответов на посты автора:<form method="get" action="/single.php">
 <input type="text" size="10" name="r" value="Имя" class="defaultfield" id="searchreplymenu" onfocus="check_field('searchreplymenu',true);" onblur="check_field('searchreplymenu',false);"></input>
 <input type="submit" value="Go!"></input>
 </form>

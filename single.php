@@ -17,7 +17,7 @@ if ($bans_class->BanCheckSilent(KU_REMOTE_ADDR, '', true)) {
 $executiontime_start = microtime_float();
 
 // Do our work only for image-type boards
-$embeds = $tc_db->GetAll("SELECT `filetype` FROM `" . KU_DBPREFIX . "embeds`");
+$embeds = $tc_db->GetAll("SELECT `name`, `filetype` FROM `" . KU_DBPREFIX . "embeds`");
 $boards_data = $tc_db->GetAll("SELECT * FROM `".KU_DBPREFIX."boards`");
 $boards = array();
 
@@ -38,20 +38,29 @@ $board_class->dwoo_data->assign('isall', $all);
 $board_class->dwoo_data->assign('issearch', true);
 $board_class->dwoo_data->assign('isread', true);
 $board_class->dwoo_data->assign('skipheader', true);
-$embeds = $tc_db->GetAll("SELECT `name`, `filetype` FROM `" . KU_DBPREFIX . "embeds`");
 $board_class->dwoo_data->assign('embeds', $embeds);
-$page = '';
-$page .= $board_class->PageHeader(-1, 0, -1, $all ? "Все треды" : "Однопоток");
-if (!$all) {
-    $page .= "<hr>";
-}
-
-$board_class->dwoo_data->assign('onlyclone', true);
-$page .= $board_class->Postbox();
 
 $thispage = (isset($_REQUEST["p"]) && is_numeric($_REQUEST["p"])) ? intval($_REQUEST["p"]) : 0;
 
-if($all) {
+if (isset($_GET['v'])) {
+    $numposts = $tc_db->GetOne("SELECT COUNT(*) FROM `" . KU_DBPREFIX . "posts` WHERE `message` LIKE " . $tc_db->qstr('%' . $_GET['v'] . '%') . " AND `IS_DELETED` = 0");
+    $results = $tc_db->GetAll("SELECT * FROM `" . KU_DBPREFIX . "posts` WHERE `message` LIKE " . $tc_db->qstr('%' . $_GET['v'] . '%') . " AND `IS_DELETED` = 0 ORDER BY `id` DESC LIMIT " . KU_FEEDLENGTH . " OFFSET " . ($thispage * KU_FEEDLENGTH));
+    $title = "Поиск постов";
+    $print_summary = true;
+} elseif (isset($_GET['n'])) {
+    $numposts = $tc_db->GetOne("SELECT COUNT(*) FROM `" . KU_DBPREFIX . "posts` WHERE `name` = " . $tc_db->qstr($_GET['n']) . " AND `IS_DELETED` = 0");
+    $results = $tc_db->GetAll("SELECT * FROM `" . KU_DBPREFIX . "posts` WHERE `name` = " . $tc_db->qstr($_GET['n']) . " AND `IS_DELETED` = 0 ORDER BY `id` DESC LIMIT " . KU_FEEDLENGTH . " OFFSET " . ($thispage * KU_FEEDLENGTH));
+    $title = "Поиск постов автора";
+    $print_summary = true;
+} elseif (isset($_GET['r'])) {
+    $numposts = $tc_db->GetOne("SELECT COUNT(*) FROM `" . KU_DBPREFIX . "posts` AS F LEFT JOIN `" . KU_DBPREFIX . "answers` AS A ON F.boardid = A.from_boardid AND F.id = A.from_id LEFT JOIN `" . KU_DBPREFIX . "posts` AS T ON T.boardid = A.to_boardid AND T.id = A.to_id WHERE T.name = " . $tc_db->qstr($_GET['r']) . " AND F.IS_DELETED = 0 AND T.IS_DELETED = 0");
+    $results = $tc_db->GetAll("SELECT * FROM `" . KU_DBPREFIX . "posts` AS F LEFT JOIN `" . KU_DBPREFIX . "answers` AS A ON F.boardid = A.from_boardid AND F.id = A.from_id LEFT JOIN `" . KU_DBPREFIX . "posts` AS T ON T.boardid = A.to_boardid AND T.id = A.to_id WHERE T.name = " . $tc_db->qstr($_GET['r']) . " AND F.IS_DELETED = 0 AND T.IS_DELETED = 0 ORDER BY F.id DESC LIMIT " . KU_FEEDLENGTH . " OFFSET " . ($thispage * KU_FEEDLENGTH));
+    $query = "SELECT * FROM `" . KU_DBPREFIX . "posts` AS F LEFT JOIN `" . KU_DBPREFIX . "answers` AS A ON F.boardid = A.from_boardid AND F.id = A.from_id LEFT JOIN `" . KU_DBPREFIX . "posts` AS T ON T.boardid = A.to_boardid AND T.id = A.to_id WHERE T.name = " . $tc_db->qstr($_GET['r']) . " AND F.IS_DELETED = 0 AND T.IS_DELETED = 0 ORDER BY F.id DESC";
+    $title = "Поиск ответов на посты автора";
+    $print_summary = true;
+} elseif ($all) {
+    $title = "Все треды";
+    $print_summary = false;
     $exclude = '';
     $excludeboards = '';
     foreach ($boards as $board) {
@@ -65,6 +74,8 @@ if($all) {
     $numposts = $tc_db->GetOne("SELECT COUNT(*) FROM `" . KU_DBPREFIX . "posts` WHERE `parentid` = 0 AND `IS_DELETED` = 0 " . $exclude . $excludeboards);
     $results = $tc_db->GetAll("SELECT * FROM `" . KU_DBPREFIX . "posts` WHERE `parentid` = 0 AND `IS_DELETED` = 0 " . $exclude . $excludeboards . " ORDER BY `bumped` DESC LIMIT ". KU_THREADS ." OFFSET ". ($thispage * KU_THREADS));
 } else {
+    $title = "Однопоток";
+    $print_summary = false;
     if (isset($_GET['boardlist'])) {
         $excludeboards = "AND C.name IN (" . implode(", ", array_map(function($x) {global $tc_db; return $tc_db->qstr($x);}, explode("|", $_GET['boardlist']))) . ")";
     } elseif ($fullfeed) {
@@ -78,7 +89,18 @@ if($all) {
 $lastpage = calculatelastpagenum($numposts, $all ? KU_THREADS : KU_FEEDLENGTH);
 $board_class->dwoo_data->assign('thispage', $thispage);
 $board_class->dwoo_data->assign('lastpage', $lastpage);
-$board_class->dwoo_data->assign('pagination', createPagination($thispage, $lastpage, KU_WEBPATH . "/single.php?fullfeed=" . ($fullfeed ? "1" : "0") . (isset($_GET['boardlist']) ? "&boardlist=" . $_GET['boardlist'] : "") . ($all ? "&all=1" : ""), "&p=", ""));
+$board_class->dwoo_data->assign('pagination', createPagination($thispage, $lastpage, KU_WEBPATH . "/single.php?fullfeed=" . ($fullfeed ? "1" : "0") . (isset($_GET['v']) ? "&v=" . $_GET['v'] : "") . (isset($_GET['n']) ? "&n=" . $_GET['n'] : "") . (isset($_GET['r']) ? "&r=" . $_GET['r'] : "") . (isset($_GET['boardlist']) ? "&boardlist=" . $_GET['boardlist'] : "") . ($all ? "&all=1" : ""), "&p=", ""));
+
+$page = '';
+$page .= $board_class->PageHeader(-1, 0, -1, $title);
+if (!$all) {
+    if($print_summary) $page .= '<h3 style="text-align: center;">' . $numposts . ' постов найдено (страница ' . $thispage . ' из ' . ($lastpage + 1) . '):</h3>' . "\n";
+    $page .= "<hr>";
+}
+
+$board_class->dwoo_data->assign('onlyclone', true);
+$page .= $board_class->Postbox();
+
 
 if (count($results) == 0) {
     exitWithErrorPage('Постов в базе нет!');

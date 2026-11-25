@@ -2003,7 +2003,7 @@ function showLinks() {
     var url = hrefParse($(this).attr('href'));
     if (url === false) return false;
     $('#directLink').val(ku_boardspath + "/" + url[0] + "/res/" + url[1] + ".html" + ((url[2].length > 0) ? ("#" + url[2]) : ""));
-    $('#singleLink').val(ku_webpath + "/read.php?b=" + url[0] + "&p=" + url[2] + "&t=0&issearch=true");
+    $('#singleLink').val(ku_webpath + "/read.php?b=" + url[0] + "&p=" + url[2] + "&t=0");
     $('#quoteLink').val('>>/' + url[0] + '/' + url[2]);
     $('#viewlink').css({
         top: $(this).offset().top + $(this).height(),

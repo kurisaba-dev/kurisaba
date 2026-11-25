@@ -280,25 +280,24 @@ function scrolling(elem, direction) {
 					<input size="7" name="p" value="{%KU_SEARCH_THREAD}" type="text" class="defaultfield" id="searchposttop" onfocus="check_field('searchposttop',true);" onblur="check_field('searchposttop',false);">
 					<input value="Перейти" type="submit">
 					<input name="t" value="0" type="hidden">
-					<input name="issearch" value="true" type="hidden">
 				</form>
 			</td></tr>
 			<tr><td>Поиск по тексту поста:</td><td>
-				<form style="display: inline;" method="get" action="/read.php">
+				<form style="display: inline;" method="get" action="/single.php">
 					<input size="25" name="v" value="{$search_phrase}" type="text" class="defaultfield" id="searchtexttop" onfocus="check_field('searchtexttop',true);" onblur="check_field('searchtexttop',false);">
 					<input value="Искать" type="submit">
 				</form>
 				</form>
 			</td></tr>
 			<tr><td>Поиск по автору:</td><td>
-				<form style="display: inline;" method="get" action="/read.php">
+				<form style="display: inline;" method="get" action="/single.php">
 					<input size="10" name="n" value="Имя" type="text" class="defaultfield" id="searchnametop" onfocus="check_field('searchnametop',true);" onblur="check_field('searchnametop',false);">
 					<input value="Искать" type="submit">
 				</form>
 				</form>
 			</td></tr>
 			<tr><td>Поиск ответов на посты автора:</td><td>
-				<form style="display: inline;" method="get" action="/read.php">
+				<form style="display: inline;" method="get" action="/single.php">
 					<input size="10" name="r" value="Имя" type="text" class="defaultfield" id="searchreplytop" onfocus="check_field('searchreplytop',true);" onblur="check_field('searchreplytop',false);">
 					<input value="Искать" type="submit">
 				</form>
@@ -322,20 +321,19 @@ function scrolling(elem, direction) {
 						<input size="7" name="p" value="{%KU_SEARCH_THREAD}" type="text" class="defaultfield" id="searchpostmain" onfocus="check_field('searchpostmain',true);" onblur="check_field('searchpostmain',false);">
 						<input value="Перейти" type="submit">
 						<input name="t" value="0" type="hidden">
-						<input name="issearch" value="true" type="hidden">
 					</form>
 					Поиск:
-					<form style="display: inline;" method="get" action="/read.php">
+					<form style="display: inline;" method="get" action="/single.php">
 						<input size="25" name="v" value="{$search_phrase}" type="text" class="defaultfield" id="searchtextmain" onfocus="check_field('searchtextmain',true);" onblur="check_field('searchtextmain',false);">
 						<input value="Искать" type="submit">
 					</form>
 					Посты автора:
-					<form style="display: inline;" method="get" action="/read.php">
+					<form style="display: inline;" method="get" action="/single.php">
 						<input size="10" name="n" value="Имя" type="text" class="defaultfield" id="searchnamemain" onfocus="check_field('searchnamemain',true);" onblur="check_field('searchnamemain',false);">
 						<input value="Искать" type="submit">
 					</form>
 					Ответы автору:
-					<form style="display: inline;" method="get" action="/read.php">
+					<form style="display: inline;" method="get" action="/single.php">
 						<input size="10" name="r" value="Имя" type="text" class="defaultfield" id="searchreplymain" onfocus="check_field('searchreplymain',true);" onblur="check_field('searchreplymain',false);">
 						<input value="Искать" type="submit">
 					</form>
