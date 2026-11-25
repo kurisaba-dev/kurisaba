@@ -1918,7 +1918,7 @@ class Manage
                     $tpl_page .= '<br /><br /><a href="' . $_SERVER['HTTP_REFERER'] . '">' . _gettext('Go back') . '</a>';
                 }
             } else {
-                $tc_db->Execute("UPDATE `".KU_DBPREFIX."posts` SET `bumped` = 0 WHERE `boardid` = " . $tc_db->qstr($board_id) . " AND `id` = " . $tc_db->qstr($post->post['id']));
+                $tc_db->Execute("UPDATE `".KU_DBPREFIX."posts` SET `bumped` = 0, `email` = 'sage' WHERE `boardid` = " . $tc_db->qstr($board_id) . " AND `id` = " . $tc_db->qstr($post->post['id']));
 
                 $post->RebumpThread($post->post['parentid']);
 
