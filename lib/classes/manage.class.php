@@ -1925,7 +1925,7 @@ class Manage
                 $tpl_page .=  _gettext('Post') . ' /' . $_GET['board'] . '/' .  $post->post['id'] . ' ' . _gettext('successfully saged') . ', ' . _gettext('thread') . ' /' . $_GET['board'] . '/' .  $post->post['parentid'] . ' ' . _gettext('has its bumptime updated') . '.';
 
                 if(isset($_GET['quick'])) {
-                    $tpl_page .= '<br /><br /><meta http-equiv="refresh" content="1;url=' . $_SERVER['HTTP_REFERER'] . '"><a href="' . $_SERVER['HTTP_REFERER'] . '">' . _gettext('Redirecting') . '</a>' . _gettext('back') . '...';
+                    $tpl_page .= '<br /><br /><meta http-equiv="refresh" content="1;url=' . $_SERVER['HTTP_REFERER'] . '"><a href="' . $_SERVER['HTTP_REFERER'] . '">' . _gettext('Redirecting') . '</a> ' . _gettext('back') . '...';
                 }
             }
 
