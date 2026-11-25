@@ -46,20 +46,24 @@ if (isset($_GET['v'])) {
     $numposts = $tc_db->GetOne("SELECT COUNT(*) FROM `" . KU_DBPREFIX . "posts` WHERE `message` LIKE " . $tc_db->qstr('%' . $_GET['v'] . '%') . " AND `IS_DELETED` = 0");
     $results = $tc_db->GetAll("SELECT * FROM `" . KU_DBPREFIX . "posts` WHERE `message` LIKE " . $tc_db->qstr('%' . $_GET['v'] . '%') . " AND `IS_DELETED` = 0 ORDER BY `id` DESC LIMIT " . KU_FEEDLENGTH . " OFFSET " . ($thispage * KU_FEEDLENGTH));
     $title = "Поиск постов";
+    $notfound = "Не найдено постов, содержащих строку \"" . $_GET['v'] . "\".";
     $print_summary = true;
 } elseif (isset($_GET['n'])) {
     $numposts = $tc_db->GetOne("SELECT COUNT(*) FROM `" . KU_DBPREFIX . "posts` WHERE `name` = " . $tc_db->qstr($_GET['n']) . " AND `IS_DELETED` = 0");
     $results = $tc_db->GetAll("SELECT * FROM `" . KU_DBPREFIX . "posts` WHERE `name` = " . $tc_db->qstr($_GET['n']) . " AND `IS_DELETED` = 0 ORDER BY `id` DESC LIMIT " . KU_FEEDLENGTH . " OFFSET " . ($thispage * KU_FEEDLENGTH));
     $title = "Поиск постов автора";
+    $notfound = "Пользователь " . $_GET['n'] . " ничего не писал на борде, или всё его творчество удалено.";
     $print_summary = true;
 } elseif (isset($_GET['r'])) {
     $numposts = $tc_db->GetOne("SELECT COUNT(*) FROM `" . KU_DBPREFIX . "posts` AS F LEFT JOIN `" . KU_DBPREFIX . "answers` AS A ON F.boardid = A.from_boardid AND F.id = A.from_id LEFT JOIN `" . KU_DBPREFIX . "posts` AS T ON T.boardid = A.to_boardid AND T.id = A.to_id WHERE T.name = " . $tc_db->qstr($_GET['r']) . " AND F.IS_DELETED = 0 AND T.IS_DELETED = 0");
     $results = $tc_db->GetAll("SELECT * FROM `" . KU_DBPREFIX . "posts` AS F LEFT JOIN `" . KU_DBPREFIX . "answers` AS A ON F.boardid = A.from_boardid AND F.id = A.from_id LEFT JOIN `" . KU_DBPREFIX . "posts` AS T ON T.boardid = A.to_boardid AND T.id = A.to_id WHERE T.name = " . $tc_db->qstr($_GET['r']) . " AND F.IS_DELETED = 0 AND T.IS_DELETED = 0 ORDER BY F.id DESC LIMIT " . KU_FEEDLENGTH . " OFFSET " . ($thispage * KU_FEEDLENGTH));
     $query = "SELECT * FROM `" . KU_DBPREFIX . "posts` AS F LEFT JOIN `" . KU_DBPREFIX . "answers` AS A ON F.boardid = A.from_boardid AND F.id = A.from_id LEFT JOIN `" . KU_DBPREFIX . "posts` AS T ON T.boardid = A.to_boardid AND T.id = A.to_id WHERE T.name = " . $tc_db->qstr($_GET['r']) . " AND F.IS_DELETED = 0 AND T.IS_DELETED = 0 ORDER BY F.id DESC";
     $title = "Поиск ответов на посты автора";
+    $notfound = "Нет ответов на посты, которые оставил пользователь " . $_GET['r'] . ".";
     $print_summary = true;
 } elseif ($all) {
     $title = "Все треды";
+    $notfound = "Постов в базе нет!";
     $print_summary = false;
     $exclude = '';
     $excludeboards = '';
@@ -75,6 +79,7 @@ if (isset($_GET['v'])) {
     $results = $tc_db->GetAll("SELECT * FROM `" . KU_DBPREFIX . "posts` WHERE `parentid` = 0 AND `IS_DELETED` = 0 " . $exclude . $excludeboards . " ORDER BY `bumped` DESC LIMIT ". KU_THREADS ." OFFSET ". ($thispage * KU_THREADS));
 } else {
     $title = "Однопоток";
+    $notfound = "Постов в базе нет!";
     $print_summary = false;
     if (isset($_GET['boardlist'])) {
         $excludeboards = "AND C.name IN (" . implode(", ", array_map(function($x) {global $tc_db; return $tc_db->qstr($x);}, explode("|", $_GET['boardlist']))) . ")";
@@ -103,7 +108,7 @@ $page .= $board_class->Postbox();
 
 
 if (count($results) == 0) {
-    exitWithErrorPage('Постов в базе нет!');
+    exitWithErrorPage($notfound);
 }
 
 $i = 0;
