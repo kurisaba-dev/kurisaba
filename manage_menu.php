@@ -120,6 +120,7 @@ if (!$manage_class->ValidateSession(true)) {
         $tpl_links .= '<li><a href="manage_page.php?action=viewfeed">'._gettext('My feed').'</a></li>';
         $tpl_links .= '<li><a href="manage_page.php?action=viewthread">'._gettext('View thread (including deleted)').'</a></li>';
         $tpl_links .= '<li><a href="manage_page.php?action=viewdeletedthread">'._gettext('View thread by number').'</a></li>';
+        $tpl_links .= '<li><a href="manage_page.php?action=sagepost">'._gettext('Sage a post').'</a></li>';
         $tpl_links .= '<li class="magic-link" data-help="spam"><a href="manage_page.php?action=spam">' . _gettext('Spamfilter') . '</a></li>';
         $tpl_links .= '<li><a href="manage_page.php?action=wordfilter">' . _gettext('Wordfilter') . '</a></li>';
         $tpl_links .= '<li class="magic-link" data-help="stickypost"><a href="manage_page.php?action=stickypost">' . _gettext('Manage stickies') . '</a></li>';

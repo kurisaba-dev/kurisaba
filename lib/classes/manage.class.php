@@ -1892,6 +1892,55 @@ class Manage
         }
     }
 
+    public function sagepost()
+    {
+        global $tc_db, $tpl_page;
+        $this->ModeratorsOnly();
+
+        $tpl_page .= '<h2>'. _gettext('Sage a post') . '</h2><br />'. "\n";
+
+        if (isset($_GET['board']) && isset($_GET['id']) && $_GET['id'] > 0) {
+
+            if (!Manage::CurrentUserIsModeratorOfBoard($_GET['board'])) {
+                exitWithErrorPage(_gettext('You are not a moderator of this board.'));
+            }
+
+            $results = $tc_db->GetAll("SELECT HIGH_PRIORITY * FROM `" . KU_DBPREFIX . "boards` WHERE `name` = " . $tc_db->qstr($_GET['board']) . "");
+            foreach ($results as $line) {
+                $board_id = $line['id'];
+            }
+            $post = new Post($_GET['id'], $_GET['board'], $board_id);
+
+            if($post->post['parentid'] == 0) {
+                $tpl_page .=  _gettext('Post') . ' ' . $post->post['id'] . ' ' . _gettext('is not a reply') . '.';
+
+                if(isset($_GET['quick'])) {
+                    $tpl_page .= '<br /><br /><a href="' . $_SERVER['HTTP_REFERER'] . '">' . _gettext('Go back') . '</a>';
+                }
+            }
+
+            $post->RebumpThread($post->post['parentid']);
+
+            $tpl_page .=  _gettext('Post') . ' ' . $post->post['id'] . ' ' . _gettext('successfully saged') . ', ' . _gettext('thread') . ' ' . $post->post['parentid'] . ' ' . _gettext('has its bumptime updated') . '.';
+
+            if(isset($_GET['quick'])) {
+                $tpl_page .= '<br /><br /><meta http-equiv="refresh" content="1;url=' . $_SERVER['HTTP_REFERER'] . '"><a href="' . $_SERVER['HTTP_REFERER'] . '">' . _gettext('Redirecting') . '</a>' . _gettext('back') . '...';
+            }
+
+        } else {
+
+            $tpl_page .= '<form method="get" action="?">'. "\n" .
+                        '<input type="hidden" name="action" value="sagepost" />'. "\n" .
+                        '<label for="board">'. _gettext('Board') . ':</label>'. "\n" .
+                        $this->MakeBoardListDropdown('board', $this->BoardList($_SESSION['manageusername'])) . "\n" .
+                        '<br /><br />'. "\n" .
+                        '<label for="id">'. _gettext('Post') . ':</label>'. "\n" .
+                        '<input type="text" name="id" /><br /><br />'. "\n" .
+                        '<input type="submit" value="'. _gettext('Sage this post') . '" />'. "\n" .
+                        '</form>';
+        }
+    }
+
     public function editfiletypes()
     {
         global $tc_db, $tpl_page;
