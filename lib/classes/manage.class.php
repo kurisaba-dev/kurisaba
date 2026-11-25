@@ -1919,9 +1919,11 @@ class Manage
                 }
             }
 
+            $tc_db->Execute("UPDATE `".KU_DBPREFIX."posts` SET `bumped` = 0 WHERE `boardid` = " . $tc_db->qstr($board_id) . " AND `id` = " . $tc_db->qstr($post->post['id']));
+
             $post->RebumpThread($post->post['parentid']);
 
-            $tpl_page .=  _gettext('Post') . ' ' . $post->post['id'] . ' ' . _gettext('successfully saged') . ', ' . _gettext('thread') . ' ' . $post->post['parentid'] . ' ' . _gettext('has its bumptime updated') . '.';
+            $tpl_page .=  _gettext('Post') . ' /' . $_GET['board'] . '/' .  $post->post['id'] . ' ' . _gettext('successfully saged') . ', ' . _gettext('thread') . ' /' . $_GET['board'] . '/' .  $post->post['parentid'] . ' ' . _gettext('has its bumptime updated') . '.';
 
             if(isset($_GET['quick'])) {
                 $tpl_page .= '<br /><br /><meta http-equiv="refresh" content="1;url=' . $_SERVER['HTTP_REFERER'] . '"><a href="' . $_SERVER['HTTP_REFERER'] . '">' . _gettext('Redirecting') . '</a>' . _gettext('back') . '...';
