@@ -99,6 +99,10 @@ config:
         default: true
         comment: 'Сохранять ли IP постов. Если отключить, то будут сохраняться только MD5, а в качестве IP будет использоваться 0.0.0.0. Баны через .htaccess будут невозможны.'
         type: bool
+      KU_UPLOADLINKS:
+        default: true
+        comment: 'Разрешать ли загрузку файлов по ссылке. Внимание: возможная дыра в безопасности, более подробно см. <a href="https://github.com/kurisaba-dev/kurisaba/pull/105">здесь</a>.'
+        type: bool
       KU_EXPAND:
         default: true
         comment: 'Включить возможность разворотат тредов на странице борд.'

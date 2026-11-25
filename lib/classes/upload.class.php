@@ -206,6 +206,10 @@ class Upload
                         $file['error'] = UPLOAD_ERR_OK;
                         $imagefile_name = $file['name'];
                     } else {
+                        if(!KU_UPLOADLINKS) {
+                            return 'Загрузка файлов по ссылке на этой борде отключена. Используй варианты "Открыть" или "Перетащить".';
+                        }
+
                         // Count remaining files.
                         if (count(scandir($dir3)) >= KU_XHRLOADLIMIT) {
                             return 'Уже загружено много файлов. Подожди несколько минут.';
