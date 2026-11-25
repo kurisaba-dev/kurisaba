@@ -3454,7 +3454,7 @@ var Settings = {
     nokoEnabled: function(changed) {
         var enabled = Settings._checkbox(changed, 'nokoEnabled', false);
         if (typeof(is_menu_frame) === 'undefined') {
-            if (changed != null) {
+            if (changed != null && document.querySelector('#gotothread') != null) {
                 if(enabled) {
                     document.querySelector('#gotothread').name = 'redirecttothread';
                     document.querySelector('#gotothread_fixed').name = 'redirecttothread_inactive';
