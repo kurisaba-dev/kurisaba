@@ -76,7 +76,7 @@
 			<tbody>
 				<tr>
 					<td>
-						{if $modifier neq 'first100'}
+						{if $modifier neq 'first100' and $modifier neq 'search'}
 							<div style="float:left">
 								<div id="newposts_get">
 									<a href="#" onclick="return getnewposts()"><img src="{%KU_WEBPATH}/static/images/blank.gif" border="0" class="getnewposts spritebtn" alt="refresh"> Получить новые посты (если есть)</a> <span id="newposts_seconds" style="display: none;">(off)</span>

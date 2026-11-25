@@ -167,6 +167,9 @@ foreach ($results as $key => $post) {
 
 $board_class->dwoo_data->assign('posts', $all ? $newposts : $results);
 $board_class->dwoo_data->assign('forceexternalboard', true);
+if (isset($_GET['v']) || isset($_GET['n']) || isset($_GET['r'])) {
+    $board_class->dwoo_data->assign('modifier', "search");
+}
 
 $page .= $board_class->dwoo->get(KU_TEMPLATEDIR . ($all ? '/img_board_page.tpl' : '/img_thread.tpl'), $board_class->dwoo_data);
 
