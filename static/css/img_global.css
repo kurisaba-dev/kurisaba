@@ -471,6 +471,15 @@ object.latex {
     display: block;
 }
 
+.transcribed {
+    display: flex;
+    border: 1px dotted #202020;
+    background: #ffffff80;
+    padding: 8px;
+    border-radius: 5px;
+    font-size: smaller;
+}
+
 /*.replies table, .replies table tbody {
 	display: block;
 }*/
