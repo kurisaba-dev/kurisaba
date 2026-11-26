@@ -1598,12 +1598,18 @@ function js_send_postbox() {
 
     if (!ku_uploadlinks && ku_corsproxy != "disabled" && form.attach_type.value == "link" && !form.embedlink.value.startsWith('>>')) {
         $('#attachdrop_tr').show();
-        $('#dropZone').html('<span style="display: flex; align-items: center; width: 100%;"><img src="/static/images/loading.gif?v=' + ku_js_css_ver + '">Загружаем файл...</span>');
+        $('#dropZone').removeClass('error');
+        $('#dropZone').html('<span style="display: flex; align-items: center; width: 100%;"><img src="/static/images/loading.gif?v=' + ku_js_css_ver + '"><span class="msg">Загружаем файл...</span></span>');
         fetch(ku_corsproxy + form.embedlink.value).then(response => {
-            if (!response.ok) {
-                throw(String(response.status) + " " + response.statusText);
-            }
-            return response.blob();
+            if(response.status != 403) return response;
+
+            // Some websites, like Danbooru, has Cloudflare sorce IPs banned.
+            // Try to fetch again, but without proxy (such websites usually have "Access-Control-Allow-Origin: *")
+            $('#dropZone .msg').text("Загружаем файл без CORS-прокси...");
+            return fetch(form.embedlink.value);
+        }).then(response => {
+            if (response.ok) return response.blob();
+            throw(String(response.status) + " " + response.statusText);
         }).then(file => {
             if(file) {
                 $('#dropZone').text("Загрузка завершена.");
