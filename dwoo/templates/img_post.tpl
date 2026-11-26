@@ -21,6 +21,9 @@
 							{t}File{/t}
 						{/if}
 						<a
+							{if $post.transcribable}
+								class="transcribable"
+							{/if}
 							{if %KU_NEWWINDOW}
 								target="_blank"
 							{/if}

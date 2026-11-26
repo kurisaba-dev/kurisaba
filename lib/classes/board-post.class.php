@@ -428,6 +428,10 @@ class Board
             }
         }
 
+        // Transcribable indicator
+        require_once KU_ENGINEDIR . 'lib/classes/speechflow.io.class.php';
+        $post['transcribable'] = !empty($post['file_type']) && in_array($post['file_type'], SpeechflowIO::supportedFormats());
+
         // (You) indicator in head
         $post['youindicator'] = '';
         if (md5(KU_REMOTE_ADDR) == $post['ipmd5']) {
