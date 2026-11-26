@@ -343,6 +343,10 @@ pre {
     background-position: 0px -16px;
 }
 
+.transcript {
+    background-position: -48px -80px;
+}
+
 .spritebtn {
     background-color: #7f7f7f;
     background-image: url('/static/images/white.gif?v=1');
