@@ -170,7 +170,7 @@ if ($operation_delete) { // currently `noreturn`.
             if ($_POST['postpassword'] != '' || $ismod) {
                 if (md5($_POST['postpassword']) == $post_class->post['password'] || $ismod) {
                     if (isset($_POST['fileonly'])) {
-                        if ($post_class->post['file'] != '' && $post_class->post['file'] != 'removed') {
+                        if ($post_class->post['file'] != '' && !fileRemoved($post_class->post['file'])) {
                             $post_class->DeleteFile();
                             $success = _gettext('Image successfully deleted from your post.');
                         } else {

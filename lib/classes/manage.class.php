@@ -2878,9 +2878,9 @@ class Manage
                             if (isset($_POST['fileonly'])) {
                                 foreach ($results as $line) {
                                     if (!empty($line['file'])) {
-                                        if (!$line['file'] != 'removed') {
+                                        if (!fileRemoved($line['file'])) {
                                             delete_file_wrapper($_POST['boarddir'], $line['file'], $line['file_type']);
-                                            $tc_db->Execute("UPDATE `".KU_DBPREFIX."posts` SET `file` = 'removed', `file_md5` = '' WHERE `boardid` = " . $board_id . " AND `id` = ".$_POST['delpostid']." LIMIT 1");
+                                            $tc_db->Execute("UPDATE `".KU_DBPREFIX."posts` SET `file` = 'removed:".$line['file']."' WHERE `boardid` = " . $board_id . " AND `id` = ".$_POST['delpostid']." LIMIT 1");
                                             $tpl_page .= '<hr />File successfully deleted<hr />';
 
                                             $delpost_id = $line['id'];
@@ -3017,7 +3017,7 @@ class Manage
                             $post_threadorpost = 'post';
                         }
                         $tpl_page .= '.html#'. $linereport['postid'] . '">'. $line['id'] . '</a></td><td>';
-                        if ($line['file'] == 'removed') {
+                        if (fileRemoved($line['file'])) {
                             $tpl_page .= 'removed';
                         } elseif ($line['file'] == '') {
                             $tpl_page .= 'none';

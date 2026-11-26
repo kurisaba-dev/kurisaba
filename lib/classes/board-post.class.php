@@ -241,7 +241,7 @@ class Board
                 $catalog_page .= '>';
                 if ($line['file'] == '') {
                     $catalog_page .= 'Файла нет</a><br />';
-                } elseif ($line['file'] == 'removed') {
+                } elseif (fileRemoved($line['file'])) {
                     $catalog_page .= 'Фейл удалён</a><br />';
                 } else {
                     if ($line['file_type'] == 'jpg' || $line['file_type'] == 'png' || $line['file_type'] == 'webp' || $line['file_type'] == 'gif') {
@@ -427,6 +427,9 @@ class Board
                 $post['file'] = '';
             }
         }
+
+
+        if(fileRemoved($post['file'])) $post['file'] = 'removed';
 
         // Transcribable indicator
         require_once KU_ENGINEDIR . 'lib/classes/speechflow.io.class.php';
@@ -882,11 +885,11 @@ class Post extends Board
             $results = $tc_db->GetAll("SELECT `id`, `file`, `file_type` FROM `".KU_DBPREFIX."posts` WHERE `boardid` = " . $this->board['id'] . " AND `IS_DELETED` = 0 AND `parentid` = ".$tc_db->qstr($this->post['id']));
             if (count($results) > 0) {
                 foreach ($results as $line) {
-                    if ($line['file'] != '' && $line['file'] != 'removed') {
+                    if ($line['file'] != '' && !fileRemoved($line['file'])) {
                         if (!$skip_delete) {
                             delete_file_wrapper($this->board['name'], $line['file'], $line['file_type']);
                             if ($update_to_removed) {
-                                $tc_db->Execute("UPDATE `".KU_DBPREFIX."posts` SET `file` = 'removed', `file_md5` = '' WHERE `boardid` = '" . $this->board['id'] . "' AND `id` = ".$line['id']);
+                                $tc_db->Execute("UPDATE `".KU_DBPREFIX."posts` SET `file` = 'removed:".$line['file']."' WHERE `boardid` = '" . $this->board['id'] . "' AND `id` = ".$line['id']);
                                 clearPostCache($line['id'], $this->board['name']);
                             }
                         }
@@ -895,7 +898,7 @@ class Post extends Board
             }
             $this->DeleteFile($update_to_removed, false, $save_picture, $skip_delete);
         } else {
-            if ($this->post['file'] != '' && $this->post['file'] != 'removed') {
+            if ($this->post['file'] != '' && !fileRemoved($this->post['file'])) {
                 if ($save_picture) {
                     @copy(
                         KU_STORAGEDIR.$this->board['name'].'/src/'.$this->post['file'].'.'.$this->post['file_type'],
@@ -905,7 +908,7 @@ class Post extends Board
                 if (!$skip_delete) {
                     delete_file_wrapper($this->board['name'], $this->post['file'], $line['file_type']);
                     if ($update_to_removed) {
-                        $tc_db->Execute("UPDATE `".KU_DBPREFIX."posts` SET `file` = 'removed', `file_md5` = '' WHERE `boardid` = '" . $this->board['id'] . "' AND `id` = ".$tc_db->qstr($this->post['id']));
+                        $tc_db->Execute("UPDATE `".KU_DBPREFIX."posts` SET `file` = 'removed:".$this->post['file']."' WHERE `boardid` = '" . $this->board['id'] . "' AND `id` = ".$tc_db->qstr($this->post['id']));
                         clearPostCache($this->post['id'], $this->board['name']);
                     }
                 }

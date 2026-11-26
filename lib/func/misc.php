@@ -444,6 +444,11 @@ function exitWithErrorPage($errormsg, $extended = '', $posttext = '', $template 
     die();
 }
 
+function fileRemoved($file)
+{
+    return strpos($file, 'removed') === 0;
+}
+
 function AnswerMapPerformAddition($query)
 {
     global $tc_db;
