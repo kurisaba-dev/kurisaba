@@ -1943,6 +1943,78 @@ class Manage
         }
     }
 
+    public function transcript()
+    {
+        global $tc_db;
+
+        if (!isset($_GET['board']) || !isset($_GET['id'])) {
+            http_response_code(400);
+            exitWithErrorPage(_gettext('Specify board and post id.'));
+        }
+
+        http_response_code(403);
+        $this->ModeratorsOnly();
+        if (!Manage::CurrentUserIsModeratorOfBoard($_GET['board'])) {
+            exitWithErrorPage(_gettext('You are not a moderator of this board.'));
+        }
+
+        if (empty(KU_SPEECHFLOW_KEY_ID) || empty(KU_SPEECHFLOW_SECRET)) {
+            http_response_code(405);
+            exitWithErrorPage(_gettext("Transcribing in unavailable on this site."));
+        }
+
+        $posts = $tc_db->GetAll("SELECT `boardid`, `file`, `file_type`, `message` FROM `" . KU_DBPREFIX . "posts` as P LEFT JOIN `" . KU_DBPREFIX . "boards` AS B ON P.boardid = B.id WHERE B.name = " . $tc_db->qstr($_GET['board']) . " AND P.id = " . $tc_db->qstr($_GET['id']));
+        if (count($posts) < 1) {
+            http_response_code(415);
+            exitWithErrorPage(_gettext("No such post."));
+        }
+
+        require_once KU_ENGINEDIR . 'lib/classes/speechflow.io.class.php';
+
+        if (!in_array($posts[0]['file_type'], SpeechflowIO::supportedFormats()))
+        {
+            exitWithErrorPage(_gettext("Unsupported file format."));
+        }
+
+        $file = KU_BOARDSPATH . '/' . $_GET['board'] . '/src/' . $posts[0]['file'] . '.' . $posts[0]['file_type'];
+        $transcriber = new SpeechflowIO(KU_SPEECHFLOW_KEY_ID, KU_SPEECHFLOW_SECRET, $file, KU_SPEECHFLOW_LANG);
+
+        $task = $transcriber->create();
+
+        if($task[0] == "")
+        {
+            if($task[1] == "create request failed")
+            {
+                http_response_code(intval($task[2]));
+                exitWithErrorPage($task[1]);
+            }
+            else
+            {
+                http_response_code(422);
+                exitWithErrorPage($task[1], $task[2]);
+            }
+        }
+
+        $result = $transcriber->query($task[0]);
+
+        if($result[0] == "query request failed")
+        {
+            http_response_code(intval($result[1]));
+            exitWithErrorPage($result[0]);
+        }
+        if($result[0] == "transcription error")
+        {
+            http_response_code(422);
+            exitWithErrorPage($result[0], $result[1]);
+        }
+
+        http_response_code(200);
+        $transcribed_msg = '<br /><span class="transcribed">' . $result[1] . '</span>';
+        $tc_db->Execute("UPDATE `".KU_DBPREFIX."posts` SET `message` = ".$tc_db->qstr($posts[0]['message'] . $transcribed_msg)." WHERE `boardid` = " . $tc_db->qstr($posts[0]['boardid']) . " AND `id` = ".$tc_db->qstr($_GET['id']));
+
+        die(_gettext("Ok"));
+    }
+
     public function editfiletypes()
     {
         global $tc_db, $tpl_page;

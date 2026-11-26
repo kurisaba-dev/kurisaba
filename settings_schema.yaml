@@ -57,7 +57,7 @@ config:
         type: string
 
   - locale:
-    name: 'Локаль и время'
+    name: 'Локаль, время, транскрипция голоса'
     options:
       KU_SUPPORTED_LOCALES:
         default: 'ru|en'
@@ -86,6 +86,18 @@ config:
       KU_DATEFORMAT:
         default: 'D Y M d H:i:s'
         comment: 'Формат даты в постах (например, "d/m/y(D)H:i").'
+        type: string
+      KU_SPEECHFLOW_KEY_ID:
+        default: ''
+        comment: 'Ключ API (KeyId) от speechflow.io для транскрипции голосовых сообщений. Если пусто, транскрипция недоступна.'
+        type: string
+      KU_SPEECHFLOW_SECRET:
+        default: ''
+        comment: 'Секрет API (KeySecret) от speechflow.io для транскрипции голосовых сообщений. Если пусто, транскрипция недоступна.'
+        type: string
+      KU_SPEECHFLOW_LANG:
+        default: 'ru'
+        comment: 'Язык транскрибируемых голосовых сообщений (<a href="https://docs.speechflow.io/#/?id=ap-lang-list">список<a>).'
         type: string
 
   - features:
