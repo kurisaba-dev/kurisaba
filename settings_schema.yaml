@@ -43,9 +43,17 @@ config:
   - proxy:
     name: 'Проксирование загрузок'
     options:
+      KU_UPLOADLINKS:
+        default: true
+        comment: 'Разрешать ли загрузку файлов по ссылке серверной частью. Внимание: возможная дыра в безопасности, более подробно см. <a href="https://github.com/kurisaba-dev/kurisaba/pull/105">здесь</a>.'
+        type: bool
       KU_CURL_PROXY:
         default: 'none'
         comment: 'Прокси для загрузки файлов по ссылке. "none" - не использовать; "interface:ifname" (например, "interface:tun0") - скачивать файлы через указанный сетевой интерфейс; "vpnbook" - использовать VPNBook; "schema://user:pass@host:port" (например, "socks5h://me:mypassword@proxy.example.com:1080") - использовать указанный прокси. '
+        type: string
+      KU_CORSPROXY:
+        default: 'disabled'
+        comment: 'Разрешать ли загрузку файлов клиентской частью по ссылке, если запрещена загрузка серверной частью. "disabled" запрещает такую загрузку вообще, пустая строка загружает напрямую (это будет возможно только с ресурсов, которые отдают "Access-Control-Allow-Origin: *"), любая другая строка задаёт начальную часть URL CORS-прокси. Более подробно о настройке <a href="https://github.com/kurisaba-dev/kurisaba/blob/master/README.md#cors-прокси">здесь</a>.'
         type: string
 
   - locale:
@@ -98,10 +106,6 @@ config:
       KU_SAVEIP:
         default: true
         comment: 'Сохранять ли IP постов. Если отключить, то будут сохраняться только MD5, а в качестве IP будет использоваться 0.0.0.0. Баны через .htaccess будут невозможны.'
-        type: bool
-      KU_UPLOADLINKS:
-        default: true
-        comment: 'Разрешать ли загрузку файлов по ссылке. Внимание: возможная дыра в безопасности, более подробно см. <a href="https://github.com/kurisaba-dev/kurisaba/pull/105">здесь</a>.'
         type: bool
       KU_EXPAND:
         default: true

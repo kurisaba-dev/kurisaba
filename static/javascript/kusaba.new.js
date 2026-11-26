@@ -1596,12 +1596,46 @@ function js_send_postbox() {
         }
     }
 
+    if (!ku_uploadlinks && ku_corsproxy != "disabled" && form.attach_type.value == "link" && !form.embedlink.value.startsWith('>>')) {
+        $('#attachdrop_tr').show();
+        $('#dropZone').html('<span style="display: flex; align-items: center; width: 100%;"><img src="/static/images/loading.gif?v=' + ku_js_css_ver + '">Загружаем файл...</span>');
+        fetch(ku_corsproxy + form.embedlink.value).then(response => {
+            if (!response.ok) {
+                throw(String(response.status) + " " + response.statusText);
+            }
+            return response.blob();
+        }).then(file => {
+            if(file) {
+                $('#dropZone').text("Загрузка завершена.");
+                if(handleDropZoneFile(file))
+                {
+                    formData.delete("imagefile");
+                    formData.append("imagefile", window.dropZoneFile);
+                    formData.delete("attach_type");
+                    formData.append("attach_type", "file");
+                    continueSending(board_to_send, formData);
+                } else {
+                    popupMessageTexted("Ошибка при загрузке файла по ссылке:", $('#dropZone').text());
+                }
+            }
+        }).catch(error => {
+            $('#dropZone').addClass('error');
+            $('#dropZone').text(error);
+            popupMessageTexted("Ошибка при загрузке файла по ссылке:", error);
+        });
+    } else {
+        continueSending(board_to_send, formData);
+    }
+    return false;
+}
+
+function continueSending(board_to_send, formData)
+{
     autoRefreshTmpPrevent();
 
     var xhr = new XMLHttpRequest();
     xhr.open("POST", ku_webpath + "/board.php");
     popupMessageWithLoading('Отправляем пост...');
-    xhr.send(formData);
     window.is_sending = true;
     xhr.onreadystatechange = function() {
         if (xhr.readyState != 4)
@@ -1656,6 +1690,8 @@ function js_send_postbox() {
             window.location.reload();
         }
     };
+
+    xhr.send(formData);
 
     return false;
 }
@@ -2903,7 +2939,7 @@ function handleDropZoneFile(blob) {
     if (blob.size > maxFileSize) {
         $('#dropZone').addClass('error');
         $('#dropZone').text('Картинка слишком большая!');
-        return;
+        return false;
     }
     window.dropZoneFile = blob;
     dropZoneFileSetPreview();
@@ -2911,6 +2947,7 @@ function handleDropZoneFile(blob) {
     form.elements['attach_type'][1].click();
     $('#dropZone').addClass('drop');
     $('#dropZone').removeClass('error');
+    return true;
 }
 
 function handleDropZoneFileURL(url) {

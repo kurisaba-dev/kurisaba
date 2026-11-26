@@ -17,6 +17,8 @@
 <script type="text/javascript">
 	var ku_webpath = '{%KU_WEBPATH}';
 	var ku_boardspath = '{%KU_BOARDSPATH}';
+	var ku_uploadlinks = '{%KU_UPLOADLINKS}';
+	var ku_corsproxy = '{%KU_CORSPROXY}';
 	var ku_defaultboard = '{%KU_DEFAULTBOARD}';
 	var ku_js_css_ver = {%KU_JS_CSS_VER};
 	var ku_captchaenabled = '{%KU_CAPTCHAENABLED}';
