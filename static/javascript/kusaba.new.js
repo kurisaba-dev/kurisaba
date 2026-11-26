@@ -753,6 +753,12 @@ var Styles = {
 Styles.init();
 document.addEventListener("load", Styles.onload);
 
+function confirmWithMsg(prompt, message) {
+    doit = confirm(prompt);
+    if(doit) popupMessageWithLoading(message);
+    return doit;
+}
+
 function delandbanlinks($scope) {
     if (!kumod_set) return;
     $scope.find('span[id^=dnb]').each(function(index, element) {
@@ -772,7 +778,7 @@ function delandbanlinks($scope) {
         newhtml += '<a href="' + ku_webpath + '/manage_page.php?action=bans&banboard=' + boardname + '&banpost=' + postid + '" title="' + _.ban + '" onclick="return confirm(\'' + _.ban + '?\');"><img src="' + ku_webpath + '/static/images/blank.gif?v=' + ku_js_css_ver + '" class="ban spritebtn sb-c"><\/a>';
         newhtml += '<a href="' + ku_webpath + '/manage_page.php?action=sagepost&quick=1&board=' + boardname + '&id=' + postid + '" title="' + _.sage + '" onclick="return confirm(\'' + _.sage + '?\');"><img src="' + ku_webpath + '/static/images/blank.gif?v=' + ku_js_css_ver + '" class="downscroll spritebtn sb-c"><\/a>';
         if(element.parentElement.querySelectorAll('.transcribed').length == 0 && element.parentElement.querySelectorAll('.transcribable').length != 0) {
-            newhtml += '<a href="' + ku_webpath + '/manage_page.php?action=transcript&board=' + boardname + '&id=' + postid + '" title="' + _.transcript + '" onclick="return confirm(\'' + _.transcript + '?\');"><img src="' + ku_webpath + '/static/images/blank.gif?v=' + ku_js_css_ver + '" class="transcript spritebtn sb-c"><\/a>';
+            newhtml += '<a href="' + ku_webpath + '/manage_page.php?action=transcript&board=' + boardname + '&id=' + postid + '" title="' + _.transcript + '" onclick="return confirmWithMsg(\'' + _.transcript + '?\', \'Транскрибируем сообщение...\');"><img src="' + ku_webpath + '/static/images/blank.gif?v=' + ku_js_css_ver + '" class="transcript spritebtn sb-c"><\/a>';
         }
         newhtml += '<a href="' + ku_webpath + '/manage_page.php?action=delposts&fileonly=1&boarddir=' + boardname + '&delpostid=' + postid + '" title="' + _.deletefile + '" onclick="return confirm(\'' + _.deletePostFile + '?\');"><img src="' + ku_webpath + '/static/images/blank.gif?v=' + ku_js_css_ver + '" class="deletefile spritebtn sb-c"><\/a>';
         newhtml += '<a href="' + ku_webpath + '/manage_page.php?action=delposts&fileonly=1&do_ban=true&boarddir=' + boardname + '&delpostid=' + postid + '" title="' + _.delandbanfile + '" onclick="return confirm(\'' + _.deleteAndBanFile + '?\');"><img src="' + ku_webpath + '/static/images/blank.gif?v=' + ku_js_css_ver + '" class="dandbfile spritebtn sb-c"><\/a>';
