@@ -846,7 +846,7 @@ class Post extends Board
             $tc_db->Execute("UPDATE `".KU_DBPREFIX."posts` SET `IS_DELETED` = 1 , `deleted_timestamp` = '" . (time() + KU_ADDTIME) . "' WHERE `boardid` = '" . $this->board['id'] . "' AND `id` = ".$tc_db->qstr($this->post['id']));
 
             // Unbump thread after deletion
-            RebumpThread($this->post['parentid']);
+            $this->RebumpThread($this->post['parentid']);
 
             clearPostCache($this->post['id'], $this->board['name']);
             AnswerMapDelete($this->post['id'], $this->board['id']);
