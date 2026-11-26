@@ -1945,7 +1945,7 @@ class Manage
 
     public function transcript()
     {
-        global $tc_db;
+        global $tc_db, $tpl_page;
 
         if (!isset($_GET['board']) || !isset($_GET['id'])) {
             http_response_code(400);
@@ -2009,10 +2009,13 @@ class Manage
         }
 
         http_response_code(200);
+        if (empty($result[1])) $result[1] = _gettext("Unable to hear any text.");
         $transcribed_msg = '<br /><span class="transcribed">' . $result[1] . '</span>';
         $tc_db->Execute("UPDATE `".KU_DBPREFIX."posts` SET `message` = ".$tc_db->qstr($posts[0]['message'] . $transcribed_msg)." WHERE `boardid` = " . $tc_db->qstr($posts[0]['boardid']) . " AND `id` = ".$tc_db->qstr($_GET['id']));
 
-        die(_gettext("Ok"));
+        $tpl_page .= '<h2>'. _gettext('Transcribe a post') . '</h2><br />'. "\n";
+        $tpl_page .=  _gettext('Post') . ' /' . $_GET['board'] . '/' . $_GET['id'] . ' ' . _gettext('successfully transcribed') . '.';
+        $tpl_page .= '<br /><br /><meta http-equiv="refresh" content="1;url=' . $_SERVER['HTTP_REFERER'] . '"><a href="' . $_SERVER['HTTP_REFERER'] . '">' . _gettext('Redirecting') . '</a> ' . _gettext('back') . '...';
     }
 
     public function editfiletypes()

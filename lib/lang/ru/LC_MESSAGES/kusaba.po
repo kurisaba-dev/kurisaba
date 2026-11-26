@@ -2043,3 +2043,6 @@ msgstr "У тебя нет модерируемых досок."
 
 msgid "Loading your feed..."
 msgstr "Загрузка однопотока..."
+
+msgid "Unable to hear any text."
+msgstr "Не удалось разобрать текст."
