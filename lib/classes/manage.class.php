@@ -2897,15 +2897,13 @@ class Manage
                     $_POST['fileonly'] = $_GET['fileonly'];
                 }
             }
-            $results = $tc_db->GetAll("SELECT HIGH_PRIORITY * FROM `" . KU_DBPREFIX . "boards` WHERE `name` = " . $tc_db->qstr($_POST['boarddir']) . "");
+            $results = $tc_db->GetAll("SELECT HIGH_PRIORITY * FROM `" . KU_DBPREFIX . "boards` WHERE `name` = " . $tc_db->qstr($_POST['boarddir']));
             if (count($results) > 0) {
                 if (!Manage::CurrentUserIsModeratorOfBoard($_POST['boarddir'])) {
                     exitWithErrorPage(_gettext('You are not a moderator of this board.'));
                 }
-                foreach ($results as $line) {
-                    $board_id = $line['id'];
-                    $board_dir = $line['name'];
-                }
+                $board_id = $results[0]['id'];
+                $board_dir = $results[0]['name'];
                 if (isset($_GET['cp'])) {
                     $cp = '&amp;cp=y&amp;instant=y';
                 }
@@ -2915,72 +2913,54 @@ class Manage
                         $results = $tc_db->GetAll("SELECT HIGH_PRIORITY * FROM `" . KU_DBPREFIX . "posts` WHERE `boardid` = " . $board_id . " AND `IS_DELETED` = '0' AND `id` = " . $tc_db->qstr($_POST['delpostid']) . "");
                         if (count($results) > 0) {
                             if (isset($_POST['fileonly'])) {
-                                foreach ($results as $line) {
-                                    if (!empty($line['file'])) {
-                                        if (!fileRemoved($line['file'])) {
-                                            delete_file_wrapper($_POST['boarddir'], $line['file'], $line['file_type']);
-                                            $tc_db->Execute("UPDATE `".KU_DBPREFIX."posts` SET `file` = 'removed:".$line['file']."' WHERE `boardid` = " . $board_id . " AND `id` = ".$_POST['delpostid']." LIMIT 1");
-                                            $tpl_page .= '<hr />File successfully deleted<hr />';
-
-                                            $delpost_id = $line['id'];
-                                            $delpost_parentid = $line['parentid'];
-
-                                            if ($delpost_parentid == 0) {
-                                                management_addlogentry('Удалён файл из ОП-поста треда' . ' #<a href="?action=viewthread&thread='. $delpost_id . '&board='. $_POST['boarddir'] . '#'. $delpost_id . '">'. $delpost_id . '</a> - /'. $board_dir . '/', 7, '', _gettext('File') . ' <a href="' . KU_BOARDSPATH . '/' . $_POST['boarddir'] . '/src/' . $line['file'] . '.' . $line['file_type'] . '">' . KU_BOARDSPATH . '/' . $_POST['boarddir'] . '/src/' . $line['file'] . '.' . $line['file_type'] . '</a> ' . _gettext('that was attached to OP of thread') . ' &gt;&gt;' . create_logentry_link($board_dir, $delpost_id, $delpost_id) . ' '. _gettext('was removed'));
-                                            } else {
-                                                management_addlogentry('Удалён файл из поста' . ' #<a href="?action=viewthread&thread='. $delpost_parentid . '&board='. $_POST['boarddir'] . '#'. $delpost_id . '">'. $delpost_id . '</a> - /'. $board_dir . '/', 7, '', _gettext('File') . ' <a href="' . KU_BOARDSPATH . '/' . $_POST['boarddir'] . '/src/' . $line['file'] . '.' . $line['file_type'] . '">' . KU_BOARDSPATH . '/' . $_POST['boarddir'] . '/src/' . $line['file'] . '.' . $line['file_type'] . '</a> ' . _gettext('that was attached to reply') . ' &gt;&gt;' . create_logentry_link($board_dir, $delpost_parentid, $delpost_id) . ' '. _gettext('was removed'));
-                                            }
-
-                                        } else {
-                                            $tpl_page .= '<hr />That file has already been deleted.<hr />';
-                                        }
+                                $file = $results[0]['file'];
+                                $file_type = $results[0]['file_type'];
+                                $delpost_id = $results[0]['id'];
+                                $delpost_parentid = $results[0]['parentid'];
+                                $delpost_threadid = ($delpost_parentid != 0 ? $delpost_parentid : $delpost_id);
+                                if (!empty($file)) {
+                                    if (!fileRemoved($file)) {
+                                        delete_file_wrapper($board_dir, $file, $file_type);
+                                        $tc_db->Execute("UPDATE `" . KU_DBPREFIX . "posts` SET `file` = 'removed:" . $file . "' WHERE `boardid` = " . $board_id . " AND `id` = " . $delpost_id . " LIMIT 1");
+                                        $tpl_page .= '<hr />File successfully deleted<hr />';
+                                        management_addlogentry('Удалён файл из поста' . ' #<a href="?action=viewthread&thread='. $delpost_threadid . '&board='. $board_dir . '#'. $delpost_id . '">'. $delpost_id . '</a> - /'. $board_dir . '/', 7, '', _gettext('File') . ' <a href="' . KU_BOARDSPATH . '/' . $board_dir . '/src/' . $file . '.' . $file_type . '">' . $file . '.' . $file_type . '</a> ' . _gettext('that was attached to') . ' &gt;&gt;' . create_logentry_link($board_dir, $delpost_threadid, $delpost_id) . ' '. _gettext('was removed'));
                                     } else {
-                                        $tpl_page .= '<hr />Error: That thread doesn\'t have a file associated with it.<hr />';
+                                        $tpl_page .= '<hr />That file has already been deleted.<hr />';
                                     }
-
-                                    if (isset($_GET['do_ban'])) {
-                                        $tpl_page .= '<br /><br /><meta http-equiv="refresh" content="1;url='. KU_WEBPATH . '/manage_page.php?action=bans&ban_img_by_post=true&banboard='. $_GET['boarddir'] . '&banpost='. $_POST['delpostid'] .'"><a href="'. KU_WEBPATH . '/manage_page.php?action=bans&ban_img_by_post=true&banboard='. $_GET['boarddir'] . '&banpost='. $_POST['delpostid'] . '">'. _gettext('Redirecting') . '</a> to ban page...';
-                                    } elseif ($isquickdel && !isset($_GET['noreturn'])) {
-                                        if ($delpost_parentid > 0) {
-                                            $tpl_page .= '<br /><br /><meta http-equiv="refresh" content="1;url='. KU_BOARDSPATH . '/'. $_GET['boarddir'] . '/res/'. $delpost_parentid . '.html"><a href="'. KU_BOARDSPATH . '/'. $_GET['boarddir'] . '/res/'. $delpost_parentid . '.html">'. _gettext('Redirecting') . '</a> back to thread...';
-                                        } else {
-                                            $tpl_page .= '<br /><br /><meta http-equiv="refresh" content="1;url='. KU_BOARDSPATH . '/'. $_GET['boarddir'] . '"><a href="'. KU_BOARDSPATH . '/'. $_GET['boarddir'] . '">'. _gettext('Redirecting') . '</a> back to board...';
-                                        }
+                                } else {
+                                    $tpl_page .= '<hr />Error: That thread doesn\'t have a file associated with it.<hr />';
+                                }
+                                if (isset($_GET['do_ban'])) {
+                                    $tpl_page .= '<br /><br /><meta http-equiv="refresh" content="1;url='. KU_WEBPATH . '/manage_page.php?action=bans&ban_img_by_post=true&banboard='. $board_dir . '&banpost=' . $delpost_id . '"><a href="' . KU_WEBPATH . '/manage_page.php?action=bans&ban_img_by_post=true&banboard=' . $board_dir . '&banpost=' . $delpost_id . '">'. _gettext('Redirecting') . '</a> ' . _gettext('to ban page') . '...';
+                                } elseif ($isquickdel && !isset($_GET['noreturn'])) {
+                                    if ($delpost_parentid > 0) {
+                                        $tpl_page .= '<br /><br /><meta http-equiv="refresh" content="1;url='. KU_BOARDSPATH . '/' . $board_dir . '/res/' . $delpost_parentid . '.html"><a href="' . KU_BOARDSPATH . '/' . $board_dir . '/res/' . $delpost_parentid . '.html">'. _gettext('Redirecting') . '</a> ' . _gettext('back to thread') . '...';
+                                    } else {
+                                        $tpl_page .= '<br /><br /><meta http-equiv="refresh" content="1;url='. KU_BOARDSPATH . '/' . $board_dir . '"><a href="' . KU_BOARDSPATH . '/' . $board_dir . '">' . _gettext('Redirecting') . '</a> ' . _gettext('back to board') . '...';
                                     }
                                 }
                             } else {
-                                foreach ($results as $line) {
-                                    $delpost_id = $line['id'];
-                                    $delpost_parentid = $line['parentid'];
-                                }
+                                $delpost_id = $results[0]['id'];
+                                $delpost_parentid = $results[0]['parentid'];
+                                $delpost_threadid = ($delpost_parentid != 0 ? $delpost_parentid : $delpost_id);
                                 $post_class = new Post($delpost_id, $board_dir, $board_id);
                                 $result = $post_class->Delete();
                                 unset($post_class);
                                 if ($result === true) {
-                                    if ($delpost_parentid == 0) {
-                                        $tpl_page .= 'Тред '.$delpost_id.' успешно удалён.';
-                                    } else {
-                                        $tpl_page .= 'Пост '.$delpost_id.' успешно удалён.';
-                                    }
-
-                                    if ($delpost_parentid == 0) {
-                                        management_addlogentry('Удалён тред' . ' #<a href="?action=viewthread&thread='. $delpost_id . '&board='. $_POST['boarddir'] . '#'. $delpost_id . '">'. $delpost_id . '</a> - /'. $board_dir . '/', 7, '', _gettext('Thread') . ' &gt;&gt;' . create_logentry_link($board_dir, $delpost_id, $delpost_id) . ' '. _gettext('was removed'));
-                                    } else {
-                                        management_addlogentry('Удалён пост' . ' #<a href="?action=viewthread&thread='. $delpost_parentid . '&board='. $_POST['boarddir'] . '#'. $delpost_id . '">'. $delpost_id . '</a> - /'. $board_dir . '/', 7, '', _gettext('Post') . ' &gt;&gt;' . create_logentry_link($board_dir, $delpost_parentid, $delpost_id) . ' '. _gettext('was removed'));
-                                    }
-
+                                    $what = ($delpost_parentid == 0 ? _gettext("Thread") : _gettext("Post"));
+                                    $tpl_page .= $what . ' /' . $board_dir . '/' . $delpost_id . ' ' . _gettext("successfully deleted") . '.';
+                                    management_addlogentry($what . ' #<a href="?action=viewthread&thread='. $delpost_threadid . '&board='. $board_dir . '#'. $delpost_id . '">'. $delpost_id . '</a> - /'. $board_dir . '/', 7, '', $what . ' &gt;&gt;' . create_logentry_link($board_dir, $delpost_threadid, $delpost_id) . ' '. _gettext('was removed'));
                                 } else {
-                                    $tpl_page = 'Невозможно удалить пост '.$delpost_id.': ' . $result;
+                                    $tpl_page = _gettext("Can't delete post") . ' ' . $delpost_id . ': ' . $result;
                                 }
 
-
                                 if (isset($_GET['do_ban'])) {
-                                    $tpl_page .= '<br /><br /><meta http-equiv="refresh" content="1;url='. KU_WEBPATH . '/manage_page.php?action=bans&banboard='. $_GET['boarddir'] . '&banpost='. $delpost_id .'"><a href="'. KU_WEBPATH . '/manage_page.php?action=bans&banboard='. $_GET['boarddir'] . '&banpost='. $delpost_id . '">'. _gettext('Redirecting') . '</a> to ban page...';
+                                    $tpl_page .= '<br /><br /><meta http-equiv="refresh" content="1;url=' . KU_WEBPATH . '/manage_page.php?action=bans&banboard=' . $board_dir . '&banpost=' . $delpost_id . '"><a href="' . KU_WEBPATH . '/manage_page.php?action=bans&banboard=' . $board_dir . '&banpost=' . $delpost_id . '">' . _gettext('Redirecting') . '</a> ' . _gettext('to ban page') . '...';
                                 } elseif ($isquickdel && !isset($_GET['noreturn'])) {
                                     if ($delpost_parentid > 0) {
-                                        $tpl_page .= '<br /><br /><meta http-equiv="refresh" content="1;url='. KU_BOARDSPATH . '/'. $_GET['boarddir'] . '/res/'. $delpost_parentid . '.html"><a href="'. KU_BOARDSPATH . '/'. $_GET['boarddir'] . '/res/'. $delpost_parentid . '.html">'. _gettext('Redirecting') . '</a> back to thread...';
+                                        $tpl_page .= '<br /><br /><meta http-equiv="refresh" content="1;url=' . KU_BOARDSPATH . '/' . $board_dir . '/res/' . $delpost_parentid . '.html"><a href="' . KU_BOARDSPATH . '/' . $board_dir . '/res/' . $delpost_parentid . '.html">' . _gettext('Redirecting') . '</a> ' . _gettext('back to thread') . '...';
                                     } else {
-                                        $tpl_page .= '<br /><br /><meta http-equiv="refresh" content="1;url='. KU_BOARDSPATH . '/'. $_GET['boarddir'] . '"><a href="'. KU_BOARDSPATH . '/'. $_GET['boarddir'] . '">'. _gettext('Redirecting') . '</a> back to board...';
+                                        $tpl_page .= '<br /><br /><meta http-equiv="refresh" content="1;url=' . KU_BOARDSPATH . '/' . $board_dir . '"><a href="' . KU_BOARDSPATH . '/' . $board_dir . '">' . _gettext('Redirecting') . '</a> ' . _gettext('back to board') . '...';
                                     }
                                 }
                             }
