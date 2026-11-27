@@ -1653,24 +1653,21 @@ class Manage
         $tpl_page .= '<h2>'. _gettext('View Threads (including deleted)') .'</h2>';
         $board = isset($_GET['board']) ? $_GET['board'] : '';
         $thread = isset($_GET['thread']) ? $_GET['thread'] : '';
-        if (!Manage::CurrentUserIsModeratorOfBoard($board)) {
-            exitWithErrorPage(_gettext('You are not a moderator of this board.'));
-        }
         if (!$thread) {
             $thread = "0";
         }
         $tpl_page .= "
-			<style type=\"text/css\">
-			input {
-				display: inline !important;
-				width: auto !important;
-				float: none !important;
-				margin-bottom: 0px !important;
-			}
-			th,td {
-				font-size: 14px !important;
-			}
-			</style>";
+            <style type=\"text/css\">
+                input {
+                    display: inline !important;
+                    width: auto !important;
+                    float: none !important;
+                    margin-bottom: 0px !important;
+                }
+                th,td {
+                    font-size: 14px !important;
+                }
+            </style>";
         if (!$board) {
             $results = $tc_db->GetAll("SELECT HIGH_PRIORITY `name`, `id` FROM `". KU_DBPREFIX . "boards` ORDER BY `name` ASC");
             $tpl_page .= '<form method="get" action=""><input type="hidden" name="action" value="viewthread" />'. _gettext('Select Board') .': <select name="board">';
@@ -1683,17 +1680,19 @@ class Manage
             return;
         }
 
+        if (!Manage::CurrentUserIsModeratorOfBoard($board)) {
+            exitWithErrorPage(_gettext('You are not a moderator of this board.'));
+        }
         $board_id = $tc_db->GetOne("SELECT HIGH_PRIORITY `id` FROM `". KU_DBPREFIX . "boards` WHERE `name` = ".$tc_db->qstr($board));
-        $tpl_page .= "
-			<form method=\"get\" action=\"\">
-			<input type=\"hidden\" name=\"action\" value=\"viewthread\" />
-			<input type=\"hidden\" name=\"board\" value=\"$board\" />";
+        $tpl_page .= "<form method=\"get\" action=\"\"><input type=\"hidden\" name=\"action\" value=\"viewthread\" /><input type=\"hidden\" name=\"board\" value=\"$board\" />";
         if ($thread == "0") {
             $tpl_page .= "<h2>". sprintf(_gettext('All threads on /%s/'), $board) ."</h2>";
-            $results = $tc_db->GetAll("SELECT HIGH_PRIORITY * FROM `" . KU_DBPREFIX . "posts` WHERE `boardid` = $board_id AND (`id` = ".$tc_db->qstr($thread)." OR `parentid` = ".$tc_db->qstr($thread).") ORDER BY `id` DESC");
+            $page = isset($_GET['p']) ? intval($_GET['p']) : 0;
+            $lastpage = calculatelastpagenum($tc_db->GetOne("SELECT HIGH_PRIORITY COUNT(*) FROM `" . KU_DBPREFIX . "posts` WHERE `boardid` = " . $board_id . " AND `parentid` = '0'"));
+            $results = $tc_db->GetAll("SELECT * FROM `" . KU_DBPREFIX . "posts` WHERE `boardid` = " . $board_id . " AND `parentid` = '0' ORDER BY `id` DESC LIMIT " . KU_THREADS . " OFFSET " . (KU_THREADS * $page));
         } else {
             $tpl_page .= "<h2>". sprintf(_gettext('Thread %s on /%s/'), $thread, $board) ."</h2>";
-            $results = $tc_db->GetAll("SELECT HIGH_PRIORITY * FROM `" . KU_DBPREFIX . "posts` WHERE `boardid` = $board_id AND (`id` = ".$tc_db->qstr($thread)." OR `parentid` = ".$tc_db->qstr($thread).") ORDER BY `id` ASC");
+            $results = $tc_db->GetAll("SELECT * FROM `" . KU_DBPREFIX . "posts` WHERE `boardid` = " . $board_id . " AND (`id` = " . $tc_db->qstr($thread) . " OR `parentid` = " . $tc_db->qstr($thread) . ") ORDER BY `id` ASC");
         }
         $time = round(microtime(), 5);
         $first = "1";
@@ -1718,13 +1717,13 @@ class Manage
             $deleted = isset($line['IS_DELETED']) ? $line['IS_DELETED'] : $line['is_deleted'];
             $deleted = $deleted == "1" ? true : false;
             if ($thread == "0") {
-                $view = "<a href=\"?action=viewthread&board=$board&thread=$id\">". _gettext('View') ."</a>";
+                $view = "<a href=\"" . KU_WEBPATH . "/manage_page.php?action=viewthread&board=$board&thread=$id\">". _gettext('View') ."</a>";
                 if ($deleted) {
-                    $view .= "|<a href=\"?action=restorepost&board=$board&id=$id\">". _gettext('Undelete') ."</a>";
+                    $view .= "|<a href=\"" . KU_WEBPATH . "/manage_page.php?action=restorepost&board=$board&id=$id\">". _gettext('Undelete') ."</a>";
                 }
                 $view = '['.$view.']';
             } else {
-                $view = $deleted ? "[<a href=\"?action=restorepost&board=$board&id=$id\">". _gettext('Undelete') ."]</a>" : "";
+                $view = $deleted ? "[<a href=\"" . KU_WEBPATH . "/manage_page.php?action=restorepost&board=$board&id=$id\">". _gettext('Undelete') ."]</a>" : "";
             }
             if ($name == "") {
                 $name = _gettext('Anonymous');
@@ -1748,7 +1747,7 @@ class Manage
                 $deleted = "<font color=green><blink><strong>". _gettext('DELETED') ."</strong></blink></font> - ";
             } else {
                 $deleted = "";
-                $bans = "</td><td width=80px style=\"text-align: right; vertical-align: top;\">[<a href=\"manage_page.php?action=delposts&boarddir=$board&delpostid=$id&noreturn=true\">D</a> <a href=\"manage_page.php?action=delposts&boarddir=$board&delpostid=$id&do_ban=true\">&amp;</a> <a href=\"manage_page.php?action=bans&banboard=$board&banpost=$id\">B</a>]";
+                $bans = "</td><td width=80px style=\"text-align: right; vertical-align: top;\">[<a href=\"" . KU_WEBPATH . "/manage_page.php?action=delposts&boarddir=$board&delpostid=$id&noreturn=true\">D</a> <a href=\"" . KU_WEBPATH . "/manage_page.php?action=delposts&boarddir=$board&delpostid=$id&do_ban=true\">&amp;</a> <a href=\"" . KU_WEBPATH . "/manage_page.php?action=bans&banboard=$board&banpost=$id\">B</a>]";
             }
 
 
@@ -1786,6 +1785,9 @@ class Manage
             }
             $tpl_page .= "<td style=\"vertical-align: top; height: 100%;\">$message</td></tr></tbody></table><br />";
             $first = "0";
+        }
+        if ($thread == "0") {
+            $tpl_page .= "<p>" . createPagination($page, $lastpage, KU_WEBPATH . "/manage_page.php?action=viewthread&board=" . $board, "&p=", "") . "</p>";
         }
         $time2 = round(microtime(), 5);
         $generation = $time2 - $time;
