@@ -134,9 +134,16 @@ if ($posting_class->CheckValidPost()) {
 // STAGE 4. Delete
 
 if ($operation_delete) { // currently `noreturn`.
+    $isfeed = false;
     $ismod = false;
     $backtothread = -1;
     foreach ($delete_post as $val) {
+        if(!is_numeric($val))
+        {
+            $isfeed = true;
+            [ , $board_name, $val] = explode("/", $val);
+            $board_class = new Board($board_name);
+        }
         $post_class = new Post($val, $board_class->board['name'], $board_class->board['id']);
         if ($backtothread != 0) {
             $backtothread = $post_class->post['parentid'];
@@ -203,6 +210,9 @@ if ($operation_delete) { // currently `noreturn`.
                 kurisaba_exit('Пустой пароль.', '', '', '/error.tpl', $board_class->board['name']);
             }
         }
+    }
+    if ($isfeed) {
+        kurisaba_redirect($_SERVER['HTTP_REFERER']);
     }
     if ($backtothread > 0 && $_COOKIE['tothread'] == 'on') {
         if (isset($_POST['plus50'])) {

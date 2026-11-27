@@ -1103,7 +1103,7 @@ function hide_unwanted_posts() {
             }
         } else {
             if (!display) {
-                var p = post.querySelector("input.stchkbox").value;
+                var p = post.querySelector("input.stchkbox").value.split("/").pop();
                 var authorData = nameNodes.map(nameNode => nameNode.innerHTML);
                 post.classList.add("hiddenbyauthor");
                 patch = document.createElement("td");
@@ -1137,7 +1137,7 @@ function hide_unwanted_posts() {
 
             if (hiddenwords_found > 0) {
                 var patch;
-                var p = post.querySelector("input.stchkbox").value;
+                var p = post.querySelector("input.stchkbox").value.split("/").pop();
                 if (document.querySelectorAll('#' + post.id + "_" + b + "hiddenbyword").length == 0) {
                     post.classList.add("hiddenbyword");
                     patch = document.createElement("td");
