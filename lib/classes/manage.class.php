@@ -1685,6 +1685,7 @@ class Manage
             if ($success) {
                 $tpl_page .= '<p>' . $msg . '.</p>';
                 management_addlogentry($msg, 7, '', $msg);
+                $tpl_page .= '<br /><br /><meta http-equiv="refresh" content="1;url=' . $_SERVER['HTTP_REFERER'] . '"><a href="' . $_SERVER['HTTP_REFERER'] . '">' . _gettext('Redirecting') . '</a> ' . _gettext('back') . '...';
             }
         }
     }
