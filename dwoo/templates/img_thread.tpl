@@ -26,7 +26,7 @@
 
 {$is_board_page = 0}
 
-{if not $isexpand and not $isread and not $iscatalog}
+{if ($isfeed and $thispage eq 0 and not $isall) || not $isexpand and not $isread and not $iscatalog}
 	<form id="delform" class="delform-id" action="{%KU_WEBPATH}/board.php" method="post" enctype="multipart/form-data">
 		<input type="hidden" name="board" value="{$board.name}" />
 {/if}
