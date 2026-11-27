@@ -264,8 +264,6 @@ var _messages = {
         tooltip_showyou: "If enabled, posts sent from the current browser or IP address will be marked with a '(You)' label in their header.",
         deletePost: "Delete post",
         deleteAndBan: "Delete post and ban poster",
-        deletePostFile: "Delete file",
-        deleteAndBanFile: "Delete and ban file",
         enterCaptcha: "Please enter captcha.",
         selectText: "Select some text",
         dcls: "Double click to show source",
@@ -276,6 +274,7 @@ var _messages = {
         delandban: "Delete and ban",
         deletefile: "Delete file",
         delandbanfile: "Delete and ban file",
+        recoverfile: "Restore file",
         ban: "Ban",
         banfile: "Ban by file",
         sage: "Sage this post",
@@ -384,8 +383,6 @@ var _messages = {
         tooltip_showyou: "Если включено, то посты, отправленные с этого браузера или с этого IP, будут помечаться пометкой (You) в заголовке.",
         deletePost: "Удалить пост",
         deleteAndBan: "Удалить пост и забанить постера",
-        deletePostFile: "Удалить файл",
-        deleteAndBanFile: "Удалить и забанить файл",
         enterCaptcha: "Пожалуйста, введите капчу.",
         selectText: "Текст не выделен",
         dcls: "Double click to show source",
@@ -397,6 +394,7 @@ var _messages = {
         delandban: "Удалить и забанить",
         deletefile: "Удалить файл",
         delandbanfile: "Удалить и забанить файл",
+        recoverfile: "Восстановить файл",
         ban: "Забанить",
         banfile: "Забанить по файлу",
         sage: "Поставить сажу на этот пост",
@@ -780,8 +778,9 @@ function delandbanlinks($scope) {
         if(element.parentElement.querySelectorAll('.transcribed').length == 0 && element.parentElement.querySelectorAll('.transcribable').length != 0) {
             newhtml += '<a href="' + ku_webpath + '/manage_page.php?action=transcript&board=' + boardname + '&id=' + postid + '" title="' + _.transcript + '" onclick="return confirmWithMsg(\'' + _.transcript + '?\', \'Транскрибируем сообщение...\');"><img src="' + ku_webpath + '/static/images/blank.gif?v=' + ku_js_css_ver + '" class="transcript spritebtn sb-c"><\/a>';
         }
-        newhtml += '<a href="' + ku_webpath + '/manage_page.php?action=delposts&fileonly=1&boarddir=' + boardname + '&delpostid=' + postid + '" title="' + _.deletefile + '" onclick="return confirm(\'' + _.deletePostFile + '?\');"><img src="' + ku_webpath + '/static/images/blank.gif?v=' + ku_js_css_ver + '" class="deletefile spritebtn sb-c"><\/a>';
-        newhtml += '<a href="' + ku_webpath + '/manage_page.php?action=delposts&fileonly=1&do_ban=true&boarddir=' + boardname + '&delpostid=' + postid + '" title="' + _.delandbanfile + '" onclick="return confirm(\'' + _.deleteAndBanFile + '?\');"><img src="' + ku_webpath + '/static/images/blank.gif?v=' + ku_js_css_ver + '" class="dandbfile spritebtn sb-c"><\/a>';
+        newhtml += '<a href="' + ku_webpath + '/manage_page.php?action=delposts&fileonly=1&boarddir=' + boardname + '&delpostid=' + postid + '" title="' + _.deletefile + '" onclick="return confirm(\'' + _.deletefile + '?\');"><img src="' + ku_webpath + '/static/images/blank.gif?v=' + ku_js_css_ver + '" class="deletefile spritebtn sb-c"><\/a>';
+        newhtml += '<a href="' + ku_webpath + '/manage_page.php?action=restorepost&fileonly=1&board=' + boardname + '&id=' + postid + '" title="' + _.recoverfile + '" onclick="return confirm(\'' + _.recoverfile + '?\');"><img src="' + ku_webpath + '/static/images/blank.gif?v=' + ku_js_css_ver + '" class="recover spritebtn sb-c"><\/a>';
+        newhtml += '<a href="' + ku_webpath + '/manage_page.php?action=delposts&fileonly=1&do_ban=true&boarddir=' + boardname + '&delpostid=' + postid + '" title="' + _.delandbanfile + '" onclick="return confirm(\'' + _.delandbanfile + '?\');"><img src="' + ku_webpath + '/static/images/blank.gif?v=' + ku_js_css_ver + '" class="dandbfile spritebtn sb-c"><\/a>';
         if (kuadm_set && ku_offload) {
             newhtml += '<a href="' + ku_webpath + '/manage_page.php?action=bans&ban_img_by_post=true&banboard=' + boardname + '&banpost=' + postid + '" title="' + _.banfile + '" onclick="return confirm(\'' + _.banfile + '?\');"><img src="' + ku_webpath + '/static/images/blank.gif?v=' + ku_js_css_ver + '" class="banfile spritebtn sb-c"><\/a>';
             newhtml += '<a href="#" onclick="geoBlock($(this), \'' + boardname + '\', ' + postid + ', ' + isthread + '); return false;" title="' + _.geobtn + '"><img src="' + ku_webpath + '/static/images/blank.gif?v=' + ku_js_css_ver + '" class="geoblock spritebtn sb-r"><\/a>';

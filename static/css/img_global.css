@@ -347,6 +347,10 @@ pre {
     background-position: -48px -80px;
 }
 
+.recover {
+    background-position: 0px -96px;
+}
+
 .spritebtn {
     background-color: #7f7f7f;
     background-image: url('/static/images/white.gif?v=1');
@@ -390,7 +394,6 @@ pre {
 .sb-r {
     border-radius: 0 3px 3px 0;
 }
-
 
 .getnewposts {
     background-position: -16px -16px;
