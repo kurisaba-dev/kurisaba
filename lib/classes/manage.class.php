@@ -1630,6 +1630,7 @@ class Manage
         }
         $boardid = $tc_db->GetOne("SELECT HIGH_PRIORITY `id` FROM `" . KU_DBPREFIX . "boards` WHERE `name` = " . $tc_db->qstr($board));
 
+        $success = false;
         $lines = $tc_db->GetAll("SELECT * FROM `" . KU_DBPREFIX . "posts` WHERE `boardid` = " . $tc_db->qstr($boardid) . " AND `id` = " . $tc_db->qstr($post));
         if (count($lines) == 0) {
             $tpl_page .= '<p>' . _gettext("Post") . ' /' . $board . '/' . $post . ' ' . _gettext("never existed") . '.</p>';
@@ -1649,22 +1650,29 @@ class Manage
             if($fileonly) {
                 $file = str_replace("removed:", "", $line['file']);
                 $type = $line['file_type'];
-                if(chmod(KU_STORAGEDIR . $board . '/src/' . $file . '.' . $type, 0644)) {
-                    @chmod(KU_STORAGEDIR.$board . '/src/' . $file . '.pch', 0644);
-                    @chmod(KU_STORAGEDIR.$board . '/thumb/' . $file . 's.' . $type, 0644);
-                    @chmod(KU_STORAGEDIR.$board . '/thumb/' . $file . 'a.' . $type, 0644);
-                    @chmod(KU_STORAGEDIR.$board . '/thumb/' . $file . 'c.' . $type, 0644);
-                    if ($type == 'mp3' || $type == 'ogg' || $type == 'm4a') {
-                        @chmod(KU_STORAGEDIR . $board . '/thumb/' . $file . 's.jpg', 0644);
-                        @chmod(KU_STORAGEDIR . $board . '/thumb/' . $file . 's.webp', 0644);
-                        @chmod(KU_STORAGEDIR . $board . '/thumb/' . $file . 's.png', 0644);
-                        @chmod(KU_STORAGEDIR . $board . '/thumb/' . $file . 's.gif', 0644);
+                if(!empty($line['file_md5'])) {
+                    if(chmod(KU_STORAGEDIR . $board . '/src/' . $file . '.' . $type, 0644)) {
+                        @chmod(KU_STORAGEDIR.$board . '/src/' . $file . '.pch', 0644);
+                        @chmod(KU_STORAGEDIR.$board . '/thumb/' . $file . 's.' . $type, 0644);
+                        @chmod(KU_STORAGEDIR.$board . '/thumb/' . $file . 'a.' . $type, 0644);
+                        @chmod(KU_STORAGEDIR.$board . '/thumb/' . $file . 'c.' . $type, 0644);
+                        if ($type == 'mp3' || $type == 'ogg' || $type == 'm4a') {
+                            @chmod(KU_STORAGEDIR . $board . '/thumb/' . $file . 's.jpg', 0644);
+                            @chmod(KU_STORAGEDIR . $board . '/thumb/' . $file . 's.webp', 0644);
+                            @chmod(KU_STORAGEDIR . $board . '/thumb/' . $file . 's.png', 0644);
+                            @chmod(KU_STORAGEDIR . $board . '/thumb/' . $file . 's.gif', 0644);
+                        }
+                        $msg = _gettext("File") . ' <a href="' . KU_BOARDSPATH . '/' . $board . '/src/' . $file . '.' . $type . '">' . $file . '.' . $type . '</a> ' . _gettext("that was attached to") . ' &gt;&gt;' . create_logentry_link($board, $thread, $post) . ' ' . _gettext("was restored");
+                        $success = true;
+                    } else {
+                        $tpl_page .= '<p>' . _gettext("Post") . ' /' . $board . '/' . $post . ' ' . _gettext("has deleted file which contents is lost; check if KU_HALFPERM_DELETE is set") . '.</p>';
                     }
-                    $tc_db->Execute("UPDATE `" . KU_DBPREFIX . "posts` SET `file` = " . $tc_db->qstr($file) . " WHERE `id` = " . $tc_db->qstr($post) . " AND `boardid` = " . $tc_db->qstr($boardid));
-                    $msg = _gettext("File") . ' <a href="' . KU_BOARDSPATH . '/' . $board . '/src/' . $file . '.' . $type . '">' . $file . '.' . $type . '</a> ' . _gettext("that was attached to") . ' &gt;&gt;' . create_logentry_link($board, $thread, $post) . ' ' . _gettext("was restored");
                 } else {
-                    $tpl_page .= '<p>' . _gettext("Post") . ' /' . $board . '/' . $post . ' ' . _gettext("has deleted file which contents is lost; check if KU_HALFPERM_DELETE is set") . '.</p>';
+                    $lines = $tc_db->GetAll("SELECT HIGH_PRIORITY * FROM `" . KU_DBPREFIX . "embeds` WHERE `filetype` = " . $tc_db->qstr($type));
+                    $msg = $lines[0]['name'] . ' ' . _gettext("embed") . ' <a href="' . $lines[0]['videourl'] . $file . '">' .  $file . '</a> ' . _gettext("that was attached to") . ' &gt;&gt;' . create_logentry_link($board, $thread, $post) . ' ' . _gettext("was restored");
+                    $success = true;
                 }
+                if ($success) $tc_db->Execute("UPDATE `" . KU_DBPREFIX . "posts` SET `file` = " . $tc_db->qstr($file) . " WHERE `id` = " . $tc_db->qstr($post) . " AND `boardid` = " . $tc_db->qstr($boardid));
             } else {
                 $what = ($line['parentid'] == '0' ? _gettext("Thread") : _gettext("Post"));
                 $timestamp = $line['deleted_timestamp'];
@@ -1672,9 +1680,12 @@ class Manage
                 $tpl_page .= '<p>' . $what . ' ' . $board . '/' . $post . ' удалён ' . $deleted_at . '(' . $timestamp . ').</p>';
                 $tc_db->Execute("UPDATE `" . KU_DBPREFIX . "posts` SET `IS_DELETED` = 0, `deleted_timestamp` = 0 WHERE (`id` = " . $tc_db->qstr($post) . " OR `parentid` = " . $tc_db->qstr($post) . ") AND `boardid` = " . $tc_db->qstr($boardid));
                 $msg = $what . ' &gt;&gt;' . create_logentry_link($board, $thread, $post) . ' ' . _gettext("was restored");
+                $success = true;
             }
-            $tpl_page .= '<p>' . $msg . '.</p>';
-            management_addlogentry($msg, 7, '', $msg);
+            if ($success) {
+                $tpl_page .= '<p>' . $msg . '.</p>';
+                management_addlogentry($msg, 7, '', $msg);
+            }
         }
     }
 
@@ -2920,10 +2931,19 @@ class Manage
                                 $delpost_threadid = ($delpost_parentid != 0 ? $delpost_parentid : $delpost_id);
                                 if (!empty($file)) {
                                     if (!fileRemoved($file)) {
-                                        delete_file_wrapper($board_dir, $file, $file_type);
+                                        if(!empty($results[0]['file_md5'])) {
+                                            delete_file_wrapper($board_dir, $file, $file_type);
+                                            $what = _gettext('File');
+                                            $msg = $what . ' <a href="' . KU_BOARDSPATH . '/' . $board_dir . '/src/' . $file . '.' . $file_type . '">' . $file . '.' . $file_type . '</a> ' . _gettext('that was attached to') . ' &gt;&gt;' . create_logentry_link($board_dir, $delpost_threadid, $delpost_id) . ' '. _gettext('was removed');
+                                            $tpl_page .= '<hr />' . $what . ' ' . _gettext('successfully deleted') . '.<hr />';
+                                        } else {
+                                            $what = _gettext('Embed');
+                                            $lines = $tc_db->GetAll("SELECT HIGH_PRIORITY * FROM `" . KU_DBPREFIX . "embeds` WHERE `filetype` = " . $tc_db->qstr($file_type));
+                                            $msg = $lines[0]['name'] . ' ' . _gettext('embed') . ' <a href="' . $lines[0]['videourl'] . $file . '">' .  $file . '</a> ' . _gettext('that was attached to') . ' &gt;&gt;' . create_logentry_link($board, $thread, $post) . ' ' . _gettext('was removed');
+                                            $tpl_page .= '<hr />' . $what . ' ' . _gettext('successfully deleted') . '.<hr />';
+                                        }
                                         $tc_db->Execute("UPDATE `" . KU_DBPREFIX . "posts` SET `file` = 'removed:" . $file . "' WHERE `boardid` = " . $board_id . " AND `id` = " . $delpost_id . " LIMIT 1");
-                                        $tpl_page .= '<hr />File successfully deleted<hr />';
-                                        management_addlogentry('Удалён файл из поста' . ' #<a href="?action=viewthread&thread='. $delpost_threadid . '&board='. $board_dir . '#'. $delpost_id . '">'. $delpost_id . '</a> - /'. $board_dir . '/', 7, '', _gettext('File') . ' <a href="' . KU_BOARDSPATH . '/' . $board_dir . '/src/' . $file . '.' . $file_type . '">' . $file . '.' . $file_type . '</a> ' . _gettext('that was attached to') . ' &gt;&gt;' . create_logentry_link($board_dir, $delpost_threadid, $delpost_id) . ' '. _gettext('was removed'));
+                                        management_addlogentry($what . ' ' . _gettext('that was attached to') . ' #<a href="?action=viewthread&thread='. $delpost_threadid . '&board='. $board_dir . '#'. $delpost_id . '">'. $delpost_id . '</a> - /'. $board_dir . '/ ' . _gettext('was removed'), 7, '', $msg);
                                     } else {
                                         $tpl_page .= '<hr />That file has already been deleted.<hr />';
                                     }
