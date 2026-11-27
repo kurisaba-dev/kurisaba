@@ -2890,9 +2890,9 @@ class Manage
                                             $delpost_parentid = $line['parentid'];
 
                                             if ($delpost_parentid == 0) {
-                                                management_addlogentry('Удалён файл из ОП-поста треда' . ' #<a href="?action=viewthread&thread='. $delpost_id . '&board='. $_POST['boarddir'] . '#'. $delpost_id . '">'. $delpost_id . '</a> - /'. $board_dir . '/', 7, '', 'File <a href="' . KU_BOARDSPATH . '/' . $_POST['boarddir'] . '/src/' . $line['file'] . '.' . $line['file_type'] . '">' . KU_BOARDSPATH . '/' . $_POST['boarddir'] . '/src/' . $line['file'] . '.' . $line['file_type'] . '</a> that was attached to &gt;&gt;' . create_logentry_link($board_dir, $delpost_id, $delpost_id) . ' was removed');
+                                                management_addlogentry('Удалён файл из ОП-поста треда' . ' #<a href="?action=viewthread&thread='. $delpost_id . '&board='. $_POST['boarddir'] . '#'. $delpost_id . '">'. $delpost_id . '</a> - /'. $board_dir . '/', 7, '', _gettext('File') . ' <a href="' . KU_BOARDSPATH . '/' . $_POST['boarddir'] . '/src/' . $line['file'] . '.' . $line['file_type'] . '">' . KU_BOARDSPATH . '/' . $_POST['boarddir'] . '/src/' . $line['file'] . '.' . $line['file_type'] . '</a> ' . _gettext('that was attached to OP of thread') . ' &gt;&gt;' . create_logentry_link($board_dir, $delpost_id, $delpost_id) . ' '. _gettext('was removed'));
                                             } else {
-                                                management_addlogentry('Удалён файл из поста' . ' #<a href="?action=viewthread&thread='. $delpost_parentid . '&board='. $_POST['boarddir'] . '#'. $delpost_id . '">'. $delpost_id . '</a> - /'. $board_dir . '/', 7, '', 'File <a href="' . KU_BOARDSPATH . '/' . $_POST['boarddir'] . '/src/' . $line['file'] . '.' . $line['file_type'] . '">' . KU_BOARDSPATH . '/' . $_POST['boarddir'] . '/src/' . $line['file'] . '.' . $line['file_type'] . '</a> that was attached to &gt;&gt;' . create_logentry_link($board_dir, $delpost_parentid, $delpost_id) . ' was removed');
+                                                management_addlogentry('Удалён файл из поста' . ' #<a href="?action=viewthread&thread='. $delpost_parentid . '&board='. $_POST['boarddir'] . '#'. $delpost_id . '">'. $delpost_id . '</a> - /'. $board_dir . '/', 7, '', _gettext('File') . ' <a href="' . KU_BOARDSPATH . '/' . $_POST['boarddir'] . '/src/' . $line['file'] . '.' . $line['file_type'] . '">' . KU_BOARDSPATH . '/' . $_POST['boarddir'] . '/src/' . $line['file'] . '.' . $line['file_type'] . '</a> ' . _gettext('that was attached to reply') . ' &gt;&gt;' . create_logentry_link($board_dir, $delpost_parentid, $delpost_id) . ' '. _gettext('was removed'));
                                             }
 
                                         } else {
@@ -2928,9 +2928,9 @@ class Manage
                                     }
 
                                     if ($delpost_parentid == 0) {
-                                        management_addlogentry('Удалён тред' . ' #<a href="?action=viewthread&thread='. $delpost_id . '&board='. $_POST['boarddir'] . '#'. $delpost_id . '">'. $delpost_id . '</a> - /'. $board_dir . '/', 7, '', 'Message &gt;&gt;' . create_logentry_link($board_dir, $delpost_id, $delpost_id) . ' was removed');
+                                        management_addlogentry('Удалён тред' . ' #<a href="?action=viewthread&thread='. $delpost_id . '&board='. $_POST['boarddir'] . '#'. $delpost_id . '">'. $delpost_id . '</a> - /'. $board_dir . '/', 7, '', _gettext('Thread') . ' &gt;&gt;' . create_logentry_link($board_dir, $delpost_id, $delpost_id) . ' '. _gettext('was removed'));
                                     } else {
-                                        management_addlogentry('Удалён пост' . ' #<a href="?action=viewthread&thread='. $delpost_parentid . '&board='. $_POST['boarddir'] . '#'. $delpost_id . '">'. $delpost_id . '</a> - /'. $board_dir . '/', 7, '', 'Message &gt;&gt;' . create_logentry_link($board_dir, $delpost_parentid, $delpost_id) . ' was removed');
+                                        management_addlogentry('Удалён пост' . ' #<a href="?action=viewthread&thread='. $delpost_parentid . '&board='. $_POST['boarddir'] . '#'. $delpost_id . '">'. $delpost_id . '</a> - /'. $board_dir . '/', 7, '', _gettext('Post') . ' &gt;&gt;' . create_logentry_link($board_dir, $delpost_parentid, $delpost_id) . ' '. _gettext('was removed'));
                                     }
 
                                 } else {
