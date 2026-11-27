@@ -2954,11 +2954,7 @@ class Manage
                                 if (isset($_GET['do_ban'])) {
                                     $tpl_page .= '<br /><br /><meta http-equiv="refresh" content="1;url='. KU_WEBPATH . '/manage_page.php?action=bans&ban_img_by_post=true&banboard='. $board_dir . '&banpost=' . $delpost_id . '"><a href="' . KU_WEBPATH . '/manage_page.php?action=bans&ban_img_by_post=true&banboard=' . $board_dir . '&banpost=' . $delpost_id . '">'. _gettext('Redirecting') . '</a> ' . _gettext('to ban page') . '...';
                                 } elseif ($isquickdel && !isset($_GET['noreturn'])) {
-                                    if ($delpost_parentid > 0) {
-                                        $tpl_page .= '<br /><br /><meta http-equiv="refresh" content="1;url='. KU_BOARDSPATH . '/' . $board_dir . '/res/' . $delpost_parentid . '.html"><a href="' . KU_BOARDSPATH . '/' . $board_dir . '/res/' . $delpost_parentid . '.html">'. _gettext('Redirecting') . '</a> ' . _gettext('back to thread') . '...';
-                                    } else {
-                                        $tpl_page .= '<br /><br /><meta http-equiv="refresh" content="1;url='. KU_BOARDSPATH . '/' . $board_dir . '"><a href="' . KU_BOARDSPATH . '/' . $board_dir . '">' . _gettext('Redirecting') . '</a> ' . _gettext('back to board') . '...';
-                                    }
+                                    $tpl_page .= '<br /><br /><meta http-equiv="refresh" content="1;url=' . $_SERVER['HTTP_REFERER'] . '"><a href="' . $_SERVER['HTTP_REFERER'] . '">' . _gettext('Redirecting') . '</a> ' . _gettext('back') . '...';
                                 }
                             } else {
                                 $delpost_id = $results[0]['id'];
