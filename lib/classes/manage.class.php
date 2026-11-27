@@ -1619,26 +1619,60 @@ class Manage
         $this->ModeratorsOnly();
 
         $tpl_page .= '<h2>Восстановить пост/тред</h2>';
-        $board = isset($_GET['board']) ? $_GET['board'] : '';
-        $post = isset($_GET['id']) ? $_GET['id'] : '';
+        if(!isset($_GET['board']) || !isset($_GET['id'])) {
+            $tpl_page .= '<p>' . _gettext("Specify board and post") . '</p>';
+        }
+        $board = $_GET['board'];
+        $post = $_GET['id'];
+        $fileonly = isset($_GET['fileonly']);
         if (!Manage::CurrentUserIsModeratorOfBoard($board)) {
             exitWithErrorPage(_gettext('You are not a moderator of this board.'));
         }
         $boardid = $tc_db->GetOne("SELECT HIGH_PRIORITY `id` FROM `" . KU_DBPREFIX . "boards` WHERE `name` = " . $tc_db->qstr($board));
 
-
-        $lines = $tc_db->GetAll("SELECT * FROM `" . KU_DBPREFIX . "posts` WHERE `boardid` = " . $tc_db->qstr($boardid) . " AND `IS_DELETED` = 1 AND `id` = " . $tc_db->qstr($post));
+        $lines = $tc_db->GetAll("SELECT * FROM `" . KU_DBPREFIX . "posts` WHERE `boardid` = " . $tc_db->qstr($boardid) . " AND `id` = " . $tc_db->qstr($post));
         if (count($lines) == 0) {
-            $tpl_page .= '<p>Пост ' . $board . '/' . $post . ' не существует или не удалён.</p>';
+            $tpl_page .= '<p>' . _gettext("Post") . ' /' . $board . '/' . $post . ' ' . _gettext("never existed") . '.</p>';
+        } elseif (!$fileonly && $lines[0]['IS_DELETED'] == '0') {
+            $tpl_page .= '<p>' . _gettext("Post") . ' /' . $board . '/' . $post . ' ' . _gettext("is not deleted") . '.</p>';
+        } elseif (!$fileonly && $lines[0]['IS_DELETED'] == '1') {
+            $tpl_page .= '<p>' . _gettext("Post") . ' /' . $board . '/' . $post . ' ' . _gettext("is deleted completely, not just a file") . '.</p>';
+        } elseif ($fileonly && empty($lines[0]['file'])) {
+            $tpl_page .= '<p>' . _gettext("Post") . ' /' . $board . '/' . $post . ' ' . _gettext("has no file attached") . '.</p>';
+        } elseif ($fileonly && $lines[0]['file'] == 'removed') {
+            $tpl_page .= '<p>' . _gettext("Post") . ' /' . $board . '/' . $post . ' ' . _gettext("has file removed, but its information is lost") . '.</p>';
+        } elseif ($fileonly && strpos($lines[0]['file'], 'removed:') !== 0) {
+            $tpl_page .= '<p>' . _gettext("Post") . ' /' . $board . '/' . $post . ' ' . _gettext("has file that is not removed") . '.</p>';
         } else {
             $line = $lines[0];
             $thread = ($line['parentid'] == '0' ? $post : $line['parentid']);
-            $what = ($line['parentid'] == '0' ? _gettext("Thread") : _gettext("Post"));
-            $timestamp = $line['deleted_timestamp'];
-            $deleted_at = date('r', $timestamp);
-            $tpl_page .= '<p>' . $what . ' ' . $board . '/' . $post . ' удалён ' . $deleted_at . '(' . $timestamp . ').</p>';
-            $tc_db->Execute("UPDATE `" . KU_DBPREFIX . "posts` SET `IS_DELETED` = 0, `deleted_timestamp` = 0 WHERE (`id` = " . $tc_db->qstr($post) . " OR `parentid` = " . $tc_db->qstr($post) . ") AND `boardid` = " . $tc_db->qstr($boardid));
-            $msg = $what . ' &gt;&gt;' . create_logentry_link($board, $thread, $post) . ' ' . _gettext("was restored");
+            if($fileonly) {
+                $file = str_replace("removed:", "", $line['file']);
+                $type = $line['file_type'];
+                if(chmod(KU_STORAGEDIR . $board . '/src/' . $file . '.' . $type, 0644)) {
+                    @chmod(KU_STORAGEDIR.$board . '/src/' . $file . '.pch', 0644);
+                    @chmod(KU_STORAGEDIR.$board . '/thumb/' . $file . 's.' . $type, 0644);
+                    @chmod(KU_STORAGEDIR.$board . '/thumb/' . $file . 'a.' . $type, 0644);
+                    @chmod(KU_STORAGEDIR.$board . '/thumb/' . $file . 'c.' . $type, 0644);
+                    if ($type == 'mp3' || $type == 'ogg' || $type == 'm4a') {
+                        @chmod(KU_STORAGEDIR . $board . '/thumb/' . $file . 's.jpg', 0644);
+                        @chmod(KU_STORAGEDIR . $board . '/thumb/' . $file . 's.webp', 0644);
+                        @chmod(KU_STORAGEDIR . $board . '/thumb/' . $file . 's.png', 0644);
+                        @chmod(KU_STORAGEDIR . $board . '/thumb/' . $file . 's.gif', 0644);
+                    }
+                    $tc_db->Execute("UPDATE `" . KU_DBPREFIX . "posts` SET `file` = " . $tc_db->qstr($file) . " WHERE `id` = " . $tc_db->qstr($post) . " AND `boardid` = " . $tc_db->qstr($boardid));
+                    $msg = _gettext("File") . ' <a href="' . KU_BOARDSPATH . '/' . $board . '/src/' . $file . '.' . $type . '">' . $file . '.' . $type . '</a> ' . _gettext("that was attached to") . ' &gt;&gt;' . create_logentry_link($board, $thread, $post) . ' ' . _gettext("was restored");
+                } else {
+                    $tpl_page .= '<p>' . _gettext("Post") . ' /' . $board . '/' . $post . ' ' . _gettext("has deleted file which contents is lost; check if KU_HALFPERM_DELETE is set") . '.</p>';
+                }
+            } else {
+                $what = ($line['parentid'] == '0' ? _gettext("Thread") : _gettext("Post"));
+                $timestamp = $line['deleted_timestamp'];
+                $deleted_at = date('r', $timestamp);
+                $tpl_page .= '<p>' . $what . ' ' . $board . '/' . $post . ' удалён ' . $deleted_at . '(' . $timestamp . ').</p>';
+                $tc_db->Execute("UPDATE `" . KU_DBPREFIX . "posts` SET `IS_DELETED` = 0, `deleted_timestamp` = 0 WHERE (`id` = " . $tc_db->qstr($post) . " OR `parentid` = " . $tc_db->qstr($post) . ") AND `boardid` = " . $tc_db->qstr($boardid));
+                $msg = $what . ' &gt;&gt;' . create_logentry_link($board, $thread, $post) . ' ' . _gettext("was restored");
+            }
             $tpl_page .= '<p>' . $msg . '.</p>';
             management_addlogentry($msg, 7, '', $msg);
         }
