@@ -766,33 +766,52 @@ function delandbanlinks($scope) {
         var isthread = (dnbinfo[3] == 'y');
         if (postid == '?????') return;
         var newhtml = '&nbsp;<span class="btngroup">';
+
+        // Tags, del, del&ban, ban, sage
         if (!isthread) {
-            newhtml += '<a href="#" onclick="editTags($(this), \'' + boardname + '\', ' + postid + '); return false;" title="' + _.tagbtn + '"><img src="' + ku_webpath + '/static/images/blank.gif?v=' + ku_js_css_ver + '" class="edittags spritebtn sb-l"><\/a>';
-            newhtml += '<a href="' + ku_webpath + '/manage_page.php?action=delposts&boarddir=' + boardname + '&delpostid=' + postid + '" title="' + _.delete + '" onclick="return confirm(\'' + _.deletePost + '?\');"><img src="' + ku_webpath + '/static/images/blank.gif?v=' + ku_js_css_ver + '" class="delete spritebtn sb-c"><\/a>';
-        } else {
-            newhtml += '<a href="' + ku_webpath + '/manage_page.php?action=delposts&boarddir=' + boardname + '&delpostid=' + postid + '" title="' + _.delete + '" onclick="return confirm(\'' + _.deletePost + '?\');"><img src="' + ku_webpath + '/static/images/blank.gif?v=' + ku_js_css_ver + '" class="delete spritebtn sb-l"><\/a>';
+            newhtml += '<a href="#" onclick="editTags($(this), \'' + boardname + '\', ' + postid + '); return false;" title="' + _.tagbtn + '"><img src="' + ku_webpath + '/static/images/blank.gif?v=' + ku_js_css_ver + '" class="edittags spritebtn"><\/a>';
         }
-        newhtml += '<a href="' + ku_webpath + '/manage_page.php?action=delposts&do_ban=true&boarddir=' + boardname + '&delpostid=' + postid + '" title="' + _.delandban + '" onclick="return confirm(\'' + _.deleteAndBan + '?\');"><img src="' + ku_webpath + '/static/images/blank.gif?v=' + ku_js_css_ver + '" class="dandb spritebtn sb-c"><\/a>';
-        newhtml += '<a href="' + ku_webpath + '/manage_page.php?action=bans&banboard=' + boardname + '&banpost=' + postid + '" title="' + _.ban + '" onclick="return confirm(\'' + _.ban + '?\');"><img src="' + ku_webpath + '/static/images/blank.gif?v=' + ku_js_css_ver + '" class="ban spritebtn sb-c"><\/a>';
-        newhtml += '<a href="' + ku_webpath + '/manage_page.php?action=sagepost&quick=1&board=' + boardname + '&id=' + postid + '" title="' + _.sage + '" onclick="return confirm(\'' + _.sage + '?\');"><img src="' + ku_webpath + '/static/images/blank.gif?v=' + ku_js_css_ver + '" class="downscroll spritebtn sb-c"><\/a>';
-        if(element.parentElement.querySelectorAll('.transcribed').length == 0 && element.parentElement.querySelectorAll('.transcribable').length != 0) {
-            newhtml += '<a href="' + ku_webpath + '/manage_page.php?action=transcript&board=' + boardname + '&id=' + postid + '" title="' + _.transcript + '" onclick="return confirmWithMsg(\'' + _.transcript + '?\', \'Транскрибируем сообщение...\');"><img src="' + ku_webpath + '/static/images/blank.gif?v=' + ku_js_css_ver + '" class="transcript spritebtn sb-c"><\/a>';
-        }
-        newhtml += '<a href="' + ku_webpath + '/manage_page.php?action=delposts&fileonly=1&boarddir=' + boardname + '&delpostid=' + postid + '" title="' + _.deletefile + '" onclick="return confirm(\'' + _.deletefile + '?\');"><img src="' + ku_webpath + '/static/images/blank.gif?v=' + ku_js_css_ver + '" class="deletefile spritebtn sb-c"><\/a>';
-        newhtml += '<a href="' + ku_webpath + '/manage_page.php?action=restorepost&fileonly=1&board=' + boardname + '&id=' + postid + '" title="' + _.recoverfile + '" onclick="return confirm(\'' + _.recoverfile + '?\');"><img src="' + ku_webpath + '/static/images/blank.gif?v=' + ku_js_css_ver + '" class="recover spritebtn sb-c"><\/a>';
-        newhtml += '<a href="' + ku_webpath + '/manage_page.php?action=delposts&fileonly=1&do_ban=true&boarddir=' + boardname + '&delpostid=' + postid + '" title="' + _.delandbanfile + '" onclick="return confirm(\'' + _.delandbanfile + '?\');"><img src="' + ku_webpath + '/static/images/blank.gif?v=' + ku_js_css_ver + '" class="dandbfile spritebtn sb-c"><\/a>';
-        if (kuadm_set && ku_offload) {
-            newhtml += '<a href="' + ku_webpath + '/manage_page.php?action=bans&ban_img_by_post=true&banboard=' + boardname + '&banpost=' + postid + '" title="' + _.banfile + '" onclick="return confirm(\'' + _.banfile + '?\');"><img src="' + ku_webpath + '/static/images/blank.gif?v=' + ku_js_css_ver + '" class="banfile spritebtn sb-c"><\/a>';
-            newhtml += '<a href="#" onclick="geoBlock($(this), \'' + boardname + '\', ' + postid + ', ' + isthread + '); return false;" title="' + _.geobtn + '"><img src="' + ku_webpath + '/static/images/blank.gif?v=' + ku_js_css_ver + '" class="geoblock spritebtn sb-r"><\/a>';
-        } else {
-            newhtml += '<a href="' + ku_webpath + '/manage_page.php?action=bans&ban_img_by_post=true&banboard=' + boardname + '&banpost=' + postid + '" title="' + _.banfile + '" onclick="return confirm(\'' + _.banfile + '?\');"><img src="' + ku_webpath + '/static/images/blank.gif?v=' + ku_js_css_ver + '" class="banfile spritebtn sb-r"><\/a>';
+        newhtml += '<a href="' + ku_webpath + '/manage_page.php?action=delposts&boarddir=' + boardname + '&delpostid=' + postid + '" title="' + _.delete + '" onclick="return confirm(\'' + _.deletePost + '?\');"><img src="' + ku_webpath + '/static/images/blank.gif?v=' + ku_js_css_ver + '" class="delete spritebtn"><\/a>';
+        newhtml += '<a href="' + ku_webpath + '/manage_page.php?action=delposts&do_ban=true&boarddir=' + boardname + '&delpostid=' + postid + '" title="' + _.delandban + '" onclick="return confirm(\'' + _.deleteAndBan + '?\');"><img src="' + ku_webpath + '/static/images/blank.gif?v=' + ku_js_css_ver + '" class="dandb spritebtn"><\/a>';
+        newhtml += '<a href="' + ku_webpath + '/manage_page.php?action=bans&banboard=' + boardname + '&banpost=' + postid + '" title="' + _.ban + '" onclick="return confirm(\'' + _.ban + '?\');"><img src="' + ku_webpath + '/static/images/blank.gif?v=' + ku_js_css_ver + '" class="ban spritebtn"><\/a>';
+        if (!isthread) {
+            newhtml += '<a href="' + ku_webpath + '/manage_page.php?action=sagepost&quick=1&board=' + boardname + '&id=' + postid + '" title="' + _.sage + '" onclick="return confirm(\'' + _.sage + '?\');"><img src="' + ku_webpath + '/static/images/blank.gif?v=' + ku_js_css_ver + '" class="downscroll spritebtn"><\/a>';
         }
         newhtml += '</span>&nbsp;';
+
+        // Transcript, del, del&ban, ban, restore file
+        if (element.parentElement.querySelectorAll('.nothumb').length != 0) {
+            newhtml += '<span class="btngroup"><a href="' + ku_webpath + '/manage_page.php?action=restorepost&fileonly=1&board=' + boardname + '&id=' + postid + '" title="' + _.recoverfile + '" onclick="return confirm(\'' + _.recoverfile + '?\');"><img src="' + ku_webpath + '/static/images/blank.gif?v=' + ku_js_css_ver + '" class="recover spritebtn"><\/a></span>&nbsp;';
+        } else if (element.parentElement.querySelectorAll('.thumb').length != 0) {
+            newhtml += '<span class="btngroup">';
+            if (element.parentElement.querySelectorAll('.transcribed').length == 0 && element.parentElement.querySelectorAll('.transcribable').length != 0) {
+                newhtml += '<a href="' + ku_webpath + '/manage_page.php?action=transcript&board=' + boardname + '&id=' + postid + '" title="' + _.transcript + '" onclick="return confirmWithMsg(\'' + _.transcript + '?\', \'Транскрибируем сообщение...\');"><img src="' + ku_webpath + '/static/images/blank.gif?v=' + ku_js_css_ver + '" class="transcript spritebtn"><\/a>';
+            }
+            newhtml += '<a href="' + ku_webpath + '/manage_page.php?action=delposts&fileonly=1&boarddir=' + boardname + '&delpostid=' + postid + '" title="' + _.deletefile + '" onclick="return confirm(\'' + _.deletefile + '?\');"><img src="' + ku_webpath + '/static/images/blank.gif?v=' + ku_js_css_ver + '" class="deletefile spritebtn"><\/a>';
+            newhtml += '<a href="' + ku_webpath + '/manage_page.php?action=delposts&fileonly=1&do_ban=true&boarddir=' + boardname + '&delpostid=' + postid + '" title="' + _.delandbanfile + '" onclick="return confirm(\'' + _.delandbanfile + '?\');"><img src="' + ku_webpath + '/static/images/blank.gif?v=' + ku_js_css_ver + '" class="dandbfile spritebtn"><\/a>';
+            newhtml += '<a href="' + ku_webpath + '/manage_page.php?action=bans&ban_img_by_post=true&banboard=' + boardname + '&banpost=' + postid + '" title="' + _.banfile + '" onclick="return confirm(\'' + _.banfile + '?\');"><img src="' + ku_webpath + '/static/images/blank.gif?v=' + ku_js_css_ver + '" class="banfile spritebtn"><\/a>';
+            newhtml += '</span>&nbsp;';
+        }
+
+        // Geoblock
+        if (kuadm_set && ku_offload) {
+            newhtml += '<span class="btngroup"><a href="#" onclick="geoBlock($(this), \'' + boardname + '\', ' + postid + ', ' + isthread + '); return false;" title="' + _.geobtn + '"><img src="' + ku_webpath + '/static/images/blank.gif?v=' + ku_js_css_ver + '" class="geoblock spritebtn"><\/a></span>&nbsp;';
+        }
+
+        // Stick/unstick and lock/unlock
         if (isthread) {
-            newhtml += '<span class="btngroup"><a href="' + ku_webpath + '/manage_page.php?action=stickypost&board=' + boardname + '&postid=' + postid + '" title="' + _.stickthread + '" ><img src="' + ku_webpath + '/static/images/blank.gif?v=' + ku_js_css_ver + '" class="stick spritebtn sb-l"><\/a><a href="' + ku_webpath + '/manage_page.php?action=unstickypost&board=' + boardname + '&postid=' + postid + '" title="' + _.unstickthread + '" ><img src="' + ku_webpath + '/static/images/blank.gif?v=' + ku_js_css_ver + '" class="unstick spritebtn sb-r"><\/a></span>&nbsp;';
-            newhtml += '<span class="btngroup"><a href="' + ku_webpath + '/manage_page.php?action=lockpost&board=' + boardname + '&postid=' + postid + '" title="' + _.lockthread + '" ><img src="' + ku_webpath + '/static/images/blank.gif?v=' + ku_js_css_ver + '" class="lock spritebtn sb-l"><\/a><a href="' + ku_webpath + '/manage_page.php?action=unlockpost&board=' + boardname + '&postid=' + postid + '" title="' + _.unlockthread + '" ><img src="' + ku_webpath + '/static/images/blank.gif?v=' + ku_js_css_ver + '" class="unlock spritebtn sb-r"><\/a></span>';
+            newhtml += '<span class="btngroup"><a href="' + ku_webpath + '/manage_page.php?action=stickypost&board=' + boardname + '&postid=' + postid + '" title="' + _.stickthread + '" ><img src="' + ku_webpath + '/static/images/blank.gif?v=' + ku_js_css_ver + '" class="stick spritebtn"><\/a><a href="' + ku_webpath + '/manage_page.php?action=unstickypost&board=' + boardname + '&postid=' + postid + '" title="' + _.unstickthread + '" ><img src="' + ku_webpath + '/static/images/blank.gif?v=' + ku_js_css_ver + '" class="unstick spritebtn"><\/a></span>&nbsp;';
+            newhtml += '<span class="btngroup"><a href="' + ku_webpath + '/manage_page.php?action=lockpost&board=' + boardname + '&postid=' + postid + '" title="' + _.lockthread + '" ><img src="' + ku_webpath + '/static/images/blank.gif?v=' + ku_js_css_ver + '" class="lock spritebtn"><\/a><a href="' + ku_webpath + '/manage_page.php?action=unlockpost&board=' + boardname + '&postid=' + postid + '" title="' + _.unlockthread + '" ><img src="' + ku_webpath + '/static/images/blank.gif?v=' + ku_js_css_ver + '" class="unlock spritebtn"><\/a></span>';
         }
         $(this).html(newhtml);
+
+        // Set sb-l, sb-r, and sb-c classes for each button in each span
+        $(this).find('span').each((num, span) => {
+            imgs = span.querySelectorAll("img");
+            imgs.forEach((img, num) => {
+                img.classList.add((num == 0) ? "sb-l" : (num == imgs.length - 1) ? "sb-r" : "sb-c");
+            });
+        });
     });
 }
 
