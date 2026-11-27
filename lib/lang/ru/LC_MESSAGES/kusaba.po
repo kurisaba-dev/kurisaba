@@ -1411,9 +1411,6 @@ msgstr "Умерьте пыл. Вы отправляете сообщения с
 msgid "You are not a moderator of this board."
 msgstr "Вы не модерируете эту доску."
 
-msgid "You are not a moderator of this board."
-msgstr "Умерьте пыл. Вы не модератор, чтобы мне указывать."
-
 msgid "You can only delete posts from boards you moderate."
 msgstr "Вы можете удалять только на тех досках, где вы модератор."
 
@@ -2046,3 +2043,66 @@ msgstr "Загрузка однопотока..."
 
 msgid "Unable to hear any text."
 msgstr "Не удалось разобрать текст."
+
+msgid "that was attached to"
+msgstr "из поста"
+
+msgid "was removed"
+msgstr "был удалён"
+
+msgid "was restored"
+msgstr "был восстановлен"
+
+msgid "successfully deleted"
+msgstr "успешно удалён"
+
+msgid " embed"
+msgstr "-видеоролик"
+
+msgid "to ban page"
+msgstr "на страницу бана"
+
+msgid "back"
+msgstr "назад"
+
+msgid "Can't delete post"
+msgstr "Невозможно удалить пост"
+
+msgid "back to thread"
+msgstr "назад в тред"
+
+msgid "back to board"
+msgstr "назад на доску"
+
+msgid "Invalid thread ID "
+msgstr "Неверный номер треда"
+
+msgid ". This may have been caused by the thread recently being deleted."
+msgstr ". Это может быть из-за того, что тред уже был только что удалён."
+
+msgid "Thread or post"
+msgstr "Тред или пост"
+
+msgid "Specify board and post"
+msgstr "Укажите доску и пост"
+
+msgid "never existed"
+msgstr "никогда не существовал"
+
+msgid "is not deleted"
+msgstr "не удалён"
+
+msgid "is deleted completely, not just a file"
+msgstr "удалён полностью, а не только файл из него"
+
+msgid "has no file attached"
+msgstr "не имеет прикреплённого файла или видео"
+
+msgid "has file removed, but its information is lost"
+msgstr "имеет удалённый файл, но информация о нём также удалена"
+
+msgid "has file that is not removed"
+msgstr "имеет прикреплённый файл, который не удалён"
+
+msgid "has deleted file which contents is lost; check if KU_HALFPERM_DELETE is set"
+msgstr "имеет удалённый файл, который не сохранился на сервере; проверь настройку движка KU_HALFPERM_DELETE"

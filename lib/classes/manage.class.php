@@ -1669,7 +1669,7 @@ class Manage
                     }
                 } else {
                     $lines = $tc_db->GetAll("SELECT HIGH_PRIORITY * FROM `" . KU_DBPREFIX . "embeds` WHERE `filetype` = " . $tc_db->qstr($type));
-                    $msg = $lines[0]['name'] . ' ' . _gettext("embed") . ' <a href="' . $lines[0]['videourl'] . $file . '">' .  $file . '</a> ' . _gettext("that was attached to") . ' &gt;&gt;' . create_logentry_link($board, $thread, $post) . ' ' . _gettext("was restored");
+                    $msg = $lines[0]['name'] . _gettext(" embed") . ' <a href="' . $lines[0]['videourl'] . $file . '">' .  $file . '</a> ' . _gettext("that was attached to") . ' &gt;&gt;' . create_logentry_link($board, $thread, $post) . ' ' . _gettext("was restored");
                     $success = true;
                 }
                 if ($success) $tc_db->Execute("UPDATE `" . KU_DBPREFIX . "posts` SET `file` = " . $tc_db->qstr($file) . " WHERE `id` = " . $tc_db->qstr($post) . " AND `boardid` = " . $tc_db->qstr($boardid));
@@ -2938,8 +2938,8 @@ class Manage
                                             $tpl_page .= '<hr />' . _gettext('File') . ' ' . _gettext('successfully deleted') . '.<hr />';
                                         } else {
                                             $lines = $tc_db->GetAll("SELECT HIGH_PRIORITY * FROM `" . KU_DBPREFIX . "embeds` WHERE `filetype` = " . $tc_db->qstr($file_type));
-                                            $msg = $lines[0]['name'] . ' ' . _gettext('embed') . ' <a href="' . $lines[0]['videourl'] . $file . '">' .  $file . '</a> ' . _gettext('that was attached to') . ' &gt;&gt;' . create_logentry_link($board_dir, $delpost_threadid, $delpost_id) . ' ' . _gettext('was removed');
-                                            $tpl_page .= '<hr />' . $lines[0]['name'] . ' ' . _gettext('embed') . ' ' . _gettext('successfully deleted') . '.<hr />';
+                                            $msg = $lines[0]['name'] . _gettext(' embed') . ' <a href="' . $lines[0]['videourl'] . $file . '">' .  $file . '</a> ' . _gettext('that was attached to') . ' &gt;&gt;' . create_logentry_link($board_dir, $delpost_threadid, $delpost_id) . ' ' . _gettext('was removed');
+                                            $tpl_page .= '<hr />' . $lines[0]['name'] . _gettext(' embed') . ' ' . _gettext('successfully deleted') . '.<hr />';
                                         }
                                         $tc_db->Execute("UPDATE `" . KU_DBPREFIX . "posts` SET `file` = 'removed:" . $file . "' WHERE `boardid` = " . $board_id . " AND `id` = " . $delpost_id . " LIMIT 1");
                                         management_addlogentry($msg, 7, '', $msg);
@@ -2996,7 +2996,7 @@ class Manage
             $this->MakeBoardListDropdown('boarddir', $this->BoardList($_SESSION['manageusername'])) .
             '<br />
 
-			<label for="delpostid">'. 'Тред или пост' .':</label>
+			<label for="delpostid">'. _gettext('Thread or post') .':</label>
 			<input type="text" name="delpostid" /><br />'.
 
             '<label for="fileonly">'. _gettext('File Only') .':</label>
