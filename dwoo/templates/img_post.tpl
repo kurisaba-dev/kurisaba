@@ -175,7 +175,13 @@
 
 				<blockquote class="postmessage">
 					{if $post.videobox}
-						{$post.videobox}
+						{if $post.file eq 'removed'}
+							<div id="thumblink{$post.id}" class="nothumb">
+								{t}File<br />Removed{/t}
+							</div>
+						{else}
+							{$post.videobox}
+						{/if}
 					{/if}
 					<span class="message">{$post.message}</span>
 				</blockquote>
