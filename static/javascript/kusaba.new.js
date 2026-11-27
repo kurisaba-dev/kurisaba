@@ -782,7 +782,7 @@ function delandbanlinks($scope) {
         // Transcript, del, del&ban, ban, restore file
         if (element.parentElement.querySelectorAll('.nothumb').length != 0) {
             newhtml += '<span class="btngroup"><a href="' + ku_webpath + '/manage_page.php?action=restorepost&fileonly=1&board=' + boardname + '&id=' + postid + '" title="' + _.recoverfile + '" onclick="return confirm(\'' + _.recoverfile + '?\');"><img src="' + ku_webpath + '/static/images/blank.gif?v=' + ku_js_css_ver + '" class="recover spritebtn"><\/a></span>&nbsp;';
-        } else if (element.parentElement.querySelectorAll('.thumb').length != 0) {
+        } else if (element.parentElement.querySelectorAll('a.videobox div.thumb, span img.thumb').length != 0) { // But not "div.newvideobox div.thumb", it's inlined video, not attached
             newhtml += '<span class="btngroup">';
             if (element.parentElement.querySelectorAll('.transcribed').length == 0 && element.parentElement.querySelectorAll('.transcribable').length != 0) {
                 newhtml += '<a href="' + ku_webpath + '/manage_page.php?action=transcript&board=' + boardname + '&id=' + postid + '" title="' + _.transcript + '" onclick="return confirmWithMsg(\'' + _.transcript + '?\', \'Транскрибируем сообщение...\');"><img src="' + ku_webpath + '/static/images/blank.gif?v=' + ku_js_css_ver + '" class="transcript spritebtn"><\/a>';
