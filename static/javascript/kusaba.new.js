@@ -2221,6 +2221,7 @@ function quickreply_show() {
         window.scrollBy(0, -(rswap.i ? $('#postform').height() + 7 : 17));
     }
     window_make_float();
+    if (typeof(isfeed) != "undefined" && isfeed) $('#postform').show();
 
     $('#postform').addClass('reflinkpreview');
     $('#postform').addClass('content-background');
@@ -2267,6 +2268,7 @@ function quickedit_cleanup() {
 function quickreply_hide() {
     if (!quickreply_shown) return;
     window_unmake_float();
+    if (typeof(isfeed) != "undefined" && isfeed) $('#postform').hide();
     if(pageType() == 'boardpage' || pageType() == 'threadpage') { // Feeds have no form, so this isn't needed
         window.scrollBy(0, rswap.i ? $('#postform').height() + 7 : 17);
     }
@@ -4772,8 +4774,6 @@ function window_make_float() {
 
     e.addEventListener('mousedown', window_mousedown, false);
 
-    if (typeof(isfeed) != "undefined" && isfeed) $('#postform').show();
-
     return true;
 }
 
@@ -4788,8 +4788,6 @@ function window_unmake_float() {
     e.style.left = '';
 
     e.removeEventListener('mousedown', window_mousedown, false);
-
-    if (typeof(isfeed) != "undefined" && isfeed) $('#postform').hide();
 
     return true;
 }
