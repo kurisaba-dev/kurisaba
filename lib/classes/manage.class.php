@@ -1613,31 +1613,34 @@ class Manage
 		</form>';
     }
 
-    public function restorethread()
+    public function restorepost()
     {
         global $tc_db, $tpl_page;
         $this->ModeratorsOnly();
 
         $tpl_page .= '<h2>Восстановить пост/тред</h2>';
         $board = isset($_GET['board']) ? $_GET['board'] : '';
-        $thread = isset($_GET['thread']) ? $_GET['thread'] : '';
+        $post = isset($_GET['id']) ? $_GET['id'] : '';
         if (!Manage::CurrentUserIsModeratorOfBoard($board)) {
             exitWithErrorPage(_gettext('You are not a moderator of this board.'));
         }
         $boardid = $tc_db->GetOne("SELECT HIGH_PRIORITY `id` FROM `" . KU_DBPREFIX . "boards` WHERE `name` = " . $tc_db->qstr($board));
 
 
-        $lines = $tc_db->GetAll("SELECT * FROM `" . KU_DBPREFIX . "posts` WHERE `boardid` = " . $tc_db->qstr($boardid) . " AND `IS_DELETED` = 1 AND `id` = " . $tc_db->qstr($thread));
+        $lines = $tc_db->GetAll("SELECT * FROM `" . KU_DBPREFIX . "posts` WHERE `boardid` = " . $tc_db->qstr($boardid) . " AND `IS_DELETED` = 1 AND `id` = " . $tc_db->qstr($post));
         if (count($lines) == 0) {
-            $tpl_page .= '<p>Тред ' . $board . '/' . $thread . ' не существует или не удалён.</p>';
+            $tpl_page .= '<p>Пост ' . $board . '/' . $post . ' не существует или не удалён.</p>';
         } else {
             $line = $lines[0];
+            $thread = ($line['parentid'] == '0' ? $post : $line['parentid']);
+            $what = ($line['parentid'] == '0' ? _gettext("Thread") : _gettext("Post"));
             $timestamp = $line['deleted_timestamp'];
             $deleted_at = date('r', $timestamp);
-            $tpl_page .= '<p>Тред/пост ' . $board . '/' . $thread . ' удалён ' . $deleted_at . '(' . $timestamp . ').</p>';
-            $tc_db->Execute("UPDATE `" . KU_DBPREFIX . "posts` SET `IS_DELETED` = 0, `deleted_timestamp` = 0 WHERE (`id` = " . $tc_db->qstr($thread) . " OR `parentid` = " . $tc_db->qstr($thread) . ") AND `boardid` = " . $tc_db->qstr($boardid));
-            $tpl_page .= '<p>Тред/пост ' . $board . '/' . $thread . ' восстановлен.</p>';
-            management_addlogentry('Восстановлен тред/пост /'. $board . '/'. $thread, 7);
+            $tpl_page .= '<p>' . $what . ' ' . $board . '/' . $post . ' удалён ' . $deleted_at . '(' . $timestamp . ').</p>';
+            $tc_db->Execute("UPDATE `" . KU_DBPREFIX . "posts` SET `IS_DELETED` = 0, `deleted_timestamp` = 0 WHERE (`id` = " . $tc_db->qstr($post) . " OR `parentid` = " . $tc_db->qstr($post) . ") AND `boardid` = " . $tc_db->qstr($boardid));
+            $msg = $what . ' &gt;&gt;' . create_logentry_link($board, $thread, $post) . ' ' . _gettext("was restored");
+            $tpl_page .= '<p>' . $msg . '.</p>';
+            management_addlogentry($msg, 7, '', $msg);
         }
     }
 
@@ -1717,11 +1720,11 @@ class Manage
             if ($thread == "0") {
                 $view = "<a href=\"?action=viewthread&board=$board&thread=$id\">". _gettext('View') ."</a>";
                 if ($deleted) {
-                    $view .= "|<a href=\"?action=restorethread&board=$board&thread=$id\">". _gettext('Undelete') ."</a>";
+                    $view .= "|<a href=\"?action=restorepost&board=$board&id=$id\">". _gettext('Undelete') ."</a>";
                 }
                 $view = '['.$view.']';
             } else {
-                $view = $deleted ? "[<a href=\"?action=restorethread&board=$board&thread=$id\">". _gettext('Undelete') ."]</a>" : "";
+                $view = $deleted ? "[<a href=\"?action=restorepost&board=$board&id=$id\">". _gettext('Undelete') ."]</a>" : "";
             }
             if ($name == "") {
                 $name = _gettext('Anonymous');
