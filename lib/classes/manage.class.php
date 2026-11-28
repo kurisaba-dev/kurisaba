@@ -3471,6 +3471,7 @@ class Manage
 		<label for="ip">'. _gettext('IP/Hash') . ':</label>';
         if (!$multiban) {
             $tpl_page .= '<input type="text" name="ip" id="ip" value="'. $ban_ip . '" />
+			<div class="desc">'. _gettext('Leave blank to skip adding the IP ban.') . '</div>
 			<br /><label for="deleteposts">'. _gettext('Delete all posts by this IP') . ':</label>
 			<input type="checkbox" name="deleteposts" id="deleteposts" />';
         } else {
@@ -3512,6 +3513,7 @@ class Manage
 		<legend>'. _gettext('Ban file') . '</legend>
 		<label for="hash">'. _gettext('File/image hash') . ':</label>
 		<input type="text" name="hash" value="'. $ban_hash . '" /><br /><br />
+		<div class="desc">'. _gettext('Leave blank to skip adding the file ban.') . '</div>
 
 		<label for="banhashtime">'. _gettext('Ban file hash duration (in seconds)') . ':</label>
 		<input type="text" name="banhashtime" id="banhashtime" value="0" />
