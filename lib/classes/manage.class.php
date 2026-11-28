@@ -3258,7 +3258,7 @@ class Manage
                         }
                     }
                     $duration = ($_POST['banhashtime'] % 86400 == 0) ? (($_POST['banhashtime'] / 86400) . ' days') : (($_POST['banhashtime'] % 3600 == 0) ? (($_POST['banhashtime'] / 3600) . ' hours') : (($_POST['banhashtime'] % 60 == 0) ? (($_POST['banhashtime'] / 60) . ' minutes') : ($_POST['banhashtime'] . ' seconds')));
-                    $pubmsg .= ' is now forbidden and will cause bans ' . (($_POST['banhashtime'] == 0) ? 'forever' : 'for ' . $_POST['banhashtime'] . ' seconds') . ' with reason: ' . $_POST['banhashdesc'];
+                    $pubmsg .= ' is now forbidden and will cause bans ' . (($_POST['banhashtime'] == 0) ? 'forever' : 'for ' . $duration) . ' with reason: ' . $_POST['banhashdesc'];
 
                     management_addlogentry('Banned md5 hash '. $banhash . ' with a description of '. $_POST['banhashdesc'], 8, '', $pubmsg);
                 } else {
