@@ -3216,6 +3216,7 @@ class Manage
                     }
                     $ban_ip = ((md5_decrypt($results[0]['ip'], KU_RANDOMSEED) == '0.0.0.0') ? $results[0]['ipmd5'] : md5_decrypt($results[0]['ip'], KU_RANDOMSEED));
                     $ban_parentid = $results[0]['parentid'];
+                    $postinfo = $results[0];
                 } else {
                     $tpl_page .= _gettext('A post with that ID does not exist.') . '<hr />';
                 }
@@ -3262,11 +3263,11 @@ class Manage
 
                     management_addlogentry('Banned md5 hash '. $banhash . ' with a description of '. $_POST['banhashdesc'], 8, '', $pubmsg);
                 } else {
-                    $tpl_page .= _gettext('This hash is already banned.')."<br /><hr>";
+                    $tpl_page .= _gettext('This hash is already banned.')."<br /><hr />";
                 }
             }
             if ($bannedhashes > 0) {
-                $tpl_page .= _gettext('File/image hash ban successfully placed.')."<br /><hr>";
+                $tpl_page .= _gettext('File/image hash ban successfully placed.')."<br /><hr />";
             }
         }
 
@@ -3420,7 +3421,7 @@ class Manage
                     $tpl_page .= _gettext('Please enter a positive amount of seconds, or zero for a permanent ban.');
                 }
             }
-            $tpl_page .= '<hr />';
+            $tpl_page .= '<br /><hr />';
         } elseif (isset($_GET['delban']) && $_GET['delban'] > 0) {
             $results = $tc_db->GetAll("SELECT HIGH_PRIORITY * FROM `" . KU_DBPREFIX . "banlist` WHERE `id` = " . $tc_db->qstr($_GET['delban']) . "");
             if (count($results) > 0) {
@@ -3446,6 +3447,59 @@ class Manage
             } else {
                 $tpl_page .= _gettext('Invalid file hash ID');
             }
+            $tpl_page .= '<br /><hr />';
+        } elseif (isset($_GET['groupunban'])) {
+            switch($_GET['groupunban']) {
+                case "ip":
+                    $results = $tc_db->GetAll("SELECT HIGH_PRIORITY * FROM `" . KU_DBPREFIX . "banlist` WHERE `ipmd5` = " . $tc_db->qstr($postinfo['ipmd5']) . "");
+                    if (count($results) > 0) {
+                        foreach ($results as $result) {
+                            $unban_ip = ((md5_decrypt($result['ip'], KU_RANDOMSEED) == '0.0.0.0') ? $result['ipmd5'] : md5_decrypt($result['ip'], KU_RANDOMSEED));
+                            $tc_db->Execute("DELETE FROM `" . KU_DBPREFIX . "banlist` WHERE `id` = " . $tc_db->qstr($result['id']) . "");
+                            $bans_class->UpdateHtaccess();
+                            $tpl_page .= _gettext('Ban successfully removed:') . ' ' . $unban_ip . '<br />';
+                            $until = ($result['until'] == 0) ? 'forever' : ('until ' . date('F j, Y, g:i a', $result['until']));
+                            $from = ($result['globalban'] == 1) ? 'all boards' : ('/'. implode('/, /', explode('|', $result['boards'])) . '/');
+                            management_addlogentry(_gettext('Unbanned') . ' '. $unban_ip, 8, '', 'Some ban term has been terminated early (originally was ' . $until . ' for ' . $result['reason'] . ' from ' . $from . ')');
+                        }
+                    } else {
+                        $tpl_page .= _gettext('This IP has no bans set on it.');
+                    }
+                    break;
+                case "file":
+                    $results = $tc_db->GetAll("SELECT HIGH_PRIORITY * FROM `" . KU_DBPREFIX . "bannedhashes` WHERE `md5` = " . $tc_db->qstr($postinfo['file_md5']) . "");
+                    if(count($results) > 0) {
+                        foreach ($results as $result) {
+                            $tc_db->Execute("DELETE FROM `" . KU_DBPREFIX . "bannedhashes` WHERE `id` = " . $tc_db->qstr($result['id']) . "");
+                            $tpl_page .= _gettext('Hash removed from ban list:') . ' ' . $result['md5'] . '<br />';
+                            $duration = ($result['bantime'] % 86400 == 0) ? (($result['bantime'] / 86400) . ' days') : (($result['bantime'] % 3600 == 0) ? (($result['bantime'] / 3600) . ' hours') : (($result['bantime'] % 60 == 0) ? (($result['bantime'] / 60) . ' minutes') : ($result['bantime'] . ' seconds')));
+                            $howlong = ($result['bantime'] == 0) ? 'forever' : ('for ' . $duration);
+                            management_addlogentry(_gettext('Unbanned file hash') . ' '. $result['md5'], 8, '', 'File ' . $result['md5'] . ' is allowed now (originally posting this file caused bans ' . $howlong . ' from all boards with notice of ' . $result['description'] . ')');
+                        }
+                    } else {
+                        $tpl_page .= _gettext('This file hash was not banned.');
+                    }
+                    break;
+                case "post":
+                    $results = $tc_db->GetAll("SELECT HIGH_PRIORITY * FROM `" . KU_DBPREFIX . "banlist` WHERE `boardid` = " . $tc_db->qstr($ban_board_id) . " AND `postid` = " . $tc_db->qstr($ban_post_id) . "");
+                    if (count($results) > 0) {
+                        foreach ($results as $result) {
+                            $unban_ip = ((md5_decrypt($result['ip'], KU_RANDOMSEED) == '0.0.0.0') ? $result['ipmd5'] : md5_decrypt($result['ip'], KU_RANDOMSEED));
+                            $tc_db->Execute("DELETE FROM `" . KU_DBPREFIX . "banlist` WHERE `id` = " . $tc_db->qstr($result['id']) . "");
+                            $bans_class->UpdateHtaccess();
+                            $tpl_page .= _gettext('Ban successfully removed:') . ' ' . $unban_ip . '<br />';
+                            $until = ($result['until'] == 0) ? 'forever' : ('until ' . date('F j, Y, g:i a', $result['until']));
+                            $from = ($result['globalban'] == 1) ? 'all boards' : ('/'. implode('/, /', explode('|', $result['boards'])) . '/');
+                            management_addlogentry(_gettext('Unbanned') . ' '. $unban_ip, 8, '', 'Some ban term has been terminated early (originally was ' . $until . ' for ' . $result['reason'] . ' from ' . $from . ')');
+                        }
+                    } else {
+                        $tpl_page .= _gettext('This post has no IP bans set on it.');
+                    }
+                    break;
+                default:
+                    $tpl_page .= _gettext('Wrong groupunban directive.');
+            }
+            $tpl_page .= '<br /><hr />';
         }
 
         flush();
