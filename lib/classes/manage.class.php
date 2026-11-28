@@ -3257,7 +3257,8 @@ class Manage
                             $pubmsg .= ' that ' . ($results[0]['IS_DELETED'] ? 'was' : 'is') . ' attached to &gt;&gt;' . create_logentry_link($board, ($results[0]['parentid'] != 0 ? $results[0]['parentid'] : $results[0]['id']), $results[0]['id']);
                         }
                     }
-                    $pubmsg .= ' was forbidden ' . (($_POST['banhashtime'] == 0) ? 'forever' : 'until '. date('F j, Y, g:i a', (time() + KU_ADDTIME) + $_POST['banhashtime'])) . ', reason is ' . $_POST['banhashdesc'];
+                    $duration = ($_POST['banhashtime'] % 86400 == 0) ? (($_POST['banhashtime'] / 86400) . ' days') : (($_POST['banhashtime'] % 3600 == 0) ? (($_POST['banhashtime'] / 3600) . ' hours') : (($_POST['banhashtime'] % 60 == 0) ? (($_POST['banhashtime'] / 60) . ' minutes') : ($_POST['banhashtime'] . ' seconds')));
+                    $pubmsg .= ' is now forbidden and will cause bans ' . (($_POST['banhashtime'] == 0) ? 'forever' : 'for ' . $_POST['banhashtime'] . ' seconds') . ' with reason: ' . $_POST['banhashdesc'];
 
                     management_addlogentry('Banned md5 hash '. $banhash . ' with a description of '. $_POST['banhashdesc'], 8, '', $pubmsg);
                 }
@@ -3425,7 +3426,9 @@ class Manage
                 $tc_db->Execute("DELETE FROM `" . KU_DBPREFIX . "banlist` WHERE `id` = " . $tc_db->qstr($_GET['delban']) . "");
                 $bans_class->UpdateHtaccess();
                 $tpl_page .= _gettext('Ban successfully removed.');
-                management_addlogentry(_gettext('Unbanned') . ' '. $unban_ip, 8);
+                $until = ($results[0]['until'] == 0) ? 'forever' : ('until ' . date('F j, Y, g:i a', $results[0]['until']));
+                $from = ($results[0]['globalban'] == 1) ? 'all boards' : ('/'. implode('/, /', explode('|', $results[0]['boards'])) . '/');
+                management_addlogentry(_gettext('Unbanned') . ' '. $unban_ip, 8, '', 'Some ban term has been terminated early (originally was ' . $until . ' for ' . $results[0]['reason'] . ' from ' . $from . ')');
             } else {
                 $tpl_page .= _gettext('Invalid ban ID');
             }
@@ -3435,6 +3438,11 @@ class Manage
             if (count($results) > 0) {
                 $tc_db->Execute("DELETE FROM `" . KU_DBPREFIX . "bannedhashes` WHERE `id` = " . $tc_db->qstr($_GET['delhashid']) . "");
                 $tpl_page .= _gettext('Hash removed from ban list.') . '<br /><hr />';
+                $duration = ($results[0]['bantime'] % 86400 == 0) ? (($results[0]['bantime'] / 86400) . ' days') : (($results[0]['bantime'] % 3600 == 0) ? (($results[0]['bantime'] / 3600) . ' hours') : (($results[0]['bantime'] % 60 == 0) ? (($results[0]['bantime'] / 60) . ' minutes') : ($results[0]['bantime'] . ' seconds')));
+                $howlong = ($results[0]['bantime'] == 0) ? 'forever' : ('for ' . $duration);
+                management_addlogentry(_gettext('Unbanned file hash') . ' '. $_GET['delhashid'], 8, '', 'File ' . $_GET['delhashid'] . ' is allowed now (originally posting this file caused bans ' . $howlong . ' from all boards with notice of ' . $results[0]['description'] . ')');
+            } else {
+                $tpl_page .= _gettext('Invalid file hash ID');
             }
         }
 
