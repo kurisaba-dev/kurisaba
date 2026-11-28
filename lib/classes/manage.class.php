@@ -3247,7 +3247,7 @@ class Manage
                 $results = $tc_db->GetOne("SELECT HIGH_PRIORITY COUNT(*) FROM `".KU_DBPREFIX."bannedhashes` WHERE `md5` = ".$tc_db->qstr($banhash)." LIMIT 1");
                 if ($results == 0) {
                     $bannedhashes++;
-                    $tc_db->Execute("INSERT INTO `".KU_DBPREFIX."bannedhashes` ( `md5` , `bantime` , `description` ) VALUES ( ".$tc_db->qstr($banhash)." , ".$tc_db->qstr($_POST['banhashtime'])." , ".$tc_db->qstr($_POST['banhashdesc'])." )");
+                    $tc_db->Execute("INSERT INTO `".KU_DBPREFIX."bannedhashes` ( `md5` , `at`, `bantime` , `description` ) VALUES ( ".$tc_db->qstr($banhash)." , " . (time() + KU_ADDTIME) . " , " . $tc_db->qstr($_POST['banhashtime'])." , ".$tc_db->qstr($_POST['banhashdesc'])." )");
 
                     $pubmsg = 'File '. $banhash;
                     $results = $tc_db->GetAll("SELECT HIGH_PRIORITY `boardid`, `id`, `parentid`, `IS_DELETED` FROM `" . KU_DBPREFIX . "posts` WHERE `file_md5` = " . $tc_db->qstr($banhash) . " OR `banimage_md5` = " . $tc_db->qstr($banhash) . " LIMIT 1");
@@ -3261,6 +3261,8 @@ class Manage
                     $pubmsg .= ' is now forbidden and will cause bans ' . (($_POST['banhashtime'] == 0) ? 'forever' : 'for ' . $_POST['banhashtime'] . ' seconds') . ' with reason: ' . $_POST['banhashdesc'];
 
                     management_addlogentry('Banned md5 hash '. $banhash . ' with a description of '. $_POST['banhashdesc'], 8, '', $pubmsg);
+                } else {
+                    $tpl_page .= _gettext('This hash is already banned.')."<br /><hr>";
                 }
             }
             if ($bannedhashes > 0) {
@@ -3543,12 +3545,16 @@ class Manage
 			<div class="desc">'. _gettext('Presets') . ':&nbsp;<a href="#" onclick="document.banform.appealdays.value=\'0\';return false;">'. _gettext('No Appeal') .'</a>&nbsp;<a href="#" onclick="document.banform.appealdays.value=\'5\';return false;">5 '. _gettext('days') .'</a>&nbsp;<a href="#" onclick="document.banform.appealdays.value=\'10\';return false;">10 '. _gettext('days') .'</a>&nbsp;<a href="#" onclick="document.banform.appealdays.value=\'30\';return false;">30 '. _gettext('days') .'</a></div><br />';
         }
 
-        $tpl_page .= '</fieldset><input type="submit" value="'. _gettext('Add ban') . '" /></form><hr /><br />';
+        $tpl_page .= '</fieldset><input type="submit" value="'. _gettext('Add ban') . '" /></form><hr />';
 
+        $limit = isset($_GET['limit']) ? intval($_GET['limit']) : 100;
+        $allbans = isset($_GET['allbans']);
+
+        // Main tables
         for ($i = 2; $i >= 0; $i--) {
             switch ($i) {
                 case 2:
-                    $tpl_page .= '<strong>'. _gettext('Whitelisted IPs') . ':</strong><br />';
+                    $tpl_page .= '<br /><strong>'. _gettext('Whitelisted IPs') . ':</strong><br />';
                     break;
                 case 1:
                     $tpl_page .= '<br /><strong>'. _gettext('IP Range Bans') . ':</strong><br />';
@@ -3561,27 +3567,13 @@ class Manage
                     }
                     break;
             }
-            if (isset($_GET['allbans'])) {
-                $results = $tc_db->GetAll("SELECT HIGH_PRIORITY * FROM `" . KU_DBPREFIX . "banlist` WHERE `type` = '" . $i . "' ORDER BY `id` DESC");
-                $hiddenbans = 0;
-            } elseif (isset($_GET['limit'])) {
-                $results = $tc_db->GetAll("SELECT HIGH_PRIORITY * FROM `" . KU_DBPREFIX . "banlist` WHERE `type` = '" . $i . "' ORDER BY `id` DESC LIMIT ".intval($_GET['limit']));
-                $hiddenbans = 0;
+
+            $bansnum = $tc_db->GetOne("SELECT HIGH_PRIORITY COUNT(*) FROM `" . KU_DBPREFIX . "banlist` WHERE `type` = '" . $i . "'" . ((!empty($ban_ip) && $i == 0) ? " AND `ipmd5` = '" . md5($ban_ip) . "'" : ""));
+            $tpl_page .= '<table border="1" width="100%"><tr><th>' . (($i == 1) ? _gettext('IP Range') : _gettext('IP Address')) . '</th><th>'. _gettext('Boards') . '</th><th>'. _gettext('Reason') . '</th><th>'. _gettext('Staff Note') . '</th><th>'. _gettext('Date added') . '</th><th>'. _gettext('Expires/Expired') . '</th><th>'. _gettext('Added By') . '</th><th>'. _gettext('Caused by post') . '</th><th>&nbsp;</th></tr>';
+            if ($bansnum == 0) {
+                $tpl_page .= '<tr><td colspan="9">'. _gettext('None') . '</td></tr>';
             } else {
-                if (!empty($ban_ip) && $i == 0) {
-                    $results = $tc_db->GetAll("SELECT HIGH_PRIORITY * FROM `" . KU_DBPREFIX . "banlist` WHERE `ipmd5` = '" . md5($ban_ip) . "' AND `type` = '" . $i . "' AND `by` != 'SERVER' ORDER BY `id` DESC");
-                } else {
-                    $results = $tc_db->GetAll("SELECT HIGH_PRIORITY * FROM `" . KU_DBPREFIX . "banlist` WHERE `type` = '" . $i . "' AND `by` != 'SERVER' ORDER BY `id` DESC LIMIT 15");
-                    // Get the number of bans in the database of this type
-                    $hiddenbans = $tc_db->GetAll("SELECT HIGH_PRIORITY COUNT(*) FROM `" . KU_DBPREFIX . "banlist` WHERE `type` = '" . $i . "'");
-                    // Subtract 15 from the count, since we only want the number not shown
-                    $hiddenbans = $hiddenbans[0][0] - 15;
-                }
-            }
-            if (count($results) > 0) {
-                $tpl_page .= '<table border="1" width="100%"><tr><th>';
-                $tpl_page .= ($i == 1) ? _gettext('IP Range') : _gettext('IP Address');
-                $tpl_page .= '</th><th>'. _gettext('Boards') . '</th><th>'. _gettext('Reason') . '</th><th>'. _gettext('Staff Note') . '</th><th>'. _gettext('Date added') . '</th><th>'. _gettext('Expires/Expired') . '</th><th>'. _gettext('Added By') . '</th><th>'. _gettext('Caused by post') . '</th><th>&nbsp;</th></tr>';
+                $results = $tc_db->GetAll("SELECT HIGH_PRIORITY * FROM `" . KU_DBPREFIX . "banlist` WHERE `type` = '" . $i . "'" . ((!empty($ban_ip) && $i == 0) ? " AND `ipmd5` = '" . md5($ban_ip) . "'" : "") . " ORDER BY `at` DESC" . ($allbans ? "" : (" LIMIT " . $limit)));
                 foreach ($results as $line) {
                     $ipval = ((md5_decrypt($line['ip'], KU_RANDOMSEED) == '0.0.0.0') ? $line['ipmd5'] : md5_decrypt($line['ip'], KU_RANDOMSEED));
                     $tpl_page .= '<tr><td><a href="?action=bans&ip='. $ipval . '">'. $ipval . '</a></td><td>';
@@ -3610,27 +3602,24 @@ class Manage
                     }
                     $tpl_page .= '</td><td>[<a href="manage_page.php?action=bans&delban='. $line['id'] . '">'. _gettext('Delete') .'</a>]</td></tr>';
                 }
-                $tpl_page .= '</table>';
-                if ($hiddenbans > 0) {
-                    $tpl_page .= sprintf(_gettext('%s bans not shown.'), $hiddenbans) .
-                    ' <a href="?action=bans&allbans=1">'. _gettext('View all bans') . '</a>'.' <a href="?action=bans&limit=100">View last 100 bans</a>';
-                }
-            } else {
-                $tpl_page .= _gettext('There are currently no bans');
             }
+            $tpl_page .= '</table>' . (($allbans || $bansnum <= $limit) ? ('All ' . $bansnum . ' bans are shown.') : ($limit . ' of ' . $bansnum . ' bans are shown (<a href="?action=bans&allbans=1">' . _gettext('View all bans') . '</a>).')) . '<br />';
         }
-        $tpl_page .= '<br /><br /><strong>'. _gettext('File hash bans') . ':</strong><br /><table border="1" width="100%"><tr><th>'. _gettext('Hash') . '</th><th>'. _gettext('Description') . '</th><th>'. _gettext('Ban time') . '</th><th>&nbsp;</th></tr>';
-        $results = $tc_db->GetAll("SELECT HIGH_PRIORITY * FROM `".KU_DBPREFIX."bannedhashes` ". ((!isset($_GET['allbans'])) ? ("LIMIT 500") : ("")));
-        if (count($results) == 0) {
-            $tpl_page .= '<tr><td colspan="4">'. _gettext('None') . '</td></tr>';
+
+        // File hash ban table
+        $tpl_page .= '<br /><strong>'. _gettext('File hash bans') . ':</strong><table border="1" width="100%"><tr><th>'. _gettext('Hash') . '</th><th>'. _gettext('Date added') . '</th><th>'. _gettext('Description') . '</th><th>'. _gettext('Ban time') . '</th><th>&nbsp;</th></tr>';
+        $hashesnum = $tc_db->GetOne("SELECT HIGH_PRIORITY COUNT(*) FROM `".KU_DBPREFIX."bannedhashes`");
+        if ($hashesnum == 0) {
+            $tpl_page .= '<tr><td colspan="5">'. _gettext('None') . '</td></tr>';
         } else {
+            $results = $tc_db->GetAll("SELECT HIGH_PRIORITY * FROM `".KU_DBPREFIX."bannedhashes`" . " ORDER BY `at` DESC" . ($allbans ? "" : (" LIMIT " . $limit)));
             foreach ($results as $line) {
-                $tpl_page .= '<tr><td>'. $line['md5'] . '</td><td>'. $line['description'] . '</td><td>';
+                $tpl_page .= '<tr><td>'. $line['md5'] . '</td><td>'. date("F j, Y, g:i a", $line['at']) . '</td><td>'. $line['description'] . '</td><td>';
                 $tpl_page .= ($line['bantime'] == 0) ? '<strong>'. _gettext('Does not expire') . '</strong>' : $line['bantime'] . ' seconds';
                 $tpl_page .= '</td><td>[<a href="?action=bans&delhashid='. $line['id'] . '">x</a>]</td></tr>';
             }
         }
-        $tpl_page .= '</table>';
+        $tpl_page .= '</table>' . (($allbans || $hashesnum <= $limit) ? ('All ' . $hashesnum . ' bans are shown.') : ($limit . ' of ' . $hashesnum . ' bans are shown (<a href="?action=bans&allbans=1">' . _gettext('View all bans') . '</a>).'));
     }
 
     public function appeals()

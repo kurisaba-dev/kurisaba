@@ -33,6 +33,7 @@ CREATE TABLE IF NOT EXISTS `{{KU_DBPREFIX}}banlist` (
 CREATE TABLE IF NOT EXISTS `{{KU_DBPREFIX}}bannedhashes` (
 `id` int(10) NOT NULL,
   `md5` varchar(255) NOT NULL,
+  `at` int(20) NOT NULL DEFAULT '0',
   `bantime` int(10) NOT NULL DEFAULT '0',
   `description` text NOT NULL
 ) ENGINE=MyISAM AUTO_INCREMENT=63 DEFAULT CHARSET=utf8;

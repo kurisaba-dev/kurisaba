@@ -319,7 +319,7 @@ msgid "Disk space used"
 msgstr "Используемое дисковое пространство"
 
 msgid "Does not expire"
-msgstr "Не истек"
+msgstr "Навсегда"
 
 msgid "Duplicate file entry detected."
 msgstr "Обнаружен дублирующий файл."
