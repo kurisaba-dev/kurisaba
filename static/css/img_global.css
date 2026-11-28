@@ -351,6 +351,18 @@ pre {
     background-position: 0px -96px;
 }
 
+.unbanip {
+    background-position: -16px -96px;
+}
+
+.unbanfile {
+    background-position: -32px -96px;
+}
+
+.unbanpost {
+    background-position: -48px -96px;
+}
+
 .spritebtn {
     background-color: #7f7f7f;
     background-image: url('/static/images/white.gif?v=1');

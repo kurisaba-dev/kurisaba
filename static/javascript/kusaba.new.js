@@ -277,6 +277,9 @@ var _messages = {
         recoverfile: "Restore file",
         ban: "Ban",
         banfile: "Ban by file",
+        unbanip: "Remove all bans on this IP",
+        unbanfile: "Unban this file",
+        unbanpost: "Remove all IP bans on this post",
         sage: "Sage this post",
         transcript: "Transcript this voice message",
         stickthread: "Stick thread",
@@ -397,6 +400,9 @@ var _messages = {
         recoverfile: "Восстановить файл",
         ban: "Забанить",
         banfile: "Забанить по файлу",
+        unbanip: "Снять все баны этого IP",
+        unbanfile: "Разбанить файл из этого поста",
+        unbanpost: "Снять все IP-баны, наложенные на этот пост",
         sage: "Поставить сажу на этот пост",
         transcript: "Преобразовать это голосовое в текст",
         stickthread: "Прикрепить тред",
@@ -778,6 +784,14 @@ function delandbanlinks($scope) {
             newhtml += '<a href="' + ku_webpath + '/manage_page.php?action=sagepost&quick=1&board=' + boardname + '&id=' + postid + '" title="' + _.sage + '" onclick="return confirm(\'' + _.sage + '?\');"><img src="' + ku_webpath + '/static/images/blank.gif?v=' + ku_js_css_ver + '" class="downscroll spritebtn"><\/a>';
         }
         newhtml += '</span>&nbsp;';
+
+        // Group unban
+        if (kuadm_set) {
+            newhtml += '<span class="btngroup"><a href="' + ku_webpath + '/manage_page.php?action=bans&groupunban=ip&banboard=' + boardname + '&banpost=' + postid + '" title="' + _.unbanip + '" onclick="return confirm(\'' + _.unbanip + '?\');"><img src="' + ku_webpath + '/static/images/blank.gif?v=' + ku_js_css_ver + '" class="unbanip spritebtn"><\/a>';
+            newhtml += '<a href="' + ku_webpath + '/manage_page.php?action=bans&groupunban=file&banboard=' + boardname + '&banpost=' + postid + '" title="' + _.unbanfile + '" onclick="return confirm(\'' + _.unbanfile + '?\');"><img src="' + ku_webpath + '/static/images/blank.gif?v=' + ku_js_css_ver + '" class="unbanfile spritebtn"><\/a>';
+            newhtml += '<a href="' + ku_webpath + '/manage_page.php?action=bans&groupunban=post&banboard=' + boardname + '&banpost=' + postid + '" title="' + _.unbanpost + '" onclick="return confirm(\'' + _.unbanpost + '?\');"><img src="' + ku_webpath + '/static/images/blank.gif?v=' + ku_js_css_ver + '" class="unbanpost spritebtn"><\/a>';
+            newhtml += '</span>&nbsp;';
+        }
 
         // Transcript, del, del&ban, ban, restore file
         if (element.parentElement.querySelectorAll('.nothumb').length != 0) {
