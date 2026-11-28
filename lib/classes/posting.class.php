@@ -166,7 +166,7 @@ class Posting
         /* Banned file hash check */
         $results = $tc_db->GetAll("SELECT `bantime` , `description` FROM `" . KU_DBPREFIX . "bannedhashes` WHERE `md5` = " . $tc_db->qstr($banhash1) . " OR `md5` = " . $tc_db->qstr($banhash2) . " LIMIT 1");
         if (count($results) > 0) {
-            $bans_class->BanUser((KU_SAVEIP ? KU_REMOTE_ADDR : md5(KU_REMOTE_ADDR)), 'SERVER', '1', $results[0]['bantime'], '', 'Posting a banned file.<br />' . $results[0]['description'], 0, 0, 1);
+            $bans_class->BanUser((KU_SAVEIP ? KU_REMOTE_ADDR : md5(KU_REMOTE_ADDR)), 'SERVER', '1', $results[0]['bantime'], '', 'Posting a banned file, ' . $results[0]['description'], '', 0, 0, 1);
             $bans_class->BanCheck(KU_REMOTE_ADDR, $board_class->board['name'], false, isset($_POST['through_js']));
             @unlink($file_location);
             return true;

@@ -3520,7 +3520,7 @@ class Manage
 			<div class="desc">'. _gettext('Presets') . ':&nbsp;<a href="#" onclick="document.banform.banhashtime.value=\'3600\';return false;">1hr</a>&nbsp;<a href="#" onclick="document.banform.banhashtime.value=\'86400\';return false;">1d</a>&nbsp;<a href="#" onclick="document.banform.banhashtime.value=\'259200\';return false;">3d</a>&nbsp;<a href="#" onclick="document.banform.banhashtime.value=\'604800\';return false;">1w</a>&nbsp;<a href="#" onclick="document.banform.banhashtime.value=\'1209600\';return false;">2w</a>&nbsp;<a href="#" onclick="document.banform.banhashtime.value=\'2592000\';return false;">30d</a>&nbsp;<a href="#" onclick="document.banform.banhashtime.value=\'31536000\';return false;">1yr</a>&nbsp;<a href="#" onclick="document.banform.banhashtime.value=\'0\';return false;">'. _gettext('never') .'</a></div><br />
 
 			<label for="banhashdesc">'. _gettext('Ban file hash description') . ':</label>
-			<input type="text" name="banhashdesc" id="banhashdesc" value="' . (isset($ban_post_id) ? ("post " . $ban_post_id) : "") . '" />
+			<input type="text" name="banhashdesc" id="banhashdesc" value="' . (isset($ban_post_id) ? ("post /" . $ban_board . "/" . $ban_post_id) : "") . '" />
 			<div class=desc">'. _gettext('The description of the image being banned.') . '</div>
 			</fieldset>';
         }
