@@ -3508,22 +3508,20 @@ class Manage
         $tpl_page .= $this->MakeBoardListCheckboxes('bannedfrom', $this->BoardList($_SESSION['manageusername'])) .
         '</fieldset>';
 
-        if ($ban_hash != "" || isset($_GET['ishashban'])) {
-            $tpl_page .= '<fieldset>
-			<legend>'. _gettext('Ban file') . '</legend>
-			<label for="hash">'. _gettext('File/image hash') . ':</label>
-			<input type="text" name="hash" value="'. $ban_hash . '" /><br /><br />
+        $tpl_page .= '<fieldset>
+		<legend>'. _gettext('Ban file') . '</legend>
+		<label for="hash">'. _gettext('File/image hash') . ':</label>
+		<input type="text" name="hash" value="'. $ban_hash . '" /><br /><br />
 
-			<label for="banhashtime">'. _gettext('Ban file hash duration (in seconds)') . ':</label>
-			<input type="text" name="banhashtime" id="banhashtime" value="0" />
-			<div class="desc">'. _gettext('The amount of time to ban the hash of the image which was posted under this ID. Leave blank to not ban the image, 0 for an infinite global ban, or any number of seconds for that duration of a global ban.') . '</div>
-			<div class="desc">'. _gettext('Presets') . ':&nbsp;<a href="#" onclick="document.banform.banhashtime.value=\'3600\';return false;">1hr</a>&nbsp;<a href="#" onclick="document.banform.banhashtime.value=\'86400\';return false;">1d</a>&nbsp;<a href="#" onclick="document.banform.banhashtime.value=\'259200\';return false;">3d</a>&nbsp;<a href="#" onclick="document.banform.banhashtime.value=\'604800\';return false;">1w</a>&nbsp;<a href="#" onclick="document.banform.banhashtime.value=\'1209600\';return false;">2w</a>&nbsp;<a href="#" onclick="document.banform.banhashtime.value=\'2592000\';return false;">30d</a>&nbsp;<a href="#" onclick="document.banform.banhashtime.value=\'31536000\';return false;">1yr</a>&nbsp;<a href="#" onclick="document.banform.banhashtime.value=\'0\';return false;">'. _gettext('never') .'</a></div><br />
+		<label for="banhashtime">'. _gettext('Ban file hash duration (in seconds)') . ':</label>
+		<input type="text" name="banhashtime" id="banhashtime" value="0" />
+		<div class="desc">'. _gettext('The amount of time to ban the hash of the image which was posted under this ID. Leave blank to not ban the image, 0 for an infinite global ban, or any number of seconds for that duration of a global ban.') . '</div>
+		<div class="desc">'. _gettext('Presets') . ':&nbsp;<a href="#" onclick="document.banform.banhashtime.value=\'3600\';return false;">1hr</a>&nbsp;<a href="#" onclick="document.banform.banhashtime.value=\'86400\';return false;">1d</a>&nbsp;<a href="#" onclick="document.banform.banhashtime.value=\'259200\';return false;">3d</a>&nbsp;<a href="#" onclick="document.banform.banhashtime.value=\'604800\';return false;">1w</a>&nbsp;<a href="#" onclick="document.banform.banhashtime.value=\'1209600\';return false;">2w</a>&nbsp;<a href="#" onclick="document.banform.banhashtime.value=\'2592000\';return false;">30d</a>&nbsp;<a href="#" onclick="document.banform.banhashtime.value=\'31536000\';return false;">1yr</a>&nbsp;<a href="#" onclick="document.banform.banhashtime.value=\'0\';return false;">'. _gettext('never') .'</a></div><br />
 
-			<label for="banhashdesc">'. _gettext('Ban file hash description') . ':</label>
-			<input type="text" name="banhashdesc" id="banhashdesc" value="' . (isset($ban_post_id) ? ("post /" . $ban_board . "/" . $ban_post_id) : "") . '" />
-			<div class=desc">'. _gettext('The description of the image being banned.') . '</div>
-			</fieldset>';
-        }
+		<label for="banhashdesc">'. _gettext('Ban file hash description') . ':</label>
+		<input type="text" name="banhashdesc" id="banhashdesc" value="' . (isset($ban_post_id) ? ("post /" . $ban_board . "/" . $ban_post_id) : "") . '" />
+		<div class=desc">'. _gettext('The description of the image being banned.') . '</div>
+		</fieldset>';
 
         $tpl_page .= '<fieldset>
 		<legend>'. _gettext('Ban duration, reason, and appeal information') . '</legend>

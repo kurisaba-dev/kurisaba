@@ -128,8 +128,7 @@ if (!$manage_class->ValidateSession(true)) {
         $tpl_links .= '<li><a href="manage_page.php?action=delposts">' . _gettext('Delete thread/post') . '</a></li>';
         $tpl_links .= '<li><a href="manage_page.php?action=deletepostsbyip">' . _gettext('Delete all posts by IP') . '</a></li>';
         $tpl_links .= '<li><a href="manage_page.php?action=reports">' . _gettext('View Reports') . ' [' . $open_reports[0][0] . ']</a></li>';
-        $tpl_links .= '<li><a href="manage_page.php?action=bans">' . _gettext('View/Add/Remove IP bans') . '</a></li>';
-        $tpl_links .= '<li><a href="manage_page.php?action=bans&ishashban=1">' . _gettext('View/Add/Remove file bans') . '</a></li>';
+        $tpl_links .= '<li><a href="manage_page.php?action=bans">' . _gettext('View/Add/Remove IP/file bans') . '</a></li>';
         if (KU_APPEAL) {
             $tpl_links .= '<li><a href="manage_page.php?action=appeals">' . _gettext('View Appeals') . '</a></li>';
         }
