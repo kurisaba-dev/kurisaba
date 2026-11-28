@@ -138,8 +138,8 @@ msgstr "Лист забаненных прокси"
 msgid "Ban successfully placed."
 msgstr "Бан установлен."
 
-msgid "Ban successfully removed."
-msgstr "Бан удален."
+msgid "Ban successfully removed:"
+msgstr "Бан удален:"
 
 msgid "Banned"
 msgstr "Забанено"

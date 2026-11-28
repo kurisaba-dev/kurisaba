@@ -138,8 +138,8 @@ msgstr "Proxysperren"
 msgid "Ban successfully placed."
 msgstr "Sperre erfolgreich angelegt."
 
-msgid "Ban successfully removed."
-msgstr "Sperre erfolgreich entfernt."
+msgid "Ban successfully removed:"
+msgstr "Sperre erfolgreich entfernt:"
 
 msgid "Banned"
 msgstr "Gesperrt"

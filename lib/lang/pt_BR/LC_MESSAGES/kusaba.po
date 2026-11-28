@@ -138,8 +138,8 @@ msgstr "Lista de proxies expulsos"
 msgid "Ban successfully placed."
 msgstr "Expulsão feita com sucesso."
 
-msgid "Ban successfully removed."
-msgstr "Expulsão removida com sucesso."
+msgid "Ban successfully removed:"
+msgstr "Expulsão removida com sucesso:"
 
 msgid "Banned"
 msgstr "Expulso"

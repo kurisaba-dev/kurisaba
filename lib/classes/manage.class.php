@@ -3427,7 +3427,7 @@ class Manage
                 $unban_ip = ((md5_decrypt($results[0]['ip'], KU_RANDOMSEED) == '0.0.0.0') ? $results[0]['ipmd5'] : md5_decrypt($results[0]['ip'], KU_RANDOMSEED));
                 $tc_db->Execute("DELETE FROM `" . KU_DBPREFIX . "banlist` WHERE `id` = " . $tc_db->qstr($_GET['delban']) . "");
                 $bans_class->UpdateHtaccess();
-                $tpl_page .= _gettext('Ban successfully removed.');
+                $tpl_page .= _gettext('Ban successfully removed:') . ' ' . $unban_ip;
                 $until = ($results[0]['until'] == 0) ? 'forever' : ('until ' . date('F j, Y, g:i a', $results[0]['until']));
                 $from = ($results[0]['globalban'] == 1) ? 'all boards' : ('/'. implode('/, /', explode('|', $results[0]['boards'])) . '/');
                 management_addlogentry(_gettext('Unbanned') . ' '. $unban_ip, 8, '', 'Some ban term has been terminated early (originally was ' . $until . ' for ' . $results[0]['reason'] . ' from ' . $from . ')');
@@ -3439,10 +3439,10 @@ class Manage
             $results = $tc_db->GetAll("SELECT HIGH_PRIORITY * FROM `" . KU_DBPREFIX . "bannedhashes` WHERE `id` = " . $tc_db->qstr($_GET['delhashid']) . "");
             if (count($results) > 0) {
                 $tc_db->Execute("DELETE FROM `" . KU_DBPREFIX . "bannedhashes` WHERE `id` = " . $tc_db->qstr($_GET['delhashid']) . "");
-                $tpl_page .= _gettext('Hash removed from ban list.') . '<br /><hr />';
+                $tpl_page .= _gettext('Hash removed from ban list:') . ' ' . $results[0]['md5'] . '<br /><hr />';
                 $duration = ($results[0]['bantime'] % 86400 == 0) ? (($results[0]['bantime'] / 86400) . ' days') : (($results[0]['bantime'] % 3600 == 0) ? (($results[0]['bantime'] / 3600) . ' hours') : (($results[0]['bantime'] % 60 == 0) ? (($results[0]['bantime'] / 60) . ' minutes') : ($results[0]['bantime'] . ' seconds')));
                 $howlong = ($results[0]['bantime'] == 0) ? 'forever' : ('for ' . $duration);
-                management_addlogentry(_gettext('Unbanned file hash') . ' '. $_GET['delhashid'], 8, '', 'File ' . $_GET['delhashid'] . ' is allowed now (originally posting this file caused bans ' . $howlong . ' from all boards with notice of ' . $results[0]['description'] . ')');
+                management_addlogentry(_gettext('Unbanned file hash') . ' '. $results[0]['md5'], 8, '', 'File ' . $results[0]['md5'] . ' is allowed now (originally posting this file caused bans ' . $howlong . ' from all boards with notice of ' . $results[0]['description'] . ')');
             } else {
                 $tpl_page .= _gettext('Invalid file hash ID');
             }
@@ -3636,8 +3636,8 @@ class Manage
                     }
                     $tc_db->Execute("UPDATE `" . KU_DBPREFIX . "banlist` SET `expired` = 1, `appealat` = -4 WHERE `id` = " . $tc_db->qstr($_GET['accept']) . "");
                     $bans_class->UpdateHtaccess();
-                    $tpl_page .= _gettext('Ban successfully removed.');
-                    management_addlogentry('Accepted appeal #'.$_GET['accept'].' from: '. $unban_ip, 8);
+                    $tpl_page .= _gettext('Ban successfully removed:') . ' ' . $unban_ip;
+                    management_addlogentry('Accepted appeal #'.$_GET['accept'].' from: '. $unban_ip, 8, '', 'Some ban term has been terminated due to appeal being accepted (originally was ' . $until . ' for ' . $results[0]['reason'] . ' from ' . $from . ')');
                 } else {
                     $tpl_page .= _gettext('Invalid ID');
                 }

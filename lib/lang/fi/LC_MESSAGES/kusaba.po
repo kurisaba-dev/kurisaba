@@ -138,8 +138,8 @@ msgstr "Bannattyjen proxyjen lista"
 msgid "Ban successfully placed."
 msgstr "Banni onnistuneesti laitettu."
 
-msgid "Ban successfully removed."
-msgstr "Banni onnistuneesti poistettu"
+msgid "Ban successfully removed:"
+msgstr "Banni onnistuneesti poistettu:"
 
 msgid "Banned"
 msgstr "Bannattu, B&!"

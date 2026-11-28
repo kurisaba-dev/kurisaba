@@ -105,8 +105,8 @@ msgstr "Utesteng fra"
 msgid "Ban successfully placed."
 msgstr "Utestengelse satt."
 
-msgid "Ban successfully removed."
-msgstr "Utestengelse fjernet."
+msgid "Ban successfully removed:"
+msgstr "Utestengelse fjernet:"
 
 msgid "Banned"
 msgstr "Utestengt"

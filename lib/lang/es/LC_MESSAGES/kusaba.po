@@ -138,8 +138,8 @@ msgstr "Banear lista proxy"
 msgid "Ban successfully placed."
 msgstr "Ban colocado con éxito."
 
-msgid "Ban successfully removed."
-msgstr "Ban removido con éxito."
+msgid "Ban successfully removed:"
+msgstr "Ban removido con éxito:"
 
 msgid "Banned"
 msgstr "Baneado"

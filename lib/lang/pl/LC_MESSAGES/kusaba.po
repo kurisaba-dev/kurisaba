@@ -117,8 +117,8 @@ msgstr "Banuj listę proxy"
 msgid "Ban successfully placed."
 msgstr "Pomyślnie zbanowano."
 
-msgid "Ban successfully removed."
-msgstr "Ban pomyślnie usunięto."
+msgid "Ban successfully removed:"
+msgstr "Ban pomyślnie usunięto:"
 
 msgid "Banned"
 msgstr "Zbanowano"

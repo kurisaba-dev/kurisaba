@@ -138,8 +138,8 @@ msgstr "Tõkendatud proxyde nimekiri"
 msgid "Ban successfully placed."
 msgstr "Tõkend edukalt paigaldatud."
 
-msgid "Ban successfully removed."
-msgstr "Tõkend edukalt eemaldatud."
+msgid "Ban successfully removed:"
+msgstr "Tõkend edukalt eemaldatud:"
 
 msgid "Banned"
 msgstr "Seadis tõkendi"

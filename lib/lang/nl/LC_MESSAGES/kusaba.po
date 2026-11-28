@@ -114,8 +114,8 @@ msgstr "Ban proxylijst"
 msgid "Ban successfully placed."
 msgstr "Ban succesvol geplaatst."
 
-msgid "Ban successfully removed."
-msgstr "Ban succesvol verwijderd."
+msgid "Ban successfully removed:"
+msgstr "Ban succesvol verwijderd:"
 
 msgid "Banned"
 msgstr "Gebanned"

@@ -42,8 +42,8 @@ msgstr "Všechny nástěnky"
 msgid "Ban from"
 msgstr "Ban od"
 
-msgid "Ban successfully removed."
-msgstr "Ban odstraněn"
+msgid "Ban successfully removed:"
+msgstr "Ban odstraněn:"
 
 msgid "Board"
 msgstr "Board"

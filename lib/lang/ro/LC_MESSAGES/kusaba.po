@@ -289,8 +289,8 @@ msgstr "Banare listă de proxy-uri"
 msgid "Ban successfully placed."
 msgstr "Banat."
 
-msgid "Ban successfully removed."
-msgstr "Ban scos."
+msgid "Ban successfully removed:"
+msgstr "Ban scos:"
 
 msgid "Ban time"
 msgstr "Durata banului"
